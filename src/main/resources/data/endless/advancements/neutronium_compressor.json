@@ -1,0 +1,30 @@
+{
+  "parent": "endless:neutronium_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:neutronium_compressor"
+    },
+    "title": {
+		"translate": "advancements.endless.neutronium_compressor.title"
+	},
+    "description": {
+		"translate": "advancements.endless.neutronium_compressor.desc"
+	},
+    "frame": "task"
+  },
+  "criteria": { 
+    "neutronium_compressor": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:neutronium_compressor"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

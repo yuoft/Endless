@@ -1,0 +1,30 @@
+{
+  "parent": "endless:diamond_lattice",
+  "display": { 
+    "icon": { 
+      "item": "endless:neutron_pile"
+    },
+    "title": {
+		"translate": "advancements.endless.neutron_pile.title"
+	},
+    "description": {
+		"translate": "advancements.endless.neutron_pile.desc"
+	},
+    "frame": "task"
+  },
+  "criteria": { 
+    "neutron_pile": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:neutron_pile"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

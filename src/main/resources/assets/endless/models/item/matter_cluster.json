@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/matter_cluster"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "endless:count": 1
+      },
+      "model": "endless:item/matter_cluster_full"
+    }
+  ]
+}

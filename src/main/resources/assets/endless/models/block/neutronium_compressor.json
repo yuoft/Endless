@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "endless:block/compressor_front",
+    "up": "endless:block/compressor_top",
+    "down": "endless:block/compressor_top",
+    "north": "endless:block/compressor_front",
+    "south": "endless:block/compressor_side",
+    "east": "endless:block/compressor_side",
+    "west": "endless:block/compressor_side"
+  }
+}

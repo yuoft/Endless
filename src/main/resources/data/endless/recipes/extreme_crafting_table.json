@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    "y": {
+      "item": "endless:double_craft"
+    }
+  },
+  "result": {
+    "item": "endless:extreme_crafting_table"
+  }
+}

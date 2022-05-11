@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "endless:double_neutron_collector"
+    },
+    "y": {
+      "item": "endless:singularity_redstone"
+    }
+  },
+  "result": {
+    "item": "endless:triple_neutron_collector"
+  }
+}

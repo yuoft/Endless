@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "endless:item/tool/infinity_pickaxe"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "endless:hammer": 1
+      },
+      "model": "endless:item/infinity_hammer"
+    }
+  ]
+}

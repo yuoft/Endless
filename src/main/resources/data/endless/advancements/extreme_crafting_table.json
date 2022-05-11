@@ -1,0 +1,30 @@
+{
+  "parent": "endless:diamond_lattice",
+  "display": { 
+    "icon": { 
+      "item": "endless:extreme_crafting_table"
+    },
+    "title": {
+		"translate": "advancements.endless.extreme_crafting_table.title"
+	},
+    "description": {
+		"translate": "advancements.endless.extreme_crafting_table.desc"
+	},
+    "frame": "task"
+  },
+  "criteria": { 
+    "extreme_crafting_table": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:extreme_crafting_table"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

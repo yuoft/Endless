@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_bow"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_bow.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_bow.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": { 
+    "infinity_bow": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:infinity_bow"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 200
+  }
+}

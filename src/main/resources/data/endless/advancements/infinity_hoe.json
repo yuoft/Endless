@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_hoe"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_hoe.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_hoe.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": { 
+    "infinity_hoe": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:infinity_hoe"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 200
+  }
+}

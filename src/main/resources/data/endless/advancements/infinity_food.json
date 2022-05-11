@@ -1,0 +1,42 @@
+{
+  "parent": "endless:neutron_pile",
+  "display": { 
+    "icon": { 
+      "item": "endless:stew"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_food.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_food.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": {
+    "infinity_food0": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "endless:stew"
+        }
+      }
+    },
+    "infinity_food1": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "endless:meat_balls"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "infinity_food0",
+      "infinity_food1"
+    ]
+  ],
+  "rewards": {
+    "experience": 30
+  }
+}

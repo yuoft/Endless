@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "endless:dense_neutron_collector"
+    },
+    "y": {
+      "item": "endless:neutronium_gear"
+    }
+  },
+  "result": {
+    "item": "endless:double_neutron_collector"
+  }
+}

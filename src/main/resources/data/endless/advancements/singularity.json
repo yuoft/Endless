@@ -1,0 +1,114 @@
+{
+  "parent": "endless:neutronium_compressor",
+  "display": {
+    "icon": {
+      "item": "endless:singularity_diamond"
+    },
+    "title": {
+      "translate": "advancements.endless.singularity.title"
+    },
+    "description": {
+      "translate": "advancements.endless.singularity.desc"
+    },
+    "frame": "challenge"
+  },
+  "criteria": {
+    "singularity_clay": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_clay"
+        }]
+      }
+    },
+    "singularity_coal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_coal"
+        }]
+      }
+    },
+    "singularity_iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_iron"
+        }]
+      }
+    },
+    "singularity_gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_gold"
+        }]
+      }
+    },
+    "singularity_diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_diamond"
+        }]
+      }
+    },
+    "singularity_netherite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_netherite"
+        }]
+      }
+    },
+    "singularity_emerald": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_emerald"
+        }]
+      }
+    },
+    "singularity_lapis": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_lapis"
+        }]
+      }
+    },
+    "singularity_redstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_redstone"
+        }]
+      }
+    },
+    "singularity_quartz": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "item": "endless:singularity_quartz"
+        }]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "singularity_clay",
+      "singularity_coal",
+      "singularity_iron",
+      "singularity_gold",
+      "singularity_diamond",
+      "singularity_netherite",
+      "singularity_emerald",
+      "singularity_lapis",
+      "singularity_redstone",
+      "singularity_quartz"
+    ]
+  ],
+  "rewards": {
+    "experience": 30
+  }
+}

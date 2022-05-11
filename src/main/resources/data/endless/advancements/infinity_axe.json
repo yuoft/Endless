@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_axe"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_axe.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_axe.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": { 
+    "infinity_axe": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:infinity_axe"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 200
+  }
+}

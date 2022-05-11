@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "endless:block/dire_crafting_side",
+    "up": "endless:block/dire_crafting_top",
+    "down": "endless:block/dire_crafting_top",
+    "north": "endless:block/dire_crafting_side",
+    "south": "endless:block/dire_crafting_side",
+    "east": "endless:block/dire_crafting_side",
+    "west": "endless:block/dire_crafting_side"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_chest"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_armor.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_armor.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": {
+    "infinity_armor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "endless:infinity_head"
+          },
+          {
+            "item": "endless:infinity_chest"
+          },
+          {
+            "item": "endless:infinity_legs"
+          },
+          {
+            "item": "endless:infinity_feet"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "infinity_armor"
+    ]
+  ],
+  "rewards": { 
+    "experience": 1000
+  }
+}

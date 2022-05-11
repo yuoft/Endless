@@ -1,0 +1,30 @@
+{
+  "parent": "endless:neutron_pile",
+  "display": { 
+    "icon": { 
+      "item": "endless:neutronium_ingot"
+    },
+    "title": {
+		"translate": "advancements.endless.neutronium_ingot.title"
+	},
+    "description": {
+		"translate": "advancements.endless.neutronium_ingot.desc"
+	},
+    "frame": "task"
+  },
+  "criteria": { 
+    "neutronium_ingot": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:neutronium_ingot"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

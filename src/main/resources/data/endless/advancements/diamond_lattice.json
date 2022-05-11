@@ -1,0 +1,30 @@
+{
+  "display": { 
+    "icon": { 
+      "item": "endless:diamond_lattice"
+    },
+    "title": {
+		"translate": "advancements.endless.diamond_lattice.title"
+	},
+    "description": {
+		"translate": "advancements.endless.diamond_lattice.desc"
+	},
+    "frame": "task",
+    "background": "endless:textures/block/block_neutronium.png"
+  },
+  "criteria": { 
+    "diamond_lattice": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:diamond_lattice"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

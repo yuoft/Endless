@@ -1,0 +1,30 @@
+{
+  "parent": "endless:singularity",
+  "display": { 
+    "icon": { 
+      "item": "endless:star_fuel"
+    },
+    "title": {
+		"translate": "advancements.endless.star_fuel.title"
+	},
+    "description": {
+		"translate": "advancements.endless.star_fuel.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": { 
+    "star_fuel": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item":"endless:star_fuel"
+			}
+		]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "parent": "endless:extreme_crafting_table",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_catalyst"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_catalyst.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_catalyst.desc"
+	},
+    "frame": "task"
+  },
+  "criteria": { 
+    "infinity_catalyst": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:infinity_catalyst"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

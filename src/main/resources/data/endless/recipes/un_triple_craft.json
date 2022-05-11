@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+		"item": "endless:triple_craft"
+	}
+  ],
+  "result": {
+    "item": "minecraft:crafting_table",
+    "count": 9
+  }
+}

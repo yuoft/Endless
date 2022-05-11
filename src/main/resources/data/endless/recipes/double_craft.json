@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "endless:triple_craft"
+    }
+  },
+  "result": {
+    "item": "endless:double_craft"
+  }
+}

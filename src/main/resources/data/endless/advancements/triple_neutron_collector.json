@@ -1,0 +1,30 @@
+{
+  "parent": "endless:neutronium_compressor",
+  "display": { 
+    "icon": { 
+      "item": "endless:triple_neutron_collector"
+    },
+    "title": {
+		"translate": "advancements.endless.triple_neutron_collector.title"
+	},
+    "description": {
+		"translate": "advancements.endless.triple_neutron_collector.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": { 
+    "triple_neutron_collector": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item":"endless:triple_neutron_collector"
+			}
+		]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}
