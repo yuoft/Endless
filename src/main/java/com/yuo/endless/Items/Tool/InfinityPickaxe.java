@@ -116,7 +116,7 @@ public class InfinityPickaxe extends PickaxeItem {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        return new EndlessItemEntity(world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
+        return new EndlessItemEntity(world, location, itemstack);
     }
 
     //允许创建自定义物品实体

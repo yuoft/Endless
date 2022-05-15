@@ -6,7 +6,7 @@
   ],
   "key": {
     "x": {
-      "item": "minecraft:diamond"
+      "item": "endless:diamond_lattice"
     },
     "y": {
       "item": "minecraft:nether_star"

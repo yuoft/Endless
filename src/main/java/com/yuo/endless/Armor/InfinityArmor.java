@@ -91,8 +91,8 @@ public class InfinityArmor extends ArmorItem{
 			}
 			tags.putBoolean("flag", !tags.getBoolean("flag"));
 			playerIn.swingArm(handIn); //摆臂
-		}
-		return ActionResult.resultSuccess(stack);
+			return ActionResult.resultSuccess(stack);
+		}else return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 
 //	@Nullable
@@ -142,7 +142,7 @@ public class InfinityArmor extends ArmorItem{
 	@Nullable
 	@Override
 	public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-		return new EndlessItemEntity(world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
+		return new EndlessItemEntity(world, location, itemstack);
 	}
 
 	@Override

@@ -125,7 +125,7 @@ public class InfinityShovel extends ShovelItem {
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        return new EndlessItemEntity(world, location.getPosX(), location.getPosY(), location.getPosZ(), itemstack);
+        return new EndlessItemEntity(world, location, itemstack);
     }
 
     @Override
