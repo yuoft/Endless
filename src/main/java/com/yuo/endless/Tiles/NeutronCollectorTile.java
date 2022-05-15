@@ -21,7 +21,7 @@ public class NeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected int getCraftTime() {
-        return 1800;
+        return 3600;
     }
 
     @Override

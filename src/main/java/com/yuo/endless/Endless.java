@@ -49,9 +49,7 @@ public class Endless {
     public static boolean IS_ICE_AND_FIRE = false; //冰与火之歌
     public static boolean IS_TORCHERINO = false; //加速火把
     public static boolean IS_CREATE = false; //机械动力
-    public static boolean IS_EPIC_FIGHT = false; //史诗战斗
     public static boolean IS_S_BACK_PACKS = false; //精妙背包
-    public static boolean IS_CURIOS = false; //饰品
 	public Endless() {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -65,9 +63,7 @@ public class Endless {
         IS_ICE_AND_FIRE = checkMod("iceandfire");
         IS_TORCHERINO = checkMod("torcherino");
         IS_CREATE = checkMod("create");
-        IS_EPIC_FIGHT = checkMod("epicfight");
         IS_S_BACK_PACKS = checkMod("sophisticatedbackpacks");
-        IS_CURIOS = checkMod("curios");
         if (IS_SPACE_ARMS){
             ItemRegistry.registerSpaceArmsItem(); //在模组存在的前提下 注册物品
         }

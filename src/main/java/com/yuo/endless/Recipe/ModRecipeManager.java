@@ -13,7 +13,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
-import vazkii.botania.common.lib.ModTags;
 
 import java.util.Arrays;
 
@@ -40,9 +39,7 @@ public class ModRecipeManager {
         if (Endless.IS_ICE_AND_FIRE) count += 100;
         if (Endless.IS_TORCHERINO) rate += 2;
         if (Endless.IS_CREATE) rate += 1;
-        if (Endless.IS_EPIC_FIGHT) count -= 25;
         if (Endless.IS_S_BACK_PACKS) count += 100;
-        if (Endless.IS_CURIOS) count += 3;
 
         //限制
         int countEnd = Math.min(1000, count);
@@ -75,7 +72,7 @@ public class ModRecipeManager {
                 getList(new ItemStack(Blocks.DIAMOND_BLOCK)));
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityEmerald.get()), (200 + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.EMERALD_BLOCK)));
-        CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityGold.get()), (300 + countEnd) * rateEnd,
+        CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityGold.get()), (350 + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.GOLD_BLOCK)));
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityIron.get()), (300 + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.IRON_BLOCK)));
@@ -83,7 +80,7 @@ public class ModRecipeManager {
                 getList(new ItemStack(Blocks.LAPIS_BLOCK)));
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityNetherite.get()), (150 + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.NETHERITE_BLOCK)));
-        CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityQuartz.get()), (400 + countEnd) * rateEnd,
+        CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityQuartz.get()), (500 + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.QUARTZ_BLOCK)));
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityRedstone.get()), (400 + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.REDSTONE_BLOCK)));
@@ -523,7 +520,7 @@ public class ModRecipeManager {
                     new ItemStack(com.yuo.spacearms.Items.ItemRegistry.superBeetrootSoup.get()),
                     new ItemStack(com.yuo.spacearms.Items.ItemRegistry.superPumpkinPie.get()));
             CompressorManager.addInputs(ItemRegistry.singularityEmerald.get(),
-                    getList(new ItemStack(com.yuo.spacearms.Blocks.BlockRegistry.emeraldIngotBlock.get(), 5)));
+                    getList(new ItemStack(BlockRegistry.emeraldIngotBlock.get(), 5)));
         }
         if (Endless.IS_PAIMENG) {
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
