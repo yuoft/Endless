@@ -1,4 +1,4 @@
-package com.yuo.endless.Jei;
+package com.yuo.endless.integration.Jei;
 
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;

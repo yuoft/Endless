@@ -89,6 +89,7 @@ public class Endless {
         ModRecipeManager.addExtremeCrafts();
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
+//        ModRecipeManager.addRecipe();
         event.enqueueWork(NetWorkHandler::registerMessage); //创建数据包
     }
 

@@ -1,4 +1,4 @@
-package com.yuo.endless.Jei;
+package com.yuo.endless.integration.Jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yuo.endless.Endless;

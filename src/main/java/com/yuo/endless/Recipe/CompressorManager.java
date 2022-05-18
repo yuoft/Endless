@@ -16,6 +16,50 @@ public class CompressorManager {
     private static final ArrayList<NeutroniumRecipe> recipes = new ArrayList<>();
 
     /**
+     * 添加单个压缩机配方
+     * @param recipe 要添加的配方
+     */
+    public static void addRecipe(NeutroniumRecipe recipe){
+        for (NeutroniumRecipe next : recipes) {
+            if (next.hasOutput(recipe.getRecipeOutput())) {
+                next.addInput(getInputs(next.getRecipeInput(), recipe.getRecipeInput()));
+                return;
+            }
+        }
+        //未找到相同配方 则添加新配方
+        recipes.add(recipe);
+    }
+
+    /**
+     * 根据输出删除配方 （有多个合成的将会全部删除）
+     * @param stack 要删除的配方输出
+     */
+    public static void removeRecipe(ItemStack stack){
+        Iterator<NeutroniumRecipe> iterator = recipes.iterator();
+        while (iterator.hasNext()){
+            NeutroniumRecipe next = iterator.next();
+            if (next.hasOutput(stack)){
+                iterator.remove();
+                return;
+            }
+        }
+    }
+
+    /**
+     * 合并两个列表
+     * @param list 主列表
+     * @param nullList 要合并的列表
+     * @return 合并后的列表
+     */
+    static NonNullList<ItemStack> getInputs(NonNullList<ItemStack> list, NonNullList<ItemStack> nullList){
+        for (ItemStack stack : list) {
+            nullList.removeIf(next -> next.isItemEqual(stack));
+        }
+        list.addAll(nullList);
+        return list;
+    }
+
+    /**
      * 添加压缩机配方 如果已有配方则删除旧配方
      * @param output 配方输出
      * @param amount 数量
@@ -29,14 +73,14 @@ public class CompressorManager {
                 NeutroniumRecipe next = iterator.next();
                 if (next.getRecipeOutput().isItemEqual(output)){
                     iterator.remove();
-                    recipes.add(new NeutroniumRecipe(new ResourceLocation(Endless.MOD_ID, output.getItem().toString()), input, amount, output));
+                    recipes.add(new NeutroniumRecipe(output.getItem().getRegistryName(), input, amount, output));
                     flag = false;
                     break;
                 }
             }
         }
         if (flag)
-            recipes.add(new NeutroniumRecipe(new ResourceLocation(Endless.MOD_ID, output.getItem().toString()), input, amount, output));
+            recipes.add(new NeutroniumRecipe(output.getItem().getRegistryName(), input, amount, output));
     }
 
     //获取输出

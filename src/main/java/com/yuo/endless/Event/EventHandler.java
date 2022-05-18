@@ -11,6 +11,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -89,10 +90,10 @@ public class EventHandler {
             PlayerEntity player = (PlayerEntity) living;
             ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
             ItemStack legs = player.getItemStackFromSlot(EquipmentSlotType.LEGS);
-            Boolean hasHead = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
-            Boolean hasChest = chest.getItem() == ItemRegistry.infinityChest.get();
-            Boolean hasLegs = legs.getItem() == ItemRegistry.infinityLegs.get();
-            Boolean hasFeet = player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
+            boolean hasHead = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
+            boolean hasChest = chest.getItem() == ItemRegistry.infinityChest.get();
+            boolean hasLegs = legs.getItem() == ItemRegistry.infinityLegs.get();
+            boolean hasFeet = player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
             //防止其它模组飞行装备无法使用
             String key = player.getGameProfile().getName()+":"+player.world.isRemote;
             //head
@@ -109,7 +110,7 @@ public class EventHandler {
             if (playersWithChest.contains(key)) {
                 if (hasChest) {
                     player.abilities.allowFlying = true;
-                    if (chest.hasTag() && chest.getTag().getBoolean("flag"))
+                    if (chest.hasTag() && chest.getOrCreateTag().getBoolean("flag"))
                         player.abilities.setFlySpeed(0.1f); //飞行速度2倍
                 }else {
                     if (!player.isCreative()) {
@@ -124,13 +125,13 @@ public class EventHandler {
             }
             //legs
             if (playersWithLegs.contains(key)) {
+                ModifiableAttributeInstance attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
                 if (hasLegs) {
-//                    player.abilities.setWalkSpeed(0.3f);
-                    if (legs.hasTag() && legs.getTag().getBoolean("flag"))
-                        player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3f); //行走速度
-                } else {
-//                    player.abilities.setWalkSpeed(0.1f);
-                    player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
+                    if (legs.getOrCreateTag().getBoolean("flag") && attribute != null && !attribute.hasModifier(InfinityArmor.modifier))
+                        attribute.applyPersistentModifier(InfinityArmor.modifier); //行走速度
+                }else {
+                    if (attribute != null && attribute.hasModifier(InfinityArmor.modifier))
+                        attribute.removeModifier(InfinityArmor.modifier);
                     playersWithLegs.remove(key);
                 }
             } else if (hasLegs) {
@@ -157,7 +158,7 @@ public class EventHandler {
             PlayerEntity player = (PlayerEntity)living;
             String key = player.getGameProfile().getName()+":"+player.world.isRemote;
             ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
-            if (playersWithFeet.contains(key) && feet.hasTag() && feet.getTag().getBoolean("flag")) {
+            if (playersWithFeet.contains(key) && feet.hasTag() && feet.getOrCreateTag().getBoolean("flag")) {
                 player.setMotion(0, 1.0f, 0);
             }
         }
@@ -168,12 +169,12 @@ public class EventHandler {
     public static void opTool(PlayerEvent.ItemCraftedEvent event){
         ItemStack stack = event.getCrafting();
         if (stack.getItem().equals(ItemRegistry.infinitySword.get())){
-            Map<Enchantment, Integer> map = new HashMap<Enchantment, Integer>();
+            Map<Enchantment, Integer> map = new HashMap<>();
             map.put(Enchantments.LOOTING, 10);
             EnchantmentHelper.setEnchantments( map, stack);
         }
         if (stack.getItem().equals(ItemRegistry.infinityPickaxe.get())){
-            Map<Enchantment, Integer> map = new HashMap<Enchantment, Integer>();
+            Map<Enchantment, Integer> map = new HashMap<>();
             map.put(Enchantments.FORTUNE, 10);
             EnchantmentHelper.setEnchantments( map, stack);
         }
@@ -214,7 +215,7 @@ public class EventHandler {
         World world = event.getWorld();
         PlayerEntity player = event.getPlayer();
         if (stack.getItem() instanceof InfinityPickaxe && world.getBlockState(pos).getBlock().equals(Blocks.BEDROCK)){
-            if (stack.hasTag() && stack.getTag().getBoolean("hammer")){
+            if (stack.hasTag() && stack.getOrCreateTag().getBoolean("hammer")){
                 world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), new ItemStack(Blocks.BEDROCK)));
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
             }
@@ -282,8 +283,8 @@ public class EventHandler {
 
     /**
      * 判断玩家是否穿戴全套无尽装备
-     * @param player
-     * @return
+     * @param player 玩家
+     * @return 结果
      */
     public static boolean isInfinite(PlayerEntity player) {
         for (EquipmentSlotType slot : EquipmentSlotType.values()) {

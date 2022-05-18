@@ -6,15 +6,21 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.spacearms.Blocks.BlockRegistry;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 模组动态配方
@@ -502,6 +508,7 @@ public class ModRecipeManager {
                 'R', new ItemStack(Blocks.REDSTONE_BLOCK),
                 'O', new ItemStack(ItemRegistry.neutroniumBlock.get()));
     }
+
 
     /**
      * 根据其他模组修改配方

@@ -62,10 +62,6 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = deserializeIngredients(astring, map, i, j);
             ItemStack result = deserializeItem(JSONUtils.getJsonObject(json, "result"));
-//            String type = JSONUtils.getString(json, "type"); 联机错误1
-//            if (!type.equals("endless:extreme_craft")){
-//                throw new IllegalStateException("Type is not found");
-//            }
             return new ExtremeCraftRecipe(recipeId, i, j, nonnulllist, result);
         }
 
@@ -179,6 +175,11 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
     @Override
     public ResourceLocation getId() {
         return this.id;
+    }
+
+    //判断输出是否相同
+    public boolean hasOutput(ItemStack stack){
+        return result.isItemEqual(stack);
     }
 
     @Override

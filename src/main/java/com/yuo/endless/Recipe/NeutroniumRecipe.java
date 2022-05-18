@@ -44,10 +44,8 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         @Override
         public NeutroniumRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
             NonNullList<ItemStack> list = NonNullList.create();
-            for (JsonElement inputs : JSONUtils.getJsonArray(json, "inputs")) {
-                list.add(new ItemStack(JSONUtils.getItem(inputs, "item")));
-            }
-
+            ItemStack input = deserializeItem(JSONUtils.getJsonObject(json, "input"));
+            list.add(input);
             int count = JSONUtils.getInt(json, "count");
             ItemStack output = deserializeItem(JSONUtils.getJsonObject(json, "output"));
             return new NeutroniumRecipe(recipeId, list, count, output);
@@ -94,6 +92,11 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         }
 
         return false;
+    }
+
+    //输出是否相同
+    public boolean hasOutput(ItemStack stack){
+        return output.isItemEqual(stack);
     }
 
     //设置数量
