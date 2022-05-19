@@ -56,4 +56,9 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
             setDead();
         }else if (ticksExisted > 100) setDead();
     }
+
+    @Override
+    protected float getWaterDrag() {
+        return 0.99f;
+    }
 }

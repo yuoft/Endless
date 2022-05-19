@@ -2,15 +2,19 @@ package com.yuo.endless.Items.Tool;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import org.openzen.zenscript.codemodel.expression.ThisExpression;
 
 public class InfinityDamageSource extends EntityDamageSource {
 
+    private static String type = "infinity";
+
     public InfinityDamageSource(LivingEntity living) {
-        super("infinity", living);
+        super(type, living);
         setDamageBypassesArmor(); //不受盔甲护甲影响
         setDamageAllowedInCreativeMode(); //对创造模式造成伤害
         setDamageIsAbsolute(); //不受附魔，药水效果影响
@@ -31,4 +35,13 @@ public class InfinityDamageSource extends EntityDamageSource {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "InfinityDamageSource (" + this.damageSourceEntity + ")";
+    }
+
+    public static boolean isInfinity(DamageSource source){
+        if (source instanceof InfinityDamageSource) return true;
+        return source.damageType.equals(type);
+    }
 }

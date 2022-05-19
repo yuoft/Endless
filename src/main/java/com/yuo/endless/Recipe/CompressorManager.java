@@ -1,10 +1,8 @@
 package com.yuo.endless.Recipe;
 
-import com.yuo.endless.Endless;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
 
 import java.util.ArrayList;

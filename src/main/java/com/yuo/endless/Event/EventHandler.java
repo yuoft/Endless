@@ -63,24 +63,29 @@ public class EventHandler {
     //无尽装备 不受伤害
     @SubscribeEvent
     public static void opArmsImmuneDamage(LivingDamageEvent event){
-        LivingEntity entityLiving = event.getEntityLiving();
-        if (entityLiving instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) entityLiving;
-            Boolean hasChest = player.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == ItemRegistry.infinityChest.get();
-            Boolean hasLeg = player.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == ItemRegistry.infinityLegs.get();
-            Boolean hasHead = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
-            Boolean hasFeet = player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
+        LivingEntity living = event.getEntityLiving();
+        Boolean hasChest = living.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == ItemRegistry.infinityChest.get();
+        Boolean hasLeg = living.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == ItemRegistry.infinityLegs.get();
+        Boolean hasHead = living.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
+        Boolean hasFeet = living.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
+        if (living instanceof PlayerEntity){ //怪物无法触发全部伤害减免
+            PlayerEntity player = (PlayerEntity) living;
             if (isInfinite(player)){
-                if (event.getSource() instanceof InfinityDamageSource){
-                    event.setAmount(10);
+                if (InfinityDamageSource.isInfinity(event.getSource())){ //是无尽伤害 减免至10点
+                    ItemStack stack = player.getActiveItemStack();
+                    if (!stack.isEmpty() && isInfinityItem(stack)) { //玩家在使用无尽剑或弓时，不会受伤
+                        event.setAmount(5);
+                    } else event.setAmount(10);
+                } else {
+                    event.setAmount(0);
+                    event.setCanceled(true);
                 }
-                else event.setCanceled(true);
+            }else if (hasChest || hasFeet || hasHead || hasLeg){
+                event.setAmount(event.getAmount() * 0.001f);
             }
-            if (hasChest || hasFeet || hasHead || hasLeg){
-                event.setAmount(event.getAmount() * 0.001f); //减伤99.9%
-            }
+        }else if (hasChest || hasFeet || hasHead || hasLeg){ //怪物也可触发减伤
+            event.setAmount(event.getAmount() * 0.001f); //减伤99.9%
         }
-
     }
     //无尽胸甲 飞行 护腿 行走速度增加
     @SubscribeEvent
@@ -179,17 +184,17 @@ public class EventHandler {
             EnchantmentHelper.setEnchantments( map, stack);
         }
     }
-    //不会被烧毁的物品
-    @SubscribeEvent
-    public static void entityItemUnDeath(ItemEvent event) { //物品实体事件
-        ItemEntity entityItem = event.getEntityItem();
-        Item item = entityItem.getItem().getItem();
-        if(item instanceof InfinityArmor || item instanceof InfinityAxe || item instanceof InfinityBow ||
-                item instanceof InfinityHoe || item instanceof InfinityShovel || item instanceof InfinityPickaxe ||
-                item instanceof InfinitySword) {
-            entityItem.setInvulnerable(true); // 设置物品实体不会死亡
-        }
-    }
+//    //不会被烧毁的物品
+//    @SubscribeEvent
+//    public static void entityItemUnDeath(ItemEvent event) { //物品实体事件
+//        ItemEntity entityItem = event.getEntityItem();
+//        Item item = entityItem.getItem().getItem();
+//        if(item instanceof InfinityArmor || item instanceof InfinityAxe || item instanceof InfinityBow ||
+//                item instanceof InfinityHoe || item instanceof InfinityShovel || item instanceof InfinityPickaxe ||
+//                item instanceof InfinitySword) {
+//            entityItem.setInvulnerable(true); // 设置物品实体不会死亡
+//        }
+//    }
 
     //原版掉落修改
     @SubscribeEvent
@@ -226,7 +231,7 @@ public class EventHandler {
     public static void onDeath(LivingDeathEvent event) { //不能被无尽伤害外的攻击杀死
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            if (isInfinite(player) && !(event.getSource() instanceof InfinityDamageSource)) {
+            if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
                 event.setCanceled(true);
                 player.setHealth(player.getMaxHealth());
             }
@@ -252,14 +257,18 @@ public class EventHandler {
             return;
         }
         PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-        ItemStack mainhand = player.getHeldItemMainhand();
-        if (!mainhand.isEmpty() && (mainhand.getItem() == ItemRegistry.infinitySword.get() || mainhand.getItem() == ItemRegistry.infinityBow.get())
-                && player.isHandActive()) {
+        ItemStack stack = player.getActiveItemStack();
+        if (!stack.isEmpty() && isInfinityItem(stack)) { //玩家在使用无尽剑或弓时，不会受伤
+            event.setAmount(10);
             event.setCanceled(true);
         }
-        if (isInfinite(player) && !(event.getSource() instanceof InfinityDamageSource)) {
+        if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
             event.setCanceled(true);
         }
+    }
+
+    static boolean isInfinityItem(ItemStack stack){
+        return stack.getItem() == ItemRegistry.infinitySword.get() || stack.getItem() == ItemRegistry.infinityBow.get();
     }
 
     //玩家不会被无尽伤害外攻击
@@ -272,7 +281,7 @@ public class EventHandler {
             return;
         }
         PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-        if (isInfinite(player) && !(event.getSource()instanceof InfinityDamageSource)) {
+        if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
             event.setCanceled(true);
         }
         String key = player.getGameProfile().getName()+":"+player.world.isRemote;

@@ -1,22 +1,4 @@
 ### 无尽贪婪
-* mod的引入
-    ```java
-    //引入仓库
-    repositories {
-       maven {
-         url "https://www.cursemaven.com"
-       }
-       maven {
-         //引入maven仓库
-         url = "https://jei.net/maven"
-       }
-    }
-    dependencies {
-        minecraft 'net.minecraftforge:forge:1.16.4-35.1.4'
-        //    compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"  //引入mod API
-        compileOnly fg.deobf("com.yuo.spaceamrs:spaceamrs:1.16.4-1.3.7") //联动      
-        runtimeOnly fg.deobf("curse.maven:jei-238222:3245003") //引入mod
-    }```
 * 1.0.0开发中....
   1. 无尽工作台基本完成。
   2. 合成配方基本添加。
@@ -60,4 +42,5 @@
 * 5/15 调整水晶矩阵锭配方。无尽物品实体：不受除【掉出世界】外的所有伤害，
     可被快速捡起，消失时间短2分钟，无法被/kill指令清除。无尽盔甲右键穿戴修复。
 * 5/16 奇点合成数量修改，影响模组修改。无尽护腿功能实现修改。
-* 5/18 添加Crt支持。
+* 5/18 添加Crt支持。减小无尽箭矢在水中的阻力。
+* 5/19 无尽弓剑调整，修复与【额外植物学】的冲突bug。
