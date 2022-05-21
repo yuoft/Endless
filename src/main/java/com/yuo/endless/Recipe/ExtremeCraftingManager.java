@@ -189,7 +189,7 @@ public class ExtremeCraftingManager {
             }
         }
 
-        ExtremeCraftRecipe recipe = new ExtremeCraftRecipe(ResourceLocation.tryCreate(result.getItem().getName().getString()), 9, 9, getList(arraylist), result);
+        ExtremeCraftRecipe recipe = new ExtremeCraftRecipe(result.getItem().getRegistryName(), 9, 9, getList(arraylist), result);
         this.recipes.add(recipe);
         return recipe;
     }
