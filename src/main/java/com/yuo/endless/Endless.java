@@ -14,6 +14,8 @@ import com.yuo.endless.Render.GapingVoidRender;
 import com.yuo.endless.Render.InfinityArrowRender;
 import com.yuo.endless.Render.InfinityArrowSubRender;
 import com.yuo.endless.Sound.ModSounds;
+import com.yuo.endless.Proxy.IProxy;
+import com.yuo.endless.Proxy.ClientProxy;
 import com.yuo.endless.Tiles.TileTypeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
