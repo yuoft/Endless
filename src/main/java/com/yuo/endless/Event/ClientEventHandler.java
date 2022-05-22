@@ -10,7 +10,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID)
+/**
+ * Description:
+ * Author: cnlimiter
+ * Date: 2022/5/21 23:27
+ * Version: 1.0
+ */
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventHandler {
 
     @SubscribeEvent
