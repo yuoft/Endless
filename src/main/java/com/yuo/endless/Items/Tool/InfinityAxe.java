@@ -35,7 +35,7 @@ public class InfinityAxe extends AxeItem {
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         if (player.isSneaking() && !player.world.isRemote){
-            hander.aoeBlocks(player.world, pos, player, 64, itemstack, false, true);
+            hander.aoeBlocks(player.world, pos, player, 64, itemstack);
         }
         return false;
     }

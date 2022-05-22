@@ -9,6 +9,12 @@
         "endless:count": 1
       },
       "model": "endless:item/matter_cluster_full"
+    },
+    {
+      "predicate": {
+        "endless:count": 0.5
+      },
+      "model": "endless:item/matter_cluster_has"
     }
   ]
 }

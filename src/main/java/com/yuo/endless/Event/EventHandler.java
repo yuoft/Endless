@@ -3,6 +3,7 @@ package com.yuo.endless.Event;
 import com.yuo.endless.Armor.InfinityArmor;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -324,6 +325,19 @@ public class EventHandler {
         Item item = event.getItemStack().getItem();
         if (item == ItemRegistry.starFuel.get()){
             event.setBurnTime(Integer.MAX_VALUE);
+        }
+    }
+
+    //物质团合并
+    @SubscribeEvent
+    public static void matterClusterAdd(PlayerEvent.ItemPickupEvent event){
+        ItemEntity itemEntity = event.getOriginalEntity();
+        PlayerEntity player = event.getPlayer();
+        ItemStack stack = itemEntity.getItem();
+        if (player != null && stack.getItem() == ItemRegistry.matterCluster.get()){
+            if (MatterCluster.mergeMatterCluster(stack, player)){
+                itemEntity.remove();
+            }
         }
     }
 

@@ -4,8 +4,12 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.client.renderer.entity.model.ArmorStandArmorModel;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -106,9 +110,9 @@ public class InfinityArmor extends ArmorItem{
 //		ModelRenderer wing = new ModelRenderer(_default);
 //		wing.setRotationPoint(0, 0, 0);
 //		wing.setTextureOffset(0,32);
-//		wing.addBox(-16.0F, -16.0F, 10.0F, 32.0F, 16.0F,0, 0.0f, false);
+//		wing.addBox(-16.0F, -16.0F, 8.0F, 32.0F, 16.0F,0, 0.0f, false);
 //		_default.bipedBody.addChild(wing);
-//		return (A) new ArmorWingModel();
+//		return _default;
 //	}
 
 	@Override

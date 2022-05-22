@@ -119,15 +119,15 @@ public class ItemHander
     /**
      * 破坏方块
      * @param x 要破坏的方块坐标
-     * @param y
-     * @param z
+     * @param y 坐标
+     * @param z 坐标
      * @param world 世界
      * @param stack 工具
      */
     private void destroyBlocks(int x, int y, int z, World world, ItemStack stack, PlayerEntity player, ToolType type){
         BlockPos pos = new BlockPos(x, y, z);
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof GrassBlock){
+        if (type == ToolType.AXE && state.getBlock() instanceof GrassBlock){ //将草方块转变为泥土
             world.setBlockState(pos, Blocks.DIRT.getDefaultState(),2);
         }
         //排除空气方块和不能用镐挖掘方块 挖掘等级不够
@@ -137,6 +137,11 @@ public class ItemHander
         if (type == ToolType.PICKAXE && !MATERIAL_PICKAXE.contains(state.getMaterial())) return;
         if (type == ToolType.SHOVEL && !MATERIAL_SHOVEL.contains(state.getMaterial())) return;
         if (type == ToolType.AXE && !MATERIAL_AXE.contains(state.getMaterial())) return;
+        //物品超过64组则不继续添加
+        if (map.size() > 64){
+            world.destroyBlock(pos, false, player); //破坏方块
+            return;
+        }
         //添加到map中
         if (state.getBlock().equals(Blocks.BEDROCK)){
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);
@@ -147,11 +152,11 @@ public class ItemHander
 
     /**
      * 添加方块掉落物到map中
-     * @param world
-     * @param pos
-     * @param player
-     * @param stack
-     * @param map
+     * @param world 世界
+     * @param pos 方块坐标
+     * @param player 收获玩家
+     * @param stack 使用工具
+     * @param map 物品map
      */
     public static void putMapDrops(World world, BlockPos pos, PlayerEntity player, ItemStack stack, Map<ItemStack, Integer> map){
         for (ItemStack drop : Block.getDrops(world.getBlockState(pos), (ServerWorld) world, pos, world.getTileEntity(pos), player, stack)) {
@@ -161,8 +166,8 @@ public class ItemHander
 
     /**
      * 添加物品到map
-     * @param drop
-     * @param map
+     * @param drop 要添加的物品
+     * @param map 物品map
      */
     private static void putMapItem(ItemStack drop, Map<ItemStack, Integer> map){
         ItemStack itemStack = mapEquals(drop, map);
@@ -173,20 +178,23 @@ public class ItemHander
 
     /**
      * 生成物质团到世界
-     * @param player
-     * @param world
-     * @param map
+     * @param player 玩家
+     * @param world 世界
+     * @param map 物品
      */
     public static void spawnMatterCluster(PlayerEntity player, World world, Map<ItemStack, Integer> map){
-        if (!player.isCreative() && map.size() > 0)
-            world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), MatterCluster.setMap(map)));
+        ItemStack stack = MatterCluster.setMap(map);
+        if (!player.isCreative() && map.size() > 0){ //创造模式不生成物质团
+            if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
+                world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
+        }
     }
 
     /**
      * 判断map中是否有相同键，并且返回键（物品相同）
-     * @param stack
-     * @param map
-     * @return
+     * @param stack 要添加的物品
+     * @param map 物品map
+     * @return 相同的物品
      */
     public static ItemStack mapEquals(ItemStack stack, Map<ItemStack, Integer> map){
         for (ItemStack itemStack : map.keySet()) {
@@ -197,19 +205,25 @@ public class ItemHander
         return ItemStack.EMPTY;
     }
 
-    public void aoeBlocks(World world, BlockPos origin, PlayerEntity player, int steps, ItemStack stack, boolean leaves, boolean force){
-        BlockState originState = world.getBlockState(origin);
-        Block originBlock = originState.getBlock();
-        if (!force && originBlock.isAir(originState, world, origin)) {
+    /**
+     * 无尽斧 连锁砍树
+     * @param world 世界
+     * @param origin 树木方块
+     * @param player 玩家
+     * @param steps 连锁数量
+     * @param stack 工具
+     */
+    public void aoeBlocks(World world, BlockPos origin, PlayerEntity player, int steps, ItemStack stack){
+        if (world.isAirBlock(origin)) {
             return;
         }
         destroyBlocks(origin, world, stack, player, ToolType.AXE);
-        if (steps == 0) {
+        if (steps == 0) { //达到最大连锁数量
             return;
         }
         for (Direction dir : Direction.values()) {
             BlockPos stepPos = origin.offset(dir);
-            if (set.contains(stepPos)) {
+            if (set.contains(stepPos)) { //防止操作重复坐标
                 continue;
             }
             BlockState stepState = world.getBlockState(stepPos);
@@ -217,10 +231,9 @@ public class ItemHander
             boolean log = stepState.getMaterial() == Material.WOOD;
             boolean leaf = stepBlock instanceof LeavesBlock;
             if (log || leaf) {
-                int step = steps - 1;
-                steps = leaf ? leaves ? steps : 3 : steps;
-                aoeBlocks(world, stepPos, player, step, stack, leaf, false);
-                set.add(stepPos);
+                int step = steps - 1; //剩余数量-1
+                aoeBlocks(world, stepPos, player, step, stack); //递归
+                set.add(stepPos); //添加当前坐标
             }
         }
     }
