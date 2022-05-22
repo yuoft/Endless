@@ -14,6 +14,8 @@ import com.yuo.endless.Render.GapingVoidRender;
 import com.yuo.endless.Render.InfinityArrowRender;
 import com.yuo.endless.Render.InfinityArrowSubRender;
 import com.yuo.endless.Sound.ModSounds;
+import com.yuo.endless.Proxy.IProxy;
+import com.yuo.endless.Proxy.ClientProxy;
 import com.yuo.endless.Tiles.TileTypeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -22,9 +24,11 @@ import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -36,7 +40,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import java.util.function.Supplier;
 
 @Mod("endless")
-@Mod.EventBusSubscriber(modid = Endless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Endless {
 	public static final String MOD_ID = "endless";
     public static boolean IS_SPACE_ARMS = false; //强力装备
@@ -50,7 +53,11 @@ public class Endless {
     public static boolean IS_TORCHERINO = false; //加速火把
     public static boolean IS_CREATE = false; //机械动力
     public static boolean IS_S_BACK_PACKS = false; //精妙背包
+    public static IProxy proxy = new IProxy() {};
 	public Endless() {
+
+        DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> proxy = new ClientProxy());
+        proxy.registerHandlers();
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         IS_SPACE_ARMS = checkMod("spacearms");
@@ -72,7 +79,6 @@ public class Endless {
         }
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::clientSetup);
         //注册物品至mod总线
         ItemRegistry.ITEMS.register(modEventBus);
         BlockRegistry.BLOCKS.register(modEventBus);
@@ -84,98 +90,12 @@ public class Endless {
     }
 
 
-//    @SubscribeEvent
     private void commonSetup(final FMLCommonSetupEvent event) {
         ModRecipeManager.addExtremeCrafts();
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
 //        ModRecipeManager.addRecipe();
         event.enqueueWork(NetWorkHandler::registerMessage); //创建数据包
-    }
-
-    @SubscribeEvent
-    public void clientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() ->{
-            setBowProperty(ItemRegistry.infinityBow.get());
-            setMatterClusterProperty(ItemRegistry.matterCluster.get());
-            setInfinityToolProperty(ItemRegistry.infinityPickaxe.get(), "hammer");
-            setInfinityToolProperty(ItemRegistry.infinityShovel.get(), "destroyer");
-        });
-        //绑定Container和ContainerScreen
-        event.enqueueWork(() -> {
-            ScreenManager.registerFactory(ContainerTypeRegistry.extremeCraftContainer.get(), ExtremeCraftScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.neutronCollectorContainer.get(), NeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.denseNeutronCollectorContainer.get(), DenseNeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.doubleNeutronCollectorContainer.get(), DoubleNeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.tripleNeutronCollectorContainer.get(), TripleNeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.neutroniumCompressorContainer.get(), NeutroniumCompressorScreen::new);
-        });
-        registerEntityRender(event.getMinecraftSupplier()); //注册客户端实体渲染
-    }
-    //    @SubscribeEvent
-//    public static void onEnqueue(final InterModEnqueueEvent event) {
-//        System.out.println("---------------+++++++++++++++++++");
-//    }
-
-    @SubscribeEvent
-    public static void itemColors(ColorHandlerEvent.Item event) {
-        // 第二个参数代表“所有需要使用此 IItemColor 的物品”，是一个 var-arg Item。
-        // 有鉴于第一个参数是一个只有一个方法的接口，我们也可以直接在这里使用 lambda 表达式。
-        for (RegistryObject<Item> entry : ItemRegistry.ITEMS.getEntries()) {
-            Item item = entry.get();
-            if (item instanceof Singularity){
-                event.getItemColors().register(Singularity::getColor, item);
-            }
-        }
-//        event.getItemColors().register(Singularity::getColor, ItemRegistry.singularityIron.get(), ItemRegistry.singularityGold.get(),
-//                ItemRegistry.singularityDiamond.get(), ItemRegistry.singularityEmerald.get(), ItemRegistry.singularityNetherite.get(),
-//                ItemRegistry.singularityCoal.get(), ItemRegistry.singularityLapis.get(), ItemRegistry.singularityRedstone.get(),
-//                ItemRegistry.singularityQuartz.get(), ItemRegistry.singularityClay.get());
-
-        // 出于某些原因，你还可以在这里拿到之前的 `BlockColors`。在某些时候这个玩意会很有用。
-//        BlockColors blockColorHandler = event.getBlockColors();
-    }
-
-    //使用动态属性来切换无尽镐，铲形态
-    private void setInfinityToolProperty(Item item, String prop) {
-        ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                prop), (itemStack, clientWorld, livingEntity) -> {
-            if (livingEntity == null){
-                return 0.0f;
-            }
-            if (itemStack.getTag() != null && itemStack.getTag().getBoolean(prop)){
-                    return 1.0f;
-            }
-            return 0.0f;
-        });
-    }
-
-    private void registerEntityRender(Supplier<Minecraft> minecraft){
-        ItemRenderer renderer = minecraft.get().getItemRenderer();
-        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.ENDEST_PEARL.get(), manager -> new SpriteRenderer<>(manager, renderer)); //投掷物渲染
-        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_ARROW.get(), InfinityArrowRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
-    }
-
-    //注册物品染色
-    //设置弓物品的动态属性
-    private void setBowProperty(Item item){
-        ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                "pull"), (itemStack, clientWorld, livingEntity) -> {
-            if (livingEntity == null) {
-                return 0.0F;
-            } else {
-                return livingEntity.getActiveItemStack() != itemStack ? 0.0F : (float)(itemStack.getUseDuration() - livingEntity.getItemInUseCount()) / 20.0F;
-            }
-        });
-        ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                "pulling"), (itemStack, clientWorld, livingEntity) -> livingEntity != null && livingEntity.isHandActive() && livingEntity.getActiveItemStack() == itemStack ? 1.0F : 0.0F);
-    }
-
-    private void setMatterClusterProperty(Item item){
-        ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                "count"), (itemStack, clientWorld, livingEntity) -> MatterCluster.getItemTag(itemStack).size() > 0 ? 1f:0f);
     }
 
     /**
