@@ -1,5 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
+import com.yuo.endless.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,10 +15,10 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 
 public class InfinityAxe extends AxeItem {
-    private ItemHander hander;
+    private final ItemHander hander;
 
     public InfinityAxe() {
-        super(MyItemTier.INFINITY_TOOL, 10, -3.0f, new Properties().group(ModGroup.myGroup).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, 10, -3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
         this.hander = new ItemHander();
     }
 
@@ -35,7 +36,7 @@ public class InfinityAxe extends AxeItem {
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
         if (player.isSneaking() && !player.world.isRemote){
-            hander.aoeBlocks(player.world, pos, player, 64, itemstack);
+            hander.aoeBlocks(player.world, pos, player, Config.SERVER.axeChainCount.get(), itemstack);
         }
         return false;
     }

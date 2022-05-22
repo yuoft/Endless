@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class NeutroniumRecipe implements INeutroniumRecipe {
 
-    private NonNullList<ItemStack> inputs; //可压缩物品 压缩效率 推荐为5的倍数
+    private final NonNullList<ItemStack> inputs; //可压缩物品 压缩效率 推荐为5的倍数
     private int count; //数量 可能大于64
     private final ItemStack output;
     private final ResourceLocation id;

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class NiumCSlot extends Slot {
-    private World world;
+    private final World world;
     public NiumCSlot(IInventory inventoryIn, World worldIn, int index, int xPosition, int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
         this.world = worldIn;

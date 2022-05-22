@@ -1,5 +1,6 @@
 package com.yuo.endless.Entity;
 
+import com.yuo.endless.Config;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -14,17 +15,17 @@ import net.minecraftforge.fml.network.NetworkHooks;
 public class InfinityArrowSubEntity extends AbstractArrowEntity {
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setDamage(10000.0f);
+        this.setDamage(Config.SERVER.subArrowDamage.get());
     }
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrowEntity> type, double x, double y, double z, World worldIn) {
         super(type, x, y, z, worldIn);
-        this.setDamage(10000.0f);
+        this.setDamage(Config.SERVER.subArrowDamage.get());
     }
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrowEntity> type, LivingEntity shooter, World worldIn) {
         super(type, shooter, worldIn);
-        this.setDamage(10000.0f);
+        this.setDamage(Config.SERVER.subArrowDamage.get());
     }
 
     @Override
@@ -35,7 +36,7 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putDouble("damage", 10000.0f);
+        compound.putDouble("damage", Config.SERVER.subArrowDamage.get());
     }
 
     @Override

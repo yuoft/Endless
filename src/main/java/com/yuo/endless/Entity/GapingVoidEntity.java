@@ -40,7 +40,7 @@ import java.util.UUID;
 
 //黑洞实体
 public class GapingVoidEntity extends Entity {
-    private GameProfile FAKE = new GameProfile(UUID.fromString("32283731-bbef-487c-bb69-c7e32f84ed27"), "[Endless]");
+    private final GameProfile FAKE = new GameProfile(UUID.fromString("32283731-bbef-487c-bb69-c7e32f84ed27"), "[Endless]");
 
     public static final DataParameter<Integer> AGE_PARAMETER = EntityDataManager.createKey(GapingVoidEntity.class, DataSerializers.VARINT);
     public static final int maxLifetime = 186; //存在时间
@@ -70,9 +70,7 @@ public class GapingVoidEntity extends Entity {
     public static final Predicate<Entity> SUCK_PREDICATE = input -> {
         if (input instanceof PlayerEntity) {
             PlayerEntity p = (PlayerEntity) input;
-            if (p.abilities.isCreativeMode && p.abilities.isFlying) {
-                return false;
-            }
+            return !p.abilities.isCreativeMode || !p.abilities.isFlying;
         }
         return true;
     };
@@ -85,13 +83,8 @@ public class GapingVoidEntity extends Entity {
 
         if (input instanceof PlayerEntity) {
             PlayerEntity p = (PlayerEntity) input;
-            if (p.abilities.isCreativeMode) {
-                return false;
-            }
-        } else if (input instanceof EndlessItemEntity) {
-            return false;
-        }
-        return true;
+            return !p.abilities.isCreativeMode;
+        } else return !(input instanceof EndlessItemEntity);
     };
 
     @Override

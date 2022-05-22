@@ -1,6 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.Sets;
+import com.yuo.endless.Config;
 import com.yuo.endless.Items.MatterCluster;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -8,10 +9,13 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 
 import java.util.HashMap;
@@ -24,8 +28,8 @@ import java.util.Set;
  */
 public class ItemHander 
 {
-    private Map<ItemStack, Integer> map = new HashMap<>();
-    private static Set<BlockPos> set = new HashSet<>();
+    private final Map<ItemStack, Integer> map = new HashMap<>();
+    private static final Set<BlockPos> set = new HashSet<>();
     public static final Set<Material> MATERIAL_PICKAXE = Sets.newHashSet(Material.ROCK, Material.ANVIL, Material.IRON, Material.ICE,
             Material.GLASS, Material.TNT, Material.REDSTONE_LIGHT, Material.PACKED_ICE, Material.SPONGE, Material.SHULKER, Material.WOOL,
             Material.PISTON, Material.CORAL, Material.GOURD);
@@ -37,12 +41,12 @@ public class ItemHander
 
     /**
      * 根据玩家朝向来破坏方块
-     * @param stack
-     * @param world
-     * @param pos
-     * @param player
+     * @param stack 工具
+     * @param world 世界
+     * @param pos 坐标
+     * @param player 玩家
      * @param lv 范围挖掘等级 1:3*3*3；2:5*5*5
-     * @param type
+     * @param type 工具类型
      */
 	public void onBlockStartBreak(ItemStack stack, World world, BlockPos pos, PlayerEntity player, Integer lv, ToolType type) {
         Vector3d vec = player.getLookVec();
@@ -52,7 +56,7 @@ public class ItemHander
                 for (int x = pos.getX() - lv; x <= pos.getX() + lv; x ++){
                     for (int y = pos.getY(); y <= pos.getY() + (2 * lv); y ++){
                         for (int z = pos.getZ() - lv; z <= pos.getZ() + lv; z ++){
-                            destroyBlocks(x, y, z, world, stack, player, type);
+                            destroyBlock(x, y, z, world, stack, player, type);
                         }
                     }
                 }
@@ -61,7 +65,7 @@ public class ItemHander
                 for (int x = pos.getX() - lv; x <= pos.getX() + lv; x ++){
                     for (int y = pos.getY(); y >= pos.getY() - (2 * lv); y --){
                         for (int z = pos.getZ() - lv; z <= pos.getZ() + lv; z ++){
-                            destroyBlocks(x, y, z, world, stack, player, type);
+                            destroyBlock(x, y, z, world, stack, player, type);
                         }
                     }
                 }
@@ -70,7 +74,7 @@ public class ItemHander
                 for (int x = pos.getX(); x <= pos.getX() + (2 * lv); x ++){
                     for (int y = pos.getY() - lv; y <= pos.getY() + lv; y ++){
                         for (int z = pos.getZ() - lv; z <= pos.getZ() + lv; z ++){
-                            destroyBlocks(x, y, z, world, stack, player, type);
+                            destroyBlock(x, y, z, world, stack, player, type);
                         }
                     }
                 }
@@ -79,7 +83,7 @@ public class ItemHander
                 for (int x = pos.getX(); x >= pos.getX() - (2 * lv); x --){
                     for (int y = pos.getY() - lv; y <= pos.getY() + lv; y ++){
                         for (int z = pos.getZ() - lv; z <= pos.getZ() + lv; z ++){
-                            destroyBlocks(x, y, z, world, stack, player, type);
+                            destroyBlock(x, y, z, world, stack, player, type);
                         }
                     }
                 }
@@ -88,7 +92,7 @@ public class ItemHander
                 for (int x = pos.getX() - lv; x <= pos.getX() + lv; x ++){
                     for (int y = pos.getY() - lv; y <= pos.getY() + lv; y ++){
                         for (int z = pos.getZ(); z >= pos.getZ() - (2 * lv); z --){
-                            destroyBlocks(x, y, z, world, stack, player, type);
+                            destroyBlock(x, y, z, world, stack, player, type);
                         }
                     }
                 }
@@ -97,7 +101,7 @@ public class ItemHander
                 for (int x = pos.getX() - lv; x <= pos.getX() + lv; x ++){
                     for (int y = pos.getY() - lv; y <= pos.getY() + lv; y ++){
                         for (int z = pos.getZ(); z <= pos.getZ() + (2 * lv); z ++){
-                            destroyBlocks(x, y, z, world, stack, player, type);
+                            destroyBlock(x, y, z, world, stack, player, type);
                         }
                     }
                 }
@@ -107,9 +111,16 @@ public class ItemHander
         map.clear(); //清空map
     }
 
-    private void destroyBlocks(BlockPos pos, World world, ItemStack stack, PlayerEntity player, ToolType type){
+    /**
+     * 无尽斧砍树
+     * @param pos 坐标
+     * @param world 世界
+     * @param stack 工具
+     * @param player 玩家
+     */
+    private void destroyBlock(BlockPos pos, World world, ItemStack stack, PlayerEntity player){
         BlockState state = world.getBlockState(pos);
-        if (world.isAirBlock(pos) || state.getHarvestLevel() > stack.getHarvestLevel(type, player, state)
+        if (world.isAirBlock(pos) || state.getHarvestLevel() > stack.getHarvestLevel(ToolType.AXE, player, state)
                 || !MATERIAL_AXE.contains(state.getMaterial())){
             return;
         }
@@ -124,7 +135,7 @@ public class ItemHander
      * @param world 世界
      * @param stack 工具
      */
-    private void destroyBlocks(int x, int y, int z, World world, ItemStack stack, PlayerEntity player, ToolType type){
+    private void destroyBlock(int x, int y, int z, World world, ItemStack stack, PlayerEntity player, ToolType type){
         BlockPos pos = new BlockPos(x, y, z);
         BlockState state = world.getBlockState(pos);
         if (type == ToolType.AXE && state.getBlock() instanceof GrassBlock){ //将草方块转变为泥土
@@ -147,7 +158,7 @@ public class ItemHander
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);
             putMapItem(stack1, map);
         }else putMapDrops(world, pos, player, stack, map);
-        world.destroyBlock(pos, false, player); //破坏方块
+        world.removeBlock(pos, false); //破坏方块
     }
 
     /**
@@ -159,7 +170,9 @@ public class ItemHander
      * @param map 物品map
      */
     public static void putMapDrops(World world, BlockPos pos, PlayerEntity player, ItemStack stack, Map<ItemStack, Integer> map){
-        for (ItemStack drop : Block.getDrops(world.getBlockState(pos), (ServerWorld) world, pos, world.getTileEntity(pos), player, stack)) {
+        BlockState state = world.getBlockState(pos);
+        if (Config.SERVER.isKeepStone.get() && (state.isIn(Tags.Blocks.STONE) || state.isIn(Tags.Blocks.DIRT))) return; //不保留石头和泥土
+        for (ItemStack drop : Block.getDrops(state, (ServerWorld) world, pos, world.getTileEntity(pos), player, stack)) {
             putMapItem(drop, map);
         }
     }
@@ -185,8 +198,11 @@ public class ItemHander
     public static void spawnMatterCluster(PlayerEntity player, World world, Map<ItemStack, Integer> map){
         ItemStack stack = MatterCluster.setMap(map);
         if (!player.isCreative() && map.size() > 0){ //创造模式不生成物质团
-            if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
-                world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
+            if (Config.SERVER.isMergeMatterCluster.get()){
+                if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
+                    world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
+                else world.playSound(player, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0f, 3.0f);
+            }else world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
         }
     }
 
@@ -217,7 +233,7 @@ public class ItemHander
         if (world.isAirBlock(origin)) {
             return;
         }
-        destroyBlocks(origin, world, stack, player, ToolType.AXE);
+        destroyBlock(origin, world, stack, player);
         if (steps == 0) { //达到最大连锁数量
             return;
         }

@@ -34,7 +34,7 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         this.inputInventory = new ExtremeCraftInventory(this, tile);
         this.outputInventory = new ExtremeCraftInventoryResult(tile);
         this.player = playerInventory.player;
-        this.world = playerInventory.player.world;;
+        this.world = playerInventory.player.world;
         //添加9*9合成栏
         for (int m = 0; m < 9; m++){
             for (int n = 0; n < 9; n++){

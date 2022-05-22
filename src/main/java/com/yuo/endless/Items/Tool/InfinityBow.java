@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 public class InfinityBow extends BowItem {
     public InfinityBow() {
-        super(new Properties().group(ModGroup.myGroup).maxStackSize(1));
+        super(new Properties().group(ModGroup.endless).maxStackSize(1));
     }
 
     //使用时间

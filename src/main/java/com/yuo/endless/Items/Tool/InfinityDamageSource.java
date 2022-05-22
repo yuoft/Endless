@@ -11,7 +11,7 @@ import org.openzen.zenscript.codemodel.expression.ThisExpression;
 
 public class InfinityDamageSource extends EntityDamageSource {
 
-    private static String type = "infinity";
+    private static final String type = "infinity";
 
     public InfinityDamageSource(LivingEntity living) {
         super(type, living);

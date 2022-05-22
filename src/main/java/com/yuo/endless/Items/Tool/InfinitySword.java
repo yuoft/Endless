@@ -1,5 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
+import com.yuo.endless.Config;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.enchantment.Enchantment;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class InfinitySword extends SwordItem{
 
     public InfinitySword() {
-        super(MyItemTier.INFINITY_ARMS, 0, -2.4f, new Properties().group(ModGroup.myGroup).isImmuneToFire());
+        super(MyItemTier.INFINITY_SWORD, 0, -2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override
@@ -78,6 +79,7 @@ public class InfinitySword extends SwordItem{
             PlayerEntity player = (PlayerEntity) target;
             if (EventHandler.isInfinite(player)){ //如果玩家穿戴全套无尽装备，则只造成10点伤害
                 player.attackEntityFrom(new InfinityDamageSource(attacker), 10.0f);
+                return true;
             }else player.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
         }
         else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
@@ -91,7 +93,7 @@ public class InfinitySword extends SwordItem{
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack heldItem = playerIn.getHeldItem(handIn);
         if (!worldIn.isRemote) {
-            attackAOE(playerIn, 32, 10000, playerIn.isSneaking());
+            attackAOE(playerIn, Config.SERVER.swordAttackRange.get(), Config.SERVER.swordRangeDamage.get(), playerIn.isSneaking() && Config.SERVER.isSwordAttackAnimal.get());
             playerIn.getCooldownTracker().setCooldown(heldItem.getItem(), 20);
         }
         worldIn.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP , SoundCategory.PLAYERS, 1.0f, 5.0f);
@@ -114,7 +116,7 @@ public class InfinitySword extends SwordItem{
                 if (entity instanceof IMob) {
                     if (entity instanceof EnderDragonEntity){
                         EnderDragonEntity drageon = (EnderDragonEntity) entity;
-                        drageon.attackEntityPartFrom(drageon.dragonPartHead, src, Float.POSITIVE_INFINITY);
+                        drageon.attackEntityPartFrom(drageon.dragonPartHead, src, damage);
                     }else if (entity instanceof WitherEntity){
                         WitherEntity wither = (WitherEntity) entity;
                         wither.setInvulTime(0); //将凋零无敌时间设为0

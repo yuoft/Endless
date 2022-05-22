@@ -4,12 +4,8 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
 import com.yuo.endless.tab.ModGroup;
-import net.minecraft.client.renderer.entity.model.ArmorStandArmorModel;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,7 +37,7 @@ public class InfinityArmor extends ArmorItem{
 	public static AttributeModifier modifier = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed",0.2, AttributeModifier.Operation.ADDITION);
 
 	public InfinityArmor(EquipmentSlotType slot) {
-		super(MyArmorMaterial.INFINITY, slot, new Properties().maxStackSize(1).group(ModGroup.myGroup));
+		super(MyArmorMaterial.INFINITY, slot, new Properties().maxStackSize(1).group(ModGroup.endless));
 	}
 
 	//不会触发末影人仇恨

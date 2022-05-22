@@ -17,7 +17,7 @@ public class Singularity extends Item{
     private final int color; //主色
 
     public Singularity(int colorIndex, int color) {
-        super(new Properties().group(ModGroup.myGroup));
+        super(new Properties().group(ModGroup.endless));
         this.colorIndex = colorIndex;
         this.color = color;
     }

@@ -1,6 +1,7 @@
 package com.yuo.endless.Armor;
 
 import com.yuo.endless.Endless;
+import com.yuo.endless.Items.ItemRegistry;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
@@ -16,7 +17,11 @@ import java.util.function.Supplier;
 //盔甲材料类
 public enum MyArmorMaterial implements IArmorMaterial {
 	//---------材质---耐久值----------护甲值-------附魔能力--------音效----------------------盔甲韧性- 击退抗性-修复材料
-	INFINITY(Endless.MOD_ID + ":" + "infinity", 999, new int[] { 6, 12, 10, 6 }, 99, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3, 1,() -> Ingredient.EMPTY);
+	INFINITY(Endless.MOD_ID + ":" + "infinity", 999, new int[] { 6, 10, 12, 6 }, 99, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6, 1,() -> Ingredient.EMPTY),
+	NEUTRON(Endless.MOD_ID + ":" + "neutron", 53, new int[] { 6, 10, 12, 6 }, 21, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 5, 0.2f,
+			() -> Ingredient.fromItems(ItemRegistry.neutroniumIngot.get())),
+	CRYSTAL(Endless.MOD_ID + ":" + "crystal", 41, new int[] { 4, 8, 10, 4 }, 17, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3, 0.1f,
+			() -> Ingredient.fromItems(ItemRegistry.crystalMatrixIngot.get()));
 
 	private static final int[] MAX_DAMAGE_ARRAY = new int[] { 13, 15, 16, 11 };
 	private final String name;

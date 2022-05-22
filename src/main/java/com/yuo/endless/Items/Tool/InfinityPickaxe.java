@@ -29,7 +29,7 @@ public class InfinityPickaxe extends PickaxeItem {
     private final ItemHander hander;
 
     public InfinityPickaxe() {
-        super(MyItemTier.INFINITY_TOOL, -3, -2.5f, new Properties().group(ModGroup.myGroup).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -3, -2.5f, new Properties().group(ModGroup.endless).isImmuneToFire());
         this.hander = new ItemHander();
     }
 

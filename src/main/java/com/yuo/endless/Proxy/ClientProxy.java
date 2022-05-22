@@ -15,18 +15,21 @@ import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
+ * 客户端属性注册
  * Description:
  * Author: cnlimiter
  * Date: 2022/5/21 23:37
  * Version: 1.0
  */
-public class ClientProxy implements IProxy{
+public class ClientProxy implements IProxy {
 
     public void clientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() ->{

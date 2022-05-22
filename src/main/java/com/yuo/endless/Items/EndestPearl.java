@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 public class EndestPearl extends Item {
 
     public EndestPearl() {
-        super(new Properties().group(ModGroup.myGroup).maxStackSize(16));
+        super(new Properties().group(ModGroup.endless).maxStackSize(16));
     }
 
     @Override

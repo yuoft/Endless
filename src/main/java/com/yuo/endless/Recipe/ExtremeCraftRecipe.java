@@ -250,7 +250,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
 
         for(Map.Entry<String, JsonElement> entry : json.entrySet()) {
             if (entry.getKey().length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: '" + (String)entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+                throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
             }
 
             if (" ".equals(entry.getKey())) {

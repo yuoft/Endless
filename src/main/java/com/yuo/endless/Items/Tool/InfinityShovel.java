@@ -21,7 +21,7 @@ public class InfinityShovel extends ShovelItem {
     private final ItemHander hander;
 
     public InfinityShovel() {
-        super(MyItemTier.INFINITY_TOOL, -2, -2.8f, new Properties().group(ModGroup.myGroup).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -2, -2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
         this.hander = new ItemHander();
     }
 
@@ -81,7 +81,7 @@ public class InfinityShovel extends ShovelItem {
                 blockstate2 = blockstate1;
             } else if (blockstate.getBlock() instanceof CampfireBlock && blockstate.get(CampfireBlock.LIT)) {
                 if (!world.isRemote()) {
-                    world.playEvent((PlayerEntity)null, 1009, blockpos, 0);
+                    world.playEvent(null, 1009, blockpos, 0);
                 }
 
                 CampfireBlock.extinguish(world, blockpos, blockstate);

@@ -1,6 +1,7 @@
 package com.yuo.endless.Event;
 
 import com.yuo.endless.Armor.InfinityArmor;
+import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.MatterCluster;
@@ -28,7 +29,6 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.item.ItemEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -43,10 +43,10 @@ import java.util.*;
  */
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID)
 public class EventHandler {
-    public static List<String> playersWithHead = new ArrayList<String>();
-    public static List<String> playersWithChest = new ArrayList<String>();
-    public static List<String> playersWithLegs = new ArrayList<String>();
-    public static List<String> playersWithFeet = new ArrayList<String>();
+    public static List<String> playersWithHead = new ArrayList<>();
+    public static List<String> playersWithChest = new ArrayList<>();
+    public static List<String> playersWithLegs = new ArrayList<>();
+    public static List<String> playersWithFeet = new ArrayList<>();
 
     //无尽鞋子 无摔落伤害
     @SubscribeEvent
@@ -331,12 +331,12 @@ public class EventHandler {
     //物质团合并
     @SubscribeEvent
     public static void matterClusterAdd(PlayerEvent.ItemPickupEvent event){
-        ItemEntity itemEntity = event.getOriginalEntity();
         PlayerEntity player = event.getPlayer();
-        ItemStack stack = itemEntity.getItem();
-        if (player != null && stack.getItem() == ItemRegistry.matterCluster.get()){
-            if (MatterCluster.mergeMatterCluster(stack, player)){
-                itemEntity.remove();
+        ItemStack stack = event.getStack();
+        if (player != null && stack.getItem() == ItemRegistry.matterCluster.get() && Config.SERVER.isMergeMatterCluster.get()){
+            int slot = player.inventory.getSlotFor(stack);
+            if (MatterCluster.mergeMatterCluster(stack, player, slot)){
+                player.inventory.removeStackFromSlot(slot);
             }
         }
     }

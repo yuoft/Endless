@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 public class ExtremeCraftInventoryResult extends CraftResultInventory {
 
-    private ExtremeCraftTile craftTile;
+    private final ExtremeCraftTile craftTile;
 
     public ExtremeCraftInventoryResult(ExtremeCraftTile tile){
         this.craftTile = tile;

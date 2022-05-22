@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class InfinityHoe extends HoeItem {
     public InfinityHoe() {
-        super(MyItemTier.INFINITY_TOOL, -10, 17.0f, new Properties().group(ModGroup.myGroup).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -10, 17.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override

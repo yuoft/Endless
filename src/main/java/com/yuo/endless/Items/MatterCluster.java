@@ -13,7 +13,6 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -32,7 +31,7 @@ public class MatterCluster extends Item  {
     public static String MAIN_NBT = "matterCluster";
 
     public MatterCluster() {
-        super(new Properties().group(ModGroup.myGroup));
+        super(new Properties().group(ModGroup.endless).maxStackSize(1));
     }
 
     /**
@@ -147,10 +146,12 @@ public class MatterCluster extends Item  {
      * 将物质团2的物品追加到1中
      * @param stack 物质团1
      * @param itemStack 物质团2
+     * @return 是否有剩余物品 有剩余表示物质团1无法完全合并2
      */
-    public static void addItem(ItemStack stack, ItemStack itemStack){
+    public static boolean addItem(ItemStack stack, ItemStack itemStack){
         Map<ItemStack, Integer> map = getItemTag(stack);
         Map<ItemStack, Integer> map1 = getItemTag(itemStack);
+        //合并相同项
         for (Map.Entry<ItemStack, Integer> entry : map.entrySet()) {
             Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
             while (iterator.hasNext()){
@@ -160,16 +161,21 @@ public class MatterCluster extends Item  {
                     iterator.remove();
                 }
             }
-//            for (ItemStack stack1 : map1.keySet()) {
-//                if (entry.getKey().isItemEqual(stack1)){
-//                    entry.setValue(entry.getValue() + map1.get(stack1));
-//                    map1.remove(stack1);
-//                }
-//            }
+        }
+        //添加新项
+        if (map1.size() > 0){
+            for (Map.Entry<ItemStack, Integer> entry : map1.entrySet()) {
+                if (map.size() < 64){ //物质团1未满
+                    map.put(entry.getKey(), entry.getValue());
+                }
+            }
         }
         //重新添加修改后的数据
         setItemTag(stack, map);
-        setItemTag(itemStack, map1);
+        if (map1.size() == 0){ //2以空，则清除nbt
+            itemStack.getOrCreateTag().remove(MAIN_NBT);
+        }else setItemTag(itemStack, map1);
+        return map1.size() > 0;
     }
 
     /**
@@ -189,6 +195,7 @@ public class MatterCluster extends Item  {
      * @return 空：true
      */
     public static boolean isEmpty(ItemStack stack){
+        if (!stack.getOrCreateTag().contains(MAIN_NBT)) return true;
         Map<ItemStack, Integer> itemTag = getItemTag(stack);
         return itemTag.size() == 0;
     }
@@ -198,17 +205,12 @@ public class MatterCluster extends Item  {
      * @param player 玩家
      * @return 物质团 无则返回EMPTY
      */
-    public static ItemStack getMatterCluster(PlayerEntity player){
+    public static ItemStack getMatterCluster(PlayerEntity player, int slot){
         PlayerInventory inventory = player.inventory;
-        NonNullList<ItemStack> mainInventory = inventory.mainInventory;
-        NonNullList<ItemStack> offHandInventory = inventory.offHandInventory;
-        for (ItemStack stack : mainInventory) {
+        for (int i = 0; i < inventory.getSizeInventory(); i++){
+            ItemStack stack = inventory.getStackInSlot(i);
             if (stack.getItem() == ItemRegistry.matterCluster.get() && !isMaxSize(stack)){
-                return stack;
-            }
-        }
-        for (ItemStack stack : offHandInventory) {
-            if (stack.getItem() == ItemRegistry.matterCluster.get() && !isMaxSize(stack)){
+                if (slot == i) continue;
                 return stack;
             }
         }
@@ -224,10 +226,27 @@ public class MatterCluster extends Item  {
     public static boolean mergeMatterCluster(ItemStack stack, PlayerEntity player){
         while (true){
             boolean empty = isEmpty(stack);
-            ItemStack matterCluster = getMatterCluster(player);
+            ItemStack matterCluster = getMatterCluster(player, -1);
             if (empty || matterCluster.isEmpty()) break; //当拾取物质团已无物品 或 玩家身上无未满物质团时 退出循环
-            addItem(stack, matterCluster);
+            if (!addItem(matterCluster, stack)) break; //完全合并时退出循环
         }
-        return false;
+        return isEmpty(stack);
+    }
+
+    /**
+     * 合并物质团
+     * @param stack 要合并的
+     * @param player 玩家
+     * @param slot 槽位id
+     * @return 是否有剩余
+     */
+    public static boolean mergeMatterCluster(ItemStack stack, PlayerEntity player, int slot){
+        while (true){
+            boolean empty = isEmpty(stack);
+            ItemStack matterCluster = getMatterCluster(player, slot);
+            if (empty || matterCluster.isEmpty()) break;
+            if (!addItem(matterCluster, stack)) break;
+        }
+        return isEmpty(stack);
     }
 }

@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/void.png");
 
-    private EntityModel<Entity> gapingVoid;
+    private final EntityModel<Entity> gapingVoid;
 
     public GapingVoidRender(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);

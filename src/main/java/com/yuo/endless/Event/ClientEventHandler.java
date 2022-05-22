@@ -3,22 +3,28 @@ package com.yuo.endless.Event;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.Singularity;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Date;
+
 /**
- * Description:
+ * Description: 客户端事件
  * Author: cnlimiter
  * Date: 2022/5/21 23:27
  * Version: 1.0
  */
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientEventHandler {
 
+    //染色
     @SubscribeEvent
     public static void itemColors(ColorHandlerEvent.Item event) {
         // 第二个参数代表“所有需要使用此 IItemColor 的物品”，是一个 var-arg Item。
@@ -36,5 +42,33 @@ public class ClientEventHandler {
 
         // 出于某些原因，你还可以在这里拿到之前的 `BlockColors`。在某些时候这个玩意会很有用。
 //        BlockColors blockColorHandler = event.getBlockColors();
+    }
+
+    public static Date lastplayedlog = null;
+    public static Date lastplayedleaf = null;
+//    @SubscribeEvent
+    public static void sound(PlaySoundEvent event){
+        String name = event.getName().trim();
+        //在连锁破坏时 以下声音设置最小播放间隔
+        if (name.equals("block.grass.break") || name.equals("block.wood.break")) {
+            Date now = new Date();
+            Date then;
+
+            if (name.equals("block.grass.break")) {
+                then = lastplayedleaf;
+                lastplayedleaf = now;
+            }
+            else {
+                then = lastplayedlog;
+                lastplayedlog = now;
+            }
+
+            if (then != null) {
+                long ms = (now.getTime()-then.getTime());
+                if (ms < 10) {
+                    event.setResultSound(null);
+                }
+            }
+        }
     }
 }

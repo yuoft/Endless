@@ -20,7 +20,7 @@ import java.util.List;
 public class OrdinaryItem extends Item {
 
 	public OrdinaryItem() {
-		super(new Properties().group(ModGroup.myGroup)); //设置物品所在 创造模式物品栏
+		super(new Properties().group(ModGroup.endless)); //设置物品所在 创造模式物品栏
 	}
 
 	@Override

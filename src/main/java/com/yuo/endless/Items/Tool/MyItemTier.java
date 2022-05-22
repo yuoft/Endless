@@ -12,11 +12,17 @@ public enum MyItemTier implements IItemTier {
     SKULLFIRE(444, 10.0f, 10, 2, 10, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     }),
+    NEUTRON(3152, 15.0f, 8, 6, 21, () -> {
+        return Ingredient.fromItems(ItemRegistry.neutroniumIngot.get());
+    }),
+    CRYSTAL(2401, 10.0f, 5, 5, 17, () -> {
+        return Ingredient.fromItems(ItemRegistry.crystalMatrixIngot.get());
+    }),
     //数值无穷表示：Double或Float的POSITIVE_INFINITY（正）或NEGATIVE_INFINITY（负）
     INFINITY_TOOL(9999, 9999.0f, 10, 9999, 0, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     }),
-    INFINITY_ARMS(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 0, () -> {
+    INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 0, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     });
 

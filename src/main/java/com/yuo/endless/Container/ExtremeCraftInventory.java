@@ -8,8 +8,8 @@ import net.minecraft.util.NonNullList;
 
 public class ExtremeCraftInventory extends CraftingInventory {
     private final NonNullList<ItemStack> stackList;
-    private ExtremeCraftTile craftTile;
-    private Container container;
+    private final ExtremeCraftTile craftTile;
+    private final Container container;
 
     public ExtremeCraftInventory(Container containerIn, ExtremeCraftTile tile) {
         super(containerIn, 9, 9);
