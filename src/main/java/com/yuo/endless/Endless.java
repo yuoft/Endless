@@ -24,9 +24,11 @@ import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -77,7 +79,6 @@ public class Endless {
         }
 
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::clientSetup);
         //注册物品至mod总线
         ItemRegistry.ITEMS.register(modEventBus);
         BlockRegistry.BLOCKS.register(modEventBus);
