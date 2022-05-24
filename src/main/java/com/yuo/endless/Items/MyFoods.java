@@ -1,6 +1,6 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import net.minecraft.item.Food;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;

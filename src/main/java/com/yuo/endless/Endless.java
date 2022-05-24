@@ -1,6 +1,7 @@
 package com.yuo.endless;
 
 import com.yuo.endless.Blocks.BlockRegistry;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.ItemRegistry;
@@ -55,10 +56,10 @@ public class Endless {
     public static boolean isInfernalMobs = false; //稀有精英怪
     public static boolean isChampions = false; //冠军/强敌
     public static boolean isZombieAwareness = false; //僵尸意识
-    public static IProxy proxy;
+    public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
-        proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-        proxy.registerHandlers();
+//        proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+//        proxy = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> proxy = new ClientProxy());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -79,12 +80,14 @@ public class Endless {
         ContainerTypeRegistry.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
+        proxy.registerHandlers();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         ModRecipeManager.addExtremeCrafts();
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
+        Config.loadConfig(); //加载工具黑名单
 //        ModRecipeManager.addRecipe();
         event.enqueueWork(NetWorkHandler::registerMessage); //创建数据包
     }

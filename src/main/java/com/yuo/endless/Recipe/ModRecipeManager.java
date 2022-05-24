@@ -1,11 +1,9 @@
 package com.yuo.endless.Recipe;
 
 import appeng.core.Api;
-import com.brandon3055.draconicevolution.blocks.DraconiumBlock;
-import com.brandon3055.draconicevolution.init.DEContent;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.spacearms.Blocks.BlockRegistry;
@@ -15,9 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import twilightforest.block.TFBlocks;
+import twilightforest.item.TFItems;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
 
@@ -647,6 +645,10 @@ public class ModRecipeManager {
         if (Endless.isTheTwilightForest){
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(TFBlocks.ironwood_block.get()));
+            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+                    new ItemStack(TFItems.hydra_chop.get()));
+            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+                    new ItemStack(TFItems.maze_wafer.get()));
         }
     }
 

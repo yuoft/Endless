@@ -47,13 +47,13 @@ public class InfinityPickaxe extends PickaxeItem {
     //锤形态下挖掘速度变慢
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (stack.getTag() != null && stack.getTag().getBoolean("hammer")) {
+        if (stack.getOrCreateTag().getBoolean("hammer")) {
             return 5.0F;
         }
         if (state.getHarvestTool() == ToolType.PICKAXE){
             return 999.0f; //对镐类挖掘方块有极高速度加成
         }
-        return Math.min(super.getDestroySpeed(stack, state), 6.0f);
+        return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }
 
     @Override

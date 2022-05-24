@@ -1,7 +1,7 @@
 package com.yuo.endless.Event;
 
 import com.yuo.endless.Armor.InfinityArmor;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.MatterCluster;
@@ -23,8 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
@@ -35,6 +34,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -221,7 +221,7 @@ public class EventHandler {
         World world = event.getWorld();
         PlayerEntity player = event.getPlayer();
         if (stack.getItem() instanceof InfinityPickaxe && world.getBlockState(pos).getBlock().equals(Blocks.BEDROCK)){
-            if (stack.hasTag() && stack.getOrCreateTag().getBoolean("hammer")){
+            if (Config.SERVER.isBreakBedrock.get() && stack.getOrCreateTag().getBoolean("hammer")){
                 world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), new ItemStack(Blocks.BEDROCK)));
                 world.setBlockState(pos, Blocks.AIR.getDefaultState());
             }
@@ -317,6 +317,10 @@ public class EventHandler {
         player.sendMessage(new TranslationTextComponent("endless.message.login")
                 .setStyle(Style.EMPTY.setHoverEvent(HoverEvent.Action.SHOW_TEXT.deserialize(new TranslationTextComponent("endless.message.login0")))
                         .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/21854371"))), UUID.randomUUID());
+        if (Config.errorInfo.size() > 0){
+            player.sendMessage(new StringTextComponent("The following errors were found in the configuration file:\n"
+                    + StringUtils.join(Config.errorInfo.toArray(), ",")).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.RED))), UUID.randomUUID());
+        }
     }
 
     //恒星燃料

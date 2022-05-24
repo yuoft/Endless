@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.Sets;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Items.MatterCluster;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -148,11 +148,17 @@ public class ItemHander
         if (type == ToolType.PICKAXE && !MATERIAL_PICKAXE.contains(state.getMaterial())) return;
         if (type == ToolType.SHOVEL && !MATERIAL_SHOVEL.contains(state.getMaterial())) return;
         if (type == ToolType.AXE && !MATERIAL_AXE.contains(state.getMaterial())) return;
+        //黑名单
+        if (type == ToolType.PICKAXE && Config.pickaxeBlocks.contains(state.getBlock())) return;
+        if (type == ToolType.SHOVEL && Config.shovelBlocks.contains(state.getBlock())) return;
+        if (type == ToolType.AXE && Config.axeBlocks.contains(state.getBlock())) return;
+
         //物品超过64组则不继续添加
         if (map.size() > 64){
             world.destroyBlock(pos, false, player); //破坏方块
             return;
         }
+        if (!Config.SERVER.isBreakBedrock.get() && state.getBlock().equals(Blocks.BEDROCK)) return;
         //添加到map中
         if (state.getBlock().equals(Blocks.BEDROCK)){
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);
@@ -171,7 +177,7 @@ public class ItemHander
      */
     public static void putMapDrops(World world, BlockPos pos, PlayerEntity player, ItemStack stack, Map<ItemStack, Integer> map){
         BlockState state = world.getBlockState(pos);
-        if (Config.SERVER.isKeepStone.get() && (state.isIn(Tags.Blocks.STONE) || state.isIn(Tags.Blocks.DIRT))) return; //不保留石头和泥土
+        if (!Config.SERVER.isKeepStone.get() && (state.isIn(Tags.Blocks.STONE) || state.isIn(Tags.Blocks.DIRT))) return; //不保留石头和泥土
         for (ItemStack drop : Block.getDrops(state, (ServerWorld) world, pos, world.getTileEntity(pos), player, stack)) {
             putMapItem(drop, map);
         }

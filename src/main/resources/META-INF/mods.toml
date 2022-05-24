@@ -3,7 +3,7 @@ loaderVersion="[36,)"
 license="All rights reserved"
 [[mods]] #mandatory
 modId="endless"
-version="1.16.5-1.2.3"
+version="1.16.5-1.2.4"
 displayName="Endless"
 authors="yuo"
 description='''
@@ -56,5 +56,23 @@ description='''
     modId="iceandfire"
     mandatory=true
     versionRange="[2.1.9-1.16.5, )"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.appliedenergistics2]]
+    modId="appliedenergistics2"
+    mandatory=true
+    versionRange="[8.4.7, )"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.projecte]]
+    modId="projecte"
+    mandatory=true
+    versionRange="[1.16.5-PE1.0.2, )"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.twilightforest]]
+    modId="twilightforest"
+    mandatory=true
+    versionRange="[4.0.546, )"
     ordering="AFTER"
     side="BOTH"

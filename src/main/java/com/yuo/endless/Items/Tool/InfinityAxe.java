@@ -1,7 +1,8 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
@@ -39,6 +40,14 @@ public class InfinityAxe extends AxeItem {
             hander.aoeBlocks(player.world, pos, player, Config.SERVER.axeChainCount.get(), itemstack);
         }
         return false;
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
+        if (state.getHarvestTool() == ToolType.AXE){
+            return 999.0f;
+        }
+        return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }
 
     @Override

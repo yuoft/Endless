@@ -27,13 +27,13 @@ public class InfinityShovel extends ShovelItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (stack.getTag() != null && stack.getTag().getBoolean("destroyer")) {
+        if (stack.getOrCreateTag().getBoolean("destroyer")) {
             return 5.0F;
         }
         if (state.getHarvestTool() == ToolType.SHOVEL){
             return 999.0f;
         }
-        return Math.min(super.getDestroySpeed(stack, state), 6.0f);
+        return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }
 
     @Override

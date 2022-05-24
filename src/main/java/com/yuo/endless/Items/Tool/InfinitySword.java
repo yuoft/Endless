@@ -1,6 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.enchantment.Enchantment;

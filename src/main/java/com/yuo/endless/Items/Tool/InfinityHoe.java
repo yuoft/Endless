@@ -1,5 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -27,7 +28,7 @@ public class InfinityHoe extends HoeItem {
         if (state.getHarvestTool() == ToolType.HOE){
             return 999.0f;
         }
-        return Math.min(super.getDestroySpeed(stack, state), 6.0f);
+        return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }
 
     //右键催熟周围作物并且收获成熟作物
@@ -155,6 +156,7 @@ public class InfinityHoe extends HoeItem {
                 || block instanceof CocoaBlock || block instanceof SweetBerryBushBlock){
             return;
         }
+        if (Config.hoeBlocks.contains(block)) return;
         //添加到map中
         if (block.equals(Blocks.BEDROCK)){
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);

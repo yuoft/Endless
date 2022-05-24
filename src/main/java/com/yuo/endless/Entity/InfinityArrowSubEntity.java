@@ -1,6 +1,6 @@
 package com.yuo.endless.Entity;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.Config;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
