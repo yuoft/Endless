@@ -8,8 +8,8 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.spacearms.Blocks.BlockRegistry;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -637,11 +637,11 @@ public class ModRecipeManager {
                     new ItemStack(Api.instance().definitions().items().fluidCell64k()), new ItemStack(Api.instance().definitions().materials().singularity()));
         }
         if (Endless.isDraconicEvolution){
-            String item = "draconicevolution:draconic_block";
-            Item itemOrDefault = Registry.ITEM.getOrDefault(new ResourceLocation(item));
-            if (itemOrDefault != Items.AIR){
+            String str = "draconicevolution:draconic_block";
+            Block block = Registry.BLOCK.getOrDefault(new ResourceLocation(str));
+            if (block != Blocks.AIR){
                 ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                        new ItemStack(itemOrDefault));
+                        new ItemStack(block));
             }
         }
         if (Endless.isProjecte){
