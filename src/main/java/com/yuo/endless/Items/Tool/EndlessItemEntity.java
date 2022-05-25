@@ -42,9 +42,14 @@ public class EndlessItemEntity extends ItemEntity {
     }
 
     @Override
+    public void onKillCommand() {
+        super.onKillCommand();
+    }
+
+    @Override
     public void remove() {
-        if (this.getAge() >= lifespan)
-            super.remove();
+        if (this.age >= lifespan)
+            this.remove(false);
     }
 
     @Override
@@ -65,7 +70,7 @@ public class EndlessItemEntity extends ItemEntity {
                 entityIn.onItemPickup(this, i);
                 if (itemstack.isEmpty()) {
                     this.age = 3600;
-                    this.remove();
+                    this.remove(false);
                     itemstack.setCount(i);
                 }
 

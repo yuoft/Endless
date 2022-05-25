@@ -67,6 +67,7 @@
 
   "endless.text.itemInfo.infinity_head":"§6Satiety, Oxygen",
   "endless.text.itemInfo.infinity_head1":"§6Night vision",
+  "endless.text.itemInfo.infinity":"INFINITY ",
   "endless.text.itemInfo.infinity_chest":"§6Negative state immunity, Flight",
   "endless.text.itemInfo.infinity_legs":"§6Fire prevention",
   "endless.text.itemInfo.infinity_feet":"§6No falling injury",
@@ -81,8 +82,8 @@
   "endless.text.itemInfo.matter_cluster":"§7Used to destroy everything.",
   "endless.text.itemInfo.matter_cluster1":"Press§9SHIFT§fDisplay details.",
   "endless.text.itemInfo.matter_cluster2":"Class goods",
-  "endless.text.itemInfo.singularity_clay":"§3Unlimited §2checks §4and §5balances",
-  "endless.text.itemInfo.singularity_netherite":"§3He§2ll §4clear§5ing §6pl§7an",
+  "endless.text.itemInfo.singularity_clay":"Unlimited checks and balances",
+  "endless.text.itemInfo.singularity_netherite":"Hell clearing plan",
   "endless.text.itemInfo.star_fuel":"§7The light of the universe shines everywhere",
 
   "endless.message.login":"§bWelcome to this module [endless greed · pseudo], question feedback §aclick here!",

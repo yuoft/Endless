@@ -9,11 +9,14 @@ import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.spacearms.Blocks.BlockRegistry;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import twilightforest.block.TFBlocks;
 import twilightforest.item.TFItems;
 import vazkii.botania.common.block.ModBlocks;
@@ -488,7 +491,7 @@ public class ModRecipeManager {
                     "  WB     ",
                     " W  B    ",
                     "D        ",
-                    'I', new ItemStack(ItemRegistry.infinityCatalyst.get()),
+                    'I', new ItemStack(ItemRegistry.crystalMatrixIngot.get()),
                     'X', new ItemStack(Items.BLAZE_POWDER),
                     'B', new ItemStack(Items.BONE),
                     'D', new ItemStack(Items.NETHER_STAR),
@@ -633,11 +636,14 @@ public class ModRecipeManager {
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(Api.instance().definitions().items().fluidCell64k()), new ItemStack(Api.instance().definitions().materials().singularity()));
         }
-//        if (Endless.isDraconicEvolution){
-//            DraconiumBlock draconiumAwakened = DEContent.block_draconium_awakened;
-//            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-//                    new ItemStack((IItemProvider) draconiumAwakened));
-//        }
+        if (Endless.isDraconicEvolution){
+            String item = "draconicevolution:draconic_block";
+            Item itemOrDefault = Registry.ITEM.getOrDefault(new ResourceLocation(item));
+            if (itemOrDefault != Items.AIR){
+                ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                        new ItemStack(itemOrDefault));
+            }
+        }
         if (Endless.isProjecte){
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(PEBlocks.RED_MATTER));

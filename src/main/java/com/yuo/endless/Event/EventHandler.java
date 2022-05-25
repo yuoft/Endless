@@ -1,5 +1,6 @@
 package com.yuo.endless.Event;
 
+import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.yuo.endless.Armor.InfinityArmor;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
@@ -7,6 +8,7 @@ import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -29,6 +31,7 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -41,7 +44,7 @@ import java.util.*;
 /**
  * 事件处理类
  */
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID)
+@Mod.EventBusSubscriber(modid = Endless.MOD_ID)
 public class EventHandler {
     public static List<String> playersWithHead = new ArrayList<>();
     public static List<String> playersWithChest = new ArrayList<>();
@@ -341,6 +344,35 @@ public class EventHandler {
             int slot = player.inventory.getSlotFor(stack);
             if (MatterCluster.mergeMatterCluster(stack, player, slot)){
                 player.inventory.removeStackFromSlot(slot);
+            }
+        }
+    }
+
+//    @SubscribeEvent
+    public static void toolInfo(ItemTooltipEvent event){
+        ItemStack stack = event.getItemStack();
+        if (stack.getItem() == ItemRegistry.infinitySword.get() && event.getPlayer() != null){
+            List<ITextComponent> toolTip = event.getToolTip();
+            for (int i = 0; i < toolTip.size(); i++){
+                for (ITextComponent sibling : toolTip.get(i).getSiblings()) {
+                    if (sibling instanceof TranslationTextComponent){
+                        TranslationTextComponent component = (TranslationTextComponent) sibling;
+                        if (component.getKey().equals("attribute.modifier.equals.0")){
+                            for (ITextProperties child : component.children) {
+                                if (child instanceof TranslationTextComponent){
+                                    TranslationTextComponent component1 = (TranslationTextComponent) child;
+                                    if (component1.getKey().equals("attribute.name.generic.attack_damage")){
+                                        event.getToolTip().set(i, new StringTextComponent(TextFormatting.BLUE + "+" + ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity"))
+                                                + I18n.format("attribute.name.generic.attack_damage")));
+                                        return;
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
             }
         }
     }

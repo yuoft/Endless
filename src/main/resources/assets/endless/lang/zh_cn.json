@@ -67,6 +67,7 @@
     
     "endless.text.itemInfo.infinity_head":"§6饱腹，氧气",
     "endless.text.itemInfo.infinity_head1":"§6夜视",
+    "endless.text.itemInfo.infinity":"无限 ",
     "endless.text.itemInfo.infinity_chest":"§6负面状态免疫，飞行",
     "endless.text.itemInfo.infinity_legs":"§6防火",
     "endless.text.itemInfo.infinity_feet":"§6无摔伤",
@@ -81,8 +82,8 @@
     "endless.text.itemInfo.matter_cluster":"§7用于毁灭一切。",
     "endless.text.itemInfo.matter_cluster1":"按下§9SHIFT§f显示详细信息。",
     "endless.text.itemInfo.matter_cluster2":"类物品",
-    "endless.text.itemInfo.singularity_clay":"§3无§2限§4制§5衡",
-    "endless.text.itemInfo.singularity_netherite":"§3地§2狱§4清§5除§6计§7划",
+    "endless.text.itemInfo.singularity_clay":"无限制衡",
+    "endless.text.itemInfo.singularity_netherite":"地狱清除计划",
     "endless.text.itemInfo.star_fuel":"§7宇宙之光挥洒四方",
 
     "endless.message.login":"§b欢迎游玩本模组[无尽贪婪·伪]，问题反馈§a点击此处!",

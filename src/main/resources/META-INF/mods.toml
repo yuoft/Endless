@@ -3,7 +3,7 @@ loaderVersion="[36,)"
 license="All rights reserved"
 [[mods]] #mandatory
 modId="endless"
-version="1.16.5-1.2.4"
+version="1.16.5-1.2.5"
 displayName="Endless"
 authors="yuo"
 description='''
@@ -74,5 +74,11 @@ description='''
     modId="twilightforest"
     mandatory=true
     versionRange="[4.0.546, )"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.draconicevolution]]
+    modId="draconicevolution"
+    mandatory=true
+    versionRange="[1.16.5-3.0.25.456, )"
     ordering="AFTER"
     side="BOTH"

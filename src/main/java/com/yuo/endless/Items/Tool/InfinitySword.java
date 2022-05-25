@@ -3,6 +3,8 @@ package com.yuo.endless.Items.Tool;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -17,6 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -39,6 +45,12 @@ public class InfinitySword extends SwordItem{
             EnchantmentHelper.setEnchantments(map, stack);
             items.add(stack);
         }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity"))
+                + I18n.format("attribute.name.generic.attack_damage")));
     }
 
     @Override

@@ -24,9 +24,9 @@ public class InfinityDamageSource extends EntityDamageSource {
     public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
         ItemStack itemstack = damageSourceEntity instanceof LivingEntity ? ((LivingEntity)damageSourceEntity).getHeldItem(Hand.MAIN_HAND) : ItemStack.EMPTY;
         String s = "death.attack.infinity";
-        int rando = entityLivingBaseIn.getEntityWorld().rand.nextInt(4) + 1;
-        return !itemstack.isEmpty() && itemstack.hasDisplayName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), damageSourceEntity.getDisplayName(),itemstack.getDisplayName())
-                : new TranslationTextComponent(s + "." + rando, entityLivingBaseIn.getDisplayName());
+        int rand = entityLivingBaseIn.getEntityWorld().rand.nextInt(4) + 1;
+        return !itemstack.isEmpty() && itemstack.hasDisplayName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), damageSourceEntity != null ? damageSourceEntity.getDisplayName() : "null",itemstack.getDisplayName())
+                : new TranslationTextComponent(s + "." + rand, entityLivingBaseIn.getDisplayName());
     }
 
     //是否根据难度缩放伤害值
