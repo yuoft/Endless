@@ -59,7 +59,7 @@ public class NeutroniumCompressorContainer extends Container {
             ItemStack itemStack1 = slot.getStack();
             itemstack = itemStack1.copy();
             if (index >= 2){
-                if (CompressorManager.getOutput(itemStack1).isEmpty()){
+                if (!CompressorManager.getOutput(itemStack1).isEmpty()){
                     if (!this.mergeItemStack(itemStack1, 0, 1, false)) return ItemStack.EMPTY;
                 }
                 if (index < 29) { //从物品栏到快捷栏

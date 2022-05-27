@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "endless:crystal_matrix",
+    "endless:neutronium_block",
+    "endless:infinity_block"
+  ]
+}

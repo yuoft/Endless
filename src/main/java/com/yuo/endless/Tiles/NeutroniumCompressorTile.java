@@ -72,7 +72,8 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
         if (count > 0 && this.data.get(0) < count){
             this.items.set(2, new ItemStack(input.getItem()));  //缓存参与合成物品
             this.data.set(0, this.data.get(0) + CompressorManager.getInputCost(input));
-            input.shrink(1);
+            if (input.getCount() >= 1)
+                input.shrink(1);
             markDirty();
         }
 

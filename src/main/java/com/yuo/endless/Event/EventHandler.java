@@ -9,6 +9,7 @@ import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.command.impl.GiveCommand;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -30,6 +31,7 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -37,6 +39,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -377,11 +380,41 @@ public class EventHandler {
         }
     }
 
-//    @SubscribeEvent
-//    public static void recipeChange(DifficultyChangeEvent event){
-//        Difficulty difficulty = event.getDifficulty();
-//        CompressorManager.changeAllCount(difficulty);
-//    }
+    //无尽镐锤形态 潜行左键删除方块
+    @SubscribeEvent
+    public static void removeBlock(PlayerInteractEvent.LeftClickBlock event){
+        PlayerEntity player = event.getPlayer();
+        ItemStack stack = event.getItemStack();
+        if (stack.getItem() instanceof InfinityPickaxe && stack.getOrCreateTag().getBoolean("hammer")){
+            if (player.isSneaking() && Config.SERVER.isRemoveBlock.get()){
+                BlockPos pos = event.getPos();
+                World world = event.getWorld();
+                world.removeBlock(pos, true);
+            }
+        }
+    }
+
+    //防止使用/give指令时无尽物品有2份
+    @SubscribeEvent
+    public static void toss(ItemTossEvent event){
+        PlayerEntity player = event.getPlayer();
+        ItemEntity entityItem = event.getEntityItem();
+        Item item = entityItem.getItem().getItem();
+        if (player != null && item.hasCustomEntity(entityItem.getItem()) && isInfinityItem(item)){
+            event.setCanceled(true);
+        }
+    }
+
+    /**
+     * 物品是否属于无尽物品
+     * @param item 物品
+     * @return 是 true
+     */
+    private  static boolean isInfinityItem(Item item){
+        return item instanceof InfinityAxe || item instanceof InfinityBow || item instanceof InfinityHoe || item instanceof InfinityPickaxe ||
+                item instanceof InfinityShovel || item instanceof InfinitySword || item instanceof InfinityArmor;
+    }
+
     /**
      * 添加额外掉落
      * @param item 需要掉落的物品

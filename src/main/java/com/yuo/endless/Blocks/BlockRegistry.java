@@ -14,7 +14,7 @@ public class BlockRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Endless.MOD_ID);
 
     public static RegistryObject<Block> infinityBlock = BLOCKS.register("infinity_block",
-            () -> new OrdinaryBlock(Material.IRON, 99, ToolType.PICKAXE, 1000, 1000));
+            () -> new OrdinaryBlock(Material.IRON, 6, ToolType.PICKAXE, 1000, 1000));
     public static RegistryObject<Block> crystalMatrix = BLOCKS.register("crystal_matrix",
             () -> new OrdinaryBlock(Material.IRON, 4, ToolType.PICKAXE, 10, 50));
     public static RegistryObject<Block> neutroniumBlock = BLOCKS.register("neutronium_block",

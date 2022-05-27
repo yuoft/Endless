@@ -1,5 +1,8 @@
 package com.yuo.endless;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.yuo.endless.Blocks.BlockRegistry;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
@@ -13,14 +16,20 @@ import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Sound.ModSounds;
 import com.yuo.endless.Tiles.TileTypeRegistry;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ConfigFileTypeHandler;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 @Mod("endless")
 public class Endless {
@@ -58,8 +67,6 @@ public class Endless {
     public static boolean isZombieAwareness = false; //僵尸意识
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
-//        proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-//        proxy = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> proxy = new ClientProxy());
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -88,7 +95,6 @@ public class Endless {
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
         Config.loadConfig(); //加载工具黑名单
-//        ModRecipeManager.addRecipe();
         event.enqueueWork(NetWorkHandler::registerMessage); //创建数据包
     }
 

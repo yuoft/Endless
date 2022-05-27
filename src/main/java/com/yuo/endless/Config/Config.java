@@ -61,6 +61,8 @@ public class Config {
         public final ForgeConfigSpec.IntValue subArrowDamage; // 无尽弓散射光箭伤害
         public final ForgeConfigSpec.IntValue axeChainCount; // 无尽斧砍树连锁数量
         public final ForgeConfigSpec.DoubleValue foodTime; //食物效果时间缩放系数
+        public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐的锤形态潜行左键是否删除方块
+        public final ForgeConfigSpec.IntValue matterClusterMaxCount; //物质团单个物品存储上限
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
         public final ForgeConfigSpec.IntValue singularityClay;
         public final ForgeConfigSpec.IntValue singularityIron;
@@ -97,6 +99,8 @@ public class Config {
             this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Endless bow scattering light arrow damage");
             this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Chain number of endless axe cutting trees");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
+            this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Hammer form of endless pickaxe left click to delete box");
+            this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 1024, 256, 4096, "Upper limit of storage of a single item in a material group");
             builder.pop();
 
             builder.comment("Singularity Recipe Count").push("singularity");

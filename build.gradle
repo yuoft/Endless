@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.5-1.2.5'
+version = '1.16.5-1.2.6'
 group = 'com.github.yuoft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -131,7 +131,10 @@ dependencies {
 //    compileOnly("curse.maven:projecte-226410:PE1.0.2")
     compileOnly("teamtwilight:twilightforest:4.0.546:universal")
 
-//    runtimeOnly fg.deobf("curse.maven:projecte-226410:3736621")
+    runtimeOnly fg.deobf("curse.maven:projecte-226410:3736621")
+//    runtimeOnly fg.deobf("curse.maven:brandons-core-231382:3775813")
+//    runtimeOnly fg.deobf("curse.maven:codechicken-lib-242818:3681973")
+//    runtimeOnly fg.deobf("curse.maven:draconic-evolution-223565:3779345")
 //    runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:1.16.5-1.3.7")
 //    runtimeOnly fg.deobf("com.yuo.orecrop:orecrop:1.16.5-1.2.5")
 //    runtimeOnly fg.deobf("com.yuo.paimeng:paimeng:1.16.5-1.1.5")

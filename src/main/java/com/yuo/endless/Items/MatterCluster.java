@@ -1,5 +1,6 @@
 package com.yuo.endless.Items;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -157,7 +158,14 @@ public class MatterCluster extends Item  {
             while (iterator.hasNext()){
                 Map.Entry<ItemStack, Integer> next = iterator.next();
                 if (entry.getKey().isItemEqual(next.getKey())){ //将2中相同物品转移到1
-                    entry.setValue(entry.getValue() + next.getValue());
+                    if (entry.getValue() + next.getValue() <= Config.SERVER.matterClusterMaxCount.get()){
+                        entry.setValue(entry.getValue() + next.getValue());
+                    }else {
+                        Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
+                        int count = maxCount - entry.getValue(); //2 的余量
+                        entry.setValue(maxCount);
+                        next.setValue(count);
+                    }
                     iterator.remove();
                 }
             }

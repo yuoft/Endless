@@ -190,9 +190,20 @@ public class ItemHander
      */
     private static void putMapItem(ItemStack drop, Map<ItemStack, Integer> map){
         ItemStack itemStack = mapEquals(drop, map);
-        if (!itemStack.isEmpty())
-            map.put(itemStack, map.get(itemStack) + drop.getCount());
-        else map.put(drop, drop.getCount());
+        int dropCount = drop.getCount();
+        Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
+        if (!itemStack.isEmpty()) {
+            Integer mapCount = map.get(itemStack);
+            if (mapCount + dropCount > maxCount) { //数量超过限制
+                map.put(itemStack, maxCount);
+//                putMapItem(new ItemStack(drop.getItem(), mapCount + dropCount - mapCount), map);
+            } else map.put(itemStack, mapCount + dropCount);
+        } else {
+            if (dropCount > maxCount){
+                map.put(drop, maxCount);
+//                putMapItem(new ItemStack(drop.getItem(), dropCount - maxCount), map);
+            }else map.put(drop, dropCount);
+        }
     }
 
     /**
@@ -220,7 +231,7 @@ public class ItemHander
      */
     public static ItemStack mapEquals(ItemStack stack, Map<ItemStack, Integer> map){
         for (ItemStack itemStack : map.keySet()) {
-            if (itemStack.getItem() == stack.getItem()){
+            if (itemStack.isItemEqual(stack)){
                 return itemStack;
             }
         }
