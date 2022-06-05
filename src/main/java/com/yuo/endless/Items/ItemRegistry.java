@@ -1,6 +1,8 @@
 package com.yuo.endless.Items;
 
 import com.yuo.endless.Armor.InfinityArmor;
+import com.yuo.endless.Armor.MyArmorMaterial;
+import com.yuo.endless.Armor.OrdinaryArmor;
 import com.yuo.endless.Blocks.BlockRegistry;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.*;
@@ -67,18 +69,32 @@ public class ItemRegistry {
 	public static RegistryObject<Item> infinitySword = ITEMS.register("infinity_sword", InfinitySword::new);
 	public static RegistryObject<Item> skullfireSword = ITEMS.register("skullfire_sword", SkullfireSword::new);
 	public static RegistryObject<Item> infinityBow = ITEMS.register("infinity_bow", InfinityBow::new);
-//	public static RegistryObject<Item> test0 = ITEMS.register("test0", () -> new OrdinarySword(MyItemTier.NEUTRON));
-//	public static RegistryObject<Item> test1 = ITEMS.register("test1", () -> new OrdinarySword(MyItemTier.CRYSTAL));
+	public static RegistryObject<Item> crystalSword = ITEMS.register("crystal_sword", () -> new OrdinarySword(MyItemTier.CRYSTAL));
+	public static RegistryObject<Item> crystalPickaxe = ITEMS.register("crystal_pickaxe", () -> new OrdinaryPickaxe(MyItemTier.CRYSTAL));
+	public static RegistryObject<Item> crystalAxe = ITEMS.register("crystal_axe", () -> new OrdinaryAxe(MyItemTier.CRYSTAL));
+	public static RegistryObject<Item> crystalShovel = ITEMS.register("crystal_shovel", () -> new OrdinaryShovel(MyItemTier.CRYSTAL));
+	public static RegistryObject<Item> crystalHoe = ITEMS.register("crystal_hoe", () -> new OrdinaryHoe(MyItemTier.CRYSTAL));
+	public static RegistryObject<Item> neutronSword = ITEMS.register("neutron_sword", () -> new OrdinarySword(MyItemTier.NEUTRON));
+	public static RegistryObject<Item> neutronPickaxe = ITEMS.register("neutron_pickaxe", () -> new OrdinaryPickaxe(MyItemTier.NEUTRON));
+	public static RegistryObject<Item> neutronAxe = ITEMS.register("neutron_axe", () -> new OrdinaryAxe(MyItemTier.NEUTRON));
+	public static RegistryObject<Item> neutronShovel = ITEMS.register("neutron_shovel", () -> new OrdinaryShovel(MyItemTier.NEUTRON));
+	public static RegistryObject<Item> neutronHoe = ITEMS.register("neutron_hoe", () -> new OrdinaryHoe(MyItemTier.NEUTRON));
+
 
 	//盔甲
-	public static RegistryObject<ArmorItem> infinityHead = ITEMS.register("infinity_head",
-			() -> new InfinityArmor(EquipmentSlotType.HEAD));
-	public static RegistryObject<ArmorItem> infinityChest = ITEMS.register("infinity_chest",
-			() -> new InfinityArmor(EquipmentSlotType.CHEST));
-	public static RegistryObject<ArmorItem> infinityLegs = ITEMS.register("infinity_legs",
-			() -> new InfinityArmor(EquipmentSlotType.LEGS));
-	public static RegistryObject<ArmorItem> infinityFeet = ITEMS.register("infinity_feet",
-			() -> new InfinityArmor(EquipmentSlotType.FEET));
+	public static RegistryObject<ArmorItem> infinityHead = ITEMS.register("infinity_head", () -> new InfinityArmor(EquipmentSlotType.HEAD));
+	public static RegistryObject<ArmorItem> infinityChest = ITEMS.register("infinity_chest", () -> new InfinityArmor(EquipmentSlotType.CHEST));
+	public static RegistryObject<ArmorItem> infinityLegs = ITEMS.register("infinity_legs", () -> new InfinityArmor(EquipmentSlotType.LEGS));
+	public static RegistryObject<ArmorItem> infinityFeet = ITEMS.register("infinity_feet", () -> new InfinityArmor(EquipmentSlotType.FEET));
+	public static RegistryObject<ArmorItem> crystalHead = ITEMS.register("crystal_head", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.HEAD));
+	public static RegistryObject<ArmorItem> crystalChest = ITEMS.register("crystal_chest", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.CHEST));
+	public static RegistryObject<ArmorItem> crystalLegs = ITEMS.register("crystal_legs", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.LEGS));
+	public static RegistryObject<ArmorItem> crystalFeet = ITEMS.register("crystal_feet", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.FEET));
+	public static RegistryObject<ArmorItem> neutronHead = ITEMS.register("neutron_head", () -> new OrdinaryArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.HEAD));
+	public static RegistryObject<ArmorItem> neutronChest = ITEMS.register("neutron_chest", () -> new OrdinaryArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.CHEST));
+	public static RegistryObject<ArmorItem> neutronLegs = ITEMS.register("neutron_legs", () -> new OrdinaryArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.LEGS));
+	public static RegistryObject<ArmorItem> neutronFeet = ITEMS.register("neutron_feet", () -> new OrdinaryArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.FEET));
+
 
 	//注册方块物品
 	public static RegistryObject<BlockItem> blockInfinity = ITEMS.register("infinity_block",

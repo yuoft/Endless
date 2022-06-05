@@ -31,6 +31,7 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -120,16 +121,19 @@ public class EventHandler {
             }
             //chest
             if (playersWithChest.contains(key)) {
+                ModifiableAttributeInstance attribute = player.getAttribute(Attributes.FLYING_SPEED);
                 if (hasChest) {
                     player.abilities.allowFlying = true;
-                    if (chest.hasTag() && chest.getOrCreateTag().getBoolean("flag"))
-                        player.abilities.setFlySpeed(0.1f); //飞行速度2倍
+                    if (chest.getOrCreateTag().getBoolean("flag") && attribute != null && !attribute.hasModifier(InfinityArmor.modifierFly)){
+                        attribute.applyPersistentModifier(InfinityArmor.modifierFly); //飞行速度2倍
+                    }
                 }else {
                     if (!player.isCreative()) {
                         player.abilities.allowFlying = false;
                         player.abilities.isFlying = false;
-                        player.abilities.setFlySpeed(0.05f);
                     }
+                    if (attribute != null && attribute.hasModifier(InfinityArmor.modifierFly))
+                        attribute.removeModifier(InfinityArmor.modifierFly);
                     playersWithChest.remove(key);
                 }
             }else if (hasChest) {
@@ -139,11 +143,11 @@ public class EventHandler {
             if (playersWithLegs.contains(key)) {
                 ModifiableAttributeInstance attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
                 if (hasLegs) {
-                    if (legs.getOrCreateTag().getBoolean("flag") && attribute != null && !attribute.hasModifier(InfinityArmor.modifier))
-                        attribute.applyPersistentModifier(InfinityArmor.modifier); //行走速度
+                    if (legs.getOrCreateTag().getBoolean("flag") && attribute != null && !attribute.hasModifier(InfinityArmor.modifierWalk))
+                        attribute.applyPersistentModifier(InfinityArmor.modifierWalk); //行走速度
                 }else {
-                    if (attribute != null && attribute.hasModifier(InfinityArmor.modifier))
-                        attribute.removeModifier(InfinityArmor.modifier);
+                    if (attribute != null && attribute.hasModifier(InfinityArmor.modifierWalk))
+                        attribute.removeModifier(InfinityArmor.modifierWalk);
                     playersWithLegs.remove(key);
                 }
             } else if (hasLegs) {
@@ -295,6 +299,9 @@ public class EventHandler {
         if (event.getSource().isFireDamage() && playersWithLegs.contains(key)){
             event.setCanceled(true);
         }
+        if (event.getSource().isMagicDamage() && playersWithChest.contains(key)){
+            event.setCanceled(true);
+        }
     }
 
     /**
@@ -351,35 +358,6 @@ public class EventHandler {
         }
     }
 
-//    @SubscribeEvent
-    public static void toolInfo(ItemTooltipEvent event){
-        ItemStack stack = event.getItemStack();
-        if (stack.getItem() == ItemRegistry.infinitySword.get() && event.getPlayer() != null){
-            List<ITextComponent> toolTip = event.getToolTip();
-            for (int i = 0; i < toolTip.size(); i++){
-                for (ITextComponent sibling : toolTip.get(i).getSiblings()) {
-                    if (sibling instanceof TranslationTextComponent){
-                        TranslationTextComponent component = (TranslationTextComponent) sibling;
-                        if (component.getKey().equals("attribute.modifier.equals.0")){
-                            for (ITextProperties child : component.children) {
-                                if (child instanceof TranslationTextComponent){
-                                    TranslationTextComponent component1 = (TranslationTextComponent) child;
-                                    if (component1.getKey().equals("attribute.name.generic.attack_damage")){
-                                        event.getToolTip().set(i, new StringTextComponent(TextFormatting.BLUE + "+" + ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity"))
-                                                + I18n.format("attribute.name.generic.attack_damage")));
-                                        return;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-
     //无尽镐锤形态 潜行左键删除方块
     @SubscribeEvent
     public static void removeBlock(PlayerInteractEvent.LeftClickBlock event){
@@ -394,23 +372,12 @@ public class EventHandler {
         }
     }
 
-    //防止使用/give指令时无尽物品有2份
-    @SubscribeEvent
-    public static void toss(ItemTossEvent event){
-        PlayerEntity player = event.getPlayer();
-        ItemEntity entityItem = event.getEntityItem();
-        Item item = entityItem.getItem().getItem();
-        if (player != null && item.hasCustomEntity(entityItem.getItem()) && isInfinityItem(item)){
-            event.setCanceled(true);
-        }
-    }
-
     /**
      * 物品是否属于无尽物品
      * @param item 物品
      * @return 是 true
      */
-    private  static boolean isInfinityItem(Item item){
+    public static boolean isInfinityItem(Item item){
         return item instanceof InfinityAxe || item instanceof InfinityBow || item instanceof InfinityHoe || item instanceof InfinityPickaxe ||
                 item instanceof InfinityShovel || item instanceof InfinitySword || item instanceof InfinityArmor;
     }

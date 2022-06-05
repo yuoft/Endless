@@ -26,6 +26,10 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
         super(TileTypeRegistry.EXTREME_CRAFT_TILE.get());
     }
 
+    public NonNullList<ItemStack> getItems() {
+        return items;
+    }
+
     @Override
     public int getSizeInventory() {
         return 82;

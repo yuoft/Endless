@@ -269,7 +269,7 @@ public class ExtremeCraftingManager {
     }
 
     /**
-     * 获取合成后消耗后的物品列表
+     * 获取合成后的剩余容器 eg：水桶 -> 桶
      * @param inventory 输入容器
      * @param world 世界
      * @return 物品列表
@@ -281,11 +281,7 @@ public class ExtremeCraftingManager {
             }
         }
 
-        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inventory.getSizeInventory(), ItemStack.EMPTY);
-        for(int i = 0; i < nonnulllist.size(); ++i) {
-            nonnulllist.set(i, inventory.getStackInSlot(i));
-        }
-        return nonnulllist;
+        return NonNullList.withSize(inventory.getSizeInventory(), ItemStack.EMPTY);
     }
 
     /**

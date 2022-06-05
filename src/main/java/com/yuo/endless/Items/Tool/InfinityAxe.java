@@ -3,6 +3,7 @@ package com.yuo.endless.Items.Tool;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.block.BlockState;
+import net.minecraft.command.impl.GiveCommand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;

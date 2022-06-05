@@ -21,12 +21,12 @@ public class TripleNeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected int getCraftTime() {
-        return 900;
+        return 400;
     }
 
     @Override
     protected ItemStack getCraftOutputItem() {
-        return new ItemStack(ItemRegistry.neutronNugget.get());
+        return new ItemStack(ItemRegistry.neutroniumIngot.get());
     }
 
     @Override

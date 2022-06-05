@@ -77,7 +77,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
             markDirty();
         }
 
-        if (this.data.get(0) >= this.data.get(1) && count > 0){ //物品已满，设置输出
+        if (this.data.get(0) >= this.data.get(1)){ //物品已满，设置输出
             if (stack1.isEmpty()){
                 this.items.set(1, CompressorManager.getOutput(input));
             }else stack1.grow(1);

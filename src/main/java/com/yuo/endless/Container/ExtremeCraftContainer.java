@@ -2,6 +2,7 @@ package com.yuo.endless.Container;
 
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
+import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -53,7 +54,6 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 39 + k * 18, 232));
         }
-
         onCraftMatrixChanged(inputInventory);
     }
 
@@ -63,7 +63,7 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         if (world.isRemote) return;
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
         //获取配方
-        Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, inputInventory, world);
+        Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, inputInventory, world);
         if (optional.isPresent()) {
             ICraftingRecipe recipe = optional.get();
             if (outputInventory.canUseRecipe(world, serverPlayer, recipe)) {

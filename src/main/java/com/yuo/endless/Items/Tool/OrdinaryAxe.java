@@ -8,14 +8,14 @@ import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 
-public class OrdinarySword extends SwordItem {
+public class OrdinaryAxe extends AxeItem {
 
-    public OrdinarySword(IItemTier tier) {
-        super(tier, 0,-2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
+    public OrdinaryAxe(IItemTier tier) {
+        super(tier, 0,-3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override
@@ -24,10 +24,10 @@ public class OrdinarySword extends SwordItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
-            if (stack.getItem() == ItemRegistry.crystalSword.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronSword.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,-0.05d));
+            if (stack.getItem() == ItemRegistry.crystalAxe.get()){
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.03d));
+            }else if (stack.getItem() == ItemRegistry.neutronAxe.get()){
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,-0.05d));
             }
             return builder.build();
         }

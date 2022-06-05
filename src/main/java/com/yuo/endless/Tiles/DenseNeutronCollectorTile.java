@@ -21,12 +21,12 @@ public class DenseNeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected int getCraftTime() {
-        return 1800;
+        return 3600;
     }
 
     @Override
     protected ItemStack getCraftOutputItem() {
-        return new ItemStack(ItemRegistry.neutronPile.get());
+        return new ItemStack(ItemRegistry.neutronNugget.get());
     }
 
     @Override

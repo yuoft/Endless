@@ -70,12 +70,8 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        entity.attackEntityFrom(new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
         if (entity instanceof LivingEntity){
-            LivingEntity living = (LivingEntity) entity;
-            living.setHealth(0);
-            if (!(living instanceof PlayerEntity))
-                living.onDeath(new InfinityDamageSource(player));
+            hitEntity(stack, (LivingEntity) entity, player);
         }
         return false;
     }

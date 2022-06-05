@@ -40,12 +40,30 @@
     "item.endless.infinity_sword":"§c寰宇支配之剑",
     "item.endless.skullfire_sword":"§d炽焰之啄颅剑",
     "item.endless.infinity_bow":"§c天堂陨落长弓",
-    
+    "item.endless.crystal_pickaxe":"§b水晶镐",
+    "item.endless.crystal_axe":"§b水晶斧",
+    "item.endless.crystal_shovel":"§b水晶之铲",
+    "item.endless.crystal_hoe":"§b水晶锄",
+    "item.endless.crystal_sword":"§b水晶剑",
+    "item.endless.neutron_pickaxe":"§b中子镐",
+    "item.endless.neutron_axe":"§b中子斧",
+    "item.endless.neutron_shovel":"§b中子铲",
+    "item.endless.neutron_hoe":"§b中子锄",
+    "item.endless.neutron_sword":"§b中子剑",
+
     "item.endless.infinity_head":"§c无尽头盔",
     "item.endless.infinity_chest":"§c无尽胸甲",
     "item.endless.infinity_legs":"§c无尽护腿",
     "item.endless.infinity_feet":"§c无尽靴子",
-    
+    "item.endless.crystal_head":"§b水晶头盔",
+    "item.endless.crystal_chest":"§b水晶胸甲",
+    "item.endless.crystal_legs":"§b水晶护腿",
+    "item.endless.crystal_feet":"§b水晶靴子",
+    "item.endless.neutron_head":"§b中子头盔",
+    "item.endless.neutron_chest":"§b中子胸甲",
+    "item.endless.neutron_legs":"§b中子护腿",
+    "item.endless.neutron_feet":"§b中子靴子",
+
     "block.endless.infinity_block":"§c无尽之块",
     "block.endless.crystal_matrix":"§b水晶矩阵",
     "block.endless.neutronium_block":"§b中子态素块",
@@ -146,5 +164,6 @@
     "death.attack.infinity.3":"%1$s被%2$s赶尽杀绝",
     "death.attack.infinity.4":"%1$s被%2$s所湮灭",
     
-    "itemGroup.Endless":"无尽贪婪"
+    "itemGroup.Endless":"无尽贪婪",
+    "endless.text.itemInfo.infinity": "INFINITY "
 }
