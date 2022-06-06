@@ -156,7 +156,6 @@ public class EventHandler {
             //feet
             if (playersWithFeet.contains(key)){
                 if (hasFeet){
-
                 }else {
                     playersWithFeet.remove(key);
                 }

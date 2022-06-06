@@ -15,7 +15,7 @@ import net.minecraft.item.PickaxeItem;
 public class OrdinaryPickaxe extends PickaxeItem {
 
     public OrdinaryPickaxe(IItemTier tier) {
-        super(tier, 0,-2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(tier, -2,-2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override

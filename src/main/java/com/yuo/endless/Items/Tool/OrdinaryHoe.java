@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 public class OrdinaryHoe extends HoeItem {
 
     public OrdinaryHoe(IItemTier tier) {
-        super(tier, 0,0f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(tier, -8,0f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override

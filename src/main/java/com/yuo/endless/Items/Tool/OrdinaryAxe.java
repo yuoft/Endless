@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 public class OrdinaryAxe extends AxeItem {
 
     public OrdinaryAxe(IItemTier tier) {
-        super(tier, 0,-3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(tier, 2,-3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx ",
+    "xy ",
+    " y "
+  ],
+  "key": {
+    "x": {
+      "item": "endless:neutronium_ingot"
+    },
+    "y": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:neutron_axe"
+  }
+}

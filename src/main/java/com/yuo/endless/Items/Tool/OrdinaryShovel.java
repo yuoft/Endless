@@ -15,7 +15,7 @@ import net.minecraft.item.ShovelItem;
 public class OrdinaryShovel extends ShovelItem {
 
     public OrdinaryShovel(IItemTier tier) {
-        super(tier, 0,-3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(tier, -1.5f,-3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override
