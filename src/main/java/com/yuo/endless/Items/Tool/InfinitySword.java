@@ -54,8 +54,8 @@ public class InfinitySword extends SwordItem{
     }
 
     @Override
-    public int getItemEnchantability() {
-        return 0;
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
     }
 
     @Override

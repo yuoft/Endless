@@ -54,8 +54,8 @@ public class InfinityAxe extends AxeItem {
     }
 
     @Override
-    public int getItemEnchantability() {
-        return 0;
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
     }
 
     @Override

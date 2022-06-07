@@ -169,9 +169,10 @@ public class InfinityHoe extends HoeItem {
     }
 
     @Override
-    public int getItemEnchantability() {
-        return 0;
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
     }
+
     @Override
     public boolean isDamageable() {
         return false;

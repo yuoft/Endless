@@ -14,6 +14,7 @@
     "item.endless.neutronium_gear":"§b中子齿轮",
     "item.endless.star_fuel":"§b恒星燃料",
     "item.endless.infinity_nugget":"§c无尽粒",
+    "item.endless.infinity_arrow":"§c时空撕裂之矢",
 
     "item.endless.singularity_coal":"§e奇点-煤炭",
     "item.endless.singularity_iron":"§e奇点-铁",
@@ -85,7 +86,6 @@
     
     "endless.text.itemInfo.infinity_head":"§6饱腹，氧气",
     "endless.text.itemInfo.infinity_head1":"§6夜视",
-    "endless.text.itemInfo.infinity":"无限 ",
     "endless.text.itemInfo.infinity_chest":"§6负面状态免疫，飞行",
     "endless.text.itemInfo.infinity_legs":"§6防火",
     "endless.text.itemInfo.infinity_feet":"§6无摔伤",

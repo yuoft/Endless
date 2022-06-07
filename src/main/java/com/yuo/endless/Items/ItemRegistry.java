@@ -38,6 +38,7 @@ public class ItemRegistry {
 	public static RegistryObject<Item> neutroniumGear = ITEMS.register("neutronium_gear", OrdinaryItem::new);
 	public static RegistryObject<Item> starFuel = ITEMS.register("star_fuel", OrdinaryItem::new);
 	public static RegistryObject<Item> infinityNugget = ITEMS.register("infinity_nugget", OrdinaryItem::new);
+	public static RegistryObject<Item> infinityArrow = ITEMS.register("infinity_arrow", InfinityArrow::new);
 
 	//奇点
 	public static RegistryObject<Item> singularityCoal = ITEMS.register("singularity_coal",

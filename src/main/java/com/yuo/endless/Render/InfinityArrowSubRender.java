@@ -21,7 +21,7 @@ public class InfinityArrowSubRender extends ArrowRenderer<InfinityArrowSubEntity
 
     @Override
     public ResourceLocation getEntityTexture(InfinityArrowSubEntity entity) {
-        return TEXTURE;
+        return TEXTURE0;
     }
 
     @Override

@@ -59,10 +59,13 @@ public class Config {
         public final ForgeConfigSpec.IntValue swordAttackRange; //无尽剑右键攻击范围
         public final ForgeConfigSpec.BooleanValue isSwordAttackAnimal; // 无尽剑右键范围攻击是否攻击中立生物
         public final ForgeConfigSpec.IntValue subArrowDamage; // 无尽弓散射光箭伤害
+        public final ForgeConfigSpec.IntValue subArrowDamageBow; // 无尽弓空射光箭伤害
         public final ForgeConfigSpec.IntValue axeChainCount; // 无尽斧砍树连锁数量
         public final ForgeConfigSpec.DoubleValue foodTime; //食物效果时间缩放系数
         public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐的锤形态潜行左键是否删除方块
         public final ForgeConfigSpec.IntValue matterClusterMaxCount; //物质团单个物品存储上限
+        public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
+
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
         public final ForgeConfigSpec.IntValue singularityClay;
         public final ForgeConfigSpec.IntValue singularityIron;
@@ -96,11 +99,13 @@ public class Config {
             this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 100000, "Range damage value of the right key of endless sword");
             this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 64, "Endless sword right click attack range");
             this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Damage", true, "Does the right key range attack of endless sword attack neutral creatures");
-            this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Endless bow scattering light arrow damage");
+            this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 50, 100000, "Endless bow scattering light arrow damage");
+            this.subArrowDamageBow = buildInt(builder, "Sub Arrow Damage Bow", 10, 5, 100, "Endless bow shooting light arrow damage");
             this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Chain number of endless axe cutting trees");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
             this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Hammer form of endless pickaxe left click to delete box");
             this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 1024, 256, 4096, "Upper limit of storage of a single item in a material group");
+            this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether the endless workbench is compatible with the original workbench formula");
             builder.pop();
 
             builder.comment("Singularity Recipe Count").push("singularity");

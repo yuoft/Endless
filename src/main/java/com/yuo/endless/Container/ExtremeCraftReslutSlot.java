@@ -1,5 +1,6 @@
 package com.yuo.endless.Container;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
@@ -27,12 +28,14 @@ public class ExtremeCraftReslutSlot extends CraftingResultSlot {
         this.onCrafting(stack);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);
         NonNullList<ItemStack> nonnulllist; //优先匹配工作台配方，没有则配方无尽配方
-        Optional<ICraftingRecipe> optional = thePlayer.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, this.craftMatrix, thePlayer.world);
-        if (optional.isPresent()){
-            nonnulllist = thePlayer.world.getRecipeManager().getRecipeNonNull(IRecipeType.CRAFTING, this.craftMatrix, thePlayer.world);
-        }else {
-            nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, thePlayer.world);
-        }
+        if (Config.SERVER.isCraftTable.get()){
+            Optional<ICraftingRecipe> optional = thePlayer.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, this.craftMatrix, thePlayer.world);
+            if (optional.isPresent()){
+                nonnulllist = thePlayer.world.getRecipeManager().getRecipeNonNull(IRecipeType.CRAFTING, this.craftMatrix, thePlayer.world);
+            }else {
+                nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, thePlayer.world);
+            }
+        }else nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, thePlayer.world);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(null);
 
         for(int i = 0; i < nonnulllist.size(); ++i) {
