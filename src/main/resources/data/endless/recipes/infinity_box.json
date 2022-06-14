@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xyx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "endless:infinity_ingot"
+    },
+    "y": {
+      "item": "endless:compressor_chest"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_box"
+  }
+}

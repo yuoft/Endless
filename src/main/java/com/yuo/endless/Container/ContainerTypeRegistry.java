@@ -31,4 +31,10 @@ public class ContainerTypeRegistry {
     public static final RegistryObject<ContainerType<NeutroniumCompressorContainer>> neutroniumCompressorContainer = CONTAINERS.register("neutronium_compressor_container", () ->
             IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
                     new NeutroniumCompressorContainer(windowId, inv)));
+    public static final RegistryObject<ContainerType<com.yuo.endless.Container.CompressorChestContainer>> CompressorChestContainer = CONTAINERS.register("compressor_chest_container", () ->
+            IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
+                    new CompressorChestContainer(windowId, inv)));
+    public static final RegistryObject<ContainerType<InfinityBoxContainer>> infinityBoxContainer = CONTAINERS.register("infinity_box_container", () ->
+            IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
+                    new InfinityBoxContainer(windowId, inv)));
 }

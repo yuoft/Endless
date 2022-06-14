@@ -76,7 +76,9 @@
     "block.endless.double_neutron_collector":"致密中子态素收集器",
     "block.endless.triple_neutron_collector":"压缩致密中子态素收集器",
     "block.endless.neutronium_compressor":"中子态素压缩机",
-    
+    "block.endless.compressor_chest":"压缩箱子",
+    "block.endless.infinity_box":"无尽之箱",
+
     "entity.endless.infinity_arrow":"无尽箭",
     "entity.endless.infinity_arrow_sub":"无尽光箭",
     "entity.endless.endest_pearl":"终望珍珠",
@@ -156,7 +158,9 @@
     "gui.endless.double_neutron_collector":"中子颗粒收集器",
     "gui.endless.triple_neutron_collector":"致密中子颗粒收集器",
     "gui.endless.neutronium_compressor":"中子态素压缩机",
-    
+    "gui.endless.compressor_chest":"压缩箱子",
+    "gui.endless.infinity_box":"无尽箱子",
+
     "death.attack.infinity":"%1$s被%2$s彻底粉碎",
     "death.attack.infinity.item":"%1$s被%2$s使用%3$s彻底粉碎",
     "death.attack.infinity.1":"%1$s被%2$s切成了条",

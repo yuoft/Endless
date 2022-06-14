@@ -22,7 +22,11 @@ public class TileTypeRegistry {
             () -> TileEntityType.Builder.create(DoubleNeutronCollectorTile::new, BlockRegistry.doubleNeutronCollector.get()).build(null));
     public static final RegistryObject<TileEntityType<TripleNeutronCollectorTile>> TRIPLE_NEUTRON_COLLECTOR_TILE = TILE_ENTITIES.register("triple_neutron_collector_tile",
             () -> TileEntityType.Builder.create(TripleNeutronCollectorTile::new, BlockRegistry.tripleNeutronCollector.get()).build(null));
-    public static final RegistryObject<TileEntityType<NeutroniumCompressorTile>> NEUTRONIUM_COOMPRESSOR_TILE = TILE_ENTITIES.register("neutronium_compressor_tile",
+    public static final RegistryObject<TileEntityType<NeutroniumCompressorTile>> NEUTRONIUM_COMPRESSOR_TILE = TILE_ENTITIES.register("neutronium_compressor_tile",
             () -> TileEntityType.Builder.create(NeutroniumCompressorTile::new, BlockRegistry.neutroniumCompressor.get()).build(null));
+    public static final RegistryObject<TileEntityType<CompressorChestTile>> COMPRESS_CHEST_TILE = TILE_ENTITIES.register("compressor_chest_tile",
+            () -> TileEntityType.Builder.create(CompressorChestTile::new, BlockRegistry.compressorChest.get()).build(null));
+    public static final RegistryObject<TileEntityType<InfinityBoxTile>> INFINITY_CHEST_TILE = TILE_ENTITIES.register("infinity_chest_tile",
+            () -> TileEntityType.Builder.create(InfinityBoxTile::new, BlockRegistry.infinityBox.get()).build(null));
 
 }

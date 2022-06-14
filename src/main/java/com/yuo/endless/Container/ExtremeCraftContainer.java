@@ -1,7 +1,9 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Config.Config;
+import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
+import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
 import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -79,9 +81,19 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
                 serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, outPut)); //发包同步数据
             }
         }else {
-            ItemStack outPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
-            outputInventory.setInventorySlotContents(81, outPut);
-            serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, outPut));
+            Optional<ExtremeCraftRecipe> optional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
+            if (optional.isPresent()){
+                ExtremeCraftRecipe recipe = optional.get();
+                if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
+                    ItemStack itemstack = recipe.getCraftingResult(inputInventory);
+                    outputInventory.setInventorySlotContents(81, itemstack);
+                    serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemstack));
+                }
+            }else {
+                ItemStack outPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
+                outputInventory.setInventorySlotContents(81, outPut);
+                serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, outPut));
+            }
         }
     }
 

@@ -32,6 +32,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class NeutroniumCompressorTile extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
     //用于自动输入输出
@@ -47,7 +48,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     private final int[] SLOT_OUT = new int[]{1};
 
     public NeutroniumCompressorTile() {
-        super(TileTypeRegistry.NEUTRONIUM_COOMPRESSOR_TILE.get());
+        super(TileTypeRegistry.NEUTRONIUM_COMPRESSOR_TILE.get());
     }
 
     @Override
@@ -61,17 +62,25 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
         ItemStack input = this.items.get(0);
         ItemStack stack1 = this.items.get(1); //已有输出
         if (input.isEmpty()) return; //没有输入时 停止
-        ItemStack stack = CompressorManager.getOutput(input); //获取此输入的输出
-        //判断输出
-        if (!stack1.isEmpty() && !(stack1.getItem() == stack.getItem()) || stack.isEmpty()) return;
-        //机器内有残留时，输入方块与残留的参与合成方块不同时  停止
-        if (stack1.isEmpty() && this.data.get(0) > 0 && !(CompressorManager.isInput(input, items.get(2)))) return;
+        ItemStack stack;
+        Optional<NeutroniumRecipe> optional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new Inventory(input), world);
+        if (optional.isPresent()){
+            stack = optional.get().getRecipeOutput();
+        }else stack = CompressorManager.getOutput(input); //获取此输入的输出
+        //判断输出 输出和已有输出不同 输出为空
+        if ((!stack1.isEmpty() && !(stack1.getItem() == stack.getItem())) || stack.isEmpty()) return;
+        //机器内有残留时
+        if (stack1.isEmpty() && this.data.get(0) > 0){ //输入与缓存输入不同 或无法替换
+            if (!optional.map(recipe -> input.isItemEqual(items.get(2))).orElseGet(() -> CompressorManager.isInput(input, items.get(2))))
+                return;
+        }
 
-        int count = CompressorManager.getCost(input);
+        int count = optional.map(NeutroniumRecipe::getRecipeCount).orElseGet(() -> CompressorManager.getCost(input));
         this.data.set(1,count );
         if (count > 0 && this.data.get(0) < count){
             this.items.set(2, new ItemStack(input.getItem()));  //缓存参与合成物品
-            this.data.set(0, this.data.get(0) + CompressorManager.getInputCost(input));
+            int num = optional.isPresent() ? 1 : CompressorManager.getInputCost(input);
+            this.data.set(0, this.data.get(0) + num);
             if (input.getCount() >= 1)
                 input.shrink(1);
             markDirty();
@@ -79,7 +88,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
 
         if (this.data.get(0) >= this.data.get(1)){ //物品已满，设置输出
             if (stack1.isEmpty()){
-                this.items.set(1, CompressorManager.getOutput(input));
+                this.items.set(1, stack);
             }else stack1.grow(1);
             this.data.set(0, 0);
             this.data.set(1, 0);

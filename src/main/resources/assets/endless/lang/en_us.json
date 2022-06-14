@@ -76,6 +76,8 @@
   "block.endless.double_neutron_collector":"Double Neutron Collector",
   "block.endless.triple_neutron_collector":"Triple Neutron Collector",
   "block.endless.neutronium_compressor":"Neutronium Compressor",
+  "block.endless.compressor_chest":"Compressor Chest",
+  "block.endless.infinity_box":"Infinity Box",
 
   "entity.endless.infinity_arrow":"Infinity Arrow",
   "entity.endless.infinity_arrow_sub":"Infinity Arrow Sub",
@@ -156,7 +158,9 @@
   "gui.endless.dense_neutron_collector":"Dense Neutron collector",
   "gui.endless.double_neutron_collector":"Double Neutron collector",
   "gui.endless.triple_neutron_collector":"Triple Neutron collector",
-  "gui.endless.neutronium_compressor":"Neutronium Compressor",
+  "gui.endless.neutronium_compressor":"Neutronium compressor",
+  "gui.endless.compressor_chest":"Compressor chest",
+  "gui.endless.infinity_box":"Infinity box",
 
   "death.attack.infinity":"%1$scover%2$sCompletely crush",
   "death.attack.infinity.item":"%1$scover%2$suse%3$sCompletely crush",

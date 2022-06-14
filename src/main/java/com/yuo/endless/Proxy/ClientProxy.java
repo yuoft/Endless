@@ -6,18 +6,16 @@ import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Gui.*;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.MatterCluster;
-import com.yuo.endless.Render.GapingVoidRender;
-import com.yuo.endless.Render.InfinityArrowRender;
-import com.yuo.endless.Render.InfinityArrowSubRender;
+import com.yuo.endless.Render.*;
+import com.yuo.endless.Tiles.TileTypeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -46,10 +44,16 @@ public class ClientProxy implements IProxy {
             ScreenManager.registerFactory(ContainerTypeRegistry.doubleNeutronCollectorContainer.get(), DoubleNeutronCollectorScreen::new);
             ScreenManager.registerFactory(ContainerTypeRegistry.tripleNeutronCollectorContainer.get(), TripleNeutronCollectorScreen::new);
             ScreenManager.registerFactory(ContainerTypeRegistry.neutroniumCompressorContainer.get(), NeutroniumCompressorScreen::new);
+            ScreenManager.registerFactory(ContainerTypeRegistry.CompressorChestContainer.get(), CompressorChestScreen::new);
+            ScreenManager.registerFactory(ContainerTypeRegistry.infinityBoxContainer.get(), InfinityBoxScreen::new);
 
         });
         registerEntityRender();
-
+        //TESR 方块实体渲染
+        event.enqueueWork(() ->{
+            ClientRegistry.bindTileEntityRenderer(TileTypeRegistry.COMPRESS_CHEST_TILE.get(), EndlessChestTileRender::new);
+            ClientRegistry.bindTileEntityRenderer(TileTypeRegistry.INFINITY_CHEST_TILE.get(), EndlessChestTileRender::new);
+        });
     }
 
     //使用动态属性来切换无尽镐，铲形态

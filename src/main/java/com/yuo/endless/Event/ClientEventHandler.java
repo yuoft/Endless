@@ -1,17 +1,21 @@
 package com.yuo.endless.Event;
 
+import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Items.Tool.ColorText;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,12 +27,35 @@ import java.util.List;
 
 /**
  * Description: 客户端事件
- * Author: cnlimiter
+ * Author: cnlimiter yuo
  * Date: 2022/5/21 23:27
  * Version: 1.0
  */
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientEventHandler {
+    public static final ResourceLocation COMPRESSOR_CHEST_TEXTURE = new ResourceLocation(Endless.MOD_ID, "entity/compressor_chest");
+    public static final ResourceLocation INFINITY_CHEST_TEXTURE = new ResourceLocation(Endless.MOD_ID, "entity/infinity_chest");
+    public static final ResourceLocation NORMAL_CHEST_LOCATION = new ResourceLocation("entity/chest/normal");
+
+    public static ResourceLocation chooseChestTexture(EndlessChestType type) {
+        switch (type) {
+            case COMPRESSOR:
+                return COMPRESSOR_CHEST_TEXTURE;
+            case INFINITY:
+                return INFINITY_CHEST_TEXTURE;
+            default:
+                return NORMAL_CHEST_LOCATION;
+        }
+    }
+
+    //箱子贴图
+    @SubscribeEvent
+    public static void onStitch(TextureStitchEvent.Pre event) {
+        if (event.getMap().getTextureLocation().equals(Atlases.CHEST_ATLAS)) {
+            event.addSprite(COMPRESSOR_CHEST_TEXTURE);
+            event.addSprite(INFINITY_CHEST_TEXTURE);
+        }
+    }
 
     //染色
     @SubscribeEvent

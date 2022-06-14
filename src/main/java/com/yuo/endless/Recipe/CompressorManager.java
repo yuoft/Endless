@@ -1,12 +1,17 @@
 package com.yuo.endless.Recipe;
 
+import com.yuo.PaiMeng.Recipes.ModRecipeType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.Difficulty;
+import net.minecraftforge.common.MinecraftForge;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
 
 //配方管理
 public class CompressorManager {

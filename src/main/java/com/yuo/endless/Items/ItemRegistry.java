@@ -120,6 +120,10 @@ public class ItemRegistry {
 			() -> new BlockItem(BlockRegistry.tripleNeutronCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> neutroniumCompressor = ITEMS.register("neutronium_compressor",
 			() -> new BlockItem(BlockRegistry.neutroniumCompressor.get(), new Item.Properties().group(ModGroup.endless)));
+	public static RegistryObject<BlockItem> compressorChest = ITEMS.register("compressor_chest",
+			() -> new BlockItem(BlockRegistry.compressorChest.get(), new Item.Properties().group(ModGroup.endless)));
+	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_box",
+			() -> new BlockItem(BlockRegistry.infinityBox.get(), new Item.Properties().group(ModGroup.endless)));
 
 	//强力装备 联动奇点
 	public static RegistryObject<Item> singularityRuby;
