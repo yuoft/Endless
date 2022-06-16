@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+@OnlyIn(value = Dist.CLIENT, _interface = IChestLid.class)
 public class AbsEndlessChestTile extends LockableLootTileEntity implements IChestLid, ITickableTileEntity {
     private NonNullList<ItemStack> chestContents;
     protected float lidAngle;
