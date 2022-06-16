@@ -4,10 +4,12 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yuo.endless.Container.InfinityBoxContainer;
 import com.yuo.endless.Endless;
+import com.yuo.endless.Items.Tool.ColorText;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class InfinityBoxScreen extends ContainerScreen<InfinityBoxContainer> {
     private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/gui/infinity_chest.png");
@@ -26,6 +28,12 @@ public class InfinityBoxScreen extends ContainerScreen<InfinityBoxContainer> {
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize, 500, 500);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+        this.font.drawText(matrixStack, new StringTextComponent(ColorText.makeFabulous(this.title.getString())), (float)this.titleX, (float)this.titleY, 4210752);
+        this.font.drawText(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 4210752);
     }
 
     @Override
