@@ -77,7 +77,7 @@
     "block.endless.triple_neutron_collector":"压缩致密中子态素收集器",
     "block.endless.neutronium_compressor":"中子态素压缩机",
     "block.endless.compressor_chest":"压缩箱子",
-    "block.endless.infinity_box":"无尽之箱",
+    "block.endless.infinity_box":"§c无尽之箱",
 
     "entity.endless.infinity_arrow":"无尽箭",
     "entity.endless.infinity_arrow_sub":"无尽光箭",

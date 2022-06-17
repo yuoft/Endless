@@ -109,7 +109,7 @@ public class AbsEndlessChest extends Block implements IWaterLoggable {
         if (tileentity instanceof AbsEndlessChestTile) {
             AbsEndlessChestTile chestTile = (AbsEndlessChestTile)tileentity;
             if (!worldIn.isRemote && player.isCreative() && !chestTile.isEmpty()) {
-                ItemStack itemstack = new ItemStack(BlockRegistry.compressorChest.get());
+                ItemStack itemstack = new ItemStack(getBlock());
                 CompoundNBT compoundnbt = chestTile.NbtWrite(new CompoundNBT());
                 if (!compoundnbt.isEmpty()) {
                     itemstack.setTagInfo("BlockEntityTag", compoundnbt);

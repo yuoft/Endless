@@ -77,7 +77,7 @@
   "block.endless.triple_neutron_collector":"Triple Neutron Collector",
   "block.endless.neutronium_compressor":"Neutronium Compressor",
   "block.endless.compressor_chest":"Compressor Chest",
-  "block.endless.infinity_box":"Infinity Box",
+  "block.endless.infinity_box":"§cInfinity Box",
 
   "entity.endless.infinity_arrow":"Infinity Arrow",
   "entity.endless.infinity_arrow_sub":"Infinity Arrow Sub",

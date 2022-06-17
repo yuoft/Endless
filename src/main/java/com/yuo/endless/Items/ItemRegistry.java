@@ -121,9 +121,9 @@ public class ItemRegistry {
 	public static RegistryObject<BlockItem> neutroniumCompressor = ITEMS.register("neutronium_compressor",
 			() -> new BlockItem(BlockRegistry.neutroniumCompressor.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> compressorChest = ITEMS.register("compressor_chest",
-			() -> new BlockItem(BlockRegistry.compressorChest.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(BlockRegistry.compressorChest.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_box",
-			() -> new BlockItem(BlockRegistry.infinityBox.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(BlockRegistry.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 
 	//强力装备 联动奇点
 	public static RegistryObject<Item> singularityRuby;
