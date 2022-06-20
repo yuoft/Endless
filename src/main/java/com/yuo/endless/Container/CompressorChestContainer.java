@@ -4,6 +4,7 @@ import com.yuo.endless.Tiles.CompressorChestTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ShulkerBoxContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -21,7 +22,7 @@ public class CompressorChestContainer extends Container {
 
         for(int j = 0; j < 9; ++j) {
             for(int k = 0; k < 12; ++k) {
-                this.addSlot(new Slot(chestTile, k + j * 12, 12 + k * 18, 18 + j * 18));
+                this.addSlot(new InfinityBoxSlot(chestTile, k + j * 12, 12 + k * 18, 18 + j * 18));
             }
         }
 

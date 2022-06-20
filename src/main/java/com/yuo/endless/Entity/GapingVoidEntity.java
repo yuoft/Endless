@@ -2,6 +2,7 @@ package com.yuo.endless.Entity;
 
 import com.google.common.base.Predicate;
 import com.mojang.authlib.GameProfile;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import com.yuo.endless.Sound.ModSounds;
@@ -44,8 +45,10 @@ public class GapingVoidEntity extends Entity {
 
     public static final DataParameter<Integer> AGE_PARAMETER = EntityDataManager.createKey(GapingVoidEntity.class, DataSerializers.VARINT);
     public static final int maxLifetime = 186; //存在时间
-    public static double collapse = 0.95; //坍塌系数
-    public static double suckRange = 20.0; //引力范围
+    public static double collapse = 0.95; //坍塌系数 膨胀速度
+    public static double suckRange = Config.SERVER.endestPearlSuckRange.get(); //引力范围
+    private static final int endDamage = Config.SERVER.endestPearlEndDamage.get(); //最终爆炸伤害
+    private static final int oneDamage = Config.SERVER.endestPearlOneDamage.get(); //单次吸引伤害
     private FakePlayer fakePlayer; //模拟玩家
     private LivingEntity useEntity;
     public GapingVoidEntity(EntityType<?> entityTypeIn, World worldIn) {
@@ -84,7 +87,8 @@ public class GapingVoidEntity extends Entity {
         if (input instanceof PlayerEntity) {
             PlayerEntity p = (PlayerEntity) input;
             return !p.abilities.isCreativeMode;
-        } else return !(input instanceof EndlessItemEntity);
+        }
+        return true;
     };
 
     @Override
@@ -136,13 +140,13 @@ public class GapingVoidEntity extends Entity {
                 if (nommee != this) {
                     if (nommee instanceof EnderDragonEntity){
                         EnderDragonEntity dragon = (EnderDragonEntity) nommee;
-                        dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(useEntity), 1000.0f);
+                        dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(useEntity), endDamage);
                     }else if (nommee instanceof WitherEntity){
                         WitherEntity wither = (WitherEntity) nommee;
                         wither.setInvulTime(0);
-                        wither.attackEntityFrom(new InfinityDamageSource(useEntity), 1000.0f);
+                        wither.attackEntityFrom(new InfinityDamageSource(useEntity), endDamage);
                     }
-                    else nommee.attackEntityFrom(new InfinityDamageSource(useEntity), 1000.0f);
+                    else nommee.attackEntityFrom(new InfinityDamageSource(useEntity), endDamage);
                 }
             }
             setDead();
@@ -208,9 +212,9 @@ public class GapingVoidEntity extends Entity {
                 if (len <= nomrange) {
                     if (nommee instanceof EnderDragonEntity){
                         EnderDragonEntity dragon = (EnderDragonEntity) nommee;
-                        dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.OUT_OF_WORLD, 5.0f);
+                        dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.OUT_OF_WORLD, oneDamage);
                     }
-                    else nommee.attackEntityFrom(DamageSource.OUT_OF_WORLD, 5.0f);
+                    else nommee.attackEntityFrom(DamageSource.OUT_OF_WORLD, oneDamage);
                 }
             }
         }
@@ -239,7 +243,7 @@ public class GapingVoidEntity extends Entity {
                             MinecraftForge.EVENT_BUS.post(event);
                             if (!event.isCanceled()) {
                                 float resist = state.getBlock().getExplosionResistance();
-                                if (resist <= 10.0) { //方块爆炸抗性小于10点
+                                if (resist <= 50.0) { //方块爆炸抗性小于10点
 //                                    state.getBlock().dropBlockAsItemWithChance(world, blockPos, state, 0.9F, 0);
                                     state.getBlock().canDropFromExplosion(state, world, blockPos, new Explosion(world, null,blockPos.getX(),
                                                                                 blockPos.getY(), blockPos.getZ(), 6.0f, false, Explosion.Mode.BREAK));

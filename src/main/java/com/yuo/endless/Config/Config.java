@@ -64,6 +64,9 @@ public class Config {
         public final ForgeConfigSpec.DoubleValue foodTime; //食物效果时间缩放系数
         public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐的锤形态潜行左键是否删除方块
         public final ForgeConfigSpec.IntValue matterClusterMaxCount; //物质团单个物品存储上限
+        public final ForgeConfigSpec.IntValue endestPearlEndDamage; //终望珍珠最终爆炸伤害
+        public final ForgeConfigSpec.IntValue endestPearlOneDamage; //终望珍珠单次吸引伤害
+        public final ForgeConfigSpec.IntValue endestPearlSuckRange; //终望珍珠引力范围
         public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
 
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
@@ -105,6 +108,9 @@ public class Config {
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
             this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Hammer form of endless pickaxe left click to delete box");
             this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 1024, 256, 4096, "Upper limit of storage of a single item in a material group");
+            this.endestPearlEndDamage = buildInt(builder, "Endest Pearl End Damage", 1000, 100, 10000, "Endest pearl final explosion damage");
+            this.endestPearlOneDamage = buildInt(builder, "Endest Pearl One Damage", 5, 1, 10, "Endest pearl single attraction damage");
+            this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Suck Range", 20, 10, 32, "Endest pearl gravitational range");
             this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether the endless workbench is compatible with the original workbench formula");
             builder.pop();
 

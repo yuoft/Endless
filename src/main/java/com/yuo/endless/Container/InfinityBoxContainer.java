@@ -21,7 +21,7 @@ public class InfinityBoxContainer extends Container {
 
         for(int j = 0; j < 9; ++j) {
             for(int k = 0; k < 27; ++k) {
-                this.addSlot(new Slot(chestTile, k + j * 27, 8 + k * 18, 18 + j * 18));
+                this.addSlot(new InfinityBoxSlot(chestTile, k + j * 27, 8 + k * 18, 18 + j * 18));
             }
         }
 

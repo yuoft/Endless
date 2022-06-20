@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -70,7 +71,7 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        if (entity instanceof LivingEntity){
+        if (entity instanceof LivingEntity  && !(entity instanceof ArmorStandEntity)){
             hitEntity(stack, (LivingEntity) entity, player);
         }
         return false;
@@ -89,6 +90,9 @@ public class InfinitySword extends SwordItem{
                 player.attackEntityFrom(new InfinityDamageSource(attacker), 10.0f);
                 return true;
             }else player.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+        }else if (target instanceof ArmorStandEntity){
+            ArmorStandEntity armorStand = (ArmorStandEntity) target;
+            armorStand.breakArmorStand(DamageSource.GENERIC);
         }
         else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
         target.setHealth(0);

@@ -652,7 +652,7 @@ public class ModRecipeManager {
                     new ItemStack(Api.instance().definitions().items().fluidCell64k()), new ItemStack(Api.instance().definitions().materials().singularity()));
         }
         if (Endless.isDraconicEvolution){
-            String str = "draconicevolution:draconic_block";
+            String str = "draconicevolution:awakened_draconium_block";
             Block block = Registry.BLOCK.getOrDefault(new ResourceLocation(str));
             if (block != Blocks.AIR){
                 ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
