@@ -24,7 +24,7 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
 //    private final IDrawableStatic extreme;
 
     public ExtremeCraftRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 0,0,190,163); //绘制背景
+        this.background = helper.createDrawable(TEXTURE, 0,0,190,164); //绘制背景
         this.icon = helper.createDrawableIngredient(new ItemStack(ItemRegistry.extremeCraftingTable.get())); //绘制合成方块
 //        this.extreme = helper.createDrawable(TEXTURE);
     }

@@ -68,6 +68,7 @@ public class Config {
         public final ForgeConfigSpec.IntValue endestPearlOneDamage; //终望珍珠单次吸引伤害
         public final ForgeConfigSpec.IntValue endestPearlSuckRange; //终望珍珠引力范围
         public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
+        public final ForgeConfigSpec.BooleanValue isBreakDECrystal; //无尽剑和弓是否破坏龙研的混沌水晶
 
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
         public final ForgeConfigSpec.IntValue singularityClay;
@@ -86,6 +87,7 @@ public class Config {
         public final ForgeConfigSpec.IntValue singularitySpace;
         public final ForgeConfigSpec.IntValue singularityXray;
         public final ForgeConfigSpec.IntValue singularityUltra;
+        public final ForgeConfigSpec.IntValue singularityZinc;
         public final ForgeConfigSpec.IntValue modRatioRate; //模组影响后的最大倍率
         public final ForgeConfigSpec.IntValue modRatioCount; //模组影响后的最大数量
 
@@ -112,6 +114,7 @@ public class Config {
             this.endestPearlOneDamage = buildInt(builder, "Endest Pearl One Damage", 5, 1, 10, "Endest pearl single attraction damage");
             this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Suck Range", 20, 10, 32, "Endest pearl gravitational range");
             this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether the endless workbench is compatible with the original workbench formula");
+            this.isBreakDECrystal = buildBoolean(builder, "Is Break DE Crystal", false,  "Does the endless sword and bow destroy the chaotic crystal of DE");
             builder.pop();
 
             builder.comment("Singularity Recipe Count").push("singularity");
@@ -132,6 +135,7 @@ public class Config {
             this.singularitySpace = buildInt(builder, "Space", 50, 10, 2000, "base count");
             this.singularityXray = buildInt(builder, "Xray", 150, 10, 2000, "base count");
             this.singularityUltra = buildInt(builder, "Ultra", 80, 10, 2000, "base count");
+            this.singularityZinc = buildInt(builder, "Zinc", 300, 10, 2000, "base count");
             builder.pop();
 
             builder.comment("Mod Impact").push("modRatio");

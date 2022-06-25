@@ -1,6 +1,10 @@
 package com.yuo.endless.Items.Tool;
 
+import com.brandon3055.draconicevolution.api.energy.ICrystalBinder;
+import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
+import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.yuo.endless.Config.Config;
+import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.client.resources.I18n;
@@ -13,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -50,8 +55,7 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity"))
-                + I18n.format("attribute.name.generic.attack_damage")));
+        tooltip.add(new StringTextComponent(ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity")) + I18n.format("attribute.name.generic.attack_damage")));
     }
 
     @Override
@@ -74,6 +78,7 @@ public class InfinitySword extends SwordItem{
         if (entity instanceof LivingEntity  && !(entity instanceof ArmorStandEntity)){
             hitEntity(stack, (LivingEntity) entity, player);
         }
+        damageGuardian(entity, player);
         return false;
     }
 
@@ -82,8 +87,8 @@ public class InfinitySword extends SwordItem{
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker.world.isRemote) return true;
         if (target instanceof EnderDragonEntity && attacker instanceof PlayerEntity){
-            EnderDragonEntity drageon = (EnderDragonEntity) target; //攻击末影龙
-            drageon.attackEntityPartFrom(drageon.dragonPartHead, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+            EnderDragonEntity dragon = (EnderDragonEntity) target; //攻击末影龙
+            dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
         }else if (target instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) target;
             if (EventHandler.isInfinite(player)){ //如果玩家穿戴全套无尽装备，则只造成10点伤害
@@ -112,30 +117,62 @@ public class InfinitySword extends SwordItem{
         return ActionResult.resultSuccess(heldItem);
     }
     //aoe伤害
-    protected void attackAOE(PlayerEntity player,float range, float damage,boolean type)
-    {
+    protected void attackAOE(PlayerEntity player,float range, float damage,boolean type) {
         if (player.world.isRemote) return;
         AxisAlignedBB aabb = player.getBoundingBox().grow(range);//范围
         List<Entity> toAttack = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, aabb);//生物列表
         DamageSource src = new InfinityDamageSource(player);//伤害类型
         for (Entity entity : toAttack) { //循环遍历
-            if(type) {
-                if(entity instanceof LivingEntity) {
-                    entity.attackEntityFrom(src, damage);//给与实体伤害
+            if (entity instanceof LivingEntity){
+                if(type) { //潜行攻击所有生物
+                    attackEntity(entity, src, damage);
+                } else {
+                    if (entity instanceof IMob) {
+                        attackEntity(entity, src, damage);
+                    }
                 }
             }
-            else {
-                if (entity instanceof IMob) {
-                    if (entity instanceof EnderDragonEntity){
-                        EnderDragonEntity drageon = (EnderDragonEntity) entity;
-                        drageon.attackEntityPartFrom(drageon.dragonPartHead, src, damage);
-                    }else if (entity instanceof WitherEntity){
-                        WitherEntity wither = (WitherEntity) entity;
-                        wither.setInvulTime(0); //将凋零无敌时间设为0
-                        wither.attackEntityFrom(src, damage);
-                    }
-                    else entity.attackEntityFrom(src, damage);
-                }
+        }
+    }
+
+    /**
+     * 攻击原版生物
+     * @param entity 生物
+     * @param src 伤害类型
+     * @param damage 伤害值
+     */
+    private void attackEntity(Entity entity, DamageSource src, float damage){
+        if (entity instanceof EnderDragonEntity){
+            EnderDragonEntity dragon = (EnderDragonEntity) entity;
+            dragon.attackEntityPartFrom(dragon.dragonPartHead, src, damage);
+        }else if (entity instanceof WitherEntity){
+            WitherEntity wither = (WitherEntity) entity;
+            wither.setInvulTime(0); //将凋零无敌时间设为0
+            wither.attackEntityFrom(src, damage);
+        }else entity.attackEntityFrom(src, damage);//给与实体伤害
+    }
+
+    /**
+     * 攻击龙研
+     * @param entity 实体
+     * @param player 玩家
+     */
+    private void damageGuardian(Entity entity, PlayerEntity player){
+        if (Endless.isDraconicEvolution){
+            if (entity instanceof GuardianEntity){
+                GuardianEntity guardian = (GuardianEntity) entity;
+                guardian.attackEntityFrom(new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
+                guardian.setHealth(0);
+                guardian.onDeath(new InfinityDamageSource(player));
+                guardian.remove();
+            }else if (entity instanceof DraconicGuardianEntity){
+                DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
+                draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player),Float.POSITIVE_INFINITY);
+                draconicGuardian.setHealth(0);
+                draconicGuardian.onDeath(new InfinityDamageSource(player));
+            }else if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){
+                GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;
+                crystal.func_174812_G();
             }
         }
     }

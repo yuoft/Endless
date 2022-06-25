@@ -1,6 +1,5 @@
 package com.yuo.endless.Event;
 
-import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.yuo.endless.Armor.InfinityArmor;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
@@ -8,8 +7,6 @@ import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.command.impl.GiveCommand;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -30,17 +27,13 @@ import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -69,7 +62,7 @@ public class EventHandler {
     }
 
     //无尽装备 不受伤害
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void opArmsImmuneDamage(LivingDamageEvent event){
         LivingEntity living = event.getEntityLiving();
         Boolean hasChest = living.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == ItemRegistry.infinityChest.get();
@@ -81,7 +74,7 @@ public class EventHandler {
             if (isInfinite(player)){
                 if (InfinityDamageSource.isInfinity(event.getSource())){ //是无尽伤害 减免至10点
                     ItemStack stack = player.getActiveItemStack();
-                    if (!stack.isEmpty() && isInfinityItem(stack)) { //玩家在使用无尽剑或弓时，不会受伤
+                    if (!stack.isEmpty() && isInfinityItem(stack)) { //玩家在使用无尽剑或弓时
                         event.setAmount(5);
                     } else event.setAmount(10);
                 } else {
@@ -96,7 +89,7 @@ public class EventHandler {
         }
     }
     //无尽胸甲 飞行 护腿 行走速度增加
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void updatePlayerAbilityStatus(LivingEvent.LivingUpdateEvent event) {
         LivingEntity living = event.getEntityLiving();
         if (living instanceof PlayerEntity) {
@@ -237,19 +230,19 @@ public class EventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onDeath(LivingDeathEvent event) { //不能被无尽伤害外的攻击杀死
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
-                event.setCanceled(true);
                 player.setHealth(player.getMaxHealth());
+                event.setCanceled(true);
             }
         }
     }
 
     @SubscribeEvent
-    public static void diggity(PlayerEvent.BreakSpeed event) {
+    public static void dignity(PlayerEvent.BreakSpeed event) {
         if (!event.getEntityLiving().getHeldItem(Hand.MAIN_HAND).isEmpty()) {
             ItemStack held = event.getEntityLiving().getHeldItem(Hand.MAIN_HAND);
             if (held.getItem() == ItemRegistry.infinityPickaxe.get() || held.getItem() == ItemRegistry.infinityShovel.get() ||
@@ -261,7 +254,7 @@ public class EventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onGetHurt(LivingHurtEvent event) { //不能伤害无尽套玩家
         if (!(event.getEntityLiving() instanceof PlayerEntity)) {
             return;
@@ -282,7 +275,7 @@ public class EventHandler {
     }
 
     //玩家不会被无尽伤害外攻击
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onAttacked(LivingAttackEvent event) {
         if (!(event.getEntityLiving() instanceof PlayerEntity)) {
             return;

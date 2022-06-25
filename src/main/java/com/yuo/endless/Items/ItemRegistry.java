@@ -125,7 +125,7 @@ public class ItemRegistry {
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_box",
 			() -> new BlockItem(BlockRegistry.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 
-	//强力装备 联动奇点
+	//联动奇点
 	public static RegistryObject<Item> singularityRuby;
 	public static RegistryObject<Item> singularityDragon;
 	public static RegistryObject<Item> singularitySpace;
@@ -133,6 +133,8 @@ public class ItemRegistry {
 	public static RegistryObject<Item> singularityUltra;
 	public static RegistryObject<Item> singularitySilver;
 	public static RegistryObject<Item> singularityCopper;
+	public static RegistryObject<Item> singularityZinc;
+
 	public static void registerSpaceArmsItem(){
 		singularityRuby = ITEMS.register("singularity_ruby",
 				() -> new Singularity(0xe02e35, 0xe25e63));
@@ -145,10 +147,18 @@ public class ItemRegistry {
 		singularityUltra = ITEMS.register("singularity_ultra",
 				() -> new Singularity(0x7f6a00, 0x4cff00));
 	}
+
 	public static void registerIafItem(){
 		singularitySilver = ITEMS.register("singularity_silver",
 				() -> new Singularity(0xf3faff, 0xe5ecf7));
 		singularityCopper = ITEMS.register("singularity_copper",
 				() -> new Singularity(0x95654c, 0xbd896d));
+	}
+
+	public static void registerCreate(){
+		singularityZinc = ITEMS.register("singularity_zinc", () -> new Singularity(0xaab59d, 0xb5d1ba));
+	}
+
+	public static void registerBotania(){
 	}
 }

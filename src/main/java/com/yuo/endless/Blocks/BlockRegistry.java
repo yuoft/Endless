@@ -31,4 +31,7 @@ public class BlockRegistry {
     public static RegistryObject<Block> neutroniumCompressor = BLOCKS.register("neutronium_compressor", NeutroniumCompressor::new);
     public static RegistryObject<Block> compressorChest = BLOCKS.register("compressor_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_box", InfinityBox::new);
+
+    public static void registerBotania(){
+    }
 }

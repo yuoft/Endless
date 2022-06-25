@@ -29,4 +29,7 @@ public class TileTypeRegistry {
     public static final RegistryObject<TileEntityType<InfinityBoxTile>> INFINITY_CHEST_TILE = TILE_ENTITIES.register("infinity_chest_tile",
             () -> TileEntityType.Builder.create(InfinityBoxTile::new, BlockRegistry.infinityBox.get()).build(null));
 
+    public static void registerBotania(){
+    }
+
 }

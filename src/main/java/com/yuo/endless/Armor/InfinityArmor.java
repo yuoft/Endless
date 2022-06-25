@@ -38,7 +38,7 @@ import java.util.UUID;
 public class InfinityArmor extends ArmorItem {
 
     public static AttributeModifier modifierWalk = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed", 0.2, AttributeModifier.Operation.ADDITION);
-    public static AttributeModifier modifierFly = new AttributeModifier(UUID.fromString("bf93174c-8a89-42ed-a702-e6fd99c28be2"), Endless.MOD_ID + ":flying_speed", 0.05, AttributeModifier.Operation.ADDITION);
+    public static AttributeModifier modifierFly = new AttributeModifier(UUID.fromString("bf93174c-8a89-42ed-a702-e6fd99c28be2"), Endless.MOD_ID + ":flying_speed", 0.15, AttributeModifier.Operation.ADDITION);
 
     public InfinityArmor(EquipmentSlotType slot) {
         super(MyArmorMaterial.INFINITY, slot, new Properties().maxStackSize(1).group(ModGroup.endless));
@@ -130,7 +130,7 @@ public class InfinityArmor extends ArmorItem {
         if (slot == EquipmentSlotType.CHEST) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_chest"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+100% FlySpeed")));
+                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% FlySpeed")));
 //				tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + TextFormatting.ITALIC + "100" +
 //						TextFormatting.RESET + "" + TextFormatting.BLUE + "% FlySpeed"));
         }

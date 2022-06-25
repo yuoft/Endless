@@ -1,11 +1,16 @@
 package com.yuo.endless.Entity;
 
+import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
+import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
+import com.yuo.endless.Config.Config;
+import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
@@ -83,12 +88,32 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         super.onEntityHit(result);
         Entity entity = result.getEntity();
         if (entity instanceof LivingEntity){
-            LivingEntity living = (LivingEntity) entity;
-            living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
-            living.setHealth(0);
-            if (!(living instanceof PlayerEntity))
-                living.onDeath(new InfinityDamageSource(this.shooter));
+            if (Endless.isDraconicEvolution){
+                if (entity instanceof GuardianEntity){
+                    GuardianEntity guardian = (GuardianEntity) entity;
+                    guardian.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+                    guardian.setHealth(0);
+                    guardian.onDeath(new InfinityDamageSource(this.shooter));
+                    guardian.remove();
+                }else if (entity instanceof DraconicGuardianEntity){
+                    DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
+                    draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter),Float.POSITIVE_INFINITY);
+                    draconicGuardian.setHealth(0);
+                    draconicGuardian.onDeath(new InfinityDamageSource(this.shooter));
+                }
+            }else {
+                LivingEntity living = (LivingEntity) entity;
+                living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+                living.setHealth(0);
+                if (!(living instanceof PlayerEntity))
+                    living.onDeath(new InfinityDamageSource(this.shooter));
+            }
             this.setDead();
+        }else if (Endless.isDraconicEvolution){
+            if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){
+                GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;
+                crystal.func_174812_G();
+            }
         }
     }
 

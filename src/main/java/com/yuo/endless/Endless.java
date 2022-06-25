@@ -1,8 +1,5 @@
 package com.yuo.endless;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.yuo.endless.Blocks.BlockRegistry;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
@@ -16,20 +13,14 @@ import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Sound.ModSounds;
 import com.yuo.endless.Tiles.TileTypeRegistry;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ConfigFileTypeHandler;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 @Mod("endless")
 public class Endless {
@@ -59,7 +50,7 @@ public class Endless {
     public static boolean isTheTwilightForest = false; //暮色森林
     public static boolean isAstralSorcery = false; //星辉魔法
     public static boolean isSlashBlade2 = false; //拔刀剑2
-    public static boolean isThermalSeries = false; //热力系列
+    public static boolean isThermal = false; //热力基本
     public static boolean isTimeBottle = false; //时间之瓶
     public static boolean isDraconicEvolution = false; //龙之进化
     public static boolean isInfernalMobs = false; //稀有精英怪
@@ -76,6 +67,9 @@ public class Endless {
         }
         if (isIceandfire){
             ItemRegistry.registerIafItem();
+        }
+        if (isCreate){
+            ItemRegistry.registerCreate();
         }
 
         modEventBus.addListener(this::commonSetup);
@@ -124,7 +118,7 @@ public class Endless {
         isTheTwilightForest = checkMod("twilightforest");
         isAstralSorcery = checkMod("astralsorcery");
         isSlashBlade2 = checkMod("slashblade");
-        isThermalSeries = checkMod("thermal");
+        isThermal = checkMod("thermal");
         isTimeBottle = checkMod("tiab");
         isDraconicEvolution = checkMod("draconicevolution");
         isInfernalMobs = checkMod("infernalmobs");
