@@ -164,7 +164,6 @@ public class InfinitySword extends SwordItem{
                 guardian.attackEntityFrom(new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
                 guardian.setHealth(0);
                 guardian.onDeath(new InfinityDamageSource(player));
-                guardian.remove();
             }else if (entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
                 draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player),Float.POSITIVE_INFINITY);

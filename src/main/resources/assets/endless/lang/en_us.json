@@ -34,6 +34,10 @@
   "item.endless.singularity_silver":"§eSingularity Silver",
   "item.endless.singularity_copper":"§eSingularity Copper",
   "item.endless.singularity_zinc":"§eSingularity Zinc",
+  "item.endless.singularity_platinum":"§eSingularity Platinum",
+  "item.endless.singularity_nickel":"§eSingularity Nickel",
+  "item.endless.singularity_lead":"§eSingularity Lead",
+  "item.endless.singularity_tin":"§eSingularity Tin",
 
   "item.endless.crystal_pickaxe":"§bCrystal Pickaxe",
   "item.endless.crystal_axe":"§bCrystal Axe",
@@ -53,6 +57,7 @@
   "item.endless.infinity_sword":"§cInfinity Sword",
   "item.endless.skullfire_sword":"§dSkullfire Sword",
   "item.endless.infinity_bow":"§cInfinity Bow",
+  "item.endless.infinity_crossbow":"§cInfinity Crossbow",
 
   "item.endless.infinity_head":"§cInfinity Head",
   "item.endless.infinity_chest":"§cInfinity Chest",

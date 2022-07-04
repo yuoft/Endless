@@ -70,6 +70,7 @@ public class ItemRegistry {
 	public static RegistryObject<Item> infinitySword = ITEMS.register("infinity_sword", InfinitySword::new);
 	public static RegistryObject<Item> skullfireSword = ITEMS.register("skullfire_sword", SkullfireSword::new);
 	public static RegistryObject<Item> infinityBow = ITEMS.register("infinity_bow", InfinityBow::new);
+	public static RegistryObject<Item> infinityCrossBow = ITEMS.register("infinity_crossbow", InfinityCrossBow::new);
 	public static RegistryObject<Item> crystalSword = ITEMS.register("crystal_sword", () -> new OrdinarySword(MyItemTier.CRYSTAL));
 	public static RegistryObject<Item> crystalPickaxe = ITEMS.register("crystal_pickaxe", () -> new OrdinaryPickaxe(MyItemTier.CRYSTAL));
 	public static RegistryObject<Item> crystalAxe = ITEMS.register("crystal_axe", () -> new OrdinaryAxe(MyItemTier.CRYSTAL));
@@ -126,15 +127,22 @@ public class ItemRegistry {
 			() -> new BlockItem(BlockRegistry.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 
 	//联动奇点
-	public static RegistryObject<Item> singularityRuby;
-	public static RegistryObject<Item> singularityDragon;
-	public static RegistryObject<Item> singularitySpace;
-	public static RegistryObject<Item> singularityXray;
-	public static RegistryObject<Item> singularityUltra;
-	public static RegistryObject<Item> singularitySilver;
-	public static RegistryObject<Item> singularityCopper;
-	public static RegistryObject<Item> singularityZinc;
+	public static RegistryObject<Item> singularityRuby; //红宝石
+	public static RegistryObject<Item> singularityDragon; //龙晶
+	public static RegistryObject<Item> singularitySpace; //空间
+	public static RegistryObject<Item> singularityXray; //X光
+	public static RegistryObject<Item> singularityUltra; //极限
+	public static RegistryObject<Item> singularitySilver; //银
+	public static RegistryObject<Item> singularityCopper; //铜
+	public static RegistryObject<Item> singularityZinc; //锌
+//	public static RegistryObject<Item> singularityPlatinum; //铂
+//	public static RegistryObject<Item> singularityAluminum; //铝
+	public static RegistryObject<Item> singularityNickel; //镍
+	public static RegistryObject<Item> singularityLead; //铅
+	public static RegistryObject<Item> singularityTin; //锡
+//	public static RegistryObject<Item> singularityIridium; //铱
 
+	//强力装备
 	public static void registerSpaceArmsItem(){
 		singularityRuby = ITEMS.register("singularity_ruby",
 				() -> new Singularity(0xe02e35, 0xe25e63));
@@ -148,6 +156,7 @@ public class ItemRegistry {
 				() -> new Singularity(0x7f6a00, 0x4cff00));
 	}
 
+	//冰与火
 	public static void registerIafItem(){
 		singularitySilver = ITEMS.register("singularity_silver",
 				() -> new Singularity(0xf3faff, 0xe5ecf7));
@@ -155,10 +164,18 @@ public class ItemRegistry {
 				() -> new Singularity(0x95654c, 0xbd896d));
 	}
 
+	//机械动力
 	public static void registerCreate(){
 		singularityZinc = ITEMS.register("singularity_zinc", () -> new Singularity(0xaab59d, 0xb5d1ba));
 	}
 
-	public static void registerBotania(){
+	//热力
+	public static void registerThermal(){
+//		singularityPlatinum = ITEMS.register("singularity_platinum", () -> new Singularity(0x649db2, 0xd3fcff));
+//		singularityAluminum = ITEMS.register("singularity_aluminum", () -> new Singularity(0x, 0x));
+		singularityNickel = ITEMS.register("singularity_nickel", () -> new Singularity(0x916e4d, 0xf9f5ab));
+		singularityLead = ITEMS.register("singularity_lead", () -> new Singularity(0x232457, 0x393c61));
+		singularityTin = ITEMS.register("singularity_tin", () -> new Singularity(0x517c88, 0x88a2a7));
+//		singularityIridium = ITEMS.register("singularity_iridium", () -> new Singularity(0xaab59d, 0xb5d1ba));
 	}
 }

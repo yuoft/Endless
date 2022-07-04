@@ -10,8 +10,7 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.util.ResourceLocation;
 
 public class InfinityArrowSubRender extends ArrowRenderer<InfinityArrowSubEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/heavenarrow.png");
-    private static final ResourceLocation TEXTURE0 = new ResourceLocation(Endless.MOD_ID, "textures/entity/heavenarrow0.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/infinity_arrow_sub.png");
 
     private EntityModel<InfinityArrowSubEntity> arrowSub;
 
@@ -21,7 +20,7 @@ public class InfinityArrowSubRender extends ArrowRenderer<InfinityArrowSubEntity
 
     @Override
     public ResourceLocation getEntityTexture(InfinityArrowSubEntity entity) {
-        return TEXTURE0;
+        return TEXTURE;
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.*;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -23,6 +24,8 @@ import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class InfinityBow extends BowItem {
+    public static final Predicate<ItemStack> ARROWS = (stack) -> stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == ItemRegistry.infinityArrow.get();
+
     public InfinityBow() {
         super(new Properties().group(ModGroup.endless).maxStackSize(1));
     }
@@ -93,17 +96,30 @@ public class InfinityBow extends BowItem {
     private ItemStack findArrow(LivingEntity living) {
         if (living instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) living;
-            PlayerInventory inventory = player.inventory;
-            for (int i = 0; i < inventory.getSizeInventory(); i++) { //优先无尽箭矢
-                ItemStack stack = inventory.getStackInSlot(i);
-                if (stack.getItem() == ItemRegistry.infinityArrow.get()) return stack;
-            }
-            for (int i = 0; i < inventory.getSizeInventory(); i++) {
-                ItemStack stack = inventory.getStackInSlot(i);
-                if (stack.getItem() == Items.ARROW) return stack;
+            ItemStack heldAmmo = getHeldAmmo(player, ARROWS);
+            if (!heldAmmo.isEmpty()) return heldAmmo; //主副手有箭矢
+            else {
+                PlayerInventory inventory = player.inventory;
+                for (int i = 0; i < inventory.getSizeInventory(); i++) { //优先无尽箭矢
+                    ItemStack stack = inventory.getStackInSlot(i);
+                    if (stack.getItem() == ItemRegistry.infinityArrow.get()) return stack;
+                }
+                for (int i = 0; i < inventory.getSizeInventory(); i++) {
+                    ItemStack stack = inventory.getStackInSlot(i);
+                    if (ItemTags.ARROWS.contains(stack.getItem())) return stack;
+                }
+                return player.isCreative() ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
             }
         }
-        return ShootableItem.getHeldAmmo(living, ARROWS);
+        return ItemStack.EMPTY;
+    }
+
+    public static ItemStack getHeldAmmo(LivingEntity living, Predicate<ItemStack> isAmmo) {
+        if (isAmmo.test(living.getHeldItem(Hand.OFF_HAND))) {
+            return living.getHeldItem(Hand.OFF_HAND);
+        } else {
+            return isAmmo.test(living.getHeldItem(Hand.MAIN_HAND)) ? living.getHeldItem(Hand.MAIN_HAND) : ItemStack.EMPTY;
+        }
     }
 
     @Override

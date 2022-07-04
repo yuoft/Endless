@@ -1,6 +1,9 @@
 package com.yuo.endless.Recipe;
 
 import appeng.core.Api;
+import cofh.thermal.core.ThermalCore;
+import cofh.thermal.core.init.TCoreBlocks;
+import cofh.thermal.core.init.TCoreItems;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.simibubi.create.AllBlocks;
@@ -9,6 +12,9 @@ import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.spacearms.Blocks.BlockRegistry;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
+import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -75,6 +81,7 @@ public class ModRecipeManager {
         if (Endless.isInfernalMobs) count -= 25;
         if (Endless.isChampions) count -= 25;
         if (Endless.isZombieAwareness) rate -= 2;
+        if (Endless.isMysticalAgriculture) rate += 3;
 
         //限制
         int countEnd = Math.min(Config.SERVER.modRatioCount.get(), count);
@@ -101,6 +108,16 @@ public class ModRecipeManager {
         if (Endless.isCreate){
             CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityZinc.get()), (Config.SERVER.singularityZinc.get() + countEnd) * rateEnd,
                     getList(new ItemStack(AllBlocks.ZINC_BLOCK.get())));
+        }
+        if (Endless.isThermal){
+//            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityPlatinum.get()), (Config.SERVER.singularityPlatinum.get() + countEnd) * rateEnd,
+//                    getList(new ItemStack(ThermalCore.BLOCKS.get("platinum_block"))));
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityNickel.get()), (Config.SERVER.singularityNickel.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(ThermalCore.BLOCKS.get("nickel_block"))));
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityLead.get()), (Config.SERVER.singularityLead.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(ThermalCore.BLOCKS.get("lead_block"))));
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityTin.get()), (Config.SERVER.singularityTin.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(ThermalCore.BLOCKS.get("tin_block"))));
         }
         //奇点合成配方
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityClay.get()), (Config.SERVER.singularityClay.get() + countEnd) * rateEnd,
@@ -524,6 +541,22 @@ public class ModRecipeManager {
                 'Z', new ItemStack(ItemRegistry.neutroniumIngot.get()),
                 'A', new ItemStack(ItemRegistry.crystalMatrixIngot.get()));
 
+        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityCrossBow.get()),
+                "  YYYYY  ",
+                " AZ  X   ",
+                "YZZZX    ",
+                "Y ZBZ    ",
+                "Y XZZZ   ",
+                "YX  ZZ   ",
+                "Y     Z  ",
+                "       Z ",
+                "         ",
+                'X', new ItemStack(ItemRegistry.infinityNugget.get()),
+                'Y', new ItemStack(ItemRegistry.infinityIngot.get()),
+                'Z', new ItemStack(ItemRegistry.neutroniumIngot.get()),
+                'B', new ItemStack(ItemRegistry.neutroniumGear.get()),
+                'A', new ItemStack(ItemRegistry.crystalMatrix.get()));
+
         ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.endestPearl.get()),
                 "   EEE   ",
                 " EEPPPEE ",
@@ -698,6 +731,34 @@ public class ModRecipeManager {
             ExtremeCraftingManager.getInstance().addRecipeInput(stew,
                     new ItemStack(AoAItems.GOLDICAP_PETALS.get()), new ItemStack(AoAItems.MAGIC_MARANG.get()),
                     new ItemStack(AoAItems.NATURAL_TEA.get()));
+        }
+        if (Endless.isAstralSorcery){ //40+1 45 47
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(BlocksAS.STARMETAL));
+        }
+        if (Endless.isSlashBlade2){ //41+1 45 47
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(SBItems.proudsoul_trapezohedron));
+        }
+        if (Endless.isMysticalAgriculture){ //42+2 45 47
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(com.blakebr0.mysticalagriculture.init.ModBlocks.SUPREMIUM_GEMSTONE_BLOCK.get()),
+                    new ItemStack(com.blakebr0.mysticalagriculture.init.ModBlocks.SUPREMIUM_BLOCK.get()));
+        }
+        if (Endless.isThermal){ //44+1 45+3 47+2
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ThermalCore.BLOCKS.get("enderium_block")),
+                    new ItemStack(ItemRegistry.singularityNickel.get()),
+                    new ItemStack(ItemRegistry.singularityLead.get()), new ItemStack(ItemRegistry.singularityTin.get()));
+            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+                    new ItemStack(ThermalCore.ITEMS.get("stuffed_pepper")), new ItemStack(ThermalCore.ITEMS.get("sushi_maki")),
+                    new ItemStack(ThermalCore.ITEMS.get("stuffed_pumpkin")));
+            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+                    new ItemStack(ThermalCore.ITEMS.get("xp_stew")), new ItemStack(ThermalCore.ITEMS.get("spring_salad")));
+            CompressorManager.addInputs(ItemRegistry.singularityCopper.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("copper_block")),
+                    new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
+            CompressorManager.addInputs(ItemRegistry.singularitySilver.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
+            CompressorManager.addInputs(ItemRegistry.singularityGold.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
+            CompressorManager.addInputs(ItemRegistry.singularityIron.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
         }
     }
 

@@ -18,10 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolType;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 范围挖掘工具类
@@ -153,12 +150,9 @@ public class ItemHander
         if (type == ToolType.SHOVEL && Config.shovelBlocks.contains(state.getBlock())) return;
         if (type == ToolType.AXE && Config.axeBlocks.contains(state.getBlock())) return;
 
-        //物品超过64组则不继续添加
-        if (map.size() > 64){
-            world.destroyBlock(pos, false, player); //破坏方块
-            return;
-        }
         if (!Config.SERVER.isBreakBedrock.get() && state.getBlock().equals(Blocks.BEDROCK)) return;
+//        world.destroyBlock(pos, false, player); //破坏方块
+
         //添加到map中
         if (state.getBlock().equals(Blocks.BEDROCK)){
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);
@@ -190,6 +184,13 @@ public class ItemHander
      */
     private static void putMapItem(ItemStack drop, Map<ItemStack, Integer> map){
         ItemStack itemStack = mapEquals(drop, map);
+        if (itemStack.isEmpty()){
+            map.put(drop, drop.getCount());
+        }else {
+            Integer integer = map.get(itemStack);
+            map.put(itemStack, integer + drop.getCount());
+        }
+        /*
         int dropCount = drop.getCount();
         Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
         if (!itemStack.isEmpty()) {
@@ -203,7 +204,7 @@ public class ItemHander
                 map.put(drop, maxCount);
 //                putMapItem(new ItemStack(drop.getItem(), dropCount - maxCount), map);
             }else map.put(drop, dropCount);
-        }
+        }*/
     }
 
     /**
@@ -213,14 +214,17 @@ public class ItemHander
      * @param map 物品
      */
     public static void spawnMatterCluster(PlayerEntity player, World world, Map<ItemStack, Integer> map){
-        ItemStack stack = MatterCluster.setMap(map);
-        if (!player.isCreative() && map.size() > 0){ //创造模式不生成物质团
-            if (Config.SERVER.isMergeMatterCluster.get()){
-                if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
-                    world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
-                else world.playSound(player, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0f, 3.0f);
-            }else world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
+        List<ItemStack> stacks = MatterCluster.createMatterCluster(map);
+        for (ItemStack stack : stacks) {
+            if (!player.isCreative()){ //创造模式不生成物质团
+                if (Config.SERVER.isMergeMatterCluster.get()){
+                    if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
+                        world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
+                    else world.playSound(player, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0f, 3.0f);
+                }else world.addEntity(new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack));
+            }
         }
+
     }
 
     /**

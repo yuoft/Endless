@@ -34,6 +34,10 @@
     "item.endless.singularity_silver":"§e奇点-银",
     "item.endless.singularity_copper":"§e奇点-铜",
     "item.endless.singularity_zinc":"§e奇点-锌",
+    "item.endless.singularity_platinum":"§e奇点-铂",
+    "item.endless.singularity_nickel":"§e奇点-镍",
+    "item.endless.singularity_lead":"§e奇点-铅",
+    "item.endless.singularity_tin":"§e奇点-锡",
 
     "item.endless.infinity_pickaxe":"§c世界崩解之镐",
     "item.endless.infinity_axe":"§c自然荒芜之斧",
@@ -42,6 +46,8 @@
     "item.endless.infinity_sword":"§c寰宇支配之剑",
     "item.endless.skullfire_sword":"§d炽焰之啄颅剑",
     "item.endless.infinity_bow":"§c天堂陨落长弓",
+    "item.endless.infinity_crossbow":"§c地狱升华之弩",
+
     "item.endless.crystal_pickaxe":"§b水晶镐",
     "item.endless.crystal_axe":"§b水晶斧",
     "item.endless.crystal_shovel":"§b水晶之铲",

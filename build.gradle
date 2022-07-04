@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.5-1.3.1'
+version = '1.16.5-1.3.2'
 group = 'com.github.yuoft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -145,6 +145,11 @@ dependencies {
     compileOnly("teamtwilight:twilightforest:4.0.546:universal")
     compileOnly("com.simibubi.create:Create:mc1.16.5_v0.3.2g+480")
     compileOnly("curse.maven:advent-of-ascension-nevermine-311054:3826879")
+    compileOnly("curse.maven:astral-sorcery-241721:3813365")
+    compileOnly("curse.maven:slashblade-241596:3422103")
+    compileOnly("curse.maven:mystical-agriculture-246640:3562127")
+    compileOnly("curse.maven:cofh-core-69162:3788884")
+    compileOnly("curse.maven:thermal-foundation-222880:3788893")
 
 //    runtimeOnly fg.deobf("curse.maven:projecte-226410:3736621")
 //    runtimeOnly fg.deobf("curse.maven:brandons-core-231382:3775813")

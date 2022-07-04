@@ -56,6 +56,7 @@ public class Endless {
     public static boolean isInfernalMobs = false; //稀有精英怪
     public static boolean isChampions = false; //冠军/强敌
     public static boolean isZombieAwareness = false; //僵尸意识
+    public static boolean isMysticalAgriculture = false; //神秘农业
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG); //配置文件
@@ -70,6 +71,9 @@ public class Endless {
         }
         if (isCreate){
             ItemRegistry.registerCreate();
+        }
+        if (isThermal){
+            ItemRegistry.registerThermal();
         }
 
         modEventBus.addListener(this::commonSetup);
@@ -124,6 +128,7 @@ public class Endless {
         isInfernalMobs = checkMod("infernalmobs");
         isChampions = checkMod("champions");
         isZombieAwareness = checkMod("zombieawareness");
+        isMysticalAgriculture = checkMod("mysticalagriculture");
     }
 
     /**

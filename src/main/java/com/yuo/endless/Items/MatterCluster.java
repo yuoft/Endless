@@ -21,10 +21,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //物质团
 public class MatterCluster extends Item  {
@@ -36,14 +33,83 @@ public class MatterCluster extends Item  {
     }
 
     /**
-     *将物品map添加到物质团中 并返回一个物质团
-     * @param map 物品map
+     *将物品map添加到物质团中 并返回物质团列表（数量较多时）
+     * @param map 总物品map
      */
-    public static ItemStack setMap(Map<ItemStack, Integer> map){
-        if (map.size() > 64) return ItemStack.EMPTY;
-        ItemStack stack = new ItemStack(ItemRegistry.matterCluster.get());
-        setItemTag(stack, map);
-        return  stack;
+    public static List<ItemStack> createMatterCluster(Map<ItemStack, Integer> map){
+        List<ItemStack> list = new ArrayList<>();
+        for (int i = 0; i < Math.ceil(map.size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0d)); i++){ //物品组数量影响物质团数量 64 -- 1
+            if (map.isEmpty()) return list;
+            Map<ItemStack, Integer> spawnMap = spawnMap(map);
+            int mapCount = getMaxCountFromMap(spawnMap);
+            int maxCount = Config.SERVER.matterClusterMaxCount.get();
+            for (int j = 0; j < Math.ceil(mapCount * 1.0d / maxCount); j++){ //数量数量限制 超过则新建物质团
+                if (spawnMap.isEmpty()) return list;
+                Map<ItemStack, Integer> newMap = spawnNewMap(spawnMap, maxCount);
+                ItemStack stack = new ItemStack(ItemRegistry.matterCluster.get());
+                setItemTag(stack, newMap);
+                list.add(stack);
+            }
+        }
+        return  list;
+    }
+
+    /**
+     * 生成一个不超过单个物品数量限制的map
+     * @param map 不超过64项的map
+     * @param maxCount 限制数量
+     * @return 满足数量限制的map
+     */
+    private static Map<ItemStack, Integer> spawnNewMap(Map<ItemStack, Integer> map, int maxCount){
+        Map<ItemStack, Integer> countMap = new HashMap<>();
+        Iterator<Map.Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<ItemStack, Integer> entry = iterator.next();
+            if (entry.getValue() > maxCount){
+                int count = entry.getValue() - maxCount; //剩余数量
+                countMap.put(entry.getKey(), maxCount);
+                entry.setValue(count);
+            }else {
+                countMap.put(entry.getKey(), entry.getValue());
+                iterator.remove();
+            }
+        }
+        return countMap;
+    }
+
+    /**
+     * 获取map中数量的最大数量值
+     * @param map map
+     * @return 最大值
+     */
+    private static int getMaxCountFromMap(Map<ItemStack, Integer> map){
+        int max = 0;
+        for (Map.Entry<ItemStack, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > max){
+                max = entry.getValue();
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 生成一个满足数量的临时map 并清理掉总map的64项
+     * @param map 总map
+     * @return 临时含64项的map
+     */
+    private static Map<ItemStack, Integer> spawnMap(Map<ItemStack, Integer> map){
+        Map<ItemStack, Integer> map1 = new HashMap<>();
+        int num = 0;
+        Iterator<Map.Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<ItemStack, Integer> next = iterator.next();
+            if (num <= Config.SERVER.matterClusterMaxTerm.get()){
+                map1.put(next.getKey(), next.getValue());
+                iterator.remove();
+                num++;
+            }else break;
+        }
+        return map1;
     }
 
     @Override
@@ -55,8 +121,8 @@ public class MatterCluster extends Item  {
         if (matterCluster != null){
             //物品种类数量信息
             if (isMaxSize(stack)){
-                tooltip.add(new StringTextComponent(matterCluster.size() + "/64" + new TranslationTextComponent("endless.text.itemInfo.matter_cluster2").getString()).mergeStyle(TextFormatting.RED));
-            }else tooltip.add(new StringTextComponent(matterCluster.size() + "/64" + new TranslationTextComponent("endless.text.itemInfo.matter_cluster2").getString()));
+                tooltip.add(new StringTextComponent(matterCluster.size() + "/" + Config.SERVER.matterClusterMaxTerm.get() + new TranslationTextComponent("endless.text.itemInfo.matter_cluster2").getString()).mergeStyle(TextFormatting.RED));
+            }else tooltip.add(new StringTextComponent(matterCluster.size() + "/" + Config.SERVER.matterClusterMaxTerm.get() + new TranslationTextComponent("endless.text.itemInfo.matter_cluster2").getString()));
             tooltip.add(new StringTextComponent(""));
 
             if (Screen.hasShiftDown()) { //在物品上按下shift键
@@ -152,29 +218,35 @@ public class MatterCluster extends Item  {
     public static boolean addItem(ItemStack stack, ItemStack itemStack){
         Map<ItemStack, Integer> map = getItemTag(stack);
         Map<ItemStack, Integer> map1 = getItemTag(itemStack);
+        Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
         //合并相同项
         for (Map.Entry<ItemStack, Integer> entry : map.entrySet()) {
             Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
             while (iterator.hasNext()){
                 Map.Entry<ItemStack, Integer> next = iterator.next();
                 if (entry.getKey().isItemEqual(next.getKey())){ //将2中相同物品转移到1
-                    if (entry.getValue() + next.getValue() <= Config.SERVER.matterClusterMaxCount.get()){
+                    if (entry.getValue() + next.getValue() <= maxCount){
                         entry.setValue(entry.getValue() + next.getValue());
+                        iterator.remove(); //完全合并时删除2中的项
                     }else {
-                        Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
-                        int count = maxCount - entry.getValue(); //2 的余量
+                        int count = next.getValue() + entry.getValue() - maxCount; //2 的余量
                         entry.setValue(maxCount);
                         next.setValue(count);
                     }
-                    iterator.remove();
                 }
             }
         }
         //添加新项
         if (map1.size() > 0){
-            for (Map.Entry<ItemStack, Integer> entry : map1.entrySet()) {
-                if (map.size() < 64){ //物质团1未满
-                    map.put(entry.getKey(), entry.getValue());
+            Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
+            while (iterator.hasNext()){
+                Map.Entry<ItemStack, Integer> entry = iterator.next();
+                if (map.size() < Config.SERVER.matterClusterMaxTerm.get()){ //物质团1未满
+                    ItemStack key = entry.getKey();
+                    if (map.containsKey(key)){
+                        map.put(new ItemStack(key.getItem(), key.getCount() + 1), entry.getValue());
+                    }else map.put(key, entry.getValue());
+                    iterator.remove();
                 }
             }
         }
@@ -194,7 +266,7 @@ public class MatterCluster extends Item  {
     public static boolean isMaxSize(ItemStack stack){
         Map<ItemStack, Integer> map = getItemTag(stack);
         if (map.size() == 0) return false;
-        return map.size() >= 64;
+        return map.size() >= Config.SERVER.matterClusterMaxTerm.get();
     }
 
     /**
