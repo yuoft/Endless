@@ -48,7 +48,7 @@ public class InfinityAxe extends AxeItem {
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (state.getHarvestTool() == ToolType.AXE){
-            return 999.0f;
+            return this.getTier().getEfficiency();
         }
         return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }

@@ -31,7 +31,7 @@ public class InfinityShovel extends ShovelItem {
             return 5.0F;
         }
         if (state.getHarvestTool() == ToolType.SHOVEL){
-            return 999.0f;
+            return this.getTier().getEfficiency();
         }
         return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }

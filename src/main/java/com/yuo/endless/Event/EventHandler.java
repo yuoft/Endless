@@ -73,10 +73,9 @@ public class EventHandler {
             PlayerEntity player = (PlayerEntity) living;
             if (isInfinite(player)){
                 if (InfinityDamageSource.isInfinity(event.getSource())){ //是无尽伤害 减免至10点
-                    ItemStack stack = player.getActiveItemStack();
-                    if (!stack.isEmpty() && isInfinityItem(stack)) { //玩家在使用无尽剑或弓时
-                        event.setAmount(5);
-                    } else event.setAmount(10);
+                    if (isInfinityItem(player)) { //玩家在使用无尽剑或弓时 减免至4点
+                        event.setAmount(Config.SERVER.infinityBearDamage.get());
+                    } else event.setAmount(Config.SERVER.infinityArmorBearDamage.get());
                 } else {
                     event.setAmount(0);
                     event.setCanceled(true);
@@ -114,19 +113,17 @@ public class EventHandler {
             }
             //chest
             if (playersWithChest.contains(key)) {
-                ModifiableAttributeInstance attribute = player.getAttribute(Attributes.FLYING_SPEED);
                 if (hasChest) {
                     player.abilities.allowFlying = true;
-                    if (chest.getOrCreateTag().getBoolean("flag") && attribute != null && !attribute.hasModifier(InfinityArmor.modifierFly)){
-                        attribute.applyPersistentModifier(InfinityArmor.modifierFly); //飞行速度2倍
+                    if (chest.getOrCreateTag().getBoolean("flag")){
+                        player.abilities.setFlySpeed(0.2f);
                     }
                 }else {
                     if (!player.isCreative()) {
                         player.abilities.allowFlying = false;
                         player.abilities.isFlying = false;
                     }
-                    if (attribute != null && attribute.hasModifier(InfinityArmor.modifierFly))
-                        attribute.removeModifier(InfinityArmor.modifierFly);
+                    player.abilities.setFlySpeed(0.05f);
                     playersWithChest.remove(key);
                 }
             }else if (hasChest) {
@@ -260,18 +257,20 @@ public class EventHandler {
             return;
         }
         PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-        ItemStack stack = player.getActiveItemStack();
-        if (!stack.isEmpty() && isInfinityItem(stack)) { //玩家在使用无尽剑或弓时，不会受伤
-            event.setAmount(10);
-            event.setCanceled(true);
-        }
         if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
             event.setCanceled(true);
         }
     }
 
-    static boolean isInfinityItem(ItemStack stack){
-        return stack.getItem() == ItemRegistry.infinitySword.get() || stack.getItem() == ItemRegistry.infinityBow.get();
+    /**
+     * 是否持有无尽武器
+     * @param player 玩家
+     * @return 是
+     */
+    static boolean isInfinityItem(PlayerEntity player){
+        ItemStack stack = player.getHeldItemMainhand().isEmpty() ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
+        return !stack.isEmpty() && (stack.getItem() == ItemRegistry.infinitySword.get() || stack.getItem() == ItemRegistry.infinityBow.get()
+                || stack.getItem() == ItemRegistry.infinityCrossBow.get());
     }
 
     //玩家不会被无尽伤害外攻击

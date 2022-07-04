@@ -153,7 +153,7 @@ public class InfinityCrossBow extends CrossbowItem {
      * @return 角度
      */
     private static float getArrowAngle(int i, boolean flag){
-        return flag ?  -(10f - i * 1.0f): (i - 10) * 1.0f;
+        return flag ?  -(45f - i * 4.5f): (i - 10) * 4.5f;
     }
 
     private static float[] getRandomSoundPitches(Random rand) {

@@ -22,7 +22,11 @@ public class InfinityDamageSource extends EntityDamageSource {
 
     @Override
     public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
-        ItemStack itemstack = damageSourceEntity instanceof LivingEntity ? ((LivingEntity)damageSourceEntity).getHeldItem(Hand.MAIN_HAND) : ItemStack.EMPTY;
+        ItemStack itemstack = ItemStack.EMPTY;
+        if (damageSourceEntity instanceof LivingEntity){
+            LivingEntity living = (LivingEntity) damageSourceEntity;
+            itemstack = living.getHeldItem(Hand.MAIN_HAND).isEmpty() ? living.getHeldItem(Hand.OFF_HAND) : living.getHeldItem(Hand.MAIN_HAND);
+        }
         String s = "death.attack.infinity";
         int rand = entityLivingBaseIn.getEntityWorld().rand.nextInt(4) + 1;
         return !itemstack.isEmpty() && itemstack.hasDisplayName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), damageSourceEntity != null ? damageSourceEntity.getDisplayName() : "null",itemstack.getDisplayName())

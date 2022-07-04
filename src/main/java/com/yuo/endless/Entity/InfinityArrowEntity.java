@@ -4,6 +4,7 @@ import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
@@ -93,20 +94,22 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
                     GuardianEntity guardian = (GuardianEntity) entity;
                     guardian.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
                     guardian.setHealth(0);
-                    guardian.onDeath(new InfinityDamageSource(this.shooter));
                     guardian.remove();
                 }else if (entity instanceof DraconicGuardianEntity){
                     DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
                     draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter),Float.POSITIVE_INFINITY);
                     draconicGuardian.setHealth(0);
-                    draconicGuardian.onDeath(new InfinityDamageSource(this.shooter));
                 }
             }else {
                 LivingEntity living = (LivingEntity) entity;
                 living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+                if (living instanceof PlayerEntity){
+                    PlayerEntity player = (PlayerEntity) living;
+                    if (EventHandler.isInfinite(player)){
+                        return;
+                    }
+                }
                 living.setHealth(0);
-                if (!(living instanceof PlayerEntity))
-                    living.onDeath(new InfinityDamageSource(this.shooter));
             }
             this.setDead();
         }else if (Endless.isDraconicEvolution){

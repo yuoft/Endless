@@ -26,7 +26,7 @@ public class InfinityHoe extends HoeItem {
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (state.getHarvestTool() == ToolType.HOE){
-            return 999.0f;
+            return this.getTier().getEfficiency();
         }
         return Math.max(super.getDestroySpeed(stack, state), 6.0f);
     }

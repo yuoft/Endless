@@ -75,9 +75,6 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        if (entity instanceof LivingEntity  && !(entity instanceof ArmorStandEntity)){
-            hitEntity(stack, (LivingEntity) entity, player);
-        }
         damageGuardian(entity, player);
         return false;
     }
@@ -89,19 +86,23 @@ public class InfinitySword extends SwordItem{
         if (target instanceof EnderDragonEntity && attacker instanceof PlayerEntity){
             EnderDragonEntity dragon = (EnderDragonEntity) target; //攻击末影龙
             dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
-        }else if (target instanceof PlayerEntity){
+        }else if (target instanceof WitherEntity){
+            WitherEntity wither = (WitherEntity) target;
+            wither.setInvulTime(0);
+            wither.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+        } else if (target instanceof ArmorStandEntity){
+//            ArmorStandEntity armorStand = (ArmorStandEntity) target;
+//            armorStand.breakArmorStand(DamageSource.GENERIC);
+            target.attackEntityFrom(DamageSource.GENERIC, 10);
+            return true;
+        }else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+        if (target instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) target;
-            if (EventHandler.isInfinite(player)){ //如果玩家穿戴全套无尽装备，则只造成10点伤害
-                player.attackEntityFrom(new InfinityDamageSource(attacker), 10.0f);
+            if (EventHandler.isInfinite(player)){ //玩家穿戴全套无尽 则不执行死亡
                 return true;
-            }else player.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
-        }else if (target instanceof ArmorStandEntity){
-            ArmorStandEntity armorStand = (ArmorStandEntity) target;
-            armorStand.breakArmorStand(DamageSource.GENERIC);
+            }
         }
-        else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
         target.setHealth(0);
-        target.onDeath(new InfinityDamageSource(attacker));
         return true;
     }
 
@@ -116,6 +117,7 @@ public class InfinitySword extends SwordItem{
         worldIn.playSound(playerIn, playerIn.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP , SoundCategory.PLAYERS, 1.0f, 5.0f);
         return ActionResult.resultSuccess(heldItem);
     }
+
     //aoe伤害
     protected void attackAOE(PlayerEntity player,float range, float damage,boolean type) {
         if (player.world.isRemote) return;
@@ -153,7 +155,7 @@ public class InfinitySword extends SwordItem{
     }
 
     /**
-     * 攻击龙研
+     * 攻击龙研中的实体 混沌水晶
      * @param entity 实体
      * @param player 玩家
      */
