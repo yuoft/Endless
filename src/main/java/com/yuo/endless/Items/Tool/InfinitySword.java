@@ -91,8 +91,6 @@ public class InfinitySword extends SwordItem{
             wither.setInvulTime(0);
             wither.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
         } else if (target instanceof ArmorStandEntity){
-//            ArmorStandEntity armorStand = (ArmorStandEntity) target;
-//            armorStand.breakArmorStand(DamageSource.GENERIC);
             target.attackEntityFrom(DamageSource.GENERIC, 10);
             return true;
         }else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
@@ -161,12 +159,7 @@ public class InfinitySword extends SwordItem{
      */
     private void damageGuardian(Entity entity, PlayerEntity player){
         if (Endless.isDraconicEvolution){
-            if (entity instanceof GuardianEntity){
-                GuardianEntity guardian = (GuardianEntity) entity;
-                guardian.attackEntityFrom(new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
-                guardian.setHealth(0);
-                guardian.onDeath(new InfinityDamageSource(player));
-            }else if (entity instanceof DraconicGuardianEntity){
+            if (entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
                 draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player),Float.POSITIVE_INFINITY);
                 draconicGuardian.setHealth(0);

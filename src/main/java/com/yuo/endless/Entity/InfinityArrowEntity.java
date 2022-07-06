@@ -89,23 +89,17 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         super.onEntityHit(result);
         Entity entity = result.getEntity();
         if (entity instanceof LivingEntity){
-            if (Endless.isDraconicEvolution){
-                if (entity instanceof GuardianEntity){
-                    GuardianEntity guardian = (GuardianEntity) entity;
-                    guardian.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
-                    guardian.setHealth(0);
-                    guardian.remove();
-                }else if (entity instanceof DraconicGuardianEntity){
-                    DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
-                    draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter),Float.POSITIVE_INFINITY);
-                    draconicGuardian.setHealth(0);
-                }
+            if (Endless.isDraconicEvolution && entity instanceof DraconicGuardianEntity){
+                DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
+                draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter),Float.POSITIVE_INFINITY);
+                draconicGuardian.setHealth(0);
             }else {
                 LivingEntity living = (LivingEntity) entity;
                 living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
                 if (living instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) living;
                     if (EventHandler.isInfinite(player)){
+                        this.setDead();
                         return;
                     }
                 }
