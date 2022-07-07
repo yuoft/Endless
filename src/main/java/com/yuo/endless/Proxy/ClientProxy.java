@@ -1,5 +1,6 @@
 package com.yuo.endless.Proxy;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
@@ -114,9 +115,11 @@ public class ClientProxy implements IProxy {
                 "firework"), (itemStack, clientWorld, livingEntity) -> livingEntity != null && InfinityCrossBow.isCharged(itemStack) && InfinityCrossBow.hasChargedProjectile(itemStack, Items.FIREWORK_ROCKET) ? 1f : 0f);
     }
 
+    //物资团颜色变化
     private void setMatterClusterProperty(Item item){
         ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                "count"), (itemStack, clientWorld, livingEntity) -> MatterCluster.getItemTag(itemStack).size() > 0 ? 1f:0f);
+                "count"), (itemStack, clientWorld, livingEntity) -> MatterCluster.getItemTag(itemStack).size() > 0 ?
+                (MatterCluster.getItemTag(itemStack).size() == Config.SERVER.matterClusterMaxTerm.get() ? 1f : 0.5f) :0f);
     }
 
 

@@ -116,6 +116,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
 
     protected void func_230299_a_(BlockRayTraceResult result) {
         BlockPos pos = result.getPos();
+
         Random random = getEntityWorld().rand;
         for (int i = 0; i < 30; i++) { //生成一片光箭
             double angle = random.nextDouble() * 2 * Math.PI;

@@ -12,8 +12,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.RecipeBookContainer;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
 import net.minecraft.network.play.server.SSetSlotPacket;
@@ -65,36 +67,46 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
     public void onCraftMatrixChanged(IInventory matrix) {
         if (world.isRemote) return;
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
-        if (Config.SERVER.isCraftTable.get()){
-            //获取配方
-            Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, inputInventory, world);
+        ItemStack itemStack = ItemStack.EMPTY;
+        //获取配方 先检查无尽配方
+        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
+        if (recipeOptional.isPresent()){
+            ExtremeCraftRecipe recipe = recipeOptional.get();
+            if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
+                itemStack = recipe.getCraftingResult(inputInventory);
+            }
+        }else {
+            CraftingInventory craftingInv = getCraftingInv();
+            Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
             if (optional.isPresent()) {
                 ICraftingRecipe recipe = optional.get();
                 if (outputInventory.canUseRecipe(world, serverPlayer, recipe)) {
-                    ItemStack itemstack = recipe.getCraftingResult(inputInventory); //获取配方输出
-                    outputInventory.setInventorySlotContents(81, itemstack);
-                    serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemstack)); //发包同步数据
+                    itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
                 }
             }else {
-                ItemStack outPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
-                outputInventory.setInventorySlotContents(81, outPut);
-                serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, outPut)); //发包同步数据
-            }
-        }else {
-            Optional<ExtremeCraftRecipe> optional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
-            if (optional.isPresent()){
-                ExtremeCraftRecipe recipe = optional.get();
-                if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
-                    ItemStack itemstack = recipe.getCraftingResult(inputInventory);
-                    outputInventory.setInventorySlotContents(81, itemstack);
-                    serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemstack));
-                }
-            }else {
-                ItemStack outPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
-                outputInventory.setInventorySlotContents(81, outPut);
-                serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, outPut));
+                itemStack = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
             }
         }
+        outputInventory.setInventorySlotContents(81, itemStack);
+        serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemStack));
+    }
+
+    /**
+     * 创建一个工作台容器
+     * @return 容器
+     */
+    private CraftingInventory getCraftingInv(){
+        CraftingInventory inventory = new CraftingInventory(new WorkbenchContainer(windowId, player.inventory), 3,3);
+        inventory.setInventorySlotContents(0, inputInventory.getStackInSlot(0));
+        inventory.setInventorySlotContents(1, inputInventory.getStackInSlot(1));
+        inventory.setInventorySlotContents(2, inputInventory.getStackInSlot(2));
+        inventory.setInventorySlotContents(3, inputInventory.getStackInSlot(9));
+        inventory.setInventorySlotContents(4, inputInventory.getStackInSlot(10));
+        inventory.setInventorySlotContents(5, inputInventory.getStackInSlot(11));
+        inventory.setInventorySlotContents(6, inputInventory.getStackInSlot(18));
+        inventory.setInventorySlotContents(7, inputInventory.getStackInSlot(19));
+        inventory.setInventorySlotContents(8, inputInventory.getStackInSlot(20));
+        return inventory;
     }
 
     @Override

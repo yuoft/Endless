@@ -70,7 +70,6 @@ public class Config {
         public final ForgeConfigSpec.IntValue endestPearlSuckRange; //终望珍珠引力范围
         public final ForgeConfigSpec.IntValue infinityArmorBearDamage; //无尽武器攻击全套无尽装备玩家时，造成伤害值
         public final ForgeConfigSpec.IntValue infinityBearDamage; //无尽武器攻击全套无尽装备和持有无尽武器玩家时，造成伤害值
-        public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
         public final ForgeConfigSpec.BooleanValue isBreakDECrystal; //无尽剑和弓是否破坏龙研的混沌水晶
         public final ForgeConfigSpec.BooleanValue isLogoInfo; //登录游戏时是否提升反馈信息
 
@@ -124,7 +123,6 @@ public class Config {
             this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Suck Range", 20, 10, 32, "Endest pearl gravitational range");
             this.infinityArmorBearDamage = buildInt(builder, "Infinity Armor Bear Damage", 10, 4, 100, "When endless weapons attack players with a full set of endless equipment, damage value will be caused");
             this.infinityBearDamage = buildInt(builder, "Infinity Bear Damage", 4, 1, 50, "When endless weapons attack a full set of endless equipment and players with endless weapons, they cause damage");
-            this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether the endless workbench is compatible with the original workbench formula");
             this.isBreakDECrystal = buildBoolean(builder, "Is Break DE Crystal", false,  "Does the endless sword and bow destroy the chaotic crystal of DE");
             this.isLogoInfo = buildBoolean(builder, "Is Logo Info", true,  "Whether to improve feedback when logging in to the game");
             builder.pop();
