@@ -2,10 +2,7 @@ package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.Lists;
 import com.yuo.endless.Config.Config;
-import com.yuo.endless.Entity.EntityRegistry;
-import com.yuo.endless.Entity.InfinityArrowEntity;
-import com.yuo.endless.Entity.InfinityArrowSubEntity;
-import com.yuo.endless.Entity.InfinityCrossArrowEntity;
+import com.yuo.endless.Entity.*;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -217,7 +214,7 @@ public class InfinityCrossBow extends CrossbowItem {
             boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
             ProjectileEntity projectileentity;
             if (flag) {
-                projectileentity = new FireworkRocketEntity(worldIn, projectile, shooter, shooter.getPosX(), shooter.getPosYEye() - (double)0.15F, shooter.getPosZ(), true);
+                projectileentity = new InfinityFireWorkEntity(worldIn, projectile, shooter, Config.SERVER.infinityFireworkDamage.get(), shooter.getPosX(), shooter.getPosYEye() - (double)0.15F, shooter.getPosZ(), true);
             } else {
                 projectileentity = createArrow(worldIn, shooter, crossbow, projectile);
                 if (isCreativeMode || projectileAngle != 0.0F) {
@@ -292,7 +289,8 @@ public class InfinityCrossBow extends CrossbowItem {
     private static boolean hasAmmo(LivingEntity entityIn, ItemStack stack) {
         boolean flag = entityIn instanceof PlayerEntity && ((PlayerEntity)entityIn).abilities.isCreativeMode;
         ItemStack itemstack = findArrow(entityIn); //无弹药 发射一发普通箭
-        int j = itemstack.isEmpty() ? 1 : (ItemTags.ARROWS.contains(itemstack.getItem()) ? 3 : 21);
+        int j = itemstack.isEmpty() ? 1 :
+                (ItemTags.ARROWS.contains(itemstack.getItem()) || itemstack.getItem() == Items.FIREWORK_ROCKET ? 3 : 21);
         ItemStack itemstack1 = itemstack.copy();
 
         for(int k = 0; k < j; ++k) {

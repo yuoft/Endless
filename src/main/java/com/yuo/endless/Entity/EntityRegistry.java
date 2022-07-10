@@ -26,4 +26,7 @@ public class EntityRegistry {
     public static RegistryObject<EntityType<GapingVoidEntity>> GAPING_VOID = ENTITY_TYPES.register("gaping_void",
             () -> EntityType.Builder.<GapingVoidEntity>create(GapingVoidEntity::new, EntityClassification.MISC)
             .size(0.5f, 0.5F).build("gaping_void"));
+    public static RegistryObject<EntityType<InfinityFireWorkEntity>> INFINITY_FIREWORK = ENTITY_TYPES.register("infinity_firework",
+            () -> EntityType.Builder.<InfinityFireWorkEntity>create(InfinityFireWorkEntity::new, EntityClassification.MISC)
+            .size(0.5f, 0.5F).build("infinity_firework"));
 }

@@ -1,6 +1,6 @@
 {
     "parent": "item/crossbow",
     "textures": {
-        "layer0": "endless:item/tool/crossbow_arrow"
+        "layer0": "endless:item/tool/infinity_crossbow_arrow"
     }
 }

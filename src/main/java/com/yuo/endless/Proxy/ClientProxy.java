@@ -79,6 +79,7 @@ public class ClientProxy implements IProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.ENDEST_PEARL.get(), manager -> new SpriteRenderer<>(manager, Minecraft.getInstance().getItemRenderer())); //投掷物渲染
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_ARROW.get(), InfinityArrowRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_CROSS_ARROW.get(), InfinityArrowRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_FIREWORK.get(), InfinityFireWorkRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
     }
