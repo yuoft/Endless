@@ -21,6 +21,8 @@ import net.minecraft.item.crafting.*;
 import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory> {
@@ -78,7 +80,7 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         }else {
             CraftingInventory craftingInv = getCraftingInv();
             Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
-            if (optional.isPresent()) {
+            if (optional.isPresent() && isCraft()) {
                 ICraftingRecipe recipe = optional.get();
                 if (outputInventory.canUseRecipe(world, serverPlayer, recipe)) {
                     itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
@@ -89,6 +91,20 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         }
         outputInventory.setInventorySlotContents(81, itemStack);
         serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemStack));
+    }
+
+    /**
+     * 判断是否适用工作台配方
+     * @return 适用 true
+     */
+    private boolean isCraft() {
+        List<Integer> list = Arrays.asList(0, 1, 2, 9, 10, 11, 18, 19, 20);
+        for (int i = 0; i < inputInventory.getSizeInventory(); i++){
+            ItemStack stack = inputInventory.getStackInSlot(i);
+            if (list.contains(i)) continue;
+            if (!stack.isEmpty()) return false;
+        }
+        return true;
     }
 
     /**

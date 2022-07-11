@@ -6,6 +6,7 @@ import com.yuo.endless.Entity.*;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -22,14 +23,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -265,6 +269,7 @@ public class InfinityCrossBow extends CrossbowItem {
     }
 
     //弹药装填
+    @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         int i = this.getUseDuration(stack) - timeLeft;
         float f = getCharge(i, stack);
@@ -274,6 +279,65 @@ public class InfinityCrossBow extends CrossbowItem {
             worldIn.playSound(null, entityLiving.getPosX(), entityLiving.getPosY(), entityLiving.getPosZ(), SoundEvents.ITEM_CROSSBOW_LOADING_END, soundcategory, 1.0F, 1.0F / (random.nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
 
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        List<ItemStack> list = getChargedProjectiles(stack);
+        if (isCharged(stack) && !list.isEmpty()) {
+            ItemStack itemstack = list.get(0);
+            tooltip.add((new TranslationTextComponent("item.minecraft.crossbow.projectile")).appendString(" ").appendSibling(itemstack.getTextComponent()));
+            if (flagIn.isAdvanced() && itemstack.getItem() == Items.FIREWORK_ROCKET) {
+                List<ITextComponent> list1 = Lists.newArrayList();
+                Items.FIREWORK_ROCKET.addInformation(itemstack, worldIn, list1, flagIn);
+                if (!list1.isEmpty()) {
+                    for(int i = 0; i < list1.size(); ++i) {
+                        list1.set(i, (new StringTextComponent("  ")).appendSibling(list1.get(i)).mergeStyle(TextFormatting.GRAY));
+                    }
+
+                    tooltip.addAll(list1);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
+        if (!worldIn.isRemote) {
+            int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+            SoundEvent soundevent = this.getSoundEvent(i);
+            SoundEvent soundevent1 = i == 0 ? SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE : null;
+            float f = (float)(stack.getUseDuration() - count) / (float)getChargeTime(stack);
+            if (f < 0.2F) {
+                this.isLoadingStart = false;
+                this.isLoadingMiddle = false;
+            }
+
+            if (f >= 0.2F && !this.isLoadingStart) {
+                this.isLoadingStart = true;
+                worldIn.playSound(null, livingEntityIn.getPosX(), livingEntityIn.getPosY(), livingEntityIn.getPosZ(), soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
+            }
+
+            if (f >= 0.5F && soundevent1 != null && !this.isLoadingMiddle) {
+                this.isLoadingMiddle = true;
+                worldIn.playSound(null, livingEntityIn.getPosX(), livingEntityIn.getPosY(), livingEntityIn.getPosZ(), soundevent1, SoundCategory.PLAYERS, 0.5F, 1.0F);
+            }
+        }
+
+    }
+
+    private SoundEvent getSoundEvent(int enchantmentLevel) {
+        switch(enchantmentLevel) {
+            case 1:
+                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_1;
+            case 2:
+                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_2;
+            case 3:
+                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
+            default:
+                return SoundEvents.ITEM_CROSSBOW_LOADING_START;
+        }
     }
 
     //使用程度

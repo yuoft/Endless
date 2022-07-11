@@ -71,7 +71,7 @@ public class ExtremeCraft extends Block {
         if (!state.matchesBlock(newState.getBlock())) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof ExtremeCraftTile) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (ExtremeCraftTile)tileentity);
+                ((ExtremeCraftTile) tileentity).dropItem(worldIn, pos);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
 

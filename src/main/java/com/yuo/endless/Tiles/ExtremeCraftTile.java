@@ -3,6 +3,7 @@ package com.yuo.endless.Tiles;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,8 +12,10 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -28,6 +31,10 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
 
     public NonNullList<ItemStack> getItems() {
         return items;
+    }
+
+    public void dropItem(World world, BlockPos pos){
+        InventoryHelper.dropItems(world, pos, items);
     }
 
     @Override
