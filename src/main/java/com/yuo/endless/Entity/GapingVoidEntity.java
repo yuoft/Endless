@@ -23,6 +23,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -217,6 +218,7 @@ public class GapingVoidEntity extends Entity {
                 double dist = getDist(pos, position);
                 if (dist <= blockRange && !world.isAirBlock(pos)) {
                     BlockState state = world.getBlockState(pos);
+                    if (state.matchesBlock(Blocks.BEDROCK) && !Config.SERVER.endestPearBreakBedrock.get()) continue;
                     BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fakePlayer);
                     MinecraftForge.EVENT_BUS.post(event);
                     if (!event.isCanceled()) {
