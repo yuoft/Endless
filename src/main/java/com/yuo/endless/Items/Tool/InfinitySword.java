@@ -1,12 +1,12 @@
 package com.yuo.endless.Items.Tool;
 
-import com.brandon3055.draconicevolution.api.energy.ICrystalBinder;
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
@@ -17,18 +17,20 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -40,6 +42,20 @@ public class InfinitySword extends SwordItem{
 
     public InfinitySword() {
         super(MyItemTier.INFINITY_SWORD, 0, -2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (entityIn instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entityIn;
+            EffectInstance effect = player.getActivePotionEffect(Effects.MINING_FATIGUE);
+            if (effect != null){
+                int amplifier = effect.getAmplifier();
+                if (amplifier >= 0){
+                    player.removePotionEffect(Effects.MINING_FATIGUE);
+                }
+            }
+        }
     }
 
     @Override
@@ -75,8 +91,32 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
+        if (entity instanceof LivingEntity){
+            LivingEntity living = (LivingEntity) entity;
+            hitEntity(stack, living, player);
+            sweepAttack(living, player);
+        }
         damageGuardian(entity, player);
         return false;
+    }
+
+    /**
+     * 模拟左键横扫攻击
+     * @param targetEntity 被攻击生物
+     * @param player 玩家
+     */
+    private void sweepAttack(LivingEntity targetEntity, PlayerEntity player){
+        World world = player.world;
+
+        for(LivingEntity livingentity : world.getEntitiesWithinAABB(LivingEntity.class, targetEntity.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
+            if (livingentity != player && livingentity != targetEntity && !player.isOnSameTeam(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity)livingentity).hasMarker()) && player.getDistanceSq(livingentity) < 9.0D) {
+                livingentity.applyKnockback(0.4F, MathHelper.sin(player.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(player.rotationYaw * ((float)Math.PI / 180F)));
+                livingentity.attackEntityFrom(DamageSource.causePlayerDamage(player), Float.MAX_VALUE);
+            }
+        }
+        //横扫音效
+        world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+        player.spawnSweepParticles(); //生成横扫粒子
     }
 
     //攻击实体

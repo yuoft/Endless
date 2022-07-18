@@ -7,6 +7,7 @@ import com.yuo.endless.Blocks.BlockRegistry;
 import com.yuo.endless.Container.ExtremeCraftInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
@@ -107,11 +108,6 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
     //检查配方是否与合成台物品栏吻合
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-//        int size = items.size();
-//        for (int i = 0; i < size; i++){
-//            if (!items.get(i).test(inv.getStackInSlot(i))) return false;
-//        }
-//        return true;
         for(int i = 0; i <= 9 - this.Width; ++i) {
             for(int j = 0; j <= 9 - this.Height; ++j) {
                 if (this.checkMatch(inv, i, j, true)) {
@@ -127,14 +123,22 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         return false;
     }
 
-    private boolean checkMatch(IInventory inv, int width, int height, boolean p_77573_4_) {
+    //无尽配方检测
+    public boolean checkRecipe(IInventory inv, World worldIn){
+        for (int i = 0; i < items.size(); i++){
+            if (!items.get(i).test(inv.getStackInSlot(i))) return false;
+        }
+        return true;
+    }
+
+    private boolean checkMatch(IInventory inv, int width, int height, boolean mirrored) {
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int k = i - width;
                 int l = j - height;
                 Ingredient ingredient = Ingredient.EMPTY;
                 if (k >= 0 && l >= 0 && k < this.Width && l < this.Height) {
-                    if (p_77573_4_) {
+                    if (mirrored) {
                         ingredient = this.items.get(this.Width - k - 1 + l * this.Width);
                     } else {
                         ingredient = this.items.get(k + l * this.Width);

@@ -50,9 +50,7 @@ public class EndestPearlEntity extends ProjectileItemEntity {
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        if (entity != null){
-            entity.attackEntityFrom( shooter == null ? DamageSource.CACTUS:DamageSource.causeThrownDamage(this, shooter), 0.0f);
-        }
+        entity.attackEntityFrom( shooter == null ? DamageSource.CACTUS:DamageSource.causeThrownDamage(this, shooter), 1.0f);
         if (world.isRemote){
             for (int i = 0; i < 100; i++){
                 world.addParticle(ParticleTypes.PORTAL, entity.getPosX(), entity.getPosY(), entity.getPosZ(), rand.nextGaussian() * 3,
@@ -65,11 +63,8 @@ public class EndestPearlEntity extends ProjectileItemEntity {
                 voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), shooter ,world);
             }else voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), world); //生成黑洞实体
             Direction facing = entity.getHorizontalFacing();
-            Vector3d offset = Vector3d.ZERO;
-            if (facing != null){
-                offset = new Vector3d(facing.getXOffset(), facing.getYOffset(), facing.getZOffset());
-            }
-            voidEntity.setLocationAndAngles(entity.getPosX() + offset.x * 0.25, entity.getPosY() + offset.y * 0.25, entity.getPosZ() + offset.z * 0.25, rotationYaw, 0.0F);
+            BlockPos offset = entity.getPosition().offset(facing);
+            voidEntity.setPositionAndUpdate(offset.getX(), offset.getY(), offset.getZ());
             world.addEntity(voidEntity);
 
             this.setDead();
@@ -89,11 +84,8 @@ public class EndestPearlEntity extends ProjectileItemEntity {
                 voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), shooter ,world);
             }else voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), world);
             Direction facing = result.getFace();
-            Vector3d offset = Vector3d.ZERO;
-            if (facing != null){
-                offset = new Vector3d(facing.getXOffset(), facing.getYOffset(), facing.getZOffset());
-            }
-            voidEntity.setLocationAndAngles(pos.getX() + offset.x * 0.25, pos.getY() + offset.y * 0.25, pos.getZ() + offset.z * 0.25, rotationYaw, 0.0F);
+            BlockPos blockPos = pos.offset(facing);
+            voidEntity.setPositionAndUpdate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             world.addEntity(voidEntity);
 
             this.setDead();

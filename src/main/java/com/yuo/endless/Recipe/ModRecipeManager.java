@@ -2,8 +2,6 @@ package com.yuo.endless.Recipe;
 
 import appeng.core.Api;
 import cofh.thermal.core.ThermalCore;
-import cofh.thermal.core.init.TCoreBlocks;
-import cofh.thermal.core.init.TCoreItems;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.simibubi.create.AllBlocks;
@@ -13,7 +11,6 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.spacearms.Blocks.BlockRegistry;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.block.Block;
@@ -28,7 +25,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.tslat.aoa3.common.registration.AoABlocks;
 import net.tslat.aoa3.common.registration.AoAItems;
-import net.tslat.aoa3.common.registration.AoATags;
 import twilightforest.block.TFBlocks;
 import twilightforest.item.TFItems;
 import vazkii.botania.common.block.ModBlocks;
@@ -560,14 +556,15 @@ public class ModRecipeManager {
         ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.endestPearl.get()),
                 "   EEE   ",
                 " EEPPPEE ",
-                " EPPPPPE ",
-                "EPPPNPPPE",
-                "EPPNSNPPE",
-                "EPPPNPPPE",
-                " EPPPPPE ",
+                " EPPAPPE ",
+                "EPPANAPPE",
+                "EPANSNAPE",
+                "EPPANAPPE",
+                " EPPAPPE ",
                 " EEPPPEE ",
                 "   EEE   ",
                 'E', new ItemStack(Blocks.END_STONE),
+                'A', new ItemStack(Blocks.TNT),
                 'P', new ItemStack(Items.ENDER_PEARL),
                 'S', new ItemStack(Items.NETHER_STAR),
                 'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
@@ -754,11 +751,13 @@ public class ModRecipeManager {
                     new ItemStack(ThermalCore.ITEMS.get("stuffed_pumpkin")));
             ExtremeCraftingManager.getInstance().addRecipeInput(stew,
                     new ItemStack(ThermalCore.ITEMS.get("xp_stew")), new ItemStack(ThermalCore.ITEMS.get("spring_salad")));
+            CompressorManager.addInputs(ItemRegistry.singularityGold.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
+            CompressorManager.addInputs(ItemRegistry.singularityIron.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
+        }
+        if (Endless.isIceandfire && Endless.isThermal){
             CompressorManager.addInputs(ItemRegistry.singularityCopper.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("copper_block")),
                     new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
             CompressorManager.addInputs(ItemRegistry.singularitySilver.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
-            CompressorManager.addInputs(ItemRegistry.singularityGold.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
-            CompressorManager.addInputs(ItemRegistry.singularityIron.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
         }
     }
 

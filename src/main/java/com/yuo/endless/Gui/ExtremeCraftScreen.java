@@ -2,6 +2,7 @@ package com.yuo.endless.Gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Container.ExtremeCraftContainer;
 import com.yuo.endless.Endless;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -9,8 +10,9 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-public class ExtremeCraftScreen extends ContainerScreen<ExtremeCraftContainer>{
+public class ExtremeCraftScreen extends ContainerScreen<ExtremeCraftContainer> {
     private final ResourceLocation RESOURCE = new ResourceLocation(Endless.MOD_ID, "textures/gui/dire_crafting_gui.png");
+    private final ResourceLocation RESOURCE_OPEN = new ResourceLocation(Endless.MOD_ID, "textures/gui/dire_crafting_gui_open.png");
     private final int textureWidth = 238;
     private final int textureHeight = 256;
 
@@ -26,11 +28,14 @@ public class ExtremeCraftScreen extends ContainerScreen<ExtremeCraftContainer>{
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F); //确保颜色正常
-        this.minecraft.getTextureManager().bindTexture(RESOURCE);
+        if (Config.SERVER.isCraftTable.get()) {
+            this.minecraft.getTextureManager().bindTexture(RESOURCE_OPEN);
+        } else this.minecraft.getTextureManager().bindTexture(RESOURCE);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         blit(matrixStack, i, j, 0, 0, xSize, ySize);
     }
+
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);

@@ -3,17 +3,20 @@ package com.yuo.endless.Entity;
 import com.google.common.base.Predicate;
 import com.mojang.authlib.GameProfile;
 import com.yuo.endless.Config.Config;
+import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import com.yuo.endless.Sound.ModSounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.PistonBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.WaterFluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -24,6 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -140,13 +144,12 @@ public class GapingVoidEntity extends Entity {
                 if (nommee != this) {
                     if (nommee instanceof EnderDragonEntity){
                         EnderDragonEntity dragon = (EnderDragonEntity) nommee;
-                        dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(useEntity), endDamage);
+                        dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.causeExplosionDamage(useEntity), endDamage);
                     }else if (nommee instanceof WitherEntity){
                         WitherEntity wither = (WitherEntity) nommee;
                         wither.setInvulTime(0);
-                        wither.attackEntityFrom(new InfinityDamageSource(useEntity), endDamage);
-                    }
-                    else nommee.attackEntityFrom(new InfinityDamageSource(useEntity), endDamage);
+                        wither.attackEntityFrom(DamageSource.causeExplosionDamage(useEntity), endDamage);
+                    } else nommee.attackEntityFrom(DamageSource.causeExplosionDamage(useEntity), endDamage);
                 }
             }
             setDead();
@@ -157,10 +160,12 @@ public class GapingVoidEntity extends Entity {
             setAge(age + 1); //年龄增加
         }
 
-        //生成粒子
-        for (int i = 0; i < 50; i++){
-            world.addParticle(ParticleTypes.PORTAL, position.getX(), position.getY(), position.getZ(), rand.nextGaussian() * 3,
-                    rand.nextGaussian() * 3, rand.nextGaussian() * 3);
+        if (age < maxLifetime - 20){
+            //生成粒子
+            for (int i = 0; i < 50; i++){
+                world.addParticle(ParticleTypes.PORTAL, position.getX(), position.getY(), position.getZ(), rand.nextGaussian() * 3,
+                        rand.nextGaussian() * 3, rand.nextGaussian() * 3);
+            }
         }
 
         if (world.isRemote) {
@@ -171,90 +176,96 @@ public class GapingVoidEntity extends Entity {
             return;
         }
 
-        //引力
+        //引力系数
         double radius = getVoidScale(age) * 0.5;
         double range = radius * suckRange;
         AxisAlignedBB axisAlignedBB = new AxisAlignedBB(position.add(-range, -range, -range), position.add(range,range,range));
         List<Entity> sucked = world.getEntitiesWithinAABB(Entity.class, axisAlignedBB, SUCK_PREDICATE); //获取引力范围内所以实体
         for (Entity suckee : sucked) { //将所以实体吸引到此实体处
             if (suckee != this) {
-                double dx = posX - suckee.getPosX();
-                double dy = posY - suckee.getPosY();
-                double dz = posZ - suckee.getPosZ();
-
-                double lensquared = dx * dx + dy * dy + dz * dz;
-                double len = Math.sqrt(lensquared); //将被吸引实体距此实体距离
-                double lenn = len / suckRange;
-
-                if (len <= suckRange) {
-                    double strength = (1 - lenn) * (1 - lenn);
-                    double power = 0.075 * radius; //引力大小
-
-                    Vector3d motion = suckee.getMotion();
-                    double motionX = motion.x + (dx / len) * strength * power;
-                    double motionY = motion.y + (dy / len) * strength * power;
-                    double motionZ = motion.z + (dz / len) * strength * power;
-                    suckee.setMotion(motionX, motionY, motionZ); //移动实体
-                }
+                double dist = getDist(suckee.getPosition(), position); //距离
+                float speed = (dist > 5) ? 0.2f : 0.1f; //速度
+                setEntityMotionFromVector(suckee, position, speed);
             }
         }
 
-        //伤害
-        double nomrange = radius * 0.95;
-        AxisAlignedBB alignedBB = new AxisAlignedBB(position.add(-nomrange, -nomrange, -nomrange), position.add(nomrange,nomrange,nomrange));
-        List<Entity> nommed = world.getEntitiesWithinAABB(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
-        //给所以被吸引到近处的实体掉出世界伤害
-        for (Entity nommee : nommed) {
-            if (nommee != this) {
-                Vector3d nomedPos = nommee.getLookVec();
-                Vector3d diff = this.getPositionVec().subtract(nomedPos);
-                double len = diff.length();
-                if (len <= nomrange) {
-                    if (nommee instanceof EnderDragonEntity){
-                        EnderDragonEntity dragon = (EnderDragonEntity) nommee;
+        double nomRange = radius * 0.95;
+        if (age % 5 == 0){ //每5tick攻击一次 一秒4次
+            AxisAlignedBB alignedBB = new AxisAlignedBB(position.add(-nomRange, -nomRange, -nomRange), position.add(nomRange,nomRange,nomRange));
+            List<LivingEntity> livings = world.getEntitiesWithinAABB(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
+            //给所以被吸引到近处的实体掉出世界伤害
+            for (LivingEntity living : livings) {
+                double len = getDist(living.getPosition(), position); //与黑洞中心距离
+                if (len <= nomRange) {
+                    if (living instanceof EnderDragonEntity){
+                        EnderDragonEntity dragon = (EnderDragonEntity) living;
                         dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.OUT_OF_WORLD, oneDamage);
                     }
-                    else nommee.attackEntityFrom(DamageSource.OUT_OF_WORLD, oneDamage);
+                    else living.attackEntityFrom(DamageSource.OUT_OF_WORLD, oneDamage);
                 }
             }
         }
 
         // 每半秒破坏一次方块
         if (age % 10 == 0) {
-            Vector3d posFloor = this.getPositionVec();
-
-            int blockrange = (int) Math.round(nomrange);
-
-            for (int y = -blockrange; y <= blockrange; y++) {
-                for (int z = -blockrange; z <= blockrange; z++) {
-                    for (int x = -blockrange; x <= blockrange; x++) {
-                        Vector3d pos2 = new Vector3d(x, y, z);
-                        Vector3d rPos = posFloor.add(pos2);
-                        BlockPos blockPos = new BlockPos(rPos);
-
-                        if (blockPos.getY() < 0 || blockPos.getY() > 255) {
-                            continue;
-                        }
-
-                        double dist = pos2.lengthSquared();
-                        if (dist <= nomrange && !world.isAirBlock(blockPos)) {
-                            BlockState state = world.getBlockState(blockPos);
-                            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, blockPos, state, fakePlayer);
-                            MinecraftForge.EVENT_BUS.post(event);
-                            if (!event.isCanceled()) {
-                                float resist = state.getBlock().getExplosionResistance();
-                                if (resist <= 50.0) { //方块爆炸抗性小于10点
-//                                    state.getBlock().dropBlockAsItemWithChance(world, blockPos, state, 0.9F, 0);
-                                    state.getBlock().canDropFromExplosion(state, world, blockPos, new Explosion(world, null,blockPos.getX(),
-                                                                                blockPos.getY(), blockPos.getZ(), 6.0f, false, Explosion.Mode.BREAK));
-                                    world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), 2);
-                                }
-                            }
+            int blockRange = Math.round(getVoidScale(age)); //破坏半径
+            Iterable<BlockPos> boxMutable = BlockPos.getAllInBoxMutable(position.add(-blockRange, -blockRange, -blockRange), position.add(blockRange, blockRange, blockRange));
+            for (BlockPos pos : boxMutable) {
+                if (pos.getY() < 0 || pos.getY() > 255) { //0层以下或255以上，不破坏
+                    continue;
+                }
+                double dist = getDist(pos, position);
+                if (dist <= blockRange && !world.isAirBlock(pos)) {
+                    BlockState state = world.getBlockState(pos);
+                    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fakePlayer);
+                    MinecraftForge.EVENT_BUS.post(event);
+                    if (!event.isCanceled()) {
+                        float hardness = state.getBlockHardness(world, pos);
+                        if (hardness <= 10.0) { //破坏硬度低于10点的方块
+                            world.destroyBlock(pos, false,useEntity );
                         }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * 设置实体移动
+     * @param entity 要移动的实体
+     * @param pos 目标坐标
+     * @param modifier 移动距离 负数为排斥
+     */
+    public static void setEntityMotionFromVector(Entity entity, BlockPos pos, float modifier) {
+//        if (entity instanceof PlayerEntity){
+//            PlayerEntity player = (PlayerEntity) entity;
+//            if (player.isCreative() || EventHandler.isInfinite(player) || player.abilities.isFlying) return; //创造或全套无尽 不会被吸引
+//            BlockPos position = player.getPosition();
+//            int x = pos.getX() - position.getX();
+//            int y = pos.getY() - position.getY();
+//            int z = pos.getZ() - position.getZ();
+//            Vector3d vector3d = new Vector3d(x, y, z).normalize();
+//            player.setMotion(vector3d);
+//        }
+        Vector3d originalPosVector = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
+        Vector3d finalVector = originalPosVector.subtract(entity.getPositionVec());
+        if (finalVector.length() > 1) { //向量长度超过1
+            finalVector.normalize(); //化为标准1单位
+        }
+        double motionX = finalVector.x * modifier;
+        double motionY = finalVector.y * modifier;
+        double motionZ = finalVector.z * modifier;
+        entity.setMotion(motionX, motionY, motionZ);
+    }
+
+    /**
+     * 获取两个坐标间的距离
+     * @param pos 坐标1
+     * @param blockPos 坐标2
+     * @return 距离
+     */
+    public static double getDist(BlockPos pos, BlockPos blockPos){
+        return Math.sqrt(pos.distanceSq(blockPos.getX(), blockPos.getY(), blockPos.getZ(), true));
     }
 
     //通过年龄获取缩放大小

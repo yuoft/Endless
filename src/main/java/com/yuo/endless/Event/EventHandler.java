@@ -21,6 +21,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
@@ -238,14 +240,23 @@ public class EventHandler {
         }
     }
 
-    @SubscribeEvent
+    //在不利因素下，将挖掘速度恢复为正常速度
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void dignity(PlayerEvent.BreakSpeed event) {
-        if (!event.getEntityLiving().getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-            ItemStack held = event.getEntityLiving().getHeldItem(Hand.MAIN_HAND);
+        if (!event.getEntityLiving().getActiveItemStack().isEmpty()) {
+            LivingEntity living = event.getEntityLiving();
+            ItemStack held = living.getActiveItemStack();
             if (held.getItem() == ItemRegistry.infinityPickaxe.get() || held.getItem() == ItemRegistry.infinityShovel.get() ||
-            held.getItem() == ItemRegistry.infinityAxe.get()) {
-                if (!event.getEntityLiving().isOnGround() || event.getEntityLiving().isInWater()) { //未站立状态,在水中 破坏速度加倍
-                    event.setNewSpeed(event.getOriginalSpeed() * 2);
+            held.getItem() == ItemRegistry.infinityAxe.get() || held.getItem() == ItemRegistry.infinityHoe.get()) {
+                EffectInstance effect = living.getActivePotionEffect(Effects.MINING_FATIGUE); //挖掘疲劳 每级将至原本30%
+                if (effect != null){
+                    int amplifier = effect.getAmplifier();
+                    if (amplifier >= 0){
+                        event.setNewSpeed((float) (event.getOriginalSpeed() / (Math.pow(0.3, Math.min(amplifier + 1, 4)))));
+                    }
+                }
+                if (!living.isOnGround() || living.isInWater()) { //未站立状态,在水中 为原本20%
+                    event.setNewSpeed(event.getOriginalSpeed() * 5);
                 }
             }
         }

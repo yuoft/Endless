@@ -3,7 +3,7 @@ loaderVersion="[36,)"
 license="All rights reserved"
 [[mods]] #mandatory
 modId="endless"
-version="1.16.5-1.3.6"
+version="1.16.5-1.3.7"
 displayName="Endless"
 authors="yuo"
 description='''
@@ -106,8 +106,8 @@ description='''
     versionRange="[1.16-0.0.12, )"
     ordering="AFTER"
     side="BOTH"
-[[dependencies.thermal]]
-    modId="thermal"
+[[dependencies.thermal-foundation]]
+    modId="thermal-foundation"
     mandatory=true
     versionRange="[1.16.5-1.5.0.14, )"
     ordering="AFTER"

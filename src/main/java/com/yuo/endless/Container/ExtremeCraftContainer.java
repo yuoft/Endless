@@ -6,6 +6,7 @@ import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
 import net.minecraft.block.CraftingTableBlock;
+import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -78,16 +79,18 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
                 itemStack = recipe.getCraftingResult(inputInventory);
             }
         }else {
-            CraftingInventory craftingInv = getCraftingInv();
-            Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
-            if (optional.isPresent() && isCraft()) {
-                ICraftingRecipe recipe = optional.get();
-                if (outputInventory.canUseRecipe(world, serverPlayer, recipe)) {
-                    itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
+            if (Config.SERVER.isCraftTable.get()){
+                CraftingInventory craftingInv = getCraftingInv();
+                Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+                if (optional.isPresent() && isCraft()) {
+                    ICraftingRecipe recipe = optional.get();
+                    if (outputInventory.canUseRecipe(world, serverPlayer, recipe)) {
+                        itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
+                    }
+                }else {
+                    itemStack = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
                 }
-            }else {
-                itemStack = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
-            }
+            }else itemStack = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
         }
         outputInventory.setInventorySlotContents(81, itemStack);
         serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemStack));
