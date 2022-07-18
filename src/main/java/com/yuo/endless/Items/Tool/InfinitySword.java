@@ -44,16 +44,16 @@ public class InfinitySword extends SwordItem{
         super(MyItemTier.INFINITY_SWORD, 0, -2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
-    @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (entityIn instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) entityIn;
-            EffectInstance effect = player.getActivePotionEffect(Effects.MINING_FATIGUE);
-            if (effect != null){
-                int amplifier = effect.getAmplifier();
-                if (amplifier >= 0){
-                    player.removePotionEffect(Effects.MINING_FATIGUE);
-                }
+    /**
+     * 清除玩家debuff
+     * @param player 玩家
+     */
+    public static void clearBuff(PlayerEntity player) {
+        EffectInstance effect = player.getActivePotionEffect(Effects.MINING_FATIGUE);
+        if (effect != null){
+            int amplifier = effect.getAmplifier();
+            if (amplifier >= 0){
+                player.removePotionEffect(Effects.MINING_FATIGUE);
             }
         }
     }

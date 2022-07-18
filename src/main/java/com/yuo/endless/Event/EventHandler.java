@@ -154,6 +154,11 @@ public class EventHandler {
             }else if (hasFeet){
                 playersWithFeet.add(key);
             }
+
+            boolean hasSword = player.getActiveItemStack().getItem() == ItemRegistry.infinitySword.get();
+            if (hasSword){
+                InfinitySword.clearBuff(player);
+            }
         }
     }
 
