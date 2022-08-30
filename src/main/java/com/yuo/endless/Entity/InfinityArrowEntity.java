@@ -88,6 +88,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
     protected void onEntityHit(EntityRayTraceResult result) {
         super.onEntityHit(result);
         Entity entity = result.getEntity();
+        if (entity.world.isRemote) return;
         if (entity instanceof LivingEntity){
             if (Endless.isDraconicEvolution && entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;

@@ -158,7 +158,11 @@
     "advancements.endless.star_fuel.desc":"获取恒星燃料",
     "advancements.endless.triple_neutron_collector.title":"产能升级",
     "advancements.endless.triple_neutron_collector.desc":"合成致密中子颗粒收集器",
-    
+    "advancements.endless.infinity_crossbow.title":"地狱升华",
+    "advancements.endless.infinity_crossbow.desc":"合成无尽弩",
+    "advancements.endless.infinity_arrow.title":"时空撕裂",
+    "advancements.endless.infinity_arrow.desc":"制作无尽箭矢",
+
     "gui.endless.extreme_craft":"无尽工作台",
     "gui.endless.neutron_collector":"中子态素收集器",
     "gui.endless.dense_neutron_collector":"压缩中子态素收集器",

@@ -221,9 +221,7 @@ public class InfinityCrossBow extends CrossbowItem {
                 projectileentity = new InfinityFireWorkEntity(worldIn, projectile, shooter, Config.SERVER.infinityFireworkDamage.get(), shooter.getPosX(), shooter.getPosYEye() - (double)0.15F, shooter.getPosZ(), true);
             } else {
                 projectileentity = createArrow(worldIn, shooter, crossbow, projectile);
-                if (isCreativeMode || projectileAngle != 0.0F) {
-                    ((AbstractArrowEntity)projectileentity).pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
-                }
+                ((AbstractArrowEntity)projectileentity).pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
             }
 
             if (shooter instanceof ICrossbowUser) {

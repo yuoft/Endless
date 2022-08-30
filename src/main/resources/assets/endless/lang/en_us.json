@@ -159,6 +159,10 @@
   "advancements.endless.star_fuel.desc":"Access to stellar fuel",
   "advancements.endless.triple_neutron_collector.title":"Capacity Upgrading",
   "advancements.endless.triple_neutron_collector.desc":"Synthetic dense neutron particle collector",
+  "advancements.endless.infinity_crossbow.title":"地狱升华",
+  "advancements.endless.infinity_crossbow.desc":"合成无尽弩",
+  "advancements.endless.infinity_arrow.title":"时空撕裂",
+  "advancements.endless.infinity_arrow.desc":"制作无尽箭矢",
 
   "gui.endless.extreme_craft":"Extreme Crafting Table",
   "gui.endless.neutron_collector":"Neutron collector",

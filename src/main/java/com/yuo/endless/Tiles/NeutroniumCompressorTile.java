@@ -234,7 +234,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
         if (!this.removed && side != null && cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (side == Direction.DOWN)
+            if (side != Direction.DOWN)
                 return handlerTop[0].cast();
             else
                 return handlerDown[0].cast();
