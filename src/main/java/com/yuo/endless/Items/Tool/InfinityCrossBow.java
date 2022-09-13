@@ -16,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -55,7 +54,7 @@ public class InfinityCrossBow extends CrossbowItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         if (isCharged(itemstack)) { //弹药以装填
-            fireProjectiles(worldIn, playerIn, handIn, itemstack, getSpeed(itemstack), 1.0F);
+            fireProjectiles(worldIn, playerIn, itemstack, getSpeed(itemstack), 1.0F);
             setCharged(itemstack, false);
             return ActionResult.resultConsume(itemstack);
         } else if (!findArrow(playerIn).isEmpty()) { //玩家有弹药
@@ -116,7 +115,7 @@ public class InfinityCrossBow extends CrossbowItem {
         return stack.getItem() == Items.CROSSBOW && hasChargedProjectile(stack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
     }
 
-    public static void fireProjectiles(World worldIn, LivingEntity shooter, Hand handIn, ItemStack stack, float velocityIn, float inaccuracyIn) {
+    public static void fireProjectiles(World worldIn, LivingEntity shooter, ItemStack stack, float velocityIn, float inaccuracyIn) {
         List<ItemStack> list = getChargedProjectiles(stack);
         float[] afloat = getRandomSoundPitches(shooter.getRNG()); //声音大小
 
@@ -126,21 +125,21 @@ public class InfinityCrossBow extends CrossbowItem {
             if (!itemstack.isEmpty()) {
                 if (list.size() <= 3){
                     if (i == 0) {
-                        fireProjectile(worldIn, shooter, handIn, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, 0.0F);
+                        fireProjectile(worldIn, shooter, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, 0.0F);
                     } else if (i == 1) {
-                        fireProjectile(worldIn, shooter, handIn, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, -10.0F);
+                        fireProjectile(worldIn, shooter, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, -10.0F);
                     } else {
-                        fireProjectile(worldIn, shooter, handIn, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, 10.0F);
+                        fireProjectile(worldIn, shooter, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, 10.0F);
                     }
                 }else { // 无尽箭矢 扇形射出大量箭矢 中间为无尽箭
                     if (i == 10){
-                        fireProjectile(worldIn, shooter, handIn, stack, new ItemStack(ItemRegistry.infinityArrow.get()), afloat[0], flag, velocityIn, inaccuracyIn, 0);
+                        fireProjectile(worldIn, shooter, stack, new ItemStack(ItemRegistry.infinityArrow.get()), afloat[0], flag, velocityIn, inaccuracyIn, 0);
                     }else {
-                        fireProjectile(worldIn, shooter, handIn, stack, new ItemStack(Items.ARROW), afloat[i < 10 ? 1 : 2], flag, velocityIn, inaccuracyIn, getArrowAngle(i, i < 10));
+                        fireProjectile(worldIn, shooter, stack, new ItemStack(Items.ARROW), afloat[i < 10 ? 1 : 2], flag, velocityIn, inaccuracyIn, getArrowAngle(i, i < 10));
                     }
                 }
             }else {
-                fireProjectile(worldIn, shooter, handIn, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, 0.0F);
+                fireProjectile(worldIn, shooter, stack, itemstack, afloat[i], flag, velocityIn, inaccuracyIn, 0.0F);
             }
         }
 
@@ -213,7 +212,7 @@ public class InfinityCrossBow extends CrossbowItem {
     }
 
     //射出一发
-    private static void fireProjectile(World worldIn, LivingEntity shooter, Hand handIn, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean isCreativeMode, float velocity, float inaccuracy, float projectileAngle) {
+    private static void fireProjectile(World worldIn, LivingEntity shooter, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean isCreativeMode, float velocity, float inaccuracy, float projectileAngle) {
         if (!worldIn.isRemote) {
             boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
             ProjectileEntity projectileentity;

@@ -115,6 +115,28 @@ public class ModRecipeManager {
             CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityTin.get()), (Config.SERVER.singularityTin.get() + countEnd) * rateEnd,
                     getList(new ItemStack(ThermalCore.BLOCKS.get("tin_block"))));
         }
+        if (Endless.isDraconicEvolution){
+            String str0 = "draconicevolution:draconium_block"; //龙块
+            String str1 = "draconicevolution:awakened_draconium_block"; //觉醒龙块
+            Block block0 = Registry.BLOCK.getOrDefault(new ResourceLocation(str0));
+            Block block1 = Registry.BLOCK.getOrDefault(new ResourceLocation(str1));
+            if (block0 != Blocks.AIR){
+                CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityDragonIum.get()), (Config.SERVER.singularityDragonIum.get() + countEnd) * rateEnd,
+                        getList(new ItemStack(block0)));
+            }
+            if (block1 != Blocks.AIR){
+                CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityAwakenDragon.get()), (Config.SERVER.singularityAwakenDragon.get() + countEnd) * rateEnd,
+                        getList(new ItemStack(block1)));
+            }
+        }
+        if (Endless.isBotania){
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityMana.get()), (Config.SERVER.singularityMana.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(ModBlocks.manasteelBlock)));
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityTara.get()), (Config.SERVER.singularityTara.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(ModBlocks.terrasteelBlock)));
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityElementIum.get()), (Config.SERVER.singularityElementIum.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(ModBlocks.elementiumBlock)));
+        }
         //奇点合成配方
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityClay.get()), (Config.SERVER.singularityClay.get() + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.CLAY)));
@@ -758,6 +780,15 @@ public class ModRecipeManager {
             CompressorManager.addInputs(ItemRegistry.singularityCopper.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("copper_block")),
                     new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
             CompressorManager.addInputs(ItemRegistry.singularitySilver.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
+        }
+        if (Endless.isDraconicEvolution){
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityDragonIum.get()));
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityAwakenDragon.get()));
+        }
+        if (Endless.isBotania){
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityMana.get()));
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityTara.get()));
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityElementIum.get()));
         }
     }
 

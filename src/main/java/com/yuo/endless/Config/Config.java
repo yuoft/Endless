@@ -1,11 +1,8 @@
 package com.yuo.endless.Config;
 
+import mezz.jei.config.ClientConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -14,12 +11,22 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 
 public class Config {
-    public static ForgeConfigSpec COMMON_CONFIG;
+    public static ForgeConfigSpec SERVER_CONFIG;
+    public static ForgeConfigSpec CLIENT_CONFIG;
     public static ServerConfig SERVER;
+    public static ClientConfig CLIENT;
+
     static {
-        final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
-        COMMON_CONFIG = specPair.getRight();
-        SERVER = specPair.getLeft();
+        {
+            final Pair<ClientConfig, ForgeConfigSpec> specPair1 = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+            CLIENT = specPair1.getLeft();
+            CLIENT_CONFIG = specPair1.getRight();
+        }
+        {
+            final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+            SERVER_CONFIG = specPair.getRight();
+            SERVER = specPair.getLeft();
+        }
     }
 
     public static Set<Block> pickaxeBlocks = new HashSet<>();
@@ -98,6 +105,11 @@ public class Config {
         public final ForgeConfigSpec.IntValue singularityNickel;
         public final ForgeConfigSpec.IntValue singularityLead;
         public final ForgeConfigSpec.IntValue singularityTin;
+        public final ForgeConfigSpec.IntValue singularityDragonIum;
+        public final ForgeConfigSpec.IntValue singularityAwakenDragon;
+        public final ForgeConfigSpec.IntValue singularityMana;
+        public final ForgeConfigSpec.IntValue singularityTara;
+        public final ForgeConfigSpec.IntValue singularityElementIum;
         public final ForgeConfigSpec.IntValue modRatioRate; //模组影响后的最大倍率
         public final ForgeConfigSpec.IntValue modRatioCount; //模组影响后的最大数量
 
@@ -156,6 +168,11 @@ public class Config {
             this.singularityNickel = buildInt(builder, "Nickel", 400, 10, 2000, "base count");
             this.singularityLead = buildInt(builder, "Lead", 300, 10, 2000, "base count");
             this.singularityTin = buildInt(builder, "Tin", 400, 10, 2000, "base count");
+            this.singularityDragonIum = buildInt(builder, "DragonIum", 80, 10, 2000, "base count");
+            this.singularityAwakenDragon = buildInt(builder, "AwakenDragon", 10, 10, 2000, "base count");
+            this.singularityMana = buildInt(builder, "Mana", 200, 10, 2000, "base count");
+            this.singularityTara = buildInt(builder, "Tara", 100, 10, 2000, "base count");
+            this.singularityElementIum = buildInt(builder, "ElementIum", 50, 10, 2000, "base count");
             builder.pop();
 
             builder.comment("Mod Impact").push("modRatio");
@@ -169,6 +186,17 @@ public class Config {
             this.shovelBlackList = buildConfig(builder, "Shovel Black List", "Tool range mining blacklist as pickaxe as shovel");
             this.hoeBlackList = buildConfig(builder, "Hoe Black List", "Tool range mining blacklist as pickaxe as hoe");
             builder.pop();
+        }
+    }
+
+    public static class ClientConfig{
+        public final ForgeConfigSpec.BooleanValue isRenderLayer; //是否开启渲染（会导致游戏帧率大幅下降）
+
+        public ClientConfig(ForgeConfigSpec.Builder builder){
+            builder.comment("Endless Client Config").push("general");
+            this.isRenderLayer = buildBoolean(builder, "Is Render Layer", false,  "Whether to turn on rendering (it will lead to a significant decrease in the game frame rate)");
+            builder.pop();
+
         }
     }
 

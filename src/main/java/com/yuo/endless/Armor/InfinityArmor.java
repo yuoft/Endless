@@ -131,15 +131,11 @@ public class InfinityArmor extends ArmorItem {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_chest"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
                 tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% FlySpeed")));
-//				tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + TextFormatting.ITALIC + "100" +
-//						TextFormatting.RESET + "" + TextFormatting.BLUE + "% FlySpeed"));
         }
         if (slot == EquipmentSlotType.LEGS) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_legs"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
                 tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% WalkSpeed")));
-//				tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + TextFormatting.ITALIC + "300" +
-//						TextFormatting.RESET + "" + TextFormatting.BLUE + "% WalkSpeed"));
         }
         if (slot == EquipmentSlotType.FEET) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_feet"));

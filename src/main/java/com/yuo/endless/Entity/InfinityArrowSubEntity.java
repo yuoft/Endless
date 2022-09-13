@@ -53,7 +53,7 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
     @Override
     public void tick() {
         super.tick();
-        if (inGround && timeInGround >= 40){
+        if (inGround && timeInGround >= 100){
             setDead();
         }else if (ticksExisted > 100) setDead();
     }

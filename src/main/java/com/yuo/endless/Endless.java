@@ -59,7 +59,8 @@ public class Endless {
     public static boolean isMysticalAgriculture = false; //神秘农业
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG); //配置文件
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SERVER_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         checkMods();
@@ -74,6 +75,12 @@ public class Endless {
         }
         if (isThermal){
             ItemRegistry.registerThermal();
+        }
+        if (isDraconicEvolution){
+            ItemRegistry.registerDE();
+        }
+        if (isBotania){
+            ItemRegistry.registerBOT();
         }
 
         modEventBus.addListener(this::commonSetup);

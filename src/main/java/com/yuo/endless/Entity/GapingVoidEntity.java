@@ -161,7 +161,7 @@ public class GapingVoidEntity extends Entity {
             setAge(age + 1); //年龄增加
         }
 
-        if (age < maxLifetime - 20){
+        if (age < maxLifetime - 20 && age % 5 == 0){
             //生成粒子
             for (int i = 0; i < 50; i++){
                 world.addParticle(ParticleTypes.PORTAL, position.getX(), position.getY(), position.getZ(), rand.nextGaussian() * 3,
@@ -270,7 +270,7 @@ public class GapingVoidEntity extends Entity {
         return Math.sqrt(pos.distanceSq(blockPos.getX(), blockPos.getY(), blockPos.getZ(), true));
     }
 
-    //通过年龄获取缩放大小
+    //通过年龄获取缩放大小（膨胀程度）
     public static float getVoidScale(double age) {
         double life = age / (double) maxLifetime;
 

@@ -141,6 +141,11 @@ public class ItemRegistry {
 	public static RegistryObject<Item> singularityLead; //铅
 	public static RegistryObject<Item> singularityTin; //锡
 //	public static RegistryObject<Item> singularityIridium; //铱
+	public static RegistryObject<Item> singularityDragonIum; //龙锭
+	public static RegistryObject<Item> singularityAwakenDragon; //觉醒龙锭
+	public static RegistryObject<Item> singularityMana; //魔钢
+	public static RegistryObject<Item> singularityTara; //泰拉钢
+	public static RegistryObject<Item> singularityElementIum; //源质钢
 
 	//强力装备
 	public static void registerSpaceArmsItem(){
@@ -178,4 +183,18 @@ public class ItemRegistry {
 		singularityTin = ITEMS.register("singularity_tin", () -> new Singularity(0x517c88, 0x88a2a7));
 //		singularityIridium = ITEMS.register("singularity_iridium", () -> new Singularity(0xaab59d, 0xb5d1ba));
 	}
+
+	//龙之研究
+	public static void registerDE(){
+		singularityDragonIum = ITEMS.register("singularity_dragon_ium", () -> new Singularity(0x6b369b, 0x6c389a));
+		singularityAwakenDragon = ITEMS.register("singularity_awaken_dragon", () -> new Singularity(0xf45100, 0xeecb3d));
+	}
+
+	//植物魔法
+	public static void registerBOT(){
+		singularityMana = ITEMS.register("singularity_mana", () -> new Singularity(0x49a5ee, 0x50b4ff));
+		singularityTara = ITEMS.register("singularity_tara", () -> new Singularity(0x51dc24, 0x57ef26));
+		singularityElementIum = ITEMS.register("singularity_element_ium", () -> new Singularity(0xe464ff, 0xe784ff));
+	}
+
 }

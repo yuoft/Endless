@@ -12,17 +12,26 @@ import com.yuo.endless.Render.*;
 import com.yuo.endless.Tiles.TileTypeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.Items;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.model.ArmorStandArmorModel;
+import net.minecraft.client.renderer.entity.model.ArmorStandModel;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.Map;
 
 /**
  * 客户端属性注册
@@ -32,6 +41,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  * Version: 1.0
  */
 public class ClientProxy implements IProxy {
+
+    @Override
+    public void registerHandlers() {
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(this::clientSetup);
+    }
 
     public void clientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() ->{
@@ -122,12 +137,4 @@ public class ClientProxy implements IProxy {
                 "count"), (itemStack, clientWorld, livingEntity) -> MatterCluster.getItemTag(itemStack).size() > 0 ?
                 (MatterCluster.getItemTag(itemStack).size() == Config.SERVER.matterClusterMaxTerm.get() ? 1f : 0.5f) :0f);
     }
-
-
-    @Override
-    public void registerHandlers() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.addListener(this::clientSetup);
-    }
-
 }
