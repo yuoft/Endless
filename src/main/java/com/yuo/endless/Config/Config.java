@@ -1,6 +1,5 @@
 package com.yuo.endless.Config;
 
-import mezz.jei.config.ClientConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -66,7 +65,7 @@ public class Config {
         public final ForgeConfigSpec.IntValue swordAttackRange; //无尽剑右键攻击范围
         public final ForgeConfigSpec.BooleanValue isSwordAttackAnimal; // 无尽剑右键范围攻击是否攻击中立生物
         public final ForgeConfigSpec.IntValue subArrowDamage; // 无尽弓散射光箭伤害
-        public final ForgeConfigSpec.IntValue subArrowDamageBow; // 无尽弓,弩空射光箭伤害
+        public final ForgeConfigSpec.IntValue noArrowDamage; // 无尽弓,弩空射箭矢伤害
         public final ForgeConfigSpec.IntValue axeChainCount; // 无尽斧砍树连锁数量
         public final ForgeConfigSpec.DoubleValue foodTime; //食物效果时间缩放系数
         public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐的锤形态潜行左键是否删除方块
@@ -82,6 +81,7 @@ public class Config {
         public final ForgeConfigSpec.BooleanValue endestPearBreakBedrock; //终望珍珠是否破坏基岩
         public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
         public final ForgeConfigSpec.BooleanValue isLogoInfo; //登录游戏时是否提升反馈信息
+        public final ForgeConfigSpec.BooleanValue isArrowLightning; //是否开启无尽矢的召雷功能
 
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
         public final ForgeConfigSpec.IntValue singularityClay;
@@ -127,7 +127,7 @@ public class Config {
             this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 64, "Endless sword right click attack range");
             this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Damage", true, "Does the right key range attack of endless sword attack neutral creatures");
             this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 50, 100000, "Endless bow scattering light arrow damage");
-            this.subArrowDamageBow = buildInt(builder, "Sub Arrow Damage Bow", 10, 5, 100, "Endless bow(cross) shooting light arrow damage");
+            this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "If no arrow,Endless bow(cross) shooting arrow damage");
             this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Chain number of endless axe cutting trees");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
             this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Hammer form of endless pickaxe left click to delete box");
@@ -143,6 +143,7 @@ public class Config {
             this.endestPearBreakBedrock = buildBoolean(builder, "Endest Pearl Is Break Bedrock", true,  "Endest pearl whether destroys the bedrock");
             this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether the endless workbench is compatible with the original workbench formula");
             this.isLogoInfo = buildBoolean(builder, "Is Logo Info", true,  "Whether to improve feedback when logging in to the game");
+            this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false,  "Whether to enable the thunder summoning function of Endless Arrow");
             builder.pop();
 
             builder.comment("Singularity Recipe Count").push("singularity");

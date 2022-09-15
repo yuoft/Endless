@@ -2,6 +2,7 @@ package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -30,7 +31,7 @@ public class InfinityArrow extends Item  {
     private final Multimap<Attribute, AttributeModifier> tridentAttributes;
 
     public InfinityArrow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(-1));
+        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(-1).isImmuneToFire());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 48.0D, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.0F, AttributeModifier.Operation.ADDITION));
@@ -58,7 +59,7 @@ public class InfinityArrow extends Item  {
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         World world = attacker.getEntityWorld();
-        if (!world.isRemote && world.isThundering()){ //雷雨天 召雷
+        if (!world.isRemote && world.isThundering() && Config.SERVER.isArrowLightning.get()){ //雷雨天 召雷
             BlockPos pos = target.getPosition();
             LightningBoltEntity lightningboltentity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
             lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(pos));

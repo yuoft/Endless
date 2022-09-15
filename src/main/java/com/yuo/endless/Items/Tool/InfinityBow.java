@@ -27,7 +27,7 @@ public class InfinityBow extends BowItem {
     public static final Predicate<ItemStack> ARROWS = (stack) -> stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == ItemRegistry.infinityArrow.get();
 
     public InfinityBow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1));
+        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
     }
 
     //使用时间
@@ -69,8 +69,10 @@ public class InfinityBow extends BowItem {
                         arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn); //普通箭矢
                     }
                 } else { //无箭矢
-                    arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn);
-                    arrow.setDamage(Config.SERVER.subArrowDamageBow.get());
+                    ItemStack arrowStack = new ItemStack(Items.ARROW);
+                    ArrowItem arrowitem = (ArrowItem)(arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
+                    arrow = arrowitem.createArrow(worldIn, stack, entityLiving);
+                    arrow.setDamage(Config.SERVER.noArrowDamage.get());
                 }
                 arrow.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0, velocity * 3.0F, 1.0F);
                 arrow.setIsCritical(true);

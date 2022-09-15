@@ -29,7 +29,7 @@ public class InfinityPickaxe extends PickaxeItem {
     private final ItemHander hander;
 
     public InfinityPickaxe() {
-        super(MyItemTier.INFINITY_TOOL, -3, -2.5f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -3, -2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
         this.hander = new ItemHander();
     }
 
@@ -48,12 +48,12 @@ public class InfinityPickaxe extends PickaxeItem {
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (stack.getOrCreateTag().getBoolean("hammer")) {
-            return 5.0F;
+            return 6.0F;
         }
         if (state.getHarvestTool() == ToolType.PICKAXE){
             return this.getTier().getEfficiency(); //对镐类挖掘方块有极高速度加成
         }
-        return Math.max(super.getDestroySpeed(stack, state), 6.0f);
+        return Math.max(super.getDestroySpeed(stack, state), 9.0f);
     }
 
     @Override

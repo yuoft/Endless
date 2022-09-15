@@ -48,7 +48,7 @@ public class InfinityCrossBow extends CrossbowItem {
     private boolean isLoadingMiddle = false;
 
     public InfinityCrossBow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1));
+        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
@@ -247,7 +247,7 @@ public class InfinityCrossBow extends CrossbowItem {
             ItemStack stack = new ItemStack(Items.ARROW);
             ArrowItem arrowitem = (ArrowItem)(stack.getItem() instanceof ArrowItem ? stack.getItem() : Items.ARROW);
             arrow = arrowitem.createArrow(worldIn, ammo, shooter);
-            arrow.setDamage(Config.SERVER.subArrowDamageBow.get());
+            arrow.setDamage(Config.SERVER.noArrowDamage.get());
         }else {
             if (ammo.getItem() == ItemRegistry.infinityArrow.get()){
                 arrow = new InfinityCrossArrowEntity(EntityRegistry.INFINITY_CROSS_ARROW.get(), shooter, worldIn);

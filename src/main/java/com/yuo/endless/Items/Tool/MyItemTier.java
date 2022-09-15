@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 public enum MyItemTier implements IItemTier {
 
-    SKULLFIRE(444, 10.0f, 10, 2, 10, () -> {
+    SKULLFIRE(1561, 10.0f, 10, 2, 10, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     }),
     NEUTRON(3152, 15.0f, 10, 6, 21, () -> {
