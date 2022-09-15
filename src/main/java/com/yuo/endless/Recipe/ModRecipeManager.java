@@ -15,7 +15,6 @@ import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -163,7 +162,7 @@ public class ModRecipeManager {
     //无尽工作台配方
     public static void addExtremeCrafts() {
 
-        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.neutronCollector.get()),
+        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.neutroniumCollector.get()),
                 "IIQQQQQII",
                 "I QQQQQ I",
                 "I  RRR  I",
@@ -190,8 +189,8 @@ public class ModRecipeManager {
         //无尽催化剂
         infinityCatalyst = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.infinityCatalyst.get()),
                 new ItemStack(Blocks.EMERALD_BLOCK), new ItemStack(ItemRegistry.crystalMatrixIngot.get()),
-                new ItemStack(ItemRegistry.neutroniumIngot.get()), new ItemStack(ItemRegistry.meatballs.get()),
-                new ItemStack(ItemRegistry.stew.get()), new ItemStack(ItemRegistry.endestPearl.get()),
+                new ItemStack(ItemRegistry.neutroniumIngot.get()), new ItemStack(ItemRegistry.cosmicMeatBalls.get()),
+                new ItemStack(ItemRegistry.ultimateStew.get()), new ItemStack(ItemRegistry.endestPearl.get()),
                 new ItemStack(ItemRegistry.recordFragment.get()),
                 new ItemStack(ItemRegistry.singularityClay.get()), new ItemStack(ItemRegistry.singularityCoal.get()),
                 new ItemStack(ItemRegistry.singularityDiamond.get()), new ItemStack(ItemRegistry.singularityEmerald.get()),
@@ -200,29 +199,29 @@ public class ModRecipeManager {
                 new ItemStack(ItemRegistry.singularityQuartz.get()), new ItemStack(ItemRegistry.singularityRedstone.get()));
 
         if (Endless.isPaimeng || Endless.isSpaceArms) {
-            meatBalls = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.meatballs.get()),
-                    new ItemStack(ItemRegistry.neutronNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.BEEF),
+            meatBalls = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.cosmicMeatBalls.get()),
+                    new ItemStack(ItemRegistry.neutroniumNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.BEEF),
                     new ItemStack(Items.MUTTON), new ItemStack(Items.COD), new ItemStack(Items.SALMON), new ItemStack(Items.TROPICAL_FISH),
                     new ItemStack(Items.PUFFERFISH), new ItemStack(Items.RABBIT), new ItemStack(Items.CHICKEN),
                     new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.EGG));
 
-            stew = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.stew.get()),
-                    new ItemStack(ItemRegistry.neutronNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
+            stew = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.ultimateStew.get()),
+                    new ItemStack(ItemRegistry.neutroniumNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
                     new ItemStack(Items.BREAD), new ItemStack(Items.KELP), new ItemStack(Items.COCOA_BEANS), new ItemStack(Blocks.CAKE),
                     new ItemStack(Items.GLISTERING_MELON_SLICE), new ItemStack(Items.CARROT), new ItemStack(Items.POISONOUS_POTATO),
                     new ItemStack(Items.CHORUS_FRUIT), new ItemStack(Items.BEETROOT), new ItemStack(Items.MUSHROOM_STEW),
                     new ItemStack(Items.HONEY_BOTTLE), new ItemStack(Items.SWEET_BERRIES));
         } else {
-            meatBalls = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.meatballs.get()),
-                    new ItemStack(ItemRegistry.neutronNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.COOKED_PORKCHOP),
+            meatBalls = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.cosmicMeatBalls.get()),
+                    new ItemStack(ItemRegistry.neutroniumNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.COOKED_PORKCHOP),
                     new ItemStack(Items.BEEF), new ItemStack(Items.COOKED_BEEF), new ItemStack(Items.MUTTON), new ItemStack(Items.COOKED_MUTTON),
                     new ItemStack(Items.COD), new ItemStack(Items.COOKED_COD), new ItemStack(Items.SALMON), new ItemStack(Items.COOKED_SALMON),
                     new ItemStack(Items.TROPICAL_FISH), new ItemStack(Items.PUFFERFISH), new ItemStack(Items.RABBIT), new ItemStack(Items.RABBIT_STEW),
                     new ItemStack(Items.COOKED_RABBIT), new ItemStack(Items.CHICKEN), new ItemStack(Items.COOKED_CHICKEN),
                     new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.EGG));
 
-            stew = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.stew.get()),
-                    new ItemStack(ItemRegistry.neutronNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
+            stew = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(ItemRegistry.ultimateStew.get()),
+                    new ItemStack(ItemRegistry.neutroniumNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
                     new ItemStack(Items.WHEAT), new ItemStack(Items.BREAD), new ItemStack(Items.KELP), new ItemStack(Items.DRIED_KELP),
                     new ItemStack(Items.COCOA_BEANS), new ItemStack(Items.COOKIE), new ItemStack(Items.MELON_SLICE),
                     new ItemStack(Items.GLISTERING_MELON_SLICE), new ItemStack(Items.CARROT), new ItemStack(Items.POTATO),
@@ -591,7 +590,7 @@ public class ModRecipeManager {
                 'S', new ItemStack(Items.NETHER_STAR),
                 'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
-        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.neutroniumCompressor.get()),
+        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.neutronCompressor.get()),
                 "IIIHHHIII",
                 "X N   N X",
                 "I N   N I",

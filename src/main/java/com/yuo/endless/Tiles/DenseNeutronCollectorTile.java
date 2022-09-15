@@ -26,7 +26,7 @@ public class DenseNeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected ItemStack getCraftOutputItem() {
-        return new ItemStack(ItemRegistry.neutronNugget.get());
+        return new ItemStack(ItemRegistry.neutroniumNugget.get());
     }
 
     @Override

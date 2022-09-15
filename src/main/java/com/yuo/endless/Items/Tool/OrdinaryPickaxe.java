@@ -26,7 +26,7 @@ public class OrdinaryPickaxe extends PickaxeItem {
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
             if (stack.getItem() == ItemRegistry.crystalPickaxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronPickaxe.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumPickaxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,-0.05d));
             }
             return builder.build();

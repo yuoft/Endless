@@ -29,7 +29,7 @@ public class OrdinaryArmor extends ArmorItem {
             if (stack.getItem() == ItemRegistry.crystalHead.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(0, 1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronHead.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumHead.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(0,3d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(0,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0,-0.05d));
@@ -39,7 +39,7 @@ public class OrdinaryArmor extends ArmorItem {
             if (stack.getItem() == ItemRegistry.crystalChest.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(1,4d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronChest.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumChest.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(1,8d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(1,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(1,-0.05d));
@@ -49,7 +49,7 @@ public class OrdinaryArmor extends ArmorItem {
             if (stack.getItem() == ItemRegistry.crystalLegs.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(2,3d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronLegs.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumLegs.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(2,6d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(2,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(2,-0.05d));
@@ -59,7 +59,7 @@ public class OrdinaryArmor extends ArmorItem {
             if (stack.getItem() == ItemRegistry.crystalFeet.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(3,1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronFeet.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumFeet.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(3,3d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(3,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(3,-0.05d));

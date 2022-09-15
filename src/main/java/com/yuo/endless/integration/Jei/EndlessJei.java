@@ -57,6 +57,6 @@ public class EndlessJei implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ItemRegistry.extremeCraftingTable.get()), ExtremeCraftRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ItemRegistry.neutroniumCompressor.get()), NeutroniumCRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ItemRegistry.neutronCompressor.get()), NeutroniumCRecipeCategory.UID);
     }
 }

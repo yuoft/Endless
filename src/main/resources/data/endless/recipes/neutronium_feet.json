@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
+    "x y",
     "x x",
-    "xyx",
-    "xxx"
+    "   "
   ],
   "key": {
     "x": {
@@ -14,6 +14,6 @@
     }
   },
   "result": {
-    "item": "endless:neutron_chest"
+    "item": "endless:neutronium_feet"
   }
 }

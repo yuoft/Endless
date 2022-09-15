@@ -61,7 +61,7 @@ public class AbsNeutronCollectorTile extends LockableTileEntity implements ITick
     }
     //产物
     protected ItemStack getCraftOutputItem(){
-        return new ItemStack(ItemRegistry.neutronPile.get());
+        return new ItemStack(ItemRegistry.neutroniumPile.get());
     }
 
     @Override

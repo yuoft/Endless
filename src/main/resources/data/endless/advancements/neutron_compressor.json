@@ -1,24 +1,24 @@
 {
-  "parent": "endless:diamond_lattice",
+  "parent": "endless:neutronium_ingot",
   "display": { 
     "icon": { 
-      "item": "endless:neutron_pile"
+      "item": "endless:neutron_compressor"
     },
     "title": {
-		"translate": "advancements.endless.neutron_pile.title"
+		"translate": "advancements.endless.neutron_compressor.title"
 	},
     "description": {
-		"translate": "advancements.endless.neutron_pile.desc"
+		"translate": "advancements.endless.neutron_compressor.desc"
 	},
     "frame": "task"
   },
   "criteria": { 
-    "neutron_pile": {
+    "neutron_compressor": {
       "trigger": "minecraft:inventory_changed", 
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:neutron_pile"
+				"item": "endless:neutron_compressor"
 			}
 		]
       }

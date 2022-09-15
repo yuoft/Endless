@@ -26,7 +26,7 @@ public class NeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected ItemStack getCraftOutputItem() {
-        return new ItemStack(ItemRegistry.neutronPile.get());
+        return new ItemStack(ItemRegistry.neutroniumPile.get());
     }
 
     @Override

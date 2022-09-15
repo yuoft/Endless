@@ -24,11 +24,11 @@ public class BlockRegistry {
     public static RegistryObject<Block> doubleCraft = BLOCKS.register("double_craft",
             () -> new OrdinaryBlock(Material.WOOD, 1, ToolType.AXE, 5, 5));
     public static RegistryObject<Block> extremeCraftingTable = BLOCKS.register("extreme_crafting_table", ExtremeCraft::new);
-    public static RegistryObject<Block> neutronCollector = BLOCKS.register("neutron_collector", NeutronCollector::new);
-    public static RegistryObject<Block> denseNeutronCollector = BLOCKS.register("dense_neutron_collector", DenseNeutronCollector::new);
-    public static RegistryObject<Block> doubleNeutronCollector = BLOCKS.register("double_neutron_collector", DoubleNeutronCollector::new);
-    public static RegistryObject<Block> tripleNeutronCollector = BLOCKS.register("triple_neutron_collector", TripleNeutronCollector::new);
-    public static RegistryObject<Block> neutroniumCompressor = BLOCKS.register("neutronium_compressor", NeutroniumCompressor::new);
+    public static RegistryObject<Block> neutroniumCollector = BLOCKS.register("neutronium_collector", NeutronCollector::new);
+    public static RegistryObject<Block> denseNeutroniumCollector = BLOCKS.register("dense_neutronium_collector", DenseNeutronCollector::new);
+    public static RegistryObject<Block> doubleNeutroniumCollector = BLOCKS.register("double_neutronium_collector", DoubleNeutronCollector::new);
+    public static RegistryObject<Block> tripleNeutroniumCollector = BLOCKS.register("triple_neutronium_collector", TripleNeutronCollector::new);
+    public static RegistryObject<Block> neutronCompressor = BLOCKS.register("neutron_compressor", NeutroniumCompressor::new);
     public static RegistryObject<Block> compressorChest = BLOCKS.register("compressor_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_box", InfinityBox::new);
 

@@ -7,13 +7,13 @@
   ],
   "key": {
     "x": {
-      "item": "endless:double_neutron_collector"
+      "item": "endless:dense_neutronium_collector"
     },
     "y": {
-      "item": "endless:singularity_redstone"
+      "item": "endless:neutronium_gear"
     }
   },
   "result": {
-    "item": "endless:triple_neutron_collector"
+    "item": "endless:double_neutronium_collector"
   }
 }

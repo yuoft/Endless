@@ -14,6 +14,6 @@ public class ModGroup extends ItemGroup{
 	//图标
 	@Override
 	public ItemStack createIcon() {
-		return new ItemStack(ItemRegistry.meatballs.get());
+		return new ItemStack(ItemRegistry.cosmicMeatBalls.get());
 	}
 }

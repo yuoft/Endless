@@ -34,11 +34,11 @@ public class OrdinaryItem extends Item {
 		if (item == ItemRegistry.crystalMatrixIngot.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.crystal_matrix_ingot"));
 		}
-		if (item == ItemRegistry.neutronPile.get()){
-			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutron_pile"));
+		if (item == ItemRegistry.neutroniumPile.get()){
+			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_pile"));
 		}
-		if (item == ItemRegistry.neutronNugget.get()){
-			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutron_nugget"));
+		if (item == ItemRegistry.neutroniumNugget.get()){
+			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_nugget"));
 		}
 		if (item == ItemRegistry.neutroniumIngot.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_ingot"));
@@ -59,7 +59,7 @@ public class OrdinaryItem extends Item {
 
 	@Override
 	public ItemStack getDefaultInstance() {
-		if (this == ItemRegistry.neutronPile.get()){
+		if (this == ItemRegistry.neutroniumPile.get()){
 			return setEmc(this, 100L);
 		}else if (this == ItemRegistry.infinityCatalyst.get()){
 			return setEmc(this, 214905788L);

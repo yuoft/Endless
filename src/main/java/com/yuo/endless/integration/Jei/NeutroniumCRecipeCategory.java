@@ -25,7 +25,7 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
 
     public NeutroniumCRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 37,25,102,40); //绘制背景
-        this.icon = helper.createDrawableIngredient(new ItemStack(ItemRegistry.neutroniumCompressor.get())); //绘制合成方块
+        this.icon = helper.createDrawableIngredient(new ItemStack(ItemRegistry.neutronCompressor.get())); //绘制合成方块
         this.singularity = helper.createDrawable(TEXTURE, 176,16,16,16);
     }
 
@@ -41,7 +41,7 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
 
     @Override
     public String getTitle() {
-        return ItemRegistry.neutroniumCompressor.get().getName().getString();
+        return ItemRegistry.neutronCompressor.get().getName().getString();
     }
 
     @Override

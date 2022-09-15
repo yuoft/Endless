@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "endless:neutron_collector"
+          "name": "endless:dense_neutronium_collector"
         }
       ],
       "conditions": [

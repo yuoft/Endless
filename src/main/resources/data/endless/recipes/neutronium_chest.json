@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "xxx",
-    " y ",
-    " y "
+    "x x",
+    "xyx",
+    "xxx"
   ],
   "key": {
     "x": {
@@ -14,6 +14,6 @@
     }
   },
   "result": {
-    "item": "endless:neutron_pickaxe"
+    "item": "endless:neutronium_chest"
   }
 }

@@ -26,7 +26,7 @@ public class OrdinaryAxe extends AxeItem {
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
             if (stack.getItem() == ItemRegistry.crystalAxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronAxe.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumAxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,-0.05d));
             }
             return builder.build();

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "endless:neutronium_compressor"
+          "name": "endless:neutronium_collector"
         }
       ],
       "conditions": [

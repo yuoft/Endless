@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " x ",
-    " y ",
+    "xx ",
+    "xy ",
     " y "
   ],
   "key": {
@@ -14,6 +14,6 @@
     }
   },
   "result": {
-    "item": "endless:neutron_shovel"
+    "item": "endless:neutronium_axe"
   }
 }

@@ -126,7 +126,7 @@ public class Config {
             this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 100000, "Range damage value of the right key of endless sword");
             this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 64, "Endless sword right click attack range");
             this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Damage", true, "Does the right key range attack of endless sword attack neutral creatures");
-            this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 50, 100000, "Endless bow scattering light arrow damage");
+            this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Endless bow scattering light arrow damage");
             this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "If no arrow,Endless bow(cross) shooting arrow damage");
             this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Chain number of endless axe cutting trees");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");

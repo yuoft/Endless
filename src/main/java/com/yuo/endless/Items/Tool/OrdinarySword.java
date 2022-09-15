@@ -26,7 +26,7 @@ public class OrdinarySword extends SwordItem {
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
             if (stack.getItem() == ItemRegistry.crystalSword.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronSword.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumSword.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,-0.05d));
             }
             return builder.build();

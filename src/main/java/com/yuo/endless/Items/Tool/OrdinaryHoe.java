@@ -26,7 +26,7 @@ public class OrdinaryHoe extends HoeItem {
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
             if (stack.getItem() == ItemRegistry.crystalHoe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(8,0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutronHoe.get()){
+            }else if (stack.getItem() == ItemRegistry.neutroniumHoe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(8,-0.05d));
             }
             return builder.build();

@@ -7,13 +7,13 @@
   ],
   "key": {
     "x": {
-      "item": "endless:dense_neutron_collector"
+      "item": "endless:neutronium_collector"
     },
     "y": {
       "item": "endless:neutronium_gear"
     }
   },
   "result": {
-    "item": "endless:double_neutron_collector"
+    "item": "endless:dense_neutronium_collector"
   }
 }
