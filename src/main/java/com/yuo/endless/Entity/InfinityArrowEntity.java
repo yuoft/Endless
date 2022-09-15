@@ -2,6 +2,7 @@ package com.yuo.endless.Entity;
 
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
+import com.google.common.collect.Sets;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
@@ -14,12 +15,21 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.PacketThreadUtil;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -29,7 +39,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.NetworkInstance;
 import net.minecraftforge.fml.network.simple.IndexedMessageCodec;
 
+import java.util.Collection;
 import java.util.Random;
+import java.util.Set;
 
 //箭实体
 public class InfinityArrowEntity extends AbstractArrowEntity {

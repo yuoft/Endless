@@ -66,7 +66,7 @@ public class InfinityBow extends BowItem {
                     if (itemStack.getItem() == ItemRegistry.infinityArrow.get()) { //无尽箭矢
                         arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn);
                     } else {
-                        arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn); //普通箭矢
+                        arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn, stack); //普通箭矢
                     }
                 } else { //无箭矢
                     ItemStack arrowStack = new ItemStack(Items.ARROW);

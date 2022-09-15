@@ -250,8 +250,8 @@ public class InfinityCrossBow extends CrossbowItem {
             arrow.setDamage(Config.SERVER.noArrowDamage.get());
         }else {
             if (ammo.getItem() == ItemRegistry.infinityArrow.get()){
-                arrow = new InfinityCrossArrowEntity(EntityRegistry.INFINITY_CROSS_ARROW.get(), shooter, worldIn);
-            }else arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, worldIn);
+                arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, worldIn);
+            }else arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, worldIn, ammo);
         }
 
         if (shooter instanceof PlayerEntity) {
