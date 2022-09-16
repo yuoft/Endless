@@ -24,7 +24,7 @@ public class OrdinaryPickaxe extends PickaxeItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
-            if (stack.getItem() == ItemRegistry.crystalPickaxe.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixPickaxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumPickaxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,-0.05d));

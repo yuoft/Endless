@@ -26,7 +26,7 @@ public class OrdinaryArmor extends ArmorItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.HEAD){
-            if (stack.getItem() == ItemRegistry.crystalHead.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixHelmet.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(0, 1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumHead.get()){
@@ -36,7 +36,7 @@ public class OrdinaryArmor extends ArmorItem {
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.CHEST){
-            if (stack.getItem() == ItemRegistry.crystalChest.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixChestplate.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(1,4d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumChest.get()){
@@ -46,7 +46,7 @@ public class OrdinaryArmor extends ArmorItem {
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.LEGS){
-            if (stack.getItem() == ItemRegistry.crystalLegs.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixLeggings.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(2,3d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumLegs.get()){
@@ -56,7 +56,7 @@ public class OrdinaryArmor extends ArmorItem {
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.FEET){
-            if (stack.getItem() == ItemRegistry.crystalFeet.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixFeet.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(3,1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumFeet.get()){

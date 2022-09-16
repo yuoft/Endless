@@ -24,7 +24,7 @@ public class OrdinaryShovel extends ShovelItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
-            if (stack.getItem() == ItemRegistry.crystalShovel.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixShovel.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumShovel.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,-0.05d));

@@ -24,7 +24,7 @@ public class OrdinarySword extends SwordItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
-            if (stack.getItem() == ItemRegistry.crystalSword.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixSword.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumSword.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,-0.05d));

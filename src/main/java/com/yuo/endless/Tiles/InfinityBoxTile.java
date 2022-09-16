@@ -22,7 +22,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile {
 
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.endless.infinity_box");
+        return new TranslationTextComponent("gui.endless.infinity_chest");
     }
 
     @Override

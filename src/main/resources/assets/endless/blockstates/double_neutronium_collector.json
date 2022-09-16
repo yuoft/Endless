@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "endless:block/double_neutronium_collector" },
-    "facing=east": { "model": "endless:block/double_neutronium_collector" ,"y": 90},
-    "facing=south": { "model": "endless:block/double_neutronium_collector" ,"y": 180},
-    "facing=west": { "model": "endless:block/double_neutronium_collector" ,"y": 270}
-  }
-}

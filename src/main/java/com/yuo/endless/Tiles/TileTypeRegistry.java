@@ -19,9 +19,9 @@ public class TileTypeRegistry {
     public static final RegistryObject<TileEntityType<DenseNeutronCollectorTile>> DENSE_NEUTRON_COLLECTOR_TILE = TILE_ENTITIES.register("dense_neutron_collector_tile",
             () -> TileEntityType.Builder.create(DenseNeutronCollectorTile::new, BlockRegistry.denseNeutroniumCollector.get()).build(null));
     public static final RegistryObject<TileEntityType<DoubleNeutronCollectorTile>> DOUBLE_NEUTRON_COLLECTOR_TILE = TILE_ENTITIES.register("double_neutron_collector_tile",
-            () -> TileEntityType.Builder.create(DoubleNeutronCollectorTile::new, BlockRegistry.doubleNeutroniumCollector.get()).build(null));
+            () -> TileEntityType.Builder.create(DoubleNeutronCollectorTile::new, BlockRegistry.denserNeutroniumCollector.get()).build(null));
     public static final RegistryObject<TileEntityType<TripleNeutronCollectorTile>> TRIPLE_NEUTRON_COLLECTOR_TILE = TILE_ENTITIES.register("triple_neutron_collector_tile",
-            () -> TileEntityType.Builder.create(TripleNeutronCollectorTile::new, BlockRegistry.tripleNeutroniumCollector.get()).build(null));
+            () -> TileEntityType.Builder.create(TripleNeutronCollectorTile::new, BlockRegistry.densestNeutroniumCollector.get()).build(null));
     public static final RegistryObject<TileEntityType<NeutroniumCompressorTile>> NEUTRONIUM_COMPRESSOR_TILE = TILE_ENTITIES.register("neutronium_compressor_tile",
             () -> TileEntityType.Builder.create(NeutroniumCompressorTile::new, BlockRegistry.neutronCompressor.get()).build(null));
     public static final RegistryObject<TileEntityType<CompressorChestTile>> COMPRESS_CHEST_TILE = TILE_ENTITIES.register("compressor_chest_tile",

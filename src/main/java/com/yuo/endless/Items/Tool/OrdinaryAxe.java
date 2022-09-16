@@ -24,7 +24,7 @@ public class OrdinaryAxe extends AxeItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND){
-            if (stack.getItem() == ItemRegistry.crystalAxe.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixAxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumAxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,-0.05d));
