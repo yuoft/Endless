@@ -59,16 +59,16 @@ public class Config {
     public static class ServerConfig{
 
         public final ForgeConfigSpec.BooleanValue isKeepStone; //无尽工具的超级模式是否保留石头和泥土
-        public final ForgeConfigSpec.BooleanValue isBreakBedrock; //无尽镐是否破坏基岩
+        public final ForgeConfigSpec.BooleanValue isBreakBedrock; //无尽镐是否破坏不可破坏方块
         public final ForgeConfigSpec.BooleanValue isMergeMatterCluster; // 是否合并物质团
         public final ForgeConfigSpec.IntValue swordRangeDamage; //无尽剑右键的范围伤害值
         public final ForgeConfigSpec.IntValue swordAttackRange; //无尽剑右键攻击范围
-        public final ForgeConfigSpec.BooleanValue isSwordAttackAnimal; // 无尽剑右键范围攻击是否攻击中立生物
-        public final ForgeConfigSpec.IntValue subArrowDamage; // 无尽弓散射光箭伤害
+        public final ForgeConfigSpec.BooleanValue isSwordAttackAnimal; // 无尽剑的右键范围攻击是否攻击中立生物
+        public final ForgeConfigSpec.IntValue subArrowDamage; // 无尽光箭伤害
         public final ForgeConfigSpec.IntValue noArrowDamage; // 无尽弓,弩空射箭矢伤害
-        public final ForgeConfigSpec.IntValue axeChainCount; // 无尽斧砍树连锁数量
+        public final ForgeConfigSpec.IntValue axeChainCount; // 无尽斧砍树连锁最大数量
         public final ForgeConfigSpec.DoubleValue foodTime; //食物效果时间缩放系数
-        public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐的锤形态潜行左键是否删除方块
+        public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐潜行左键是否删除方块
         public final ForgeConfigSpec.IntValue matterClusterMaxCount; //物质团单个物品存储上限
         public final ForgeConfigSpec.IntValue matterClusterMaxTerm; //物质团存储物品项上限
         public final ForgeConfigSpec.IntValue endestPearlEndDamage; //终望珍珠最终爆炸伤害
@@ -80,7 +80,7 @@ public class Config {
         public final ForgeConfigSpec.BooleanValue isBreakDECrystal; //无尽剑和弓是否破坏龙研的混沌水晶
         public final ForgeConfigSpec.BooleanValue endestPearBreakBedrock; //终望珍珠是否破坏基岩
         public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
-        public final ForgeConfigSpec.BooleanValue isLogoInfo; //登录游戏时是否提升反馈信息
+        public final ForgeConfigSpec.BooleanValue isLogoInfo; //登录游戏时是否提示反馈信息
         public final ForgeConfigSpec.BooleanValue isArrowLightning; //是否开启无尽矢的召雷功能
 
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
@@ -120,30 +120,30 @@ public class Config {
 
         public ServerConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Base Config").push("general");
-            this.isKeepStone = buildBoolean(builder, "Is Keep Stone", true, "Does the super mode of endless tools retain stone and soil");
-            this.isBreakBedrock = buildBoolean(builder, "Is Break Bedrock", true, "Whether the rock is damaged by the pickaxe");
+            this.isKeepStone = buildBoolean(builder, "Is Keep Stone", true, "Whether to allow the super mode of infinity tools keep stone and dirt.");
+            this.isBreakBedrock = buildBoolean(builder, "Is Break Bedrock", true, "Whether to allow the infinity pickaxe to destory unbreakable blocks such as bedrock.");
             this.isMergeMatterCluster = buildBoolean(builder, "Is Merge Matter Cluster", false, "Whether to merge matter cluster");
-            this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 100000, "Range damage value of the right key of endless sword");
-            this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 64, "Endless sword right click attack range");
-            this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Damage", true, "Does the right key range attack of endless sword attack neutral creatures");
-            this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Endless bow scattering light arrow damage");
-            this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "If no arrow,Endless bow(cross) shooting arrow damage");
-            this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Chain number of endless axe cutting trees");
+            this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 100000, "Damage of right click attack of the infinity sword.");
+            this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 64, "Infinity sword right click attack range.");
+            this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Attack Animal", true, "Whether to allow infinity sword right click attack neutral creatures.");
+            this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Damage of the sub arrow.");
+            this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "Damage of the infinity bow or crossbow without projectile.");
+            this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Maximum number of blocks can be destroyed by a chain cutting of the infinity axe.");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
-            this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Hammer form of endless pickaxe left click to delete box");
-            this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 2048, 256, 10240, "Upper limit of storage of a single item in a material group");
-            this.matterClusterMaxTerm = buildInt(builder, "Matter Cluster Max Term", 16, 8, 64, "Upper limit of items stored in the mass");
-            this.endestPearlEndDamage = buildInt(builder, "Endest Pearl End Damage", 1000, 100, 10000, "Endest pearl final explosion damage");
-            this.endestPearlOneDamage = buildInt(builder, "Endest Pearl One Damage", 5, 1, 10, "Endest pearl single attraction damage");
-            this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Suck Range", 20, 10, 32, "Endest pearl gravitational range");
-            this.infinityArmorBearDamage = buildInt(builder, "Infinity Armor Bear Damage", 10, 4, 100, "When endless weapons attack players with a full set of endless equipment, damage value will be caused");
-            this.infinityBearDamage = buildInt(builder, "Infinity Bear Damage", 4, 1, 50, "When endless weapons attack a full set of endless equipment and players with endless weapons, they cause damage");
-            this.infinityFireworkDamage = buildInt(builder, "Infinity Firework Damage", 100, 5, 10000, "Endless crossbow firing fireworks damage");
-            this.isBreakDECrystal = buildBoolean(builder, "Is Break DE Crystal", false,  "Does the endless sword and bow destroy the chaotic crystal of DE");
-            this.endestPearBreakBedrock = buildBoolean(builder, "Endest Pearl Is Break Bedrock", true,  "Endest pearl whether destroys the bedrock");
-            this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether the endless workbench is compatible with the original workbench formula");
-            this.isLogoInfo = buildBoolean(builder, "Is Logo Info", true,  "Whether to improve feedback when logging in to the game");
-            this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false,  "Whether to enable the thunder summoning function of Endless Arrow");
+            this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Whether to allow infinity pickaxe to delete blocks with left click.");
+            this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 2048, 256, 10240, "Maximum quantity of a single item in a matter cluster.");
+            this.matterClusterMaxTerm = buildInt(builder, "Matter Cluster Max Term", 16, 8, 64, "Maximum category of items in a matter cluster.");
+            this.endestPearlEndDamage = buildInt(builder, "Endest Pearl End Damage", 1000, 100, 10000, "Endest pearl explosion damage");
+            this.endestPearlOneDamage = buildInt(builder, "Endest Pearl One Damage", 5, 1, 10, "Endest pearl attraction damage");
+            this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Suck Range", 20, 10, 32, "Endest pearl attraction range");
+            this.infinityArmorBearDamage = buildInt(builder, "Infinity Armor Bear Damage", 10, 4, 100, "Damage of infinity weapons to players wearing a full suit of infinity armor.");
+            this.infinityBearDamage = buildInt(builder, "Infinity Bear Damage", 4, 1, 50, "Damage of infinity weapons to players wearing a full suit of infinity armor and holding infinity weapons.");
+            this.infinityFireworkDamage = buildInt(builder, "Infinity Firework Damage", 100, 5, 10000, "Infinity crossbow fireworks damage.");
+            this.isBreakDECrystal = buildBoolean(builder, "Is Break DE Crystal", false,  "Whether to allow the infinity sword and bow to destroy the guardian crystal in DE(Draconic Evolution).");
+            this.endestPearBreakBedrock = buildBoolean(builder, "Endest Pearl Is Break Bedrock", true,  "Whether to allow endest pearls to destroy unbreakable blocks such as bedrock.");
+            this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether to allow the extreme crafting table to use vanilla crafting table recipes.");
+            this.isLogoInfo = buildBoolean(builder, "Is Logo Info", true,  "Whether to show feedback when player log into the game.");
+            this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false,  "Whether to allow the infinity arrow to channel lightning.");
             builder.pop();
 
             builder.comment("Singularity Recipe Count").push("singularity");

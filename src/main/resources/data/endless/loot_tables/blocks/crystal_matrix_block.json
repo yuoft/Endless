@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "endless:crystal_matrix"
+          "name": "endless:crystal_matrix_block"
         }
       ],
       "conditions": [

@@ -1,5 +1,5 @@
 {
-  "parent": "endless:neutron_pile",
+  "parent": "endless:neutronium_pile",
   "display": { 
     "icon": { 
       "item": "endless:neutronium_ingot"

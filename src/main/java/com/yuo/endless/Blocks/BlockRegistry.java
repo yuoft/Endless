@@ -16,7 +16,7 @@ public class BlockRegistry {
 
     public static RegistryObject<Block> infinityBlock = BLOCKS.register("infinity_block",
             () -> new OrdinaryBlock(Material.IRON, 6, ToolType.PICKAXE, 1000, 1000));
-    public static RegistryObject<Block> crystalMatrix = BLOCKS.register("crystal_matrix",
+    public static RegistryObject<Block> crystalMatrixBlock = BLOCKS.register("crystal_matrix_block",
             () -> new OrdinaryBlock(Material.IRON, 4, ToolType.PICKAXE, 10, 50));
     public static RegistryObject<Block> neutroniumBlock = BLOCKS.register("neutronium_block",
             () -> new OrdinaryBlock(Material.IRON, 5, ToolType.PICKAXE, 15, 100));
@@ -30,9 +30,7 @@ public class BlockRegistry {
     public static RegistryObject<Block> denserNeutroniumCollector = BLOCKS.register("denser_neutronium_collector", DoubleNeutronCollector::new);
     public static RegistryObject<Block> densestNeutroniumCollector = BLOCKS.register("densest_neutronium_collector", TripleNeutronCollector::new);
     public static RegistryObject<Block> neutronCompressor = BLOCKS.register("neutron_compressor", NeutroniumCompressor::new);
-    public static RegistryObject<Block> compressorChest = BLOCKS.register("compressor_chest", CompressorChest::new);
+    public static RegistryObject<Block> compressedChest = BLOCKS.register("compressed_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_chest", InfinityBox::new);
 
-    public static void registerBotania(){
-    }
 }

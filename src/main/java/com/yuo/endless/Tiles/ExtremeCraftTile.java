@@ -155,6 +155,6 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
 
     @Override
     public ITextComponent getName() {
-        return new TranslationTextComponent("gui.endless.extreme_craft");
+        return new TranslationTextComponent("gui.endless.extreme_crafting_table");
     }
 }

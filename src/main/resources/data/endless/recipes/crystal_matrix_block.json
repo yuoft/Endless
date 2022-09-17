@@ -1,19 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "x y",
-    "x x",
-    "   "
+    "xxx",
+    "xxx",
+    "xxx"
   ],
   "key": {
     "x": {
       "item": "endless:crystal_matrix_ingot"
-    },
-    "y": {
-      "item": "minecraft:diamond"
     }
   },
   "result": {
-    "item": "endless:crystal_matrix_feet"
+    "item": "endless:crystal_matrix_block"
   }
 }

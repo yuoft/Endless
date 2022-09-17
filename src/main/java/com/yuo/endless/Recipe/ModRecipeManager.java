@@ -244,7 +244,7 @@ public class ModRecipeManager {
                     "    N    ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opPickaxe.get()),
-                    'C', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'C', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinitySword.get()),
                     "       II",
@@ -273,7 +273,7 @@ public class ModRecipeManager {
                     "N        ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.spaceShovel.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityAxe.get()),
@@ -288,7 +288,7 @@ public class ModRecipeManager {
                     "    N    ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.spaceAxe.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityHoe.get()),
@@ -303,7 +303,7 @@ public class ModRecipeManager {
                     "     N   ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.spaceHoe.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityBow.get()),
@@ -318,7 +318,7 @@ public class ModRecipeManager {
                     "     II  ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.amosiBow.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'W', ItemTags.WOOL);
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityChest.get()),
@@ -333,7 +333,7 @@ public class ModRecipeManager {
                     "  NNNNN  ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opChest.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityHead.get()),
@@ -361,7 +361,7 @@ public class ModRecipeManager {
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opLegs.get()),
                     'X', new ItemStack(ItemRegistry.infinityCatalyst.get()),
-                    'C', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'C', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityFeet.get()),
@@ -403,7 +403,7 @@ public class ModRecipeManager {
                     "    N    ",
                     "    N    ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
-                    'C', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'C', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinitySword.get()),
                     "       II",
@@ -430,7 +430,7 @@ public class ModRecipeManager {
                     " N       ",
                     "N        ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityAxe.get()),
@@ -444,7 +444,7 @@ public class ModRecipeManager {
                     "    N    ",
                     "    N    ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityHoe.get()),
@@ -458,7 +458,7 @@ public class ModRecipeManager {
                     "     N   ",
                     "     N   ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityBow.get()),
@@ -472,7 +472,7 @@ public class ModRecipeManager {
                     "    I W  ",
                     "     II  ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'W', ItemTags.WOOL);
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityChest.get()),
@@ -486,7 +486,7 @@ public class ModRecipeManager {
                     " NIIIIIN ",
                     "  NNNNN  ",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
-                    'X', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'X', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityHead.get()),
@@ -512,7 +512,7 @@ public class ModRecipeManager {
                     "NNN   NNN",
                     'I', new ItemStack(ItemRegistry.infinityIngot.get()),
                     'X', new ItemStack(ItemRegistry.infinityCatalyst.get()),
-                    'C', new ItemStack(ItemRegistry.crystalMatrix.get()),
+                    'C', new ItemStack(ItemRegistry.crystalMatrixBlock.get()),
                     'N', new ItemStack(ItemRegistry.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.infinityFeet.get()),
@@ -572,7 +572,7 @@ public class ModRecipeManager {
                 'Y', new ItemStack(ItemRegistry.infinityIngot.get()),
                 'Z', new ItemStack(ItemRegistry.neutroniumIngot.get()),
                 'B', new ItemStack(ItemRegistry.neutroniumGear.get()),
-                'A', new ItemStack(ItemRegistry.crystalMatrix.get()));
+                'A', new ItemStack(ItemRegistry.crystalMatrixBlock.get()));
 
         ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ItemRegistry.endestPearl.get()),
                 "   EEE   ",

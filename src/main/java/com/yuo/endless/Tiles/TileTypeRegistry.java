@@ -25,7 +25,7 @@ public class TileTypeRegistry {
     public static final RegistryObject<TileEntityType<NeutroniumCompressorTile>> NEUTRONIUM_COMPRESSOR_TILE = TILE_ENTITIES.register("neutronium_compressor_tile",
             () -> TileEntityType.Builder.create(NeutroniumCompressorTile::new, BlockRegistry.neutronCompressor.get()).build(null));
     public static final RegistryObject<TileEntityType<CompressorChestTile>> COMPRESS_CHEST_TILE = TILE_ENTITIES.register("compressor_chest_tile",
-            () -> TileEntityType.Builder.create(CompressorChestTile::new, BlockRegistry.compressorChest.get()).build(null));
+            () -> TileEntityType.Builder.create(CompressorChestTile::new, BlockRegistry.compressedChest.get()).build(null));
     public static final RegistryObject<TileEntityType<InfinityBoxTile>> INFINITY_CHEST_TILE = TILE_ENTITIES.register("infinity_chest_tile",
             () -> TileEntityType.Builder.create(InfinityBoxTile::new, BlockRegistry.infinityBox.get()).build(null));
 

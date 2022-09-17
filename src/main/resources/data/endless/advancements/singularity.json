@@ -1,5 +1,5 @@
 {
-  "parent": "endless:neutronium_compressor",
+  "parent": "endless:neutron_compressor",
   "display": {
     "icon": {
       "item": "endless:singularity_diamond"

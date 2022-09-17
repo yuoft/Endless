@@ -367,7 +367,7 @@ public class EventHandler {
         }
     }
 
-    //无尽镐锤形态 潜行左键删除方块
+    //无尽镐 潜行左键删除方块
     @SubscribeEvent
     public static void removeBlock(PlayerInteractEvent.LeftClickBlock event){
         PlayerEntity player = event.getPlayer();

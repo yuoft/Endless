@@ -3,7 +3,7 @@
   "pattern": [
     "xyx",
     "x x",
-    "   "
+    "x x"
   ],
   "key": {
     "x": {
@@ -14,6 +14,6 @@
     }
   },
   "result": {
-    "item": "endless:neutronium_head"
+    "item": "endless:neutronium_leggings"
   }
 }

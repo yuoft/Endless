@@ -26,7 +26,7 @@ public class OrdinaryArmor extends ArmorItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.HEAD){
-            if (stack.getItem() == ItemRegistry.crystalMatrixHelmet.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixHead.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(0, 1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumHead.get()){
@@ -36,7 +36,7 @@ public class OrdinaryArmor extends ArmorItem {
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.CHEST){
-            if (stack.getItem() == ItemRegistry.crystalMatrixChestplate.get()){
+            if (stack.getItem() == ItemRegistry.crystalMatrixChest.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(1,4d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == ItemRegistry.neutroniumChest.get()){

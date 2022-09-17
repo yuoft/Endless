@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "x y",
+    "xyx",
     "x x",
     "   "
   ],
@@ -14,6 +14,6 @@
     }
   },
   "result": {
-    "item": "endless:neutronium_feet"
+    "item": "endless:neutronium_helmet"
   }
 }

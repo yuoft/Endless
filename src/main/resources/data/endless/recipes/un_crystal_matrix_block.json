@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-		"item": "endless:crystal_matrix"
+		"item": "endless:crystal_matrix_block"
 	}
   ],
   "result": {
