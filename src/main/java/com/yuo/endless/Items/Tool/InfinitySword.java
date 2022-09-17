@@ -137,7 +137,8 @@ public class InfinitySword extends SwordItem{
                 return true;
             }
         }
-        target.setHealth(0);
+        target.setHealth(-1);
+//        target.deathTime = 20;
         return true;
     }
 
@@ -199,7 +200,7 @@ public class InfinitySword extends SwordItem{
             if (entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
                 draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player),Float.POSITIVE_INFINITY);
-                draconicGuardian.setHealth(0);
+                draconicGuardian.setHealth(-1);
                 draconicGuardian.onDeath(new InfinityDamageSource(player));
             }else if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){
                 GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;

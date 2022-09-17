@@ -148,8 +148,8 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
                 living.addPotionEffect(effectinstance1);
             }
         }
-//        if (isLighting)
-//            living.addPotionEffect(new EffectInstance(Effects.GLOWING, 10, 0)); //10秒发光
+        if (isLighting)
+            living.addPotionEffect(new EffectInstance(Effects.GLOWING, 10, 0)); //10秒发光
     }
 
     @Override

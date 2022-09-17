@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -65,6 +66,13 @@ public class InfinityArrow extends Item  {
             lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(pos));
             lightningboltentity.setCaster(target instanceof ServerPlayerEntity ? (ServerPlayerEntity)target : null);
             world.addEntity(lightningboltentity);
+        }
+        if (!world.isRemote){
+            if (target instanceof WitherEntity){
+                WitherEntity wither = (WitherEntity) target;
+                wither.setInvulTime(0);
+                wither.attackEntityFrom(new InfinityDamageSource(attacker), 49);
+            }
         }
         return true;
     }

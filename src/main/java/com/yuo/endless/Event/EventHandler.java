@@ -6,6 +6,7 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -373,9 +374,10 @@ public class EventHandler {
         PlayerEntity player = event.getPlayer();
         ItemStack stack = event.getItemStack();
         if (stack.getItem() instanceof InfinityPickaxe && !stack.getOrCreateTag().getBoolean("hammer")){
-            if (player.isSneaking() && Config.SERVER.isRemoveBlock.get()){
-                BlockPos pos = event.getPos();
-                World world = event.getWorld();
+            BlockPos pos = event.getPos();
+            World world = event.getWorld();
+            BlockState state = world.getBlockState(pos);
+            if (state.getBlockHardness(world, pos) < 0 && player.isSneaking() && Config.SERVER.isRemoveBlock.get()){
                 world.destroyBlock(pos, true);
             }
         }

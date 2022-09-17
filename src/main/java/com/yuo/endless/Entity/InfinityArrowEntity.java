@@ -17,6 +17,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -136,7 +137,6 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             i = (int)Math.min(j + (long)i, 2147483647L);
         }
 
-        DamageSource damagesource = new InfinityDamageSource(shooter);
         if (shooter != null)
             shooter.setLastAttackedEntity(entity); //设置最后攻击者
 
@@ -149,16 +149,11 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             }
         }
 
-        boolean flag = entity.getType() == EntityType.ENDERMAN;
-        int k = entity.getFireTimer();
-        if (this.isBurning() && !flag) {
+        if (this.isBurning()) {
             entity.setFire(5);
         }
 
-        if (entity.attackEntityFrom(damagesource, (float)i)) {
-            if (flag) {
-                return;
-            }
+//        if (entity.attackEntityFrom(damagesource, (float)i)) {
 
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)entity;
@@ -166,7 +161,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
                     livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
                 }
 
-                if (this.knockbackStrength > 0) {
+                if (this.knockbackStrength > 0) { //击退
                     Vector3d vector3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockbackStrength * 0.6D);
                     if (vector3d.lengthSquared() > 0.0D) {
                         livingentity.addVelocity(vector3d.x, 0.1D, vector3d.z);
@@ -175,7 +170,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
 
                 if (!this.world.isRemote) {
                     EnchantmentHelper.applyThornEnchantments(livingentity, shooter);
-                    EnchantmentHelper.applyArthropodEnchantments((LivingEntity)shooter, livingentity);
+                    EnchantmentHelper.applyArthropodEnchantments(shooter, livingentity);
                 }
 
                 this.arrowHit(livingentity);
@@ -201,29 +196,34 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             if (this.getPierceLevel() <= 0) {
                 this.remove();
             }
-        } else {
-            entity.forceFireTicks(k);
-            this.setMotion(this.getMotion().scale(-0.1D));
-            this.rotationYaw += 180.0F;
-            this.prevRotationYaw += 180.0F;
-            if (!this.world.isRemote && this.getMotion().lengthSquared() < 1.0E-7D) {
-                if (this.pickupStatus == AbstractArrowEntity.PickupStatus.ALLOWED) {
-                    this.entityDropItem(this.getArrowStack(), 0.1F);
-                }
-
-                this.remove();
-            }
-        }
+//        } else { //反弹箭矢
+//            entity.forceFireTicks(k);
+//            this.setMotion(this.getMotion().scale(-0.1D));
+//            this.rotationYaw += 180.0F;
+//            this.prevRotationYaw += 180.0F;
+//            if (!this.world.isRemote && this.getMotion().lengthSquared() < 1.0E-7D) {
+//                if (this.pickupStatus == AbstractArrowEntity.PickupStatus.ALLOWED) {
+//                    this.entityDropItem(this.getArrowStack(), 0.1F);
+//                }
+//
+//                this.remove();
+//            }
+//        }
 
     }
 
     @Override
     protected void arrowHit(LivingEntity living) {
         if (living.world.isRemote) return;
+        if (living instanceof WitherEntity){
+            WitherEntity wither = (WitherEntity) living;
+            wither.setInvulTime(0);
+            wither.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+        }
         if (Endless.isDraconicEvolution && living instanceof DraconicGuardianEntity){
             DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) living;
             draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter),Float.POSITIVE_INFINITY);
-            draconicGuardian.setHealth(0);
+            draconicGuardian.setHealth(-1);
         }else {
             living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
             if (living instanceof PlayerEntity){
@@ -233,7 +233,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
                     return;
                 }
             }
-            living.setHealth(0);
+            living.setHealth(-1);
         }
     }
 
