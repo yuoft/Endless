@@ -64,9 +64,11 @@ public class InfinityBow extends BowItem {
                 AbstractArrowEntity arrow;
                 if (!itemStack.isEmpty()) {
                     if (itemStack.getItem() == ItemRegistry.infinityArrow.get()) { //无尽箭矢
-                        arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn);
+                        arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, true);
+                        arrow.setPierceLevel((byte) 5);
                     } else {
-                        arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn, stack); //普通箭矢
+                        arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn, itemStack); //普通箭矢
+                        arrow.setPierceLevel((byte) 3);
                     }
                 } else { //无箭矢
                     ItemStack arrowStack = new ItemStack(Items.ARROW);
@@ -82,7 +84,7 @@ public class InfinityBow extends BowItem {
                 worldIn.addEntity(arrow);
             }
             worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (worldIn.rand.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
-            if (!player.isCreative() && itemStack.getItem() == Items.ARROW){
+            if (!player.isCreative() && itemStack.getItem() instanceof ArrowItem){
                 itemStack.shrink(1);
             }
             player.addStat(Stats.ITEM_USED.get(this));

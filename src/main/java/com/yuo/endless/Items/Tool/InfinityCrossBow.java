@@ -250,14 +250,15 @@ public class InfinityCrossBow extends CrossbowItem {
             arrow.setDamage(Config.SERVER.noArrowDamage.get());
         }else {
             if (ammo.getItem() == ItemRegistry.infinityArrow.get()){
-                arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, worldIn);
-            }else arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, worldIn, ammo);
+                arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, worldIn, false);
+                arrow.setPierceLevel((byte) 5);
+            }else {
+                arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, worldIn, ammo);
+                arrow.setPierceLevel((byte) 3);
+            }
         }
 
-        if (shooter instanceof PlayerEntity) {
-            arrow.setIsCritical(true); //暴击粒子
-        }
-
+        arrow.setIsCritical(true); //暴击粒子
         arrow.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
         arrow.setShotFromCrossbow(true);
         arrow.setPierceLevel((byte)5); //5级穿透效果

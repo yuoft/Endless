@@ -1,6 +1,9 @@
 package com.yuo.endless.Items.Tool;
 
+import com.yuo.endless.Items.ItemRegistry;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -25,12 +28,16 @@ public class InfinityDamageSource extends EntityDamageSource {
         ItemStack itemstack = ItemStack.EMPTY;
         if (damageSourceEntity instanceof LivingEntity){
             LivingEntity living = (LivingEntity) damageSourceEntity;
-            itemstack = living.getHeldItem(Hand.MAIN_HAND).isEmpty() ? living.getHeldItem(Hand.OFF_HAND) : living.getHeldItem(Hand.MAIN_HAND);
+            itemstack = getInfinityWeapon(living);
         }
         String s = "death.attack.infinity";
-        int rand = entityLivingBaseIn.getEntityWorld().rand.nextInt(4) + 1;
-        return !itemstack.isEmpty() && itemstack.hasDisplayName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), damageSourceEntity != null ? damageSourceEntity.getDisplayName() : "null",itemstack.getDisplayName())
-                : new TranslationTextComponent(s + "." + rand, entityLivingBaseIn.getDisplayName());
+        String s0 = "death.attack.infinity_weapon";
+        int rand = entityLivingBaseIn.getEntityWorld().rand.nextInt(5);
+        if (!itemstack.isEmpty() && damageSourceEntity != null)
+            return new TranslationTextComponent(s0 + "." + rand,
+                    entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
+
+        return new TranslationTextComponent(s + "." + rand, entityLivingBaseIn.getDisplayName());
     }
 
     //是否根据难度缩放伤害值
@@ -47,5 +54,26 @@ public class InfinityDamageSource extends EntityDamageSource {
     public static boolean isInfinity(DamageSource source){
         if (source instanceof InfinityDamageSource) return true;
         return source.damageType.equals(type);
+    }
+
+    /**
+     * 获取击杀者使用的无尽武器
+     * @param living 击杀者
+     * @return 无尽武器/空
+     */
+    public ItemStack getInfinityWeapon(LivingEntity living){
+        ItemStack mainItem = living.getHeldItem(Hand.MAIN_HAND);
+        ItemStack offItem = living.getHeldItem(Hand.OFF_HAND);
+        return isInfinityWeapon(mainItem) ? mainItem : isInfinityWeapon(offItem) ? offItem : ItemStack.EMPTY;
+    }
+
+    /**
+     * 判断物品是否是无尽武器
+     * @param stack 要判断的物品
+     * @return 是 true
+     */
+    public boolean isInfinityWeapon(ItemStack stack){
+        Item item = stack.getItem();
+        return item == ItemRegistry.infinitySword.get() || item == ItemRegistry.infinityBow.get() || item == ItemRegistry.infinityCrossBow.get();
     }
 }

@@ -15,10 +15,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
+import net.minecraft.potion.*;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,6 +32,7 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
     private Potion potion = Potions.EMPTY;
     private final Set<EffectInstance> customPotionEffects = Sets.newHashSet();
     private boolean fixedColor;
+    private boolean isLighting; //是否是光灵箭
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
         this.setDamage(Config.SERVER.subArrowDamage.get());
@@ -48,6 +46,7 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrowEntity> type, LivingEntity shooter, World worldIn, ItemStack stack) {
         super(type, shooter, worldIn);
         this.setDamage(Config.SERVER.subArrowDamage.get());
+        this.isLighting = stack.getItem() == Items.SPECTRAL_ARROW;
         this.setPotionEffect(stack); //添加药水效果
     }
 
@@ -149,6 +148,8 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
                 living.addPotionEffect(effectinstance1);
             }
         }
+//        if (isLighting)
+//            living.addPotionEffect(new EffectInstance(Effects.GLOWING, 10, 0)); //10秒发光
     }
 
     @Override
