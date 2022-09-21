@@ -265,7 +265,7 @@ public class ItemHander
             }
             BlockState stepState = world.getBlockState(stepPos);
             Block stepBlock = stepState.getBlock();
-            boolean log = stepState.getMaterial() == Material.WOOD;
+            boolean log = stepState.getMaterial() == Material.WOOD || stepState.getMaterial() == Material.NETHER_WOOD;
             boolean leaf = stepBlock instanceof LeavesBlock;
             if (log || leaf) {
                 int step = steps - 1; //剩余数量-1

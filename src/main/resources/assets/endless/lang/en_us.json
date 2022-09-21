@@ -180,16 +180,18 @@
   "gui.endless.infinity_chest":"Infinity Chest",
 
   "death.attack.infinity":"%1$s被彻底湮灭",
-  "death.attack.infinity.0":"%1$s被%2$s彻底粉碎",
-  "death.attack.infinity_weapon.0":"%1$s被%2$s使用%3$s彻底粉碎",
-  "death.attack.infinity.1":"%1$s被%2$s切成了条",
-  "death.attack.infinity_weapon.1":"%1$s被%2$s使用%3$s切成了条",
-  "death.attack.infinity.2":"%1$s被%2$s抹杀了存在",
-  "death.attack.infinity_weapon.2":"%1$s被%2$s使用%3$s抹杀了存在",
-  "death.attack.infinity.3":"%1$s被%2$s赶尽杀绝",
-  "death.attack.infinity_weapon.3":"%1$s被%2$s使用%3$s赶尽杀绝",
-  "death.attack.infinity.4":"%1$s被%2$s所湮灭",
-  "death.attack.infinity_weapon.4":"%1$s被%2$s使用%3$s所湮灭",
+  "death.attack.infinity.0":"%1$s was sliced to ribbons by %2$s",
+  "death.attack.infinity_weapon.0":"%1$s was sliced to ribbons by %2$s using %3$s",
+  "death.attack.infinity.1":"%1$s was obliterated by %2$s",
+  "death.attack.infinity_weapon.1":"%1$s was obliterated by %2$s using %3$s",
+  "death.attack.infinity.2":"%1$s was obliterated by %2$s using %3$s",
+  "death.attack.infinity_weapon.2":"%1$s was excised from existence by %2$s using %3$s",
+  "death.attack.infinity.3":"%1$s was overkilled by %2$s",
+  "death.attack.infinity_weapon.3":"%1$s was overkilled by %2$s using %3$s",
+  "death.attack.infinity.4":"%1$s was annihilated by %2$s",
+  "death.attack.infinity_weapon.4":"%1$s was annihilated by %2$s using %3$s",
+  "death.attack.infinity.5":"%1$s被%2$s击穿了",
+  "death.attack.infinity_weapon.5":"%1$s被%2$s使用%3$s击穿了",
 
   "itemGroup.Endless":"Avaritia Endless"
 }

@@ -426,12 +426,17 @@ public class InfinityCrossBow extends CrossbowItem {
     }
 
     @Override
-    public int getItemEnchantability() {
-        return 0;
+    public boolean isDamageable() {
+        return false;
     }
 
     @Override
-    public boolean isDamageable() {
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return false;
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
         return false;
     }
 

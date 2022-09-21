@@ -144,12 +144,12 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
         }
 
         if (!this.customPotionEffects.isEmpty()) {
-            for(EffectInstance effectinstance1 : this.customPotionEffects) {
-                living.addPotionEffect(effectinstance1);
+            for(EffectInstance effectInstance : this.customPotionEffects) {
+                living.addPotionEffect(effectInstance);
             }
         }
         if (isLighting)
-            living.addPotionEffect(new EffectInstance(Effects.GLOWING, 10, 0)); //10秒发光
+            living.addPotionEffect(new EffectInstance(Effects.GLOWING, 20 * 10, 0)); //10秒发光
     }
 
     @Override

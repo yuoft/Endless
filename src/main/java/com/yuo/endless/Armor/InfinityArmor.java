@@ -41,13 +41,18 @@ public class InfinityArmor extends ArmorItem {
     public static AttributeModifier modifierFly = new AttributeModifier(UUID.fromString("bf93174c-8a89-42ed-a702-e6fd99c28be2"), Endless.MOD_ID + ":flying_speed", 0.15, AttributeModifier.Operation.ADDITION);
 
     public InfinityArmor(EquipmentSlotType slot) {
-        super(MyArmorMaterial.INFINITY, slot, new Properties().maxStackSize(1).group(ModGroup.endless));
+        super(MyArmorMaterial.INFINITY, slot, new Properties().maxStackSize(1).group(ModGroup.endless).isImmuneToFire());
     }
 
     //不会触发末影人仇恨
     @Override
     public boolean isEnderMask(ItemStack stack, PlayerEntity player, EndermanEntity endermanEntity) {
         return true;
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return false;
     }
 
     //猪灵中立

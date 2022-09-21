@@ -130,7 +130,16 @@ public class InfinitySword extends SwordItem{
         } else if (target instanceof ArmorStandEntity){
             target.attackEntityFrom(DamageSource.GENERIC, 10);
             return true;
-        }else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+        }else {
+            if (target instanceof PlayerEntity){
+              PlayerEntity player = (PlayerEntity) target;
+              if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
+                  if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
+                    target.attackEntityFrom(new InfinityDamageSource(attacker), Config.SERVER.infinityBearDamage.get());
+                  else target.attackEntityFrom(new InfinityDamageSource(attacker), Config.SERVER.infinityArmorBearDamage.get());
+              } else target.attackEntityFrom(new InfinityDamageSource(attacker),  Float.POSITIVE_INFINITY);
+            } else target.attackEntityFrom(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+        }
         if (target instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) target;
             if (EventHandler.isInfinite(player)){ //玩家穿戴全套无尽 则不执行死亡

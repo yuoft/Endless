@@ -28,8 +28,8 @@ public class ClientHandler {
      * 生物渲染事件，可以为原本生物添加layer或取消渲染
      * @param event 生物渲染
      */
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
+//    @OnlyIn(Dist.CLIENT)
+//    @SubscribeEvent
     public static void addLayer(RenderLivingEvent.Pre<PlayerEntity, PlayerModel<PlayerEntity>> event){
         LivingEntity entity = event.getEntity();
         if (entity instanceof PlayerEntity){

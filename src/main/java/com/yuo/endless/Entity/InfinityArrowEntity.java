@@ -225,7 +225,15 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter),Float.POSITIVE_INFINITY);
             draconicGuardian.setHealth(-1);
         }else {
-            living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+            if (living instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) living;
+                if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
+                    if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
+                        living.attackEntityFrom(new InfinityDamageSource(this.shooter), Config.SERVER.infinityBearDamage.get());
+                    else living.attackEntityFrom(new InfinityDamageSource(this.shooter), Config.SERVER.infinityArmorBearDamage.get());
+                } else living.attackEntityFrom(new InfinityDamageSource(this.shooter),  Float.POSITIVE_INFINITY);
+            } else living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+//            living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
             if (living instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) living;
                 if (EventHandler.isInfinite(player)){

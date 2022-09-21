@@ -78,7 +78,6 @@ public class Config {
         public final ForgeConfigSpec.IntValue infinityBearDamage; //无尽武器攻击全套无尽装备和持有无尽武器玩家时，造成伤害值
         public final ForgeConfigSpec.IntValue infinityFireworkDamage; //无尽弩发射烟花伤害
         public final ForgeConfigSpec.BooleanValue isBreakDECrystal; //无尽剑和弓是否破坏龙研的混沌水晶
-        public final ForgeConfigSpec.BooleanValue endestPearBreakBedrock; //终望珍珠是否破坏基岩
         public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
         public final ForgeConfigSpec.BooleanValue isLogoInfo; //登录游戏时是否提示反馈信息
         public final ForgeConfigSpec.BooleanValue isArrowLightning; //是否开启无尽矢的召雷功能
@@ -140,7 +139,6 @@ public class Config {
             this.infinityBearDamage = buildInt(builder, "Infinity Bear Damage", 4, 1, 50, "Damage of infinity weapons to players wearing a full suit of infinity armor and holding infinity weapons.");
             this.infinityFireworkDamage = buildInt(builder, "Infinity Firework Damage", 100, 5, 10000, "Infinity crossbow fireworks damage.");
             this.isBreakDECrystal = buildBoolean(builder, "Is Break DE Crystal", false,  "Whether to allow the infinity sword and bow to destroy the guardian crystal in DE(Draconic Evolution).");
-            this.endestPearBreakBedrock = buildBoolean(builder, "Endest Pearl Is Break Bedrock", true,  "Whether to allow endest pearls to destroy unbreakable blocks such as bedrock.");
             this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether to allow the extreme crafting table to use vanilla crafting table recipes.");
             this.isLogoInfo = buildBoolean(builder, "Is Logo Info", true,  "Whether to show feedback when player log into the game.");
             this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false,  "Whether to allow the infinity arrow to channel lightning.");

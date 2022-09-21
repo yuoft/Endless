@@ -119,6 +119,11 @@ public class InfinityShovel extends ShovelItem {
     }
 
     @Override
+    public boolean hasEffect(ItemStack stack) {
+        return false;
+    }
+
+    @Override
     public boolean isDamageable() {
         return false;
     }

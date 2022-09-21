@@ -218,12 +218,12 @@ public class GapingVoidEntity extends Entity {
                 double dist = getDist(pos, position);
                 if (dist <= blockRange && !world.isAirBlock(pos)) {
                     BlockState state = world.getBlockState(pos);
-                    if (state.matchesBlock(Blocks.BEDROCK) && !Config.SERVER.endestPearBreakBedrock.get()) continue;
+//                    if (state.matchesBlock(Blocks.BEDROCK) && !Config.SERVER.endestPearBreakBedrock.get()) continue;
                     BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fakePlayer);
                     MinecraftForge.EVENT_BUS.post(event);
                     if (!event.isCanceled()) {
                         float hardness = state.getBlockHardness(world, pos);
-                        if (hardness <= 10.0) { //破坏硬度低于10点的方块
+                        if (hardness <= 50.0 && hardness > 0) { //破坏硬度低于10点的方块
                             world.destroyBlock(pos, false,useEntity );
                         }
                     }

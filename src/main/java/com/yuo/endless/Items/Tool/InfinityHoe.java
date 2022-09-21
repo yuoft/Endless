@@ -178,6 +178,11 @@ public class InfinityHoe extends HoeItem {
         return false;
     }
 
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return false;
+    }
+
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {

@@ -59,6 +59,11 @@ public class InfinityAxe extends AxeItem {
     }
 
     @Override
+    public boolean hasEffect(ItemStack stack) {
+        return false;
+    }
+
+    @Override
     public boolean isDamageable() {
         return false;
     }

@@ -12,6 +12,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.openzen.zenscript.codemodel.expression.ThisExpression;
 
+import java.util.Random;
+
 public class InfinityDamageSource extends EntityDamageSource {
 
     private static final String type = "infinity";
@@ -32,12 +34,23 @@ public class InfinityDamageSource extends EntityDamageSource {
         }
         String s = "death.attack.infinity";
         String s0 = "death.attack.infinity_weapon";
-        int rand = entityLivingBaseIn.getEntityWorld().rand.nextInt(5);
-        if (!itemstack.isEmpty() && damageSourceEntity != null)
-            return new TranslationTextComponent(s0 + "." + rand,
-                    entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
+        Random rand = entityLivingBaseIn.getEntityWorld().rand;
+        if (damageSourceEntity != null){
+            if (!itemstack.isEmpty()){//有击杀者和武器
+                if (itemstack.getItem() instanceof InfinitySword){ //剑0-4
+                    return new TranslationTextComponent(s0 + "." + rand.nextInt(5),
+                            entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
+                } //弓弩1-5
+                else {
+                    int i = rand.nextInt(5) + 1;
+                    return new TranslationTextComponent(s0 + "." + i,
+                            entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
+                }
+            }
+            else return new TranslationTextComponent(s + "." + rand, entityLivingBaseIn.getDisplayName());
+        }
+        else return new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName());
 
-        return new TranslationTextComponent(s + "." + rand, entityLivingBaseIn.getDisplayName());
     }
 
     //是否根据难度缩放伤害值

@@ -2,7 +2,7 @@
   "parent": "endless:infinity_ingot",
   "display": { 
     "icon": { 
-      "item": "endless:infinity_chest"
+      "item": "endless:infinity_chestplate"
     },
     "title": {
 		"translate": "advancements.endless.infinity_armor.title"

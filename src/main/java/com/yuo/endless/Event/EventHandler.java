@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,22 +73,19 @@ public class EventHandler {
         Boolean hasLeg = living.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == ItemRegistry.infinityLegs.get();
         Boolean hasHead = living.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
         Boolean hasFeet = living.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
+        float amount = event.getAmount();
         if (living instanceof PlayerEntity){ //怪物无法触发全部伤害减免
             PlayerEntity player = (PlayerEntity) living;
-            if (isInfinite(player)){
-                if (InfinityDamageSource.isInfinity(event.getSource())){ //是无尽伤害 减免至10点
-                    if (isInfinityItem(player)) { //玩家在使用无尽剑或弓时 减免至4点
-                        event.setAmount(Config.SERVER.infinityBearDamage.get());
-                    } else event.setAmount(Config.SERVER.infinityArmorBearDamage.get());
-                } else {
-                    event.setAmount(0);
+            if (!InfinityDamageSource.isInfinity(event.getSource())){ //非无尽伤害才进行减免
+                if (isInfinite(player)){
+                    event.setAmount(0.0f);
                     event.setCanceled(true);
+                }else if (hasChest || hasFeet || hasHead || hasLeg){
+                    event.setAmount(amount * 0.001f);
                 }
-            }else if (hasChest || hasFeet || hasHead || hasLeg){
-                event.setAmount(event.getAmount() * 0.001f);
             }
         }else if (hasChest || hasFeet || hasHead || hasLeg){ //怪物也可触发减伤
-            event.setAmount(event.getAmount() * 0.001f); //减伤99.9%
+            event.setAmount(amount * 0.001f); //减伤99.9%
         }
     }
     //无尽胸甲 飞行 护腿 行走速度增加
@@ -284,7 +282,7 @@ public class EventHandler {
      * @param player 玩家
      * @return 是
      */
-    static boolean isInfinityItem(PlayerEntity player){
+    public static boolean isInfinityItem(PlayerEntity player){
         ItemStack stack = player.getHeldItemMainhand().isEmpty() ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
         return !stack.isEmpty() && (stack.getItem() == ItemRegistry.infinitySword.get() || stack.getItem() == ItemRegistry.infinityBow.get()
                 || stack.getItem() == ItemRegistry.infinityCrossBow.get());
@@ -292,12 +290,12 @@ public class EventHandler {
 
     //玩家不会被无尽伤害外攻击
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onAttacked(LivingAttackEvent event) {
-        if (!(event.getEntityLiving() instanceof PlayerEntity)) {
+    public static void onAttacked(LivingAttackEvent event) { //实体受到攻击事件
+        if (!(event.getEntityLiving() instanceof PlayerEntity)) { //受伤实体不是玩家
             return;
         }
         if (event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof PlayerEntity) {
-            return;
+            return; //造成伤害的实体是玩家
         }
         PlayerEntity player = (PlayerEntity) event.getEntityLiving();
         if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
@@ -378,6 +376,11 @@ public class EventHandler {
             World world = event.getWorld();
             BlockState state = world.getBlockState(pos);
             if (state.getBlockHardness(world, pos) < 0 && player.isSneaking() && Config.SERVER.isRemoveBlock.get()){
+                Item item = Item.getItemFromBlock(state.getBlock());
+                if (item != Items.AIR){
+                    world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ()
+                    , new ItemStack(item)));
+                }
                 world.destroyBlock(pos, true);
             }
         }
