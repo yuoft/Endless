@@ -51,7 +51,7 @@ public class InfinityPickaxe extends PickaxeItem {
             return 6.0F;
         }
         if (state.getHarvestTool() == ToolType.PICKAXE){
-            return this.getTier().getEfficiency(); //对镐类挖掘方块有极高速度加成
+            return this.getTier().getEfficiency() * 1000f; //对镐类挖掘方块有极高速度加成
         }
         return Math.max(super.getDestroySpeed(stack, state), 9.0f);
     }
@@ -99,11 +99,6 @@ public class InfinityPickaxe extends PickaxeItem {
     //无法破坏
     @Override
     public boolean isDamageable() {
-        return false;
-    }
-
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
         return false;
     }
 

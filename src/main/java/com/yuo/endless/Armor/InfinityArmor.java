@@ -128,22 +128,22 @@ public class InfinityArmor extends ArmorItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (slot == EquipmentSlotType.HEAD) {
-            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_head"));
+            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_helmet"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_head1"));
+                tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_helmet1"));
         }
         if (slot == EquipmentSlotType.CHEST) {
-            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_chest"));
+            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_chestplate"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
                 tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% FlySpeed")));
         }
         if (slot == EquipmentSlotType.LEGS) {
-            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_legs"));
+            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_leggings"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
                 tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% WalkSpeed")));
         }
         if (slot == EquipmentSlotType.FEET) {
-            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_feet"));
+            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_boots"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
                 tooltip.add(new StringTextComponent(ColorText.makeSANIC("+400% JumpHeight")));
 //				tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + TextFormatting.ITALIC + "400" +

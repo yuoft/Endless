@@ -99,12 +99,12 @@
     
     "sound.endless.gaping_void":"黑洞吸入",
     
-    "endless.text.itemInfo.infinity_head":"§6饱腹，氧气",
-    "endless.text.itemInfo.infinity_head1":"§6夜视",
+    "endless.text.itemInfo.infinity_helmet":"§6饱腹，氧气",
+    "endless.text.itemInfo.infinity_helmet1":"§6夜视",
     "endless.text.itemInfo.infinity": "INFINITY ",
-    "endless.text.itemInfo.infinity_chest":"§6负面状态免疫，飞行",
-    "endless.text.itemInfo.infinity_legs":"§6防火",
-    "endless.text.itemInfo.infinity_feet":"§6无摔伤",
+    "endless.text.itemInfo.infinity_chestplate":"§6负面状态免疫，飞行",
+    "endless.text.itemInfo.infinity_leggings":"§6防火",
+    "endless.text.itemInfo.infinity_boots":"§6无摔伤",
     "endless.text.itemInfo.crystal_matrix_ingot":"§7这甚至不是最终形态。",
     "endless.text.itemInfo.neutronium_pile":"§7尽量不要去想它。",
     "endless.text.itemInfo.neutronium_nugget":"§7大约3560万吨吧。",

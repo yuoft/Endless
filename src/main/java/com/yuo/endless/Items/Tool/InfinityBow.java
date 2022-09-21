@@ -141,11 +141,6 @@ public class InfinityBow extends BowItem {
         return false;
     }
 
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
-    }
-
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {

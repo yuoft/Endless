@@ -99,12 +99,12 @@
 
   "sound.endless.gaping_void":"Gaping Inhalation",
 
-  "endless.text.itemInfo.infinity_head":"§6Satiety, Oxygen",
-  "endless.text.itemInfo.infinity_head1":"§6Night vision",
+  "endless.text.itemInfo.infinity_helmet":"§6Satiety, Oxygen",
+  "endless.text.itemInfo.infinity_helmet1":"§6Night vision",
   "endless.text.itemInfo.infinity":"INFINITY ",
-  "endless.text.itemInfo.infinity_chest":"§6Negative effect immunity, Flight",
-  "endless.text.itemInfo.infinity_legs":"§6Fire Resistance",
-  "endless.text.itemInfo.infinity_feet":"§6No falling damage",
+  "endless.text.itemInfo.infinity_chestplate":"§6Negative effect immunity, Flight",
+  "endless.text.itemInfo.infinity_leggings":"§6Fire Resistance",
+  "endless.text.itemInfo.infinity_boots":"§6No falling damage",
   "endless.text.itemInfo.crystal_matrix_ingot":"§7This is not even the final form.",
   "endless.text.itemInfo.neutronium_pile":"§7Try not to think about it.",
   "endless.text.itemInfo.neutronium_nugget":"§7About 35.6 million tons.",

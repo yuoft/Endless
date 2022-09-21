@@ -71,10 +71,10 @@ public class InfinitySword extends SwordItem{
         tooltip.add(new StringTextComponent(ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity")) + I18n.format("attribute.name.generic.attack_damage")));
     }
 
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
-    }
+//    @Override
+//    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+//        return false;
+//    }
 
     @Override
     public boolean hasEffect(ItemStack stack) {

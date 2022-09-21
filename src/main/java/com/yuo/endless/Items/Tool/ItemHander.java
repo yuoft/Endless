@@ -266,7 +266,7 @@ public class ItemHander
             BlockState stepState = world.getBlockState(stepPos);
             Block stepBlock = stepState.getBlock();
             boolean log = stepState.getMaterial() == Material.WOOD || stepState.getMaterial() == Material.NETHER_WOOD;
-            boolean leaf = stepBlock instanceof LeavesBlock;
+            boolean leaf = stepBlock instanceof LeavesBlock; // || stepBlock.getBlock() == Blocks.NETHER_WART_BLOCK || stepBlock.getBlock() == Blocks.WARPED_WART_BLOCK;
             if (log || leaf) {
                 int step = steps - 1; //剩余数量-1
                 aoeBlocks(world, stepPos, player, step, stack); //递归
