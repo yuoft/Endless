@@ -38,11 +38,11 @@
   "item.endless.singularity_nickel":"§eNickel Singularity",
   "item.endless.singularity_lead":"§eLead Singularity",
   "item.endless.singularity_tin":"§eTin Singularity",
-  "item.endless.singularity_dragon_ium":"§eDragon Ium Singularity",
-  "item.endless.singularity_awaken_dragon":"§eAwaken Dragon Singularity",
-  "item.endless.singularity_mana":"§eMana Singularity",
-  "item.endless.singularity_tara":"§eTara Singularity",
-  "item.endless.singularity_element_ium":"§eElement Ium Singularity",
+  "item.endless.singularity_draconium":"§eDraconium Singularity",
+  "item.endless.singularity_awakened_draconium":"§eAwakened Draconium Singularity",
+  "item.endless.singularity_manasteel":"§eManasteel Singularity",
+  "item.endless.singularity_terrasteel":"§eTerrasteel Singularity",
+  "item.endless.singularity_elementium":"§eElementium Singularity",
 
   "item.endless.crystal_matrix_pickaxe":"§bCrystal Matrix Pickaxe",
   "item.endless.crystal_matrix_axe":"§bCrystal Matrix Axe",
@@ -179,7 +179,7 @@
   "gui.endless.compressed_chest":"Compressed Chest",
   "gui.endless.infinity_chest":"Infinity Chest",
 
-  "death.attack.infinity":"%1$s被彻底湮灭",
+  "death.attack.infinity":"%1$s was annihilated",
   "death.attack.infinity.0":"%1$s was sliced to ribbons by %2$s",
   "death.attack.infinity_weapon.0":"%1$s was sliced to ribbons by %2$s using %3$s",
   "death.attack.infinity.1":"%1$s was obliterated by %2$s",
@@ -190,8 +190,8 @@
   "death.attack.infinity_weapon.3":"%1$s was overkilled by %2$s using %3$s",
   "death.attack.infinity.4":"%1$s was annihilated by %2$s",
   "death.attack.infinity_weapon.4":"%1$s was annihilated by %2$s using %3$s",
-  "death.attack.infinity.5":"%1$s被%2$s击穿了",
-  "death.attack.infinity_weapon.5":"%1$s被%2$s使用%3$s击穿了",
+  "death.attack.infinity.5":"%1$s was pierced by %2$s",
+  "death.attack.infinity_weapon.5":"%1$s was pierced by %2$s using %3$s",
 
   "itemGroup.Endless":"Avaritia Endless"
 }

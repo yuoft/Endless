@@ -208,7 +208,7 @@ public class InfinitySword extends SwordItem{
         if (Endless.isDraconicEvolution){
             if (entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
-                draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player),Float.POSITIVE_INFINITY);
+                draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player), Float.MAX_VALUE);
                 draconicGuardian.setHealth(-1);
                 draconicGuardian.onDeath(new InfinityDamageSource(player));
             }else if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){

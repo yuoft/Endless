@@ -186,15 +186,15 @@ public class ItemRegistry {
 
 	//龙之研究
 	public static void registerDE(){
-		singularityDragonIum = ITEMS.register("singularity_dragon_ium", () -> new Singularity(0x6b369b, 0x6c389a));
-		singularityAwakenDragon = ITEMS.register("singularity_awaken_dragon", () -> new Singularity(0xf45100, 0xeecb3d));
+		singularityDragonIum = ITEMS.register("singularity_draconium", () -> new Singularity(0x6b369b, 0x6c389a));
+		singularityAwakenDragon = ITEMS.register("singularity_awakened_draconium", () -> new Singularity(0xf45100, 0xeecb3d));
 	}
 
 	//植物魔法
 	public static void registerBOT(){
-		singularityMana = ITEMS.register("singularity_mana", () -> new Singularity(0x49a5ee, 0x50b4ff));
-		singularityTara = ITEMS.register("singularity_tara", () -> new Singularity(0x51dc24, 0x57ef26));
-		singularityElementIum = ITEMS.register("singularity_element_ium", () -> new Singularity(0xe464ff, 0xe784ff));
+		singularityMana = ITEMS.register("singularity_manasteel", () -> new Singularity(0x49a5ee, 0x50b4ff));
+		singularityTara = ITEMS.register("singularity_terrasteel", () -> new Singularity(0x51dc24, 0x57ef26));
+		singularityElementIum = ITEMS.register("singularity_elementium", () -> new Singularity(0xe464ff, 0xe784ff));
 	}
 
 }

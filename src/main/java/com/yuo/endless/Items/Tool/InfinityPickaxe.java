@@ -51,7 +51,7 @@ public class InfinityPickaxe extends PickaxeItem {
             return 6.0F;
         }
         if (state.getHarvestTool() == ToolType.PICKAXE){
-            return this.getTier().getEfficiency() * 1000f; //对镐类挖掘方块有极高速度加成
+            return this.getTier().getEfficiency(); //对镐类挖掘方块有极高速度加成
         }
         return Math.max(super.getDestroySpeed(stack, state), 9.0f);
     }

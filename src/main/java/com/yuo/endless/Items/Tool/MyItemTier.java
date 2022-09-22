@@ -19,7 +19,7 @@ public enum MyItemTier implements IItemTier {
         return Ingredient.fromItems(ItemRegistry.crystalMatrixIngot.get());
     }),
     //数值无穷表示：Double或Float的POSITIVE_INFINITY（正）或NEGATIVE_INFINITY（负）
-    INFINITY_TOOL(9999, 9999.0f, 10, 9999, 999, () -> {
+    INFINITY_TOOL(9999, Float.MAX_VALUE, 10, 9999, 999, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     }),
     INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 999, () -> {

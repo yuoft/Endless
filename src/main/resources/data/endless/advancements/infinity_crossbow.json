@@ -14,7 +14,7 @@
   },
   "criteria": { 
     "infinity_crossbow": {
-      "trigger": "minecraft:inventory_changed", 
+      "trigger": "minecraft:inventory_changed",
       "conditions": { 
 		"items":[
 			{
