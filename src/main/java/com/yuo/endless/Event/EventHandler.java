@@ -371,7 +371,7 @@ public class EventHandler {
     public static void removeBlock(PlayerInteractEvent.LeftClickBlock event){
         PlayerEntity player = event.getPlayer();
         ItemStack stack = event.getItemStack();
-        if (stack.getItem() instanceof InfinityPickaxe && !stack.getOrCreateTag().getBoolean("hammer")){
+        if (stack.getItem() instanceof InfinityPickaxe && !stack.getOrCreateTag().getBoolean("hammer") && !player.isCreative()){
             BlockPos pos = event.getPos();
             World world = event.getWorld();
             BlockState state = world.getBlockState(pos);
