@@ -47,10 +47,9 @@ public class InfinityDamageSource extends EntityDamageSource {
                             entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
                 }
             }
-            else return new TranslationTextComponent(s + "." + rand, entityLivingBaseIn.getDisplayName());
+            else return new TranslationTextComponent(s + "." + rand.nextInt(4), entityLivingBaseIn.getDisplayName());
         }
         else return new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName());
-
     }
 
     //是否根据难度缩放伤害值

@@ -24,7 +24,7 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 
 public class ExtremeCraft extends Block {
-    private static final ITextComponent CONTAINER_NAME = new TranslationTextComponent("gui.endless.extreme_craft");
+    private static final ITextComponent CONTAINER_NAME = new TranslationTextComponent("gui.endless.extreme_crafting_table");
 
     public ExtremeCraft() {
         super(Properties.create(Material.ROCK).hardnessAndResistance(10, 50).harvestLevel(1)

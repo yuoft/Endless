@@ -150,7 +150,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.endless.neutronium_compressor");
+        return new TranslationTextComponent("gui.endless.neutron_compressor");
     }
 
     @Override

@@ -120,7 +120,7 @@ public class Config {
         public ServerConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Base Config").push("general");
             this.isKeepStone = buildBoolean(builder, "Is Keep Stone", true, "Whether to allow the super mode of infinity tools keep stone and dirt.");
-            this.isBreakBedrock = buildBoolean(builder, "Is Break Bedrock", true, "Whether to allow the infinity pickaxe to destory unbreakable blocks such as bedrock.");
+            this.isBreakBedrock = buildBoolean(builder, "Is Break Bedrock", true, "Whether to allow the hammer mode of the infinity pickaxe to destory unbreakable blocks such as bedrock.");
             this.isMergeMatterCluster = buildBoolean(builder, "Is Merge Matter Cluster", false, "Whether to merge matter cluster");
             this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 100000, "Damage of right click attack of the infinity sword.");
             this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 64, "Infinity sword right click attack range.");
@@ -129,12 +129,12 @@ public class Config {
             this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "Damage of the infinity bow or crossbow without projectile.");
             this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 128, "Maximum number of blocks can be destroyed by a chain cutting of the infinity axe.");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
-            this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Whether to allow infinity pickaxe to delete blocks with left click.");
+            this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Whether to allow the infinity pickaxe to destory unbreakable blocks with shift + left click.");
             this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 2048, 256, 10240, "Maximum quantity of a single item in a matter cluster.");
             this.matterClusterMaxTerm = buildInt(builder, "Matter Cluster Max Term", 16, 8, 64, "Maximum category of items in a matter cluster.");
             this.endestPearlEndDamage = buildInt(builder, "Endest Pearl End Damage", 1000, 100, 10000, "Endest pearl explosion damage");
             this.endestPearlOneDamage = buildInt(builder, "Endest Pearl One Damage", 5, 1, 10, "Endest pearl attraction damage");
-            this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Suck Range", 20, 10, 32, "Endest pearl attraction range");
+            this.endestPearlSuckRange = buildInt(builder, "Endest Pearl Attraction Range", 20, 10, 32, "Endest pearl attraction range");
             this.infinityArmorBearDamage = buildInt(builder, "Infinity Armor Bear Damage", 10, 4, 100, "Damage of infinity weapons to players wearing a full suit of infinity armor.");
             this.infinityBearDamage = buildInt(builder, "Infinity Bear Damage", 4, 1, 50, "Damage of infinity weapons to players wearing a full suit of infinity armor and holding infinity weapons.");
             this.infinityFireworkDamage = buildInt(builder, "Infinity Firework Damage", 100, 5, 10000, "Infinity crossbow fireworks damage.");
@@ -144,7 +144,7 @@ public class Config {
             this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false,  "Whether to allow the infinity arrow to channel lightning.");
             builder.pop();
 
-            builder.comment("Singularity Recipe Count").push("singularity");
+            builder.comment("Basic amount of singularities required by the compressor.").push("singularity");
             this.singularityCoal = buildInt(builder, "Coal", 450, 10, 2000, "base count");
             this.singularityClay = buildInt(builder, "Clay", 400, 10, 2000, "base count");
             this.singularityIron = buildInt(builder, "Iron", 300, 10, 2000, "base count");
@@ -175,15 +175,16 @@ public class Config {
             builder.pop();
 
             builder.comment("Mod Impact").push("modRatio");
-            this.modRatioRate = buildInt(builder, "Mod Ratio Rate", 20, 5, 50, "Maximum magnification after module influence");
-            this.modRatioCount = buildInt(builder, "Mod Ratio Count", 2000, 500, 5000, "Maximum number of modules affected");
+            this.modRatioRate = buildInt(builder, "Mod Ratio Rate", 20, 5, 50, "Maximum multiple of the amount of singularities affected by other mods.");
+            this.modRatioCount = buildInt(builder, "Mod Ratio Count", 2000, 500, 5000, "Maximum addition of the amount of singularities affected by other mods.");
             builder.pop();
 
-            builder.comment("Tool Range Mining Black List").push("black list");
-            this.pickaxeBlackList = buildConfig(builder, "Pickaxe Black List", "Tool range mining blacklist as pickaxe");
-            this.axeBlackList = buildConfig(builder, "Axe Black List", "Tool range mining blacklist as pickaxe as axe");
-            this.shovelBlackList = buildConfig(builder, "Shovel Black List", "Tool range mining blacklist as pickaxe as shovel");
-            this.hoeBlackList = buildConfig(builder, "Hoe Black List", "Tool range mining blacklist as pickaxe as hoe");
+            builder.comment("Blacklist of the super mode of infinity tools.For example, if you want stone and block of diamond to be ignored from the super mode of the infinity pickaxe, use [\"minecraft:stone\", \"minecraft:diamond_block\"] in pickaxe blacklist;" +
+                    "if you want dirt to be ignored from the super mode of the infinity shovel, use [\"minecraft:dirt\"] in shovel blacklist.").push("black list");
+            this.pickaxeBlackList = buildConfig(builder, "Pickaxe Black List", "Blacklist of the super mode of the infinity pickaxe");
+            this.axeBlackList = buildConfig(builder, "Axe Black List", "Blacklist of the super mode of the infinity axe");
+            this.shovelBlackList = buildConfig(builder, "Shovel Black List", "Blacklist of the super mode of the infinity shovel");
+            this.hoeBlackList = buildConfig(builder, "Hoe Black List", "Blacklist of the super mode of the infinity hoe");
             builder.pop();
         }
     }
@@ -193,7 +194,7 @@ public class Config {
 
         public ClientConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Client Config").push("general");
-            this.isRenderLayer = buildBoolean(builder, "Is Render Layer", false,  "Whether to turn on rendering (it will lead to a significant decrease in the game frame rate)");
+            this.isRenderLayer = buildBoolean(builder, "Is Render Layer", false,  "Whether to turn on rendering (it may decline the fps significantly)");
             builder.pop();
 
         }

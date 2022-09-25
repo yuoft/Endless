@@ -2,6 +2,7 @@ package com.yuo.endless.Entity;
 
 import com.google.common.collect.Sets;
 import com.yuo.endless.Config.Config;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;

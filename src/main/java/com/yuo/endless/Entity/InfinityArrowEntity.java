@@ -222,8 +222,9 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         }
         if (Endless.isDraconicEvolution && living instanceof DraconicGuardianEntity){
             DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) living;
-            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
+            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
             draconicGuardian.setHealth(-1);
+            draconicGuardian.onDeath(new InfinityDamageSource(this.shooter));
         }else {
             if (living instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) living;

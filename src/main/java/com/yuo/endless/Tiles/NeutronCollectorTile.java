@@ -31,6 +31,6 @@ public class NeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.endless.neutron_collector");
+        return new TranslationTextComponent("gui.endless.neutronium_collector");
     }
 }
