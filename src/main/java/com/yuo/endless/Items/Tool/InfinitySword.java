@@ -6,6 +6,7 @@ import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
@@ -18,6 +19,7 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -34,6 +36,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class InfinitySword extends SwordItem{
 
@@ -71,19 +74,14 @@ public class InfinitySword extends SwordItem{
         tooltip.add(new StringTextComponent(ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity")) + I18n.format("attribute.name.generic.attack_damage")));
     }
 
-//    @Override
-//    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-//        return false;
-//    }
-
     @Override
     public boolean hasEffect(ItemStack stack) {
         return false;
     }
 
     @Override
-    public boolean isDamageable() {
-        return false;
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
     }
 
     @Override
@@ -120,6 +118,10 @@ public class InfinitySword extends SwordItem{
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker.world.isRemote) return true;
+        int fireAspect = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
+        if (fireAspect > 0){
+            target.setFire(fireAspect * 4);
+        }
         if (target instanceof EnderDragonEntity && attacker instanceof PlayerEntity){
             EnderDragonEntity dragon = (EnderDragonEntity) target; //攻击末影龙
             dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);

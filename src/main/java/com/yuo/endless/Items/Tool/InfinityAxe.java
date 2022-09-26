@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class InfinityAxe extends AxeItem {
     private final ItemHander hander;
@@ -54,12 +56,12 @@ public class InfinityAxe extends AxeItem {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
     }
 
     @Override
-    public boolean isDamageable() {
+    public boolean hasEffect(ItemStack stack) {
         return false;
     }
 

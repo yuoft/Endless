@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.GrassBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class InfinityShovel extends ShovelItem {
     private final ItemHander hander;
@@ -113,12 +115,12 @@ public class InfinityShovel extends ShovelItem {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
     }
 
     @Override
-    public boolean isDamageable() {
+    public boolean hasEffect(ItemStack stack) {
         return false;
     }
 

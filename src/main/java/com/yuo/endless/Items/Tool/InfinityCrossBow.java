@@ -48,7 +48,7 @@ public class InfinityCrossBow extends CrossbowItem {
     private boolean isLoadingMiddle = false;
 
     public InfinityCrossBow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
+        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
@@ -73,6 +73,11 @@ public class InfinityCrossBow extends CrossbowItem {
         } else {
             return ActionResult.resultFail(itemstack);
         }
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return 99;
     }
 
     /**
@@ -248,10 +253,11 @@ public class InfinityCrossBow extends CrossbowItem {
             ArrowItem arrowitem = (ArrowItem)(stack.getItem() instanceof ArrowItem ? stack.getItem() : Items.ARROW);
             arrow = arrowitem.createArrow(worldIn, ammo, shooter);
             arrow.setDamage(Config.SERVER.noArrowDamage.get());
+            arrow.setPierceLevel((byte) 1);
         }else {
             if (ammo.getItem() == ItemRegistry.infinityArrow.get()){
                 arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, worldIn, false);
-                arrow.setPierceLevel((byte) 5);
+                arrow.setPierceLevel((byte) 5);//5级穿透效果
             }else {
                 arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, worldIn, ammo);
                 arrow.setPierceLevel((byte) 3);
@@ -261,7 +267,6 @@ public class InfinityCrossBow extends CrossbowItem {
         arrow.setIsCritical(true); //暴击粒子
         arrow.setHitSound(SoundEvents.ITEM_CROSSBOW_HIT);
         arrow.setShotFromCrossbow(true);
-        arrow.setPierceLevel((byte)5); //5级穿透效果
 
         return arrow;
     }
@@ -423,11 +428,6 @@ public class InfinityCrossBow extends CrossbowItem {
 
     public static int getChargeTime(ItemStack stack) {
         return 25 - 5 * 3;//快速装填3
-    }
-
-    @Override
-    public boolean isDamageable() {
-        return false;
     }
 
     @Override

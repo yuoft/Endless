@@ -23,6 +23,7 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class InfinityPickaxe extends PickaxeItem {
 
@@ -97,9 +98,14 @@ public class InfinityPickaxe extends PickaxeItem {
     }
 
     //无法破坏
+//    @Override
+//    public boolean isDamageable() {
+//        return false;
+//    }
+
     @Override
-    public boolean isDamageable() {
-        return false;
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
     }
 
     @Override

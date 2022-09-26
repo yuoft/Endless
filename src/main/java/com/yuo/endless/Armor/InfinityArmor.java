@@ -121,11 +121,6 @@ public class InfinityArmor extends ArmorItem {
 //	}
 
     @Override
-    public boolean isDamageable() {
-        return false;
-    }
-
-    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (slot == EquipmentSlotType.HEAD) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_helmet"));

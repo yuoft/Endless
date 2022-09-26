@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -32,7 +33,7 @@ public class InfinityArrow extends Item  {
     private final Multimap<Attribute, AttributeModifier> tridentAttributes;
 
     public InfinityArrow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(-1).isImmuneToFire());
+        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 48.0D, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.0F, AttributeModifier.Operation.ADDITION));
@@ -41,6 +42,16 @@ public class InfinityArrow extends Item  {
 
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
         return equipmentSlot == EquipmentSlotType.MAINHAND ? this.tridentAttributes : super.getAttributeModifiers(equipmentSlot);
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return 99;
     }
 
     @Override
@@ -74,7 +85,7 @@ public class InfinityArrow extends Item  {
                 wither.attackEntityFrom(new InfinityDamageSource(attacker), 49);
             }
         }
-        return true;
+        return super.hitEntity(stack, target, attacker);
     }
 
     @Override

@@ -35,21 +35,23 @@ public class InfinityDamageSource extends EntityDamageSource {
         String s = "death.attack.infinity";
         String s0 = "death.attack.infinity_weapon";
         Random rand = entityLivingBaseIn.getEntityWorld().rand;
+        ITextComponent displayName = entityLivingBaseIn.getDisplayName();
         if (damageSourceEntity != null){
+            ITextComponent name = damageSourceEntity.getName();
             if (!itemstack.isEmpty()){//有击杀者和武器
                 if (itemstack.getItem() instanceof InfinitySword){ //剑0-4
                     return new TranslationTextComponent(s0 + "." + rand.nextInt(5),
-                            entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
+                            displayName, name, itemstack.getDisplayName());
                 } //弓弩1-5
                 else {
                     int i = rand.nextInt(5) + 1;
                     return new TranslationTextComponent(s0 + "." + i,
-                            entityLivingBaseIn.getDisplayName(), damageSourceEntity.getName(), itemstack.getDisplayName());
+                            displayName, name, itemstack.getDisplayName());
                 }
             }
-            else return new TranslationTextComponent(s + "." + rand.nextInt(4), entityLivingBaseIn.getDisplayName());
+            else return new TranslationTextComponent(s + "." + rand.nextInt(4), displayName, name);
         }
-        else return new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName());
+        else return new TranslationTextComponent(s, displayName);
     }
 
     //是否根据难度缩放伤害值

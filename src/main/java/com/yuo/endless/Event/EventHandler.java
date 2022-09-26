@@ -184,11 +184,11 @@ public class EventHandler {
             map.put(Enchantments.LOOTING, 10);
             EnchantmentHelper.setEnchantments( map, stack);
         }
-        if (stack.getItem().equals(ItemRegistry.infinityPickaxe.get())){
-            Map<Enchantment, Integer> map = new HashMap<>();
-            map.put(Enchantments.FORTUNE, 10);
-            EnchantmentHelper.setEnchantments( map, stack);
-        }
+//        if (stack.getItem().equals(ItemRegistry.infinityPickaxe.get())){
+//            Map<Enchantment, Integer> map = new HashMap<>();
+//            map.put(Enchantments.FORTUNE, 10);
+//            EnchantmentHelper.setEnchantments( map, stack);
+//        }
     }
 //    //不会被烧毁的物品
 //    @SubscribeEvent

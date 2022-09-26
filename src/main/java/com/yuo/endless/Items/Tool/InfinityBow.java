@@ -6,6 +6,8 @@ import com.yuo.endless.Entity.InfinityArrowEntity;
 import com.yuo.endless.Entity.InfinityArrowSubEntity;
 import com.yuo.endless.Items.ItemRegistry;
 import com.yuo.endless.tab.ModGroup;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,13 +29,18 @@ public class InfinityBow extends BowItem {
     public static final Predicate<ItemStack> ARROWS = (stack) -> stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == ItemRegistry.infinityArrow.get();
 
     public InfinityBow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
+        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
     }
 
     //使用时间
     @Override
     public int getUseDuration(ItemStack stack) {
         return 1200;
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return 99;
     }
 
     //使用时动作
@@ -77,7 +84,14 @@ public class InfinityBow extends BowItem {
                     arrow.setDamage(Config.SERVER.noArrowDamage.get());
                 }
                 arrow.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0, velocity * 3.0F, 1.0F);
-                arrow.setIsCritical(true);
+                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
+                    arrow.setFire(100);
+                }
+//                int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+//                if (k > 0) {
+//                    arrow.setKnockbackStrength(k);
+//                }
+                arrow.setIsCritical(true); //暴击粒子
                 arrow.setShooter(player);
 
                 arrow.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
@@ -124,16 +138,6 @@ public class InfinityBow extends BowItem {
         } else {
             return isAmmo.test(living.getHeldItem(Hand.MAIN_HAND)) ? living.getHeldItem(Hand.MAIN_HAND) : ItemStack.EMPTY;
         }
-    }
-
-    @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
-
-    @Override
-    public boolean isDamageable() {
-        return false;
     }
 
     @Override

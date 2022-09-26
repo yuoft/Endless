@@ -4,6 +4,7 @@ import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class InfinityHoe extends HoeItem {
     public InfinityHoe() {
@@ -169,8 +171,8 @@ public class InfinityHoe extends HoeItem {
     }
 
     @Override
-    public boolean isDamageable() {
-        return false;
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
     }
 
     @Override
