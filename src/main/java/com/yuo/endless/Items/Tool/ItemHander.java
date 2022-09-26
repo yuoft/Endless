@@ -7,7 +7,9 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -29,7 +31,7 @@ public class ItemHander
     private static final Set<BlockPos> set = new HashSet<>();
     public static final Set<Material> MATERIAL_PICKAXE = Sets.newHashSet(Material.ROCK, Material.ANVIL, Material.IRON, Material.ICE,
             Material.GLASS, Material.TNT, Material.REDSTONE_LIGHT, Material.PACKED_ICE, Material.SPONGE, Material.SHULKER, Material.WOOL,
-            Material.PISTON, Material.CORAL, Material.GOURD);
+            Material.PISTON, Material.CORAL, Material.GOURD, Material.BARRIER);
     public static final Set<Material> MATERIAL_AXE = Sets.newHashSet(Material.WOOD, Material.PORTAL, Material.WEB, Material.PLANTS, Material.OCEAN_PLANT,
             Material.NETHER_PLANTS, Material.TALL_PLANTS, Material.SEA_GRASS, Material.NETHER_WOOD, Material.BAMBOO, Material.BAMBOO_SAPLING,
             Material.LEAVES, Material.CACTUS);
@@ -150,13 +152,15 @@ public class ItemHander
         if (type == ToolType.SHOVEL && Config.shovelBlocks.contains(state.getBlock())) return;
         if (type == ToolType.AXE && Config.axeBlocks.contains(state.getBlock())) return;
 
-        if (!Config.SERVER.isBreakBedrock.get() && state.getBlock().equals(Blocks.BEDROCK)) return;
+        if (!Config.SERVER.isBreakBedrock.get() && state.getBlockHardness(world, pos) < 0) return;
 //        world.destroyBlock(pos, false, player); //破坏方块
 
         //添加到map中
-        if (state.getBlock().equals(Blocks.BEDROCK)){
-            ItemStack stack1 = new ItemStack(Blocks.BEDROCK);
-            putMapItem(stack1, map);
+        if (state.getBlockHardness(world, pos) < 0){
+            Item block = Item.getItemFromBlock(state.getBlock());
+            if (block != Items.AIR){
+                putMapItem(new ItemStack(block), map);
+            }
         }else putMapDrops(world, pos, player, stack, map);
         world.removeBlock(pos, false); //破坏方块
     }
