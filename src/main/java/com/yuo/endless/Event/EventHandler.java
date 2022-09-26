@@ -96,6 +96,7 @@ public class EventHandler {
             PlayerEntity player = (PlayerEntity) living;
             ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
             ItemStack legs = player.getItemStackFromSlot(EquipmentSlotType.LEGS);
+            ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
             boolean hasHead = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
             boolean hasChest = chest.getItem() == ItemRegistry.infinityChest.get();
             boolean hasLegs = legs.getItem() == ItemRegistry.infinityLegs.get();
@@ -147,7 +148,11 @@ public class EventHandler {
             //feet
             if (playersWithFeet.contains(key)){
                 if (hasFeet){
+                    if (feet.getOrCreateTag().getBoolean("flag") && !player.isSneaking()){
+                        player.stepHeight = 1.25f; //上坡高度
+                    }
                 }else {
+                    player.stepHeight = 0.6f;
                     playersWithFeet.remove(key);
                 }
             }else if (hasFeet){
