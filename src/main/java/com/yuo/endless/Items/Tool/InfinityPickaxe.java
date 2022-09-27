@@ -38,17 +38,6 @@ public class InfinityPickaxe extends PickaxeItem {
         this.hander = new ItemHander();
     }
 
-    @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (this.isInGroup(group)){
-            Map<Enchantment, Integer> map = new HashMap<Enchantment, Integer>();
-            map.put(Enchantments.FORTUNE, 10);
-            ItemStack stack = new ItemStack(this);
-            EnchantmentHelper.setEnchantments(map, stack);
-            items.add(stack);
-        }
-    }
-
     //锤形态下挖掘速度变慢
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
@@ -66,8 +55,20 @@ public class InfinityPickaxe extends PickaxeItem {
         ItemStack stack = player.getHeldItem(hand);
         if (player.isSneaking()) { //潜行右键切换形态
             CompoundNBT tags = stack.getOrCreateTag();
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack) < 10) { //添加附魔
-                stack.addEnchantment(Enchantments.FORTUNE, 10);
+            Enchantment enchantment = Enchantments.FORTUNE;
+            int fortune = EnchantmentHelper.getEnchantmentLevel(enchantment, stack);
+            if (fortune > 0) { //添加附魔
+                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
+                for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
+                    if (entry.getKey() == enchantment){
+                        map.keySet().removeIf(enchant -> enchant == enchantment);
+                        map.put(enchantment, 10);
+                        EnchantmentHelper.setEnchantments(map, stack);
+                    }
+                }
+
+            }else {
+                stack.addEnchantment(enchantment, 10);
             }
             tags.putBoolean("hammer", !tags.getBoolean("hammer"));
             player.swingArm(hand); //摆臂
@@ -101,15 +102,31 @@ public class InfinityPickaxe extends PickaxeItem {
         return false; //范围挖掘成功与否与挖掘此方块无关
     }
 
-    //无法破坏
-//    @Override
-//    public boolean isDamageable() {
-//        return false;
-//    }
-
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         return 0;
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        stack.getOrCreateTag().putInt("Damage", 0);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        int damage = stack.getDamage();
+        if (damage > 0){
+            stack.getOrCreateTag().putInt("Damage", 0);
+        }
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)){
+            ItemStack stack = new ItemStack(this);
+            stack.getOrCreateTag().putBoolean("Unbreakable",true);
+            items.add(stack);
+        }
     }
 
     @Override

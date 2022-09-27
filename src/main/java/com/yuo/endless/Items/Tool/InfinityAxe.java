@@ -10,9 +10,11 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -58,6 +60,28 @@ public class InfinityAxe extends AxeItem {
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
         return 0;
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        stack.getOrCreateTag().putInt("Damage", 0);
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)){
+            ItemStack stack = new ItemStack(this);
+            stack.getOrCreateTag().putBoolean("Unbreakable",true);
+            items.add(stack);
+        }
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        int damage = stack.getDamage();
+        if (damage > 0){
+            stack.getOrCreateTag().putInt("Damage", 0);
+        }
     }
 
     @Override

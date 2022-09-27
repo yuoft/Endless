@@ -16,13 +16,11 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.*;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class InfinityBow extends BowItem {
@@ -137,6 +135,33 @@ public class InfinityBow extends BowItem {
             return living.getHeldItem(Hand.OFF_HAND);
         } else {
             return isAmmo.test(living.getHeldItem(Hand.MAIN_HAND)) ? living.getHeldItem(Hand.MAIN_HAND) : ItemStack.EMPTY;
+        }
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        stack.getOrCreateTag().putInt("Damage", 0);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        int damage = stack.getDamage();
+        if (damage > 0){
+            stack.getOrCreateTag().putInt("Damage", 0);
+        }
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)){
+            ItemStack stack = new ItemStack(this);
+            stack.getOrCreateTag().putBoolean("Unbreakable",true);
+            items.add(stack);
         }
     }
 

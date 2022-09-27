@@ -17,7 +17,8 @@ import java.util.function.Supplier;
 //盔甲材料类
 public enum MyArmorMaterial implements IArmorMaterial {
 	//---------材质---耐久值----------护甲值-------附魔能力--------音效----------------------盔甲韧性- 击退抗性-修复材料
-	INFINITY(Endless.MOD_ID + ":" + "infinity", 999, new int[] { 6, 10, 12, 6 }, 999, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6, 1,() -> Ingredient.EMPTY),
+	INFINITY(Endless.MOD_ID + ":" + "infinity", 999, new int[] { 7, 13, 15, 9 }, 99, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 6, 1,
+			() -> Ingredient.fromItems(ItemRegistry.infinityIngot.get())),
 	NEUTRON(Endless.MOD_ID + ":" + "neutron", 53, new int[] { 6, 10, 12, 6 }, 21, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 5, 0.2f,
 			() -> Ingredient.fromItems(ItemRegistry.neutroniumIngot.get())),
 	CRYSTAL(Endless.MOD_ID + ":" + "crystal", 41, new int[] { 4, 8, 10, 4 }, 17, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3, 0.1f,

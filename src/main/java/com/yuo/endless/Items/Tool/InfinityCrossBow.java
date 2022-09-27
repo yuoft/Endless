@@ -37,6 +37,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class InfinityCrossBow extends CrossbowItem {
@@ -428,6 +429,33 @@ public class InfinityCrossBow extends CrossbowItem {
 
     public static int getChargeTime(ItemStack stack) {
         return 25 - 5 * 3;//快速装填3
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        stack.getOrCreateTag().putInt("Damage", 0);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        int damage = stack.getDamage();
+        if (damage > 0){
+            stack.getOrCreateTag().putInt("Damage", 0);
+        }
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (this.isInGroup(group)){
+            ItemStack stack = new ItemStack(this);
+            stack.getOrCreateTag().putBoolean("Unbreakable",true);
+            items.add(stack);
+        }
     }
 
     @Override

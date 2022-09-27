@@ -61,10 +61,8 @@ public class InfinitySword extends SwordItem{
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.isInGroup(group)){ //防止添加到其它物品页
-            Map<Enchantment, Integer> map = new HashMap<Enchantment, Integer>();
-            map.put(Enchantments.LOOTING, 10);
             ItemStack stack = new ItemStack(this);
-            EnchantmentHelper.setEnchantments(map, stack);
+            stack.getOrCreateTag().putBoolean("Unbreakable",true);
             items.add(stack);
         }
     }
@@ -72,16 +70,6 @@ public class InfinitySword extends SwordItem{
     @Override
     public void addInformation(ItemStack stack, @Nullable World p_77624_2_, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(new StringTextComponent(ColorText.makeFabulous(I18n.format("endless.text.itemInfo.infinity")) + I18n.format("attribute.name.generic.attack_damage")));
-    }
-
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return 0;
     }
 
     @Override
@@ -219,6 +207,29 @@ public class InfinitySword extends SwordItem{
                 crystal.func_174812_G();
             }
         }
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return 0;
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        stack.getOrCreateTag().putInt("Damage", 0);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        int damage = stack.getDamage();
+        if (damage > 0){
+            stack.getOrCreateTag().putInt("Damage", 0);
+        }
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return false;
     }
 
     @Nullable

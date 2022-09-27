@@ -2,9 +2,11 @@ package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Items.ItemRegistry;
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 
+import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public enum MyItemTier implements IItemTier {
@@ -22,7 +24,7 @@ public enum MyItemTier implements IItemTier {
     INFINITY_TOOL(9999, Float.MAX_VALUE, 10, 9999, 99, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     }),
-    INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 999, () -> {
+    INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 99, () -> {
         return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
     });
 
@@ -39,7 +41,7 @@ public enum MyItemTier implements IItemTier {
         this.attackDamage = attackDamage;
         this.harvestLevel = harvestLevel;
         this.enchantability = enchantability;
-        this.repairMaterial = new LazyValue<Ingredient>(repairMaterial);
+        this.repairMaterial = new LazyValue<>(repairMaterial);
     }
 
     @Override
@@ -67,6 +69,7 @@ public enum MyItemTier implements IItemTier {
         return this.enchantability;
     }
 
+    @Nonnull
     @Override
     public Ingredient getRepairMaterial() {
         return this.repairMaterial.getValue();

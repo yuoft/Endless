@@ -189,12 +189,11 @@ public class EventHandler {
             map.put(Enchantments.LOOTING, 10);
             EnchantmentHelper.setEnchantments( map, stack);
         }
-//        if (stack.getItem().equals(ItemRegistry.infinityPickaxe.get())){
-//            Map<Enchantment, Integer> map = new HashMap<>();
-//            map.put(Enchantments.FORTUNE, 10);
-//            EnchantmentHelper.setEnchantments( map, stack);
-//        }
+        if (isInfinityItem(stack.getItem())){
+            stack.getOrCreateTag().putBoolean("Unbreakable",true);
+        }
     }
+
 //    //不会被烧毁的物品
 //    @SubscribeEvent
 //    public static void entityItemUnDeath(ItemEvent event) { //物品实体事件
@@ -397,7 +396,8 @@ public class EventHandler {
      * @return 是 true
      */
     public static boolean isInfinityItem(Item item){
-        return item instanceof InfinityAxe || item instanceof InfinityBow || item instanceof InfinityHoe || item instanceof InfinityPickaxe ||
+        return item instanceof InfinityAxe || item instanceof InfinityBow || item instanceof InfinityCrossBow
+                || item instanceof InfinityArrow || item instanceof InfinityHoe || item instanceof InfinityPickaxe ||
                 item instanceof InfinityShovel || item instanceof InfinitySword || item instanceof InfinityArmor;
     }
 
