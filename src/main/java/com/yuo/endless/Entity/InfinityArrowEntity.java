@@ -155,49 +155,49 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             entity.setFire(5);
         }
 
-//        if (entity.attackEntityFrom(damagesource, (float)i)) {
+        if (entity instanceof LivingEntity) {
+            LivingEntity livingentity = (LivingEntity)entity;
+            if (!this.world.isRemote && this.getPierceLevel() <= 0) {
+                livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
+            }
 
-            if (entity instanceof LivingEntity) {
-                LivingEntity livingentity = (LivingEntity)entity;
-                if (!this.world.isRemote && this.getPierceLevel() <= 0) {
-                    livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
-                }
-
-                if (this.knockbackStrength > 0) { //击退
-                    Vector3d vector3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockbackStrength * 0.6D);
-                    if (vector3d.lengthSquared() > 0.0D) {
-                        livingentity.addVelocity(vector3d.x, 0.1D, vector3d.z);
-                    }
-                }
-
-                if (!this.world.isRemote) {
-                    EnchantmentHelper.applyThornEnchantments(livingentity, shooter);
-                    EnchantmentHelper.applyArthropodEnchantments(shooter, livingentity);
-                }
-
-                this.arrowHit(livingentity);
-                if (shooter != null && livingentity != shooter && livingentity instanceof PlayerEntity && shooter instanceof ServerPlayerEntity && !this.isSilent()) {
-                    ((ServerPlayerEntity)shooter).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.HIT_PLAYER_ARROW, 0.0F));
-                }
-
-                if (!entity.isAlive() && this.hitEntities != null) {
-                    this.hitEntities.add(livingentity);
-                }
-
-                if (!this.world.isRemote && shooter instanceof ServerPlayerEntity) {
-                    ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)shooter;
-                    if (this.hitEntities != null && this.getShotFromCrossbow()) {
-                        CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, this.hitEntities);
-                    } else if (!entity.isAlive() && this.getShotFromCrossbow()) {
-                        CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, Arrays.asList(entity));
-                    }
+            if (this.knockbackStrength > 0) { //击退
+                Vector3d vector3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockbackStrength * 0.6D);
+                if (vector3d.lengthSquared() > 0.0D) {
+                    livingentity.addVelocity(vector3d.x, 0.1D, vector3d.z);
                 }
             }
 
-            this.playSound(this.hitSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
-            if (this.getPierceLevel() <= 0) {
-                this.remove();
+            if (!this.world.isRemote) {
+                EnchantmentHelper.applyThornEnchantments(livingentity, shooter);
+                EnchantmentHelper.applyArthropodEnchantments(shooter, livingentity);
             }
+
+            this.arrowHit(livingentity);
+            if (shooter != null && livingentity != shooter && livingentity instanceof PlayerEntity && shooter instanceof ServerPlayerEntity && !this.isSilent()) {
+                ((ServerPlayerEntity)shooter).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.HIT_PLAYER_ARROW, 0.0F));
+            }
+
+            if (!entity.isAlive() && this.hitEntities != null) {
+                this.hitEntities.add(livingentity);
+            }
+
+            if (!this.world.isRemote && shooter instanceof ServerPlayerEntity) {
+                ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)shooter;
+                if (this.hitEntities != null && this.getShotFromCrossbow()) {
+                    CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, this.hitEntities);
+                } else if (!entity.isAlive() && this.getShotFromCrossbow()) {
+                    CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, Arrays.asList(entity));
+                }
+            }
+        }
+        else {
+            entity.attackEntityFrom(new InfinityDamageSource(this.shooter), (float)i);
+        }
+        this.playSound(this.hitSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+        if (this.getPierceLevel() <= 0) {
+            this.remove();
+        }
 //        } else { //反弹箭矢
 //            entity.forceFireTicks(k);
 //            this.setMotion(this.getMotion().scale(-0.1D));
