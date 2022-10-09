@@ -74,10 +74,13 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        if (entity instanceof LivingEntity && !player.world.isRemote){
+        if (player.world.isRemote) return false;
+        if (entity instanceof LivingEntity){
             LivingEntity living = (LivingEntity) entity;
             hitEntity(stack, living, player);
-            sweepAttack(living, player);
+            float attackStrength = player.getCooledAttackStrength(1.6f); //攻击强度
+            if (attackStrength > 0.84f)
+                sweepAttack(living, player);
         }
         damageGuardian(entity, player);
         return false;
