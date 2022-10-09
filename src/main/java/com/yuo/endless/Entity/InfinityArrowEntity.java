@@ -18,6 +18,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -219,13 +221,17 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             WitherEntity wither = (WitherEntity) living;
             wither.setInvulTime(0);
             wither.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
-        }
-        if (Endless.isDraconicEvolution && living instanceof DraconicGuardianEntity){
+        } else if (living instanceof EnderDragonEntity && this.shooter instanceof PlayerEntity){
+            EnderDragonEntity dragon = (EnderDragonEntity) living; //攻击末影龙
+            dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+        } else if (living instanceof ArmorStandEntity){
+            living.attackEntityFrom(DamageSource.GENERIC, 10);
+        } else if (Endless.isDraconicEvolution && living instanceof DraconicGuardianEntity){
             DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) living;
             draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
             draconicGuardian.setHealth(-1);
             draconicGuardian.onDeath(new InfinityDamageSource(this.shooter));
-        }else {
+        } else {
             if (living instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) living;
                 if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
@@ -234,7 +240,6 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
                     else living.attackEntityFrom(new InfinityDamageSource(this.shooter), Config.SERVER.infinityArmorBearDamage.get());
                 } else living.attackEntityFrom(new InfinityDamageSource(this.shooter),  Float.POSITIVE_INFINITY);
             } else living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
-//            living.attackEntityFrom(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
             if (living instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) living;
                 if (EventHandler.isInfinite(player)){
@@ -246,6 +251,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         }
     }
 
+    @Override
     protected void func_230299_a_(BlockRayTraceResult result) {
         super.func_230299_a_(result);
         if (!isSub) return;
