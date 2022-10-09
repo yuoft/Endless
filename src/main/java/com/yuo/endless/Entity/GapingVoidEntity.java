@@ -177,16 +177,15 @@ public class GapingVoidEntity extends Entity {
             return;
         }
 
-        //引力系数
-        double radius = getVoidScale(age) * 0.5;
-        double range = radius * suckRange;
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(position.add(-range, -range, -range), position.add(range,range,range));
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(position.add(-suckRange, -suckRange, -suckRange), position.add(suckRange,suckRange,suckRange));
         List<Entity> sucked = world.getEntitiesWithinAABB(Entity.class, axisAlignedBB, SUCK_PREDICATE); //获取引力范围内所以实体
+
+        double radius = getVoidScale(age) * 0.5; //引力系数
         for (Entity suckee : sucked) { //将所以实体吸引到此实体处
             if (suckee != this) {
                 double dist = getDist(suckee.getPosition(), position); //距离
-                float speed = (dist > 5) ? 0.2f : 0.1f; //速度
-                setEntityMotionFromVector(suckee, position, speed);
+                if (dist <= suckRange)
+                    setEntityMotionFromVector(suckee, position, radius * 0.075d);
             }
         }
 
@@ -238,7 +237,7 @@ public class GapingVoidEntity extends Entity {
      * @param pos 目标坐标
      * @param modifier 移动距离 负数为排斥
      */
-    public static void setEntityMotionFromVector(Entity entity, BlockPos pos, float modifier) {
+    public static void setEntityMotionFromVector(Entity entity, BlockPos pos, double modifier) {
 //        if (entity instanceof PlayerEntity){
 //            PlayerEntity player = (PlayerEntity) entity;
 //            if (player.isCreative() || EventHandler.isInfinite(player) || player.abilities.isFlying) return; //创造或全套无尽 不会被吸引
