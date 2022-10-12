@@ -70,10 +70,10 @@ public class InfinityBow extends BowItem {
                 if (!itemStack.isEmpty()) {
                     if (itemStack.getItem() == ItemRegistry.infinityArrow.get()) { //无尽箭矢
                         arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, true);
-                        arrow.setPierceLevel((byte) 5);
+                        arrow.setPierceLevel((byte) 3);
                     } else {
                         arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn, itemStack); //普通箭矢
-                        arrow.setPierceLevel((byte) 3);
+                        arrow.setPierceLevel((byte) 1);
                     }
                 } else { //无箭矢
                     ItemStack arrowStack = new ItemStack(Items.ARROW);

@@ -7,15 +7,16 @@ import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import com.yuo.endless.Sound.ModSounds;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PistonBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.fluid.WaterFluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -23,6 +24,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -202,8 +205,20 @@ public class GapingVoidEntity extends Entity {
                         dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.OUT_OF_WORLD, oneDamage);
                     }
                     else living.attackEntityFrom(DamageSource.OUT_OF_WORLD, oneDamage);
+
+                    if (age % 40 == 0 && living instanceof PlayerEntity){
+                        PlayerEntity player = (PlayerEntity) living;
+                        player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 40, 9));
+                    }
                 }
             }
+        }
+
+        //给予内部玩家失明buff
+        if (age % 20 == 0){
+            AxisAlignedBB alignedBB = new AxisAlignedBB(position.add(-nomRange, -nomRange, -nomRange), position.add(nomRange,nomRange,nomRange));
+            List<LivingEntity> livings = world.getEntitiesWithinAABB(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
+
         }
 
         // 每半秒破坏一次方块
@@ -217,13 +232,16 @@ public class GapingVoidEntity extends Entity {
                 double dist = getDist(pos, position);
                 if (dist <= blockRange && !world.isAirBlock(pos)) {
                     BlockState state = world.getBlockState(pos);
-//                    if (state.matchesBlock(Blocks.BEDROCK) && !Config.SERVER.endestPearBreakBedrock.get()) continue;
                     BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fakePlayer);
                     MinecraftForge.EVENT_BUS.post(event);
                     if (!event.isCanceled()) {
                         float hardness = state.getBlockHardness(world, pos);
+                        if (state.getMaterial().isLiquid()){ //流体删除
+                            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                            continue;
+                        }
                         if (hardness <= 50.0 && hardness > 0) { //破坏硬度低于10点的方块
-                            world.destroyBlock(pos, false,useEntity );
+                            world.destroyBlock(pos, false, useEntity );
                         }
                     }
                 }
@@ -238,16 +256,6 @@ public class GapingVoidEntity extends Entity {
      * @param modifier 移动距离 负数为排斥
      */
     public static void setEntityMotionFromVector(Entity entity, BlockPos pos, double modifier) {
-//        if (entity instanceof PlayerEntity){
-//            PlayerEntity player = (PlayerEntity) entity;
-//            if (player.isCreative() || EventHandler.isInfinite(player) || player.abilities.isFlying) return; //创造或全套无尽 不会被吸引
-//            BlockPos position = player.getPosition();
-//            int x = pos.getX() - position.getX();
-//            int y = pos.getY() - position.getY();
-//            int z = pos.getZ() - position.getZ();
-//            Vector3d vector3d = new Vector3d(x, y, z).normalize();
-//            player.setMotion(vector3d);
-//        }
         Vector3d originalPosVector = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
         Vector3d finalVector = originalPosVector.subtract(entity.getPositionVec());
         if (finalVector.length() > 1) { //向量长度超过1
@@ -256,6 +264,12 @@ public class GapingVoidEntity extends Entity {
         double motionX = finalVector.x * modifier;
         double motionY = finalVector.y * modifier;
         double motionZ = finalVector.z * modifier;
+        if (entity instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entity;
+            if (player.isCreative() || EventHandler.isInfinite(player) || player.abilities.isFlying) return; //创造或全套无尽 不会被吸引
+            Vector3d vector3d = new Vector3d(motionX, motionY, motionZ).normalize();
+            player.addVelocity(vector3d.x, vector3d.y, vector3d.z);
+        }
         entity.setMotion(motionX, motionY, motionZ);
     }
 

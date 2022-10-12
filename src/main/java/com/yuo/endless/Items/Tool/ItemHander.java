@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -117,13 +118,13 @@ public class ItemHander
      * @param stack 工具
      * @param player 玩家
      */
-    private void destroyBlock(BlockPos pos, World world, ItemStack stack, PlayerEntity player){
+    private static void destroyBlock(BlockPos pos, World world, ItemStack stack, PlayerEntity player){
         BlockState state = world.getBlockState(pos);
         if (world.isAirBlock(pos) || state.getHarvestLevel() > stack.getHarvestLevel(ToolType.AXE, player, state)
                 || !MATERIAL_AXE.contains(state.getMaterial())){
             return;
         }
-        world.destroyBlock(pos, true, player); //破坏方块
+        world.destroyBlock(pos, !player.isCreative(), player); //破坏方块
     }
 
     /**
@@ -255,27 +256,115 @@ public class ItemHander
      * @param stack 工具
      */
     public void aoeBlocks(World world, BlockPos origin, PlayerEntity player, int steps, ItemStack stack){
-        if (world.isAirBlock(origin)) {
+        BlockState state = world.getBlockState(origin);
+        if (!state.isIn(BlockTags.LOGS) && !state.isIn(BlockTags.LEAVES)) {
             return;
         }
         destroyBlock(origin, world, stack, player);
         if (steps == 0) { //达到最大连锁数量
             return;
         }
-        for (Direction dir : Direction.values()) {
-            BlockPos stepPos = origin.offset(dir);
-            if (set.contains(stepPos)) { //防止操作重复坐标
-                continue;
-            }
-            BlockState stepState = world.getBlockState(stepPos);
-            Block stepBlock = stepState.getBlock();
-            boolean log = stepState.getMaterial() == Material.WOOD || stepState.getMaterial() == Material.NETHER_WOOD;
-            boolean leaf = stepBlock instanceof LeavesBlock; // || stepBlock.getBlock() == Blocks.NETHER_WART_BLOCK || stepBlock.getBlock() == Blocks.WARPED_WART_BLOCK;
-            if (log || leaf) {
+        for (BlockPos pos : getAroundPos(origin)){
+            if (set.contains(pos)) continue;
+            if (isLogAndLeaf(world, pos)){
                 int step = steps - 1; //剩余数量-1
-                aoeBlocks(world, stepPos, player, step, stack); //递归
-                set.add(stepPos); //添加当前坐标
+                aoeBlocks(world, pos, player, step, stack); //递归
+                set.add(pos); //添加当前坐标
             }
         }
+    }
+
+    /**
+     * 获取当前木头周围一圈的坐标（26个）
+     * @param pos 中心坐标
+     * @return 周围坐标集合
+     */
+    public static Iterable<BlockPos> getAroundPos(BlockPos pos){
+        return BlockPos.getAllInBoxMutable(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+    }
+
+    /**
+     * 存在问题：无法准确获取上层木头坐标 无法确定树木高度以介绍砍树
+     * @param world
+     * @param pos
+     * @param player
+     * @param maxCount
+     * @param axe
+     */
+    public static void aoeAxe(World world, BlockPos pos, PlayerEntity player, int maxCount, ItemStack axe){
+        int heightY = pos.getY(); //初始高度坐标
+        if (heightY < 0 || heightY > 255) return;
+
+        boolean flag = true; //是否结束伐木
+        int max = maxCount;
+        while (flag){
+            BlockPos upPos = BlockPos.ZERO;
+            if (max == maxCount)
+                maxCount = layerBreak(world, pos, maxCount, axe, player);
+            else {
+                upPos = getUpPos(world, pos.up());
+                maxCount = layerBreak(world, upPos, maxCount, axe, player);
+            }
+            if (maxCount <= 0 || upPos.getY() > 255) flag = false;
+        }
+    }
+
+    /**
+     * 破坏当前一层的所有树木
+     * @param world 世界
+     * @param pos 此层开始破坏坐标
+     * @param maxCount 最大破坏数量
+     * @param axe 使用工具（斧头）
+     * @param player 砍树玩家
+     */
+    public static int layerBreak(World world, BlockPos pos, int maxCount, ItemStack axe, PlayerEntity player){
+        if (!isLogAndLeaf(world, pos)) return maxCount;
+
+        destroyBlock(pos, world, axe, player);
+        maxCount--;
+        if (maxCount <= 0) return maxCount;
+
+        for (Direction dir : Direction.values()){
+            if (dir == Direction.DOWN || dir == Direction.UP) continue;
+            BlockPos offset = pos.offset(dir); //临近方块
+            if (set.contains(offset)) continue; //防止操作重复坐标
+
+            if (isLogAndLeaf(world, offset)) {
+                maxCount = layerBreak(world, offset, maxCount, axe, player); //递归
+                set.add(offset); //添加当前坐标
+            }
+        }
+
+        return maxCount;
+    }
+
+    /**
+     * 获取一个上一层的原木或树叶坐标
+     * @param world 世界
+     * @param pos 上方坐标
+     * @return 可用坐标
+     */
+    public static BlockPos getUpPos(World world, BlockPos pos){
+        if (isLogAndLeaf(world, pos)) return pos;
+        for (Direction dir : Direction.values()){
+            if (dir == Direction.DOWN || dir == Direction.UP) continue;
+            BlockPos offset = pos.offset(dir);
+            if (isLogAndLeaf(world, offset)) return offset; //是可砍伐方块
+//            if (world.isAirBlock(offset))
+//                getUpPos(world, offset);
+        }
+
+        return BlockPos.ZERO;
+    }
+
+    /**
+     * 判断当前坐标的方块是不是原木或树叶
+     * @param world 世界
+     * @param pos 要判断的坐标
+     * @return true 是原木或树叶
+     */
+    public static boolean isLogAndLeaf(World world, BlockPos pos){
+        BlockState state = world.getBlockState(pos);
+        return state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES);
     }
 }
