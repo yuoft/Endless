@@ -21,11 +21,11 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class InfinityShovel extends ShovelItem {
-    private final ItemHander hander;
+    private final ToolHelper hander;
 
     public InfinityShovel() {
         super(MyItemTier.INFINITY_TOOL, -2, -2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
-        this.hander = new ItemHander();
+        this.hander = new ToolHelper();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class InfinityShovel extends ShovelItem {
             if (!world.isRemote){
                 BlockState state = world.getBlockState(pos);
                 if (state.getHarvestLevel() <= itemstack.getHarvestLevel(ToolType.SHOVEL, player, state)
-                        && ItemHander.MATERIAL_SHOVEL.contains(state.getMaterial())){
+                        && ToolHelper.MATERIAL_SHOVEL.contains(state.getMaterial())){
                     hander.onBlockStartBreak(itemstack, world, pos, player, 7, ToolType.SHOVEL);
                 }
             }

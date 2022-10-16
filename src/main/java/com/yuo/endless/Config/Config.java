@@ -66,7 +66,8 @@ public class Config {
         public final ForgeConfigSpec.BooleanValue isSwordAttackAnimal; // 无尽剑的右键范围攻击是否攻击中立生物
         public final ForgeConfigSpec.IntValue subArrowDamage; // 无尽光箭伤害
         public final ForgeConfigSpec.IntValue noArrowDamage; // 无尽弓,弩空射箭矢伤害
-        public final ForgeConfigSpec.IntValue axeChainCount; // 无尽斧砍树连锁最大数量
+        public final ForgeConfigSpec.IntValue axeChainDistance; // 无尽斧砍树连锁最大距离
+        public final ForgeConfigSpec.BooleanValue isAxeChangeGrassBlock; // 无尽斧的右键范围破坏是否转变草方块
         public final ForgeConfigSpec.DoubleValue foodTime; //食物效果时间缩放系数
         public final ForgeConfigSpec.BooleanValue isRemoveBlock; //无尽镐潜行左键是否删除方块
         public final ForgeConfigSpec.IntValue matterClusterMaxCount; //物质团单个物品存储上限
@@ -127,7 +128,8 @@ public class Config {
             this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Attack Animal", true, "Whether to allow infinity sword right click attack neutral creatures.");
             this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Damage of the sub arrow.");
             this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "Damage of the infinity bow or crossbow without projectile.");
-            this.axeChainCount = buildInt(builder, "Axe Chain Count", 64, 16, 1024, "Maximum number of blocks can be destroyed by a chain cutting of the infinity axe.");
+            this.axeChainDistance = buildInt(builder, "Axe Chain Distance", 32, 16, 1024, "Maximum distance of blocks can be destroyed by a chain cutting of the infinity axe.");
+            this.isAxeChangeGrassBlock = buildBoolean(builder, "Is Axe Change Grass Block", true,  "Right click range of Endless Axe Destroy Whether to change the grass box.");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
             this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Whether to allow the infinity pickaxe to destory unbreakable blocks with shift + left click.");
             this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 2048, 256, 10240, "Maximum quantity of a single item in a matter cluster.");

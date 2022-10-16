@@ -53,23 +53,23 @@ public class InfinityHoe extends HoeItem {
                 if (block instanceof CropsBlock){ //普通作物
                     if (block instanceof BeetrootBlock ? state.get(BeetrootBlock.BEETROOT_AGE) >= 3 : state.get(CropsBlock.AGE) >= 7){
                         //对收获作物进行打包
-                        ItemHander.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
+                        ToolHelper.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
                         worldIn.setBlockState(pos, state.with(block instanceof BeetrootBlock ? BeetrootBlock.BEETROOT_AGE:CropsBlock.AGE, 0), 11); //重新种植
                     }
                 }
                 if (block instanceof CocoaBlock){ //可可豆
                     if (state.get(CocoaBlock.AGE) >= 2){
-                        ItemHander.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
+                        ToolHelper.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
                         worldIn.setBlockState(pos, state.with(CocoaBlock.AGE, 0), 11); //重新种植
                     }
                 }
                 if (block instanceof StemGrownBlock){ //南瓜
-                    ItemHander.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
+                    ToolHelper.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
                     worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
                 }
                 if (block instanceof SweetBerryBushBlock){ //浆果
                     if (state.get(SweetBerryBushBlock.AGE) >= 3){
-                        ItemHander.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
+                        ToolHelper.putMapDrops(worldIn, pos, playerIn, new ItemStack(this), map);
                         worldIn.setBlockState(pos, state.with(SweetBerryBushBlock.AGE, 0), 11); //重新种植
                     }
                 }
@@ -79,7 +79,7 @@ public class InfinityHoe extends HoeItem {
                         ((IGrowable) block).grow((ServerWorld) worldIn, worldIn.rand, pos, state);
                 }
             }
-            ItemHander.spawnMatterCluster(playerIn, worldIn, map);
+            ToolHelper.spawnMatterCluster(playerIn, worldIn, map);
             playerIn.getCooldownTracker().setCooldown(heldItem.getItem(), 20); //冷却
         }
         return ActionResult.resultPass(heldItem);
@@ -124,7 +124,7 @@ public class InfinityHoe extends HoeItem {
                             world.setBlockState(pos, blockstate, 11);
                         }
                     }
-                    ItemHander.spawnMatterCluster(playerentity, world, map);
+                    ToolHelper.spawnMatterCluster(playerentity, world, map);
 
                     //填充外边液体
                     Iterable<BlockPos> inBoxMutable = BlockPos.getAllInBoxMutable(minPos, maxPos.add(0, 3, 0));
@@ -163,11 +163,11 @@ public class InfinityHoe extends HoeItem {
         //添加到map中
         if (block.equals(Blocks.BEDROCK)){
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);
-            ItemStack itemStack = ItemHander.mapEquals(stack1, map);
+            ItemStack itemStack = ToolHelper.mapEquals(stack1, map);
             if (!itemStack.isEmpty())
                 map.put(itemStack, map.get(itemStack) + stack1.getCount());
             else map.put(stack1, stack1.getCount());
-        }else ItemHander.putMapDrops(world, pos, player, new ItemStack(this), map);
+        }else ToolHelper.putMapDrops(world, pos, player, new ItemStack(this), map);
         world.setBlockState(pos, Blocks.AIR.getDefaultState());
     }
 

@@ -3,16 +3,16 @@ package com.yuo.endless.Items.Tool;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.block.BlockState;
-import net.minecraft.command.impl.GiveCommand;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -23,11 +23,11 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class InfinityAxe extends AxeItem {
-    private final ItemHander hander;
+    private final ToolHelper hander;
 
     public InfinityAxe() {
         super(MyItemTier.INFINITY_TOOL, 10, -3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
-        this.hander = new ItemHander();
+        this.hander = new ToolHelper();
     }
 
     @Override
@@ -43,8 +43,14 @@ public class InfinityAxe extends AxeItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
-        if (player.isSneaking() && !player.world.isRemote){
-            hander.aoeBlocks(player.world, pos, player, Config.SERVER.axeChainCount.get(), itemstack);
+        World world = player.world;
+        if (player.isSneaking() && !world.isRemote){
+            BlockState state = world.getBlockState(pos);
+            //垂直方向的树木
+            if (state.isIn(BlockTags.LOGS) && state.get(RotatedPillarBlock.AXIS) == Direction.Axis.Y){
+                hander.aoeBlocks(world, pos, player, Config.SERVER.axeChainDistance.get(), itemstack);
+                return true;
+            }
         }
         return false;
     }
@@ -99,4 +105,5 @@ public class InfinityAxe extends AxeItem {
     public boolean hasCustomEntity(ItemStack stack) {
         return true;
     }
+
 }

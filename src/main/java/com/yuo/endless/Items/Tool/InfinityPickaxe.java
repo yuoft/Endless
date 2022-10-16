@@ -7,7 +7,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -19,23 +18,19 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public class InfinityPickaxe extends PickaxeItem {
 
-    private final ItemHander hander;
+    private final ToolHelper hander;
 
     public InfinityPickaxe() {
         super(MyItemTier.INFINITY_TOOL, -3, -2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
-        this.hander = new ItemHander();
+        this.hander = new ToolHelper();
     }
 
     //锤形态下挖掘速度变慢
@@ -94,7 +89,7 @@ public class InfinityPickaxe extends PickaxeItem {
             if (!world.isRemote){
                 BlockState state = world.getBlockState(pos);
                 if (state.getHarvestLevel() <= itemstack.getHarvestLevel(ToolType.PICKAXE, player, state)
-                        && ItemHander.MATERIAL_PICKAXE.contains(state.getMaterial())){ //初始坐标能挖掘
+                        && ToolHelper.MATERIAL_PICKAXE.contains(state.getMaterial())){ //初始坐标能挖掘
                     hander.onBlockStartBreak(itemstack, world, pos, player, 7, ToolType.PICKAXE);
                 }
             }
