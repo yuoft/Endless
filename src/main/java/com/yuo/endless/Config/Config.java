@@ -128,8 +128,8 @@ public class Config {
             this.isSwordAttackAnimal = buildBoolean(builder, "Is Sword Attack Animal", true, "Whether to allow infinity sword right click attack neutral creatures.");
             this.subArrowDamage = buildInt(builder, "Sub Arrow Damage", 10000, 10, 100000, "Damage of the sub arrow.");
             this.noArrowDamage = buildInt(builder, "No Arrow Damage", 10, 5, 100, "Damage of the infinity bow or crossbow without projectile.");
-            this.axeChainDistance = buildInt(builder, "Axe Chain Distance", 32, 16, 1024, "Maximum distance of blocks can be destroyed by a chain cutting of the infinity axe.");
-            this.isAxeChangeGrassBlock = buildBoolean(builder, "Is Axe Change Grass Block", true,  "Right click range of Endless Axe Destroy Whether to change the grass box.");
+            this.axeChainDistance = buildInt(builder, "Axe Chain Distance", 32, 16, 1024, "Maximum distance of a chain cutting of the infinity axe.");
+            this.isAxeChangeGrassBlock = buildBoolean(builder, "Is Axe Change Grass Block", true,  "Whether to allow the infinity axe to turn grass block into dirt.");
             this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor");
             this.isRemoveBlock = buildBoolean(builder, "Is Remove Block", false,  "Whether to allow the infinity pickaxe to destory unbreakable blocks with shift + left click.");
             this.matterClusterMaxCount = buildInt(builder, "Matter Cluster Max Count", 2048, 256, 10240, "Maximum quantity of a single item in a matter cluster.");
