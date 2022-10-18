@@ -82,6 +82,9 @@ public class Endless {
         if (isBotania){
             ItemRegistry.registerBOT();
         }
+        if (isProjecte){
+            ItemRegistry.registerPE();
+        }
 
         modEventBus.addListener(this::commonSetup);
         //注册物品至mod总线
@@ -147,20 +150,4 @@ public class Endless {
         return ModList.get().isLoaded(modId);
     }
 
-    /**
-     * 比较版本
-     * @param str 实际版本
-     * @param minVer 最低版本
-     * @param maxVer 最高版本
-     * @return 符合 true
-     */
-    private boolean compareVersion(String str, String minVer, String maxVer){
-        String s = str.replace(".", "");
-        String s1 = minVer.replace(".", "");
-        String s2 = maxVer.replace(".", "");
-        int i = Integer.parseInt(s);
-        int i1 = Integer.parseInt(s1);
-        int i2 = Integer.parseInt(s2);
-        return i >= i1 && i <= i2;
-    }
 }

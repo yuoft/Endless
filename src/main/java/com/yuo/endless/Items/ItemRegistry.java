@@ -146,6 +146,8 @@ public class ItemRegistry {
 	public static RegistryObject<Item> singularityMana; //魔钢
 	public static RegistryObject<Item> singularityTara; //泰拉钢
 	public static RegistryObject<Item> singularityElementIum; //源质钢
+	public static RegistryObject<Item> singularityDarkMatter; //暗物质
+	public static RegistryObject<Item> singularityRedMatter; //红物质
 
 	//强力装备
 	public static void registerSpaceArmsItem(){
@@ -197,4 +199,9 @@ public class ItemRegistry {
 		singularityElementIum = ITEMS.register("singularity_elementium", () -> new Singularity(0xe464ff, 0xe784ff));
 	}
 
+	//等价交换
+	public static void registerPE(){
+		singularityDarkMatter = ITEMS.register("singularity_dark_matter", () -> new Singularity(0x0c0c0c, 0x171717));
+		singularityRedMatter = ITEMS.register("singularity_red_matter", () -> new Singularity(0x340303, 0x4d0404));
+	}
 }

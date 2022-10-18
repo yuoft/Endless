@@ -110,6 +110,8 @@ public class Config {
         public final ForgeConfigSpec.IntValue singularityMana;
         public final ForgeConfigSpec.IntValue singularityTara;
         public final ForgeConfigSpec.IntValue singularityElementIum;
+        public final ForgeConfigSpec.IntValue singularityDarkMatter;
+        public final ForgeConfigSpec.IntValue singularityRedMatter;
         public final ForgeConfigSpec.IntValue modRatioRate; //模组影响后的最大倍率
         public final ForgeConfigSpec.IntValue modRatioCount; //模组影响后的最大数量
 
@@ -174,6 +176,8 @@ public class Config {
             this.singularityMana = buildInt(builder, "Mana", 200, 10, 2000, "base count");
             this.singularityTara = buildInt(builder, "Tara", 100, 10, 2000, "base count");
             this.singularityElementIum = buildInt(builder, "ElementIum", 50, 10, 2000, "base count");
+            this.singularityDarkMatter = buildInt(builder, "Dark Matter", 150, 10, 2000, "base count");
+            this.singularityRedMatter = buildInt(builder, "Red Matter", 100, 10, 2000, "base count");
             builder.pop();
 
             builder.comment("Mod Impact").push("modRatio");
