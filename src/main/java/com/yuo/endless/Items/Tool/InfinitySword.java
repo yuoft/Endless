@@ -14,6 +14,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
@@ -23,6 +25,7 @@ import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
@@ -31,6 +34,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -74,20 +80,66 @@ public class InfinitySword extends SwordItem{
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        if (player.world.isRemote) return false;
+//        if (player.world.isRemote) return false;
         if (entity instanceof LivingEntity){
             LivingEntity living = (LivingEntity) entity;
             hitEntity(stack, living, player);
             float attackStrength = player.getCooledAttackStrength(1.6f); //攻击强度
-            if (attackStrength > 0.84f)
+            float walkSpeed = player.abilities.getWalkSpeed();
+            boolean isCritical = attackStrength > 0.848f && walkSpeed <= 0.1f && !player.isOnGround() && player.fallDistance > 0.f
+                    && !player.isOnLadder() && !player.isInWater() && !player.isPassenger();
+            CriticalHitEvent criticalHit = ForgeHooks.getCriticalHit(player, living, isCritical, isCritical ? 1.5f : 1.0f);
+            isCritical = criticalHit != null;
+            if (attackStrength > 0.84f && player.isOnGround()) { //攻击强度大于84%，且在地面
                 sweepAttack(living, player);
+            } else if (isCritical){
+                //攻击强度大于84.8%，正在下落，未在地面, 正常行走速度,未骑乘实体，不在水中
+                criticalAttack(player, living);
+            }
+            knockAttack(player, living, stack);
         }
         damageGuardian(entity, player);
         return false;
     }
 
     /**
-     * 模拟左键横扫攻击
+     * 击退
+     * @param player 玩家
+     * @param living 被攻击生物
+     * @param stack 玩家使用武器
+     */
+    private void knockAttack(PlayerEntity player, LivingEntity living, ItemStack stack){
+        ModifiableAttributeInstance knockback = player.getAttribute(Attributes.ATTACK_KNOCKBACK); //击退
+        if (knockback != null){
+            int level = EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, stack); //击退附魔
+            if (player.isSprinting()) level++;
+            player.world.playSound(player, player.getPosition(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            living.applyKnockback((float)knockback.getValue() + level, -player.getLookVec().x, -player.getLookVec().z); //击退
+        }
+    }
+
+    /**
+     * 暴击
+     * @param player 玩家
+     * @param living 玩家攻击生物
+     */
+    private void criticalAttack(PlayerEntity player, LivingEntity living){
+        EffectInstance blindness = player.getActivePotionEffect(Effects.BLINDNESS); //失明
+        EffectInstance slowFalling = player.getActivePotionEffect(Effects.SLOW_FALLING); //缓降
+        World world = player.world;
+        if (blindness == null && slowFalling == null){ //没有此2个效果
+            world.playSound(player, player.getPosition(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0f, 1.0f);
+            float health = living.getHealth() > 300 ? 300 : living.getHealth();
+            int particleCount = (int) (health > 2.0 ? health * 0.5 : health);
+            if (world instanceof ServerWorld){ //暴击粒子
+                ServerWorld serverWorld = (ServerWorld) world;
+                serverWorld.spawnParticle(ParticleTypes.CRIT, living.getPosX(), living.getPosYHeight(0.5), living.getPosZ(), particleCount, 0.1D, 0.0D, 0.1D, 0.2D);
+            }
+        }
+    }
+
+    /**
+     * 横扫攻击
      * @param targetEntity 被攻击生物
      * @param player 玩家
      */
@@ -108,11 +160,11 @@ public class InfinitySword extends SwordItem{
     //攻击实体
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (attacker.world.isRemote) return true;
         int fireAspect = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
         if (fireAspect > 0){
             target.setFire(fireAspect * 4);
         }
+        if (!attacker.isOnGround() && !attacker.isInWater())
         if (target instanceof EnderDragonEntity && attacker instanceof PlayerEntity){
             EnderDragonEntity dragon = (EnderDragonEntity) target; //攻击末影龙
             dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
