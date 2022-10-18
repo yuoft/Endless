@@ -15,6 +15,7 @@ import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -135,6 +136,12 @@ public class ModRecipeManager {
                     getList(new ItemStack(ModBlocks.terrasteelBlock)));
             CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityElementIum.get()), (Config.SERVER.singularityElementIum.get() + countEnd) * rateEnd,
                     getList(new ItemStack(ModBlocks.elementiumBlock)));
+        }
+        if (Endless.isProjecte){
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityDarkMatter.get()), (Config.SERVER.singularityDarkMatter.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(PEBlocks.DARK_MATTER)));
+            CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityRedMatter.get()), (Config.SERVER.singularityRedMatter.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(PEBlocks.RED_MATTER)));
         }
         //奇点合成配方
         CompressorManager.addRecipe(new ItemStack(ItemRegistry.singularityClay.get()), (Config.SERVER.singularityClay.get() + countEnd) * rateEnd,
@@ -606,6 +613,56 @@ public class ModRecipeManager {
                 'H', new ItemStack(Blocks.HOPPER),
                 'R', new ItemStack(Blocks.REDSTONE_BLOCK),
                 'O', new ItemStack(ItemRegistry.neutroniumBlock.get()));
+//        if (Endless.isThermal){
+//            ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(ThermalCore.ITEMS.get("rf_coil_creative_augment")),
+//                    );
+//        }
+        if (Endless.isDraconicEvolution){
+            Block creativeOpCapacitor = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:creative_op_capacitor")); //创造RF能源
+            Item creativeCapacitor = Registry.ITEM.getOrDefault(new ResourceLocation("draconicevolution:creative_capacitor")); //创造模式电容
+            if (creativeOpCapacitor != Blocks.AIR && creativeCapacitor != Items.AIR){
+                Block reactorStabilizer = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:reactor_stabilizer")); //反应堆稳定器
+                Block reactorCore = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:reactor_core")); //反应堆核心
+                ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(creativeCapacitor),
+                        "BBCCCCCBB",
+                        "BBBBBBBBB",
+                        "CBAAAAABC",
+                        "CBACECABC",
+                        "CBAEDEABC",
+                        "CBACECABC",
+                        "CBAAAAABC",
+                        "BBBBBBBBB",
+                        "BBCCCCCBB",
+                        'A', new ItemStack(ItemRegistry.infinityIngot.get()),
+                        'B', new ItemStack(com.yuo.endless.Blocks.BlockRegistry.infinityBlock.get()),
+                        'C', new ItemStack(reactorStabilizer),
+                        'D', new ItemStack(reactorCore),
+                        'E', new ItemStack(creativeCapacitor));
+            }
+            if (creativeCapacitor != Items.AIR){
+                Block chaoticCraftingInjector = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:chaotic_crafting_injector")); //混沌注入器
+                Block reactorStabilizer = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:reactor_stabilizer")); //反应堆稳定器
+                Block reactorCore = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:reactor_core")); //反应堆核心
+                Item chaoticCore = Registry.ITEM.getOrDefault(new ResourceLocation("draconicevolution:chaotic_core")); //混沌核心
+                Item chaoticCapacitor = Registry.ITEM.getOrDefault(new ResourceLocation("draconicevolution:chaotic_capacitor")); //混沌电容
+                ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(creativeCapacitor),
+                        "AAAACAAAA",
+                        "ADDBCBDDA",
+                        "ADBFCFBDA",
+                        "ADFFCFFDA",
+                        "CCCCECCCC",
+                        "ADFFCFFDA",
+                        "ADBFCFBDA",
+                        "ADDBCBDDA",
+                        "AAAACAAAA",
+                        'A', new ItemStack(ItemRegistry.infinityIngot.get()),
+                        'B', new ItemStack(chaoticCraftingInjector),
+                        'C', new ItemStack(reactorStabilizer),
+                        'D', new ItemStack(reactorCore),
+                        'E', new ItemStack(chaoticCore),
+                        'F', new ItemStack(chaoticCapacitor));
+            }
+        }
     }
 
 
@@ -712,7 +769,8 @@ public class ModRecipeManager {
         }
         if (Endless.isAppliedEnergistics2){ //33+2 41 42
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(Api.instance().definitions().items().fluidCell64k()), new ItemStack(Api.instance().definitions().materials().singularity()));
+                    new ItemStack(Api.instance().definitions().items().fluidCell64k()),
+                    new ItemStack(Api.instance().definitions().materials().singularity()));
         }
         if (Endless.isDraconicEvolution){ //35+1 41 42
             String str = "draconicevolution:awakened_draconium_block"; //觉醒龙块
@@ -722,11 +780,12 @@ public class ModRecipeManager {
                         new ItemStack(block));
             }
         }
-        if (Endless.isProjecte){ //36+1 41 42
+        if (Endless.isProjecte){ //36+3 41 42
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(PEBlocks.RED_MATTER));
+                    new ItemStack(PEBlocks.RED_MATTER), new ItemStack(ItemRegistry.singularityDarkMatter.get()),
+                    new ItemStack(ItemRegistry.singularityRedMatter.get()));
         }
-        if (Endless.isTheTwilightForest){ //37+1 41+1 42+1
+        if (Endless.isTheTwilightForest){ //39+1 41+1 42+1
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(TFBlocks.ironwood_block.get()));
             ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
@@ -734,13 +793,13 @@ public class ModRecipeManager {
             ExtremeCraftingManager.getInstance().addRecipeInput(stew,
                     new ItemStack(TFItems.maze_wafer.get()));
         }
-        if (Endless.isCreate){ //38+1 42 43+1
+        if (Endless.isCreate){ //40+1 42 43+1
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(ItemRegistry.singularityZinc.get()));
             ExtremeCraftingManager.getInstance().addRecipeInput(stew,
                     new ItemStack(AllItems.BAR_OF_CHOCOLATE.get()));
         }
-        if (Endless.isAdventOfAscension3){ //39+1 42+3 44+3
+        if (Endless.isAdventOfAscension3){ //41+1 42+3 44+3
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(AoABlocks.SHYREGEM_BLOCK.get()));
             ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
@@ -750,20 +809,20 @@ public class ModRecipeManager {
                     new ItemStack(AoAItems.GOLDICAP_PETALS.get()), new ItemStack(AoAItems.MAGIC_MARANG.get()),
                     new ItemStack(AoAItems.NATURAL_TEA.get()));
         }
-        if (Endless.isAstralSorcery){ //40+1 45 47
+        if (Endless.isAstralSorcery){ //42+1 45 47
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(BlocksAS.STARMETAL));
         }
-        if (Endless.isSlashBlade2){ //41+1 45 47
+        if (Endless.isSlashBlade2){ //43+1 45 47
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(SBItems.proudsoul_trapezohedron));
         }
-        if (Endless.isMysticalAgriculture){ //42+2 45 47
+        if (Endless.isMysticalAgriculture){ //44+2 45 47
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(com.blakebr0.mysticalagriculture.init.ModBlocks.SUPREMIUM_GEMSTONE_BLOCK.get()),
                     new ItemStack(com.blakebr0.mysticalagriculture.init.ModBlocks.SUPREMIUM_BLOCK.get()));
         }
-        if (Endless.isThermal){ //44+1 45+3 47+2
+        if (Endless.isThermal){ //46+1 45+3 47+2
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ThermalCore.BLOCKS.get("enderium_block")),
                     new ItemStack(ItemRegistry.singularityNickel.get()),
                     new ItemStack(ItemRegistry.singularityLead.get()), new ItemStack(ItemRegistry.singularityTin.get()));
@@ -775,19 +834,19 @@ public class ModRecipeManager {
             CompressorManager.addInputs(ItemRegistry.singularityGold.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
             CompressorManager.addInputs(ItemRegistry.singularityIron.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
         }
-        if (Endless.isIceandfire && Endless.isThermal){
+        if (Endless.isIceandfire && Endless.isThermal){ //47 48 49
             CompressorManager.addInputs(ItemRegistry.singularityCopper.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("copper_block")),
                     new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
             CompressorManager.addInputs(ItemRegistry.singularitySilver.get(), getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
         }
-        if (Endless.isDraconicEvolution){
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityDragonIum.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityAwakenDragon.get()));
+        if (Endless.isDraconicEvolution){ //47+2 48 49
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(ItemRegistry.singularityDragonIum.get()), new ItemStack(ItemRegistry.singularityAwakenDragon.get()));
         }
-        if (Endless.isBotania){
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityMana.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityTara.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ItemRegistry.singularityElementIum.get()));
+        if (Endless.isBotania){ //49+3
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(ItemRegistry.singularityMana.get()), new ItemStack(ItemRegistry.singularityTara.get()),
+                    new ItemStack(ItemRegistry.singularityElementIum.get()));
         }
     }
 
