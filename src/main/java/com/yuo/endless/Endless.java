@@ -38,7 +38,7 @@ public class Endless {
     public static boolean isSophisticatedBackpacks = false; //精妙背包
     public static boolean isOreExcavation = false; //矿石挖掘
     public static boolean isAOA3 = false; //虚无世界3
-    public static boolean isTinkersConstruct3 = false; //匠魂3
+    public static boolean isTC3 = false; //匠魂3
     public static boolean isCrT = false; //CRT
     public static boolean isStorageDrawers = false; //储物抽屉
     public static boolean isEnchantingInfuser = false; //附魔灌注台
@@ -121,7 +121,7 @@ public class Endless {
         isSophisticatedBackpacks = checkMod("sophisticatedbackpacks");
         isOreExcavation = checkMod("oreexcavation");
         isAOA3 = checkMod("aoa3");
-        isTinkersConstruct3 = checkMod("tconstruct");
+        isTC3 = checkMod("tconstruct");
         isCrT = checkMod("crafttweaker");
         isStorageDrawers = checkMod("storagedrawers");
         isEnchantingInfuser = checkMod("enchantinginfuser");

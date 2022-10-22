@@ -148,6 +148,8 @@ public class EndlessItems {
 	public static RegistryObject<Item> singularityElementIum; //源质钢
 	public static RegistryObject<Item> singularityDarkMatter; //暗物质
 	public static RegistryObject<Item> singularityRedMatter; //红物质
+	public static RegistryObject<Item> singularityCobalt; //钴
+	public static RegistryObject<Item> singularityManyullyn; //玛玉灵
 
 	//强力装备
 	public static void registerSpaceArmsItem(){
@@ -203,5 +205,10 @@ public class EndlessItems {
 	public static void registerPE(){
 		singularityDarkMatter = ITEMS.register("singularity_dark_matter", () -> new Singularity(0x0c0c0c, 0x171717));
 		singularityRedMatter = ITEMS.register("singularity_red_matter", () -> new Singularity(0x340303, 0x4d0404));
+	}
+	//匠魂3
+	public static void registerTC3(){
+		singularityCobalt = ITEMS.register("singularity_cobalt", () -> new Singularity(0x0753b8, 0x59a6ef));
+		singularityManyullyn = ITEMS.register("singularity_manyullyn", () -> new Singularity(0xa97de0, 0xcfacf9));
 	}
 }

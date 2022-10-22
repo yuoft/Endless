@@ -26,6 +26,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.tslat.aoa3.common.registration.AoABlocks;
 import net.tslat.aoa3.common.registration.AoAItems;
+import slimeknights.tconstruct.shared.TinkerMaterials;
+import slimeknights.tconstruct.tools.TinkerModifiers;
 import twilightforest.block.TFBlocks;
 import twilightforest.item.TFItems;
 import vazkii.botania.common.block.ModBlocks;
@@ -60,7 +62,7 @@ public class ModRecipeManager {
 
         if (Endless.isOreExcavation) rate += 2;
         if (Endless.isAOA3) count += 100;
-        if (Endless.isTinkersConstruct3) count += 100;
+        if (Endless.isTC3) count += 100;
         if (Endless.isCrT) count += 25;
         if (Endless.isStorageDrawers) count += 50;
         if (Endless.isEnchantingInfuser) rate += 1;
@@ -145,6 +147,13 @@ public class ModRecipeManager {
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityRedMatter.get()), (Config.SERVER.singularityRedMatter.get() + countEnd) * rateEnd,
                     getList(new ItemStack(PEBlocks.RED_MATTER)));
         }
+        if (Endless.isTC3){
+            CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityCobalt.get()), (Config.SERVER.singularityCobalt.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(TinkerMaterials.cobalt)));
+            CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityManyullyn.get()), (Config.SERVER.singularityManyullyn.get() + countEnd) * rateEnd,
+                    getList(new ItemStack(TinkerMaterials.manyullyn)));
+        }
+
         //奇点合成配方
         CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityClay.get()), (Config.SERVER.singularityClay.get() + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.CLAY)));
@@ -795,8 +804,13 @@ public class ModRecipeManager {
                     new ItemStack(RSItems.ITEM_STORAGE_DISKS.get(ItemStorageType.SIXTY_FOUR_K).get()),
                     new ItemStack(RSItems.FLUID_STORAGE_DISKS.get(FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get()));
         }
-        if (Endless.isTinkersConstruct3){
-
+        if (Endless.isTC3){//52 48 49
+            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(TinkerModifiers.dragonScale),
+                    new ItemStack(EndlessItems.singularityCobalt.get()), new ItemStack(EndlessItems.singularityManyullyn.get()));
+        }
+        if (Endless.isIAF && Endless.isTC3){ //52 48 49
+            CompressorManager.addInputs(EndlessItems.singularityCopper.get(), getList(new ItemStack(TinkerMaterials.copper)));
         }
     }
 
