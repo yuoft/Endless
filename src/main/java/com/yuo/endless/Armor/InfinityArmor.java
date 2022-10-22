@@ -1,7 +1,7 @@
 package com.yuo.endless.Armor;
 
 import com.yuo.endless.Endless;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.ColorText;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
 import com.yuo.endless.tab.ModGroup;
@@ -23,7 +23,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -64,7 +63,7 @@ public class InfinityArmor extends ArmorItem {
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         Item item = stack.getItem();
-        if (item == ItemRegistry.infinityHead.get()) {
+        if (item == EndlessItems.infinityHead.get()) {
             if (player.areEyesInFluid(FluidTags.WATER)) { //玩家视线在水中
                 player.setAir(300);
             }
@@ -72,7 +71,7 @@ public class InfinityArmor extends ArmorItem {
             if (stack.getOrCreateTag().getBoolean("flag"))
                 player.addPotionEffect(new EffectInstance(Effects.NIGHT_VISION, 300, 0)); //夜视
         }
-        if (item == ItemRegistry.infinityChest.get()) {
+        if (item == EndlessItems.infinityChest.get()) {
             //清除所有负面效果
             Collection<EffectInstance> effects = player.getActivePotionEffects();
             if (effects.size() > 0) {
@@ -87,7 +86,7 @@ public class InfinityArmor extends ArmorItem {
                 }
             }
         }
-        if (item == ItemRegistry.infinityLegs.get()) {
+        if (item == EndlessItems.infinityLegs.get()) {
             if (player.isBurning()) player.extinguish();//着火时熄灭
             player.isImmuneToFire(); //免疫火伤
         }

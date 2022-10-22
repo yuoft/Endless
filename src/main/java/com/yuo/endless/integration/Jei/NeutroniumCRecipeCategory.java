@@ -2,7 +2,7 @@ package com.yuo.endless.integration.Jei;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yuo.endless.Endless;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -25,7 +25,7 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
 
     public NeutroniumCRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 37,25,102,40); //绘制背景
-        this.icon = helper.createDrawableIngredient(new ItemStack(ItemRegistry.neutronCompressor.get())); //绘制合成方块
+        this.icon = helper.createDrawableIngredient(new ItemStack(EndlessItems.neutronCompressor.get())); //绘制合成方块
         this.singularity = helper.createDrawable(TEXTURE, 176,16,16,16);
     }
 
@@ -41,7 +41,7 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
 
     @Override
     public String getTitle() {
-        return ItemRegistry.neutronCompressor.get().getName().getString();
+        return EndlessItems.neutronCompressor.get().getName().getString();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Container.NCIntArray;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -61,7 +61,7 @@ public class AbsNeutronCollectorTile extends LockableTileEntity implements ITick
     }
     //产物
     protected ItemStack getCraftOutputItem(){
-        return new ItemStack(ItemRegistry.neutroniumPile.get());
+        return new ItemStack(EndlessItems.neutroniumPile.get());
     }
 
     @Override

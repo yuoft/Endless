@@ -3,11 +3,8 @@ package com.yuo.endless.Recipe;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.*;
-import com.yuo.endless.Blocks.BlockRegistry;
-import com.yuo.endless.Container.ExtremeCraftInventory;
-import net.minecraft.inventory.CraftingInventory;
+import com.yuo.endless.Blocks.EndlessBlocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.*;
@@ -201,7 +198,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
     //合成方块图标
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(BlockRegistry.extremeCraftingTable.get());
+        return new ItemStack(EndlessBlocks.extremeCraftingTable.get());
     }
 
     //解析json配方方法

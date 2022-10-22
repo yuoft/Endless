@@ -1,8 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemTier;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 
@@ -12,20 +11,20 @@ import java.util.function.Supplier;
 public enum MyItemTier implements IItemTier {
 
     SKULLFIRE(1561, 10.0f, 10, 2, 10, () -> {
-        return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
+        return Ingredient.fromItems(EndlessItems.infinityIngot.get());
     }),
     NEUTRON(3152, 15.0f, 10, 6, 21, () -> {
-        return Ingredient.fromItems(ItemRegistry.neutroniumIngot.get());
+        return Ingredient.fromItems(EndlessItems.neutroniumIngot.get());
     }),
     CRYSTAL(2401, 10.0f, 8, 5, 17, () -> {
-        return Ingredient.fromItems(ItemRegistry.crystalMatrixIngot.get());
+        return Ingredient.fromItems(EndlessItems.crystalMatrixIngot.get());
     }),
     //数值无穷表示：Double或Float的POSITIVE_INFINITY（正）或NEGATIVE_INFINITY（负）
     INFINITY_TOOL(9999, Float.MAX_VALUE, 10, 9999, 99, () -> {
-        return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
+        return Ingredient.fromItems(EndlessItems.infinityIngot.get());
     }),
     INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 99, () -> {
-        return Ingredient.fromItems(ItemRegistry.infinityIngot.get());
+        return Ingredient.fromItems(EndlessItems.infinityIngot.get());
     });
 
     private final int maxUses;//耐久

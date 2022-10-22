@@ -46,7 +46,7 @@ public class MatterCluster extends Item  {
             for (int j = 0; j < Math.ceil(mapCount * 1.0d / maxCount); j++){ //数量数量限制 超过则新建物质团
                 if (spawnMap.isEmpty()) return list;
                 Map<ItemStack, Integer> newMap = spawnNewMap(spawnMap, maxCount);
-                ItemStack stack = new ItemStack(ItemRegistry.matterCluster.get());
+                ItemStack stack = new ItemStack(EndlessItems.matterCluster.get());
                 setItemTag(stack, newMap);
                 list.add(stack);
             }
@@ -289,7 +289,7 @@ public class MatterCluster extends Item  {
         PlayerInventory inventory = player.inventory;
         for (int i = 0; i < inventory.getSizeInventory(); i++){
             ItemStack stack = inventory.getStackInSlot(i);
-            if (stack.getItem() == ItemRegistry.matterCluster.get() && !isMaxSize(stack)){
+            if (stack.getItem() == EndlessItems.matterCluster.get() && !isMaxSize(stack)){
                 if (slot == i) continue;
                 return stack;
             }

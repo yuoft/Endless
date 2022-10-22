@@ -1,7 +1,7 @@
 package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Container.DoubleNeutronCollectorContainer;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -26,7 +26,7 @@ public class DoubleNeutronCollectorTile extends AbsNeutronCollectorTile{
 
     @Override
     protected ItemStack getCraftOutputItem() {
-        return new ItemStack(ItemRegistry.neutroniumIngot.get());
+        return new ItemStack(EndlessItems.neutroniumIngot.get());
     }
 
     @Override

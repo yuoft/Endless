@@ -115,6 +115,10 @@ repositories {
         name = 'Create'
         url = "https://maven.tterrag.com"
     }
+    maven {
+        name 'RS maven'
+        url 'https://repo.refinedmods.com'
+    }
     //声明本地存储库
     flatDir {
         dirs('libs')
@@ -150,6 +154,10 @@ dependencies {
     compileOnly("curse.maven:mystical-agriculture-246640:3562127")
     compileOnly("curse.maven:cofh-core-69162:3788884")
     compileOnly("curse.maven:thermal-foundation-222880:3788893")
+    compileOnly("curse.maven:refinedstorage-243076:3630064")
+    compileOnly("curse.maven:StorageDrawers-223852:3776277")
+    compileOnly("slimeknights.mantle:Mantle:1.16.5-1.6.158")
+    compileOnly("slimeknights.tconstruct:TConstruct:1.16.5-3.3.4.335")
 
 //    runtimeOnly fg.deobf("com.teamcofh:cofh_core:1.16.5-1.5.0.+")
 //    runtimeOnly fg.deobf("com.teamcofh:thermal_foundation:1.16.5-1.5.0.+")

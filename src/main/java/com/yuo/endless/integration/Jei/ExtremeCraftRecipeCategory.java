@@ -1,7 +1,7 @@
 package com.yuo.endless.integration.Jei;
 
 import com.yuo.endless.Endless;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -25,7 +25,7 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
 
     public ExtremeCraftRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 0,0,190,164); //绘制背景
-        this.icon = helper.createDrawableIngredient(new ItemStack(ItemRegistry.extremeCraftingTable.get())); //绘制合成方块
+        this.icon = helper.createDrawableIngredient(new ItemStack(EndlessItems.extremeCraftingTable.get())); //绘制合成方块
 //        this.extreme = helper.createDrawable(TEXTURE);
     }
 
@@ -41,7 +41,7 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
 
     @Override
     public String getTitle() {
-        return ItemRegistry.extremeCraftingTable.get().getName().getString();
+        return EndlessItems.extremeCraftingTable.get().getName().getString();
     }
 
     @Override

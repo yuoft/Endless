@@ -1,18 +1,14 @@
 package com.yuo.endless.Entity;
 
-import com.brandon3055.draconicevolution.blocks.ChaosCrystal;
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -20,26 +16,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.entity.monster.GuardianEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.PacketThreadUtil;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -47,15 +31,11 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.eventbus.EventBus;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.NetworkInstance;
-import net.minecraftforge.fml.network.simple.IndexedMessageCodec;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
-import java.util.Set;
 
 //箭实体
 public class InfinityArrowEntity extends AbstractArrowEntity {
@@ -142,7 +122,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         if (shooter != null)
             shooter.setLastAttackedEntity(entity); //设置最后攻击者
 
-        if (Endless.isDraconicEvolution){
+        if (Endless.isDE){
             if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){
                 GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;
                 crystal.func_174812_G();
@@ -187,7 +167,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
                 if (this.hitEntities != null && this.getShotFromCrossbow()) {
                     CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, this.hitEntities);
                 } else if (!entity.isAlive() && this.getShotFromCrossbow()) {
-                    CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, Arrays.asList(entity));
+                    CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, Collections.singletonList(entity));
                 }
             }
         }
@@ -226,7 +206,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
             dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
         } else if (living instanceof ArmorStandEntity){
             living.attackEntityFrom(DamageSource.GENERIC, 10);
-        } else if (Endless.isDraconicEvolution && living instanceof DraconicGuardianEntity){
+        } else if (Endless.isDE && living instanceof DraconicGuardianEntity){
             DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) living;
             draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
             draconicGuardian.setHealth(-1);

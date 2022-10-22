@@ -124,3 +124,21 @@ description='''
     versionRange="[1.16.5-4.2.6, )"
     ordering="AFTER"
     side="BOTH"
+[[dependencies.refinedstorage]]
+    modId="refinedstorage"
+    mandatory=true
+    versionRange="[1.9.16,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.storagedrawers]]
+    modId="storagedrawers"
+    mandatory=true
+    versionRange="[8.4.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.tconstruct3]]
+    modId="tconstruct"
+    mandatory=true
+    versionRange="[3.3.4, )"
+    ordering="AFTER"
+    side="BOTH"

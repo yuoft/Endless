@@ -31,37 +31,37 @@ public class OrdinaryItem extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		Item item = stack.getItem();
-		if (item == ItemRegistry.crystalMatrixIngot.get()){
+		if (item == EndlessItems.crystalMatrixIngot.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.crystal_matrix_ingot"));
 		}
-		if (item == ItemRegistry.neutroniumPile.get()){
+		if (item == EndlessItems.neutroniumPile.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_pile"));
 		}
-		if (item == ItemRegistry.neutroniumNugget.get()){
+		if (item == EndlessItems.neutroniumNugget.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_nugget"));
 		}
-		if (item == ItemRegistry.neutroniumIngot.get()){
+		if (item == EndlessItems.neutroniumIngot.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_ingot"));
 		}
-		if (item == ItemRegistry.infinityCatalyst.get()){
+		if (item == EndlessItems.infinityCatalyst.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_catalyst"));
 		}
-		if (item == ItemRegistry.infinityIngot.get()){
+		if (item == EndlessItems.infinityIngot.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_ingot"));
 		}
-		if (item == ItemRegistry.recordFragment.get()){
+		if (item == EndlessItems.recordFragment.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.record_fragment"));
 		}
-		if (item == ItemRegistry.starFuel.get()){
+		if (item == EndlessItems.starFuel.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.star_fuel"));
 		}
 	}
 
 	@Override
 	public ItemStack getDefaultInstance() {
-		if (this == ItemRegistry.neutroniumPile.get()){
+		if (this == EndlessItems.neutroniumPile.get()){
 			return setEmc(this, 100L);
-		}else if (this == ItemRegistry.infinityCatalyst.get()){
+		}else if (this == EndlessItems.infinityCatalyst.get()){
 			return setEmc(this, 214905788L);
 		}
 		return super.getDefaultInstance();

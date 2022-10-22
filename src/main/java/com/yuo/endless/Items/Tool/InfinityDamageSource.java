@@ -1,8 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -10,7 +9,6 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import org.openzen.zenscript.codemodel.expression.ThisExpression;
 
 import java.util.Random;
 
@@ -88,6 +86,6 @@ public class InfinityDamageSource extends EntityDamageSource {
      */
     public boolean isInfinityWeapon(ItemStack stack){
         Item item = stack.getItem();
-        return item == ItemRegistry.infinitySword.get() || item == ItemRegistry.infinityBow.get() || item == ItemRegistry.infinityCrossBow.get();
+        return item == EndlessItems.infinitySword.get() || item == EndlessItems.infinityBow.get() || item == EndlessItems.infinityCrossBow.get();
     }
 }

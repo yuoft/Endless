@@ -5,7 +5,7 @@ import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Gui.*;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.InfinityCrossBow;
 import com.yuo.endless.Render.*;
@@ -13,25 +13,13 @@ import com.yuo.endless.Tiles.TileTypeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.entity.*;
-import net.minecraft.client.renderer.entity.model.ArmorStandArmorModel;
-import net.minecraft.client.renderer.entity.model.ArmorStandModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import java.util.Map;
 
 /**
  * 客户端属性注册
@@ -50,11 +38,11 @@ public class ClientProxy implements IProxy {
 
     public void clientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() ->{
-            setBowProperty(ItemRegistry.infinityBow.get());
-            setCrossBowProperty(ItemRegistry.infinityCrossBow.get());
-            setMatterClusterProperty(ItemRegistry.matterCluster.get());
-            setInfinityToolProperty(ItemRegistry.infinityPickaxe.get(), "hammer");
-            setInfinityToolProperty(ItemRegistry.infinityShovel.get(), "destroyer");
+            setBowProperty(EndlessItems.infinityBow.get());
+            setCrossBowProperty(EndlessItems.infinityCrossBow.get());
+            setMatterClusterProperty(EndlessItems.matterCluster.get());
+            setInfinityToolProperty(EndlessItems.infinityPickaxe.get(), "hammer");
+            setInfinityToolProperty(EndlessItems.infinityShovel.get(), "destroyer");
         });
         //绑定Container和ContainerScreen
         event.enqueueWork(() -> {

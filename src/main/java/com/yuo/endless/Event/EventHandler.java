@@ -3,7 +3,7 @@ package com.yuo.endless.Event;
 import com.yuo.endless.Armor.InfinityArmor;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import net.minecraft.block.BlockState;
@@ -18,7 +18,6 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,7 +30,6 @@ import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -70,10 +68,10 @@ public class EventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void opArmsImmuneDamage(LivingDamageEvent event){
         LivingEntity living = event.getEntityLiving();
-        Boolean hasChest = living.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == ItemRegistry.infinityChest.get();
-        Boolean hasLeg = living.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == ItemRegistry.infinityLegs.get();
-        Boolean hasHead = living.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
-        Boolean hasFeet = living.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
+        Boolean hasChest = living.getItemStackFromSlot(EquipmentSlotType.CHEST).getItem() == EndlessItems.infinityChest.get();
+        Boolean hasLeg = living.getItemStackFromSlot(EquipmentSlotType.LEGS).getItem() == EndlessItems.infinityLegs.get();
+        Boolean hasHead = living.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == EndlessItems.infinityHead.get();
+        Boolean hasFeet = living.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == EndlessItems.infinityFeet.get();
         float amount = event.getAmount();
         if (living instanceof PlayerEntity){ //怪物无法触发全部伤害减免
             PlayerEntity player = (PlayerEntity) living;
@@ -98,10 +96,10 @@ public class EventHandler {
             ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
             ItemStack legs = player.getItemStackFromSlot(EquipmentSlotType.LEGS);
             ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
-            boolean hasHead = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == ItemRegistry.infinityHead.get();
-            boolean hasChest = chest.getItem() == ItemRegistry.infinityChest.get();
-            boolean hasLegs = legs.getItem() == ItemRegistry.infinityLegs.get();
-            boolean hasFeet = player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == ItemRegistry.infinityFeet.get();
+            boolean hasHead = player.getItemStackFromSlot(EquipmentSlotType.HEAD).getItem() == EndlessItems.infinityHead.get();
+            boolean hasChest = chest.getItem() == EndlessItems.infinityChest.get();
+            boolean hasLegs = legs.getItem() == EndlessItems.infinityLegs.get();
+            boolean hasFeet = player.getItemStackFromSlot(EquipmentSlotType.FEET).getItem() == EndlessItems.infinityFeet.get();
             //防止其它模组飞行装备无法使用
             String key = player.getGameProfile().getName()+":"+player.world.isRemote;
             //head
@@ -160,7 +158,7 @@ public class EventHandler {
                 playersWithFeet.add(key);
             }
 
-            boolean hasSword = player.getActiveItemStack().getItem() == ItemRegistry.infinitySword.get();
+            boolean hasSword = player.getActiveItemStack().getItem() == EndlessItems.infinitySword.get();
             if (hasSword){
                 InfinitySword.clearBuff(player);
             }
@@ -185,7 +183,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void opTool(PlayerEvent.ItemCraftedEvent event){
         ItemStack stack = event.getCrafting();
-        if (stack.getItem().equals(ItemRegistry.infinitySword.get())){
+        if (stack.getItem().equals(EndlessItems.infinitySword.get())){
             Map<Enchantment, Integer> map = new HashMap<>();
             map.put(Enchantments.LOOTING, 10);
             EnchantmentHelper.setEnchantments( map, stack);
@@ -255,8 +253,8 @@ public class EventHandler {
         if (!event.getEntityLiving().getActiveItemStack().isEmpty()) {
             LivingEntity living = event.getEntityLiving();
             ItemStack held = living.getActiveItemStack();
-            if (held.getItem() == ItemRegistry.infinityPickaxe.get() || held.getItem() == ItemRegistry.infinityShovel.get() ||
-            held.getItem() == ItemRegistry.infinityAxe.get() || held.getItem() == ItemRegistry.infinityHoe.get()) {
+            if (held.getItem() == EndlessItems.infinityPickaxe.get() || held.getItem() == EndlessItems.infinityShovel.get() ||
+            held.getItem() == EndlessItems.infinityAxe.get() || held.getItem() == EndlessItems.infinityHoe.get()) {
                 EffectInstance effect = living.getActivePotionEffect(Effects.MINING_FATIGUE); //挖掘疲劳 每级将至原本30%
                 if (effect != null){
                     int amplifier = effect.getAmplifier();
@@ -289,8 +287,8 @@ public class EventHandler {
      */
     public static boolean isInfinityItem(PlayerEntity player){
         ItemStack stack = player.getHeldItemMainhand().isEmpty() ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
-        return !stack.isEmpty() && (stack.getItem() == ItemRegistry.infinitySword.get() || stack.getItem() == ItemRegistry.infinityBow.get()
-                || stack.getItem() == ItemRegistry.infinityCrossBow.get());
+        return !stack.isEmpty() && (stack.getItem() == EndlessItems.infinitySword.get() || stack.getItem() == EndlessItems.infinityBow.get()
+                || stack.getItem() == EndlessItems.infinityCrossBow.get());
     }
 
     //玩家不会被无尽伤害外攻击
@@ -353,7 +351,7 @@ public class EventHandler {
     @SubscribeEvent
     public static void starFuel(FurnaceFuelBurnTimeEvent event){
         Item item = event.getItemStack().getItem();
-        if (item == ItemRegistry.starFuel.get()){
+        if (item == EndlessItems.starFuel.get()){
             event.setBurnTime(Integer.MAX_VALUE);
         }
     }
@@ -363,7 +361,7 @@ public class EventHandler {
     public static void matterClusterAdd(PlayerEvent.ItemPickupEvent event){
         PlayerEntity player = event.getPlayer();
         ItemStack stack = event.getStack();
-        if (player != null && stack.getItem() == ItemRegistry.matterCluster.get() && Config.SERVER.isMergeMatterCluster.get()){
+        if (player != null && stack.getItem() == EndlessItems.matterCluster.get() && Config.SERVER.isMergeMatterCluster.get()){
             int slot = player.inventory.getSlotFor(stack);
             if (MatterCluster.mergeMatterCluster(stack, player, slot)){
                 player.inventory.removeStackFromSlot(slot);

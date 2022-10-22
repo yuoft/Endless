@@ -6,10 +6,8 @@ import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.tab.ModGroup;
-import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -21,7 +19,6 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -39,9 +36,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public class InfinitySword extends SwordItem{
@@ -83,20 +78,20 @@ public class InfinitySword extends SwordItem{
 //        if (player.world.isRemote) return false;
         if (entity instanceof LivingEntity){
             LivingEntity living = (LivingEntity) entity;
-            hitEntity(stack, living, player);
+            boolean b = hitEntity(stack, living, player);
             float attackStrength = player.getCooledAttackStrength(1.6f); //攻击强度
             float walkSpeed = player.abilities.getWalkSpeed();
             boolean isCritical = attackStrength > 0.848f && walkSpeed <= 0.1f && !player.isOnGround() && player.fallDistance > 0.f
                     && !player.isOnLadder() && !player.isInWater() && !player.isPassenger();
             CriticalHitEvent criticalHit = ForgeHooks.getCriticalHit(player, living, isCritical, isCritical ? 1.5f : 1.0f);
             isCritical = criticalHit != null;
-            if (attackStrength > 0.84f && player.isOnGround()) { //攻击强度大于84%，且在地面
+            if (attackStrength > 0.84f && player.isOnGround() && !player.isSprinting()) { //攻击强度大于84%，且在地面,未疾跑
                 sweepAttack(living, player);
             } else if (isCritical){
                 //攻击强度大于84.8%，正在下落，未在地面, 正常行走速度,未骑乘实体，不在水中
                 criticalAttack(player, living);
-            }
-            knockAttack(player, living, stack);
+            }else if (player.isSprinting())
+                knockAttack(player, living, stack);
         }
         damageGuardian(entity, player);
         return false;
@@ -164,7 +159,6 @@ public class InfinitySword extends SwordItem{
         if (fireAspect > 0){
             target.setFire(fireAspect * 4);
         }
-        if (!attacker.isOnGround() && !attacker.isInWater())
         if (target instanceof EnderDragonEntity && attacker instanceof PlayerEntity){
             EnderDragonEntity dragon = (EnderDragonEntity) target; //攻击末影龙
             dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
@@ -250,7 +244,7 @@ public class InfinitySword extends SwordItem{
      * @param player 玩家
      */
     private void damageGuardian(Entity entity, PlayerEntity player){
-        if (Endless.isDraconicEvolution){
+        if (Endless.isDE){
             if (entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
                 draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player), Float.POSITIVE_INFINITY);

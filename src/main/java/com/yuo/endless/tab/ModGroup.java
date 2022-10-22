@@ -1,6 +1,6 @@
 package com.yuo.endless.tab;
 
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
@@ -14,6 +14,6 @@ public class ModGroup extends ItemGroup{
 	//图标
 	@Override
 	public ItemStack createIcon() {
-		return new ItemStack(ItemRegistry.cosmicMeatBalls.get());
+		return new ItemStack(EndlessItems.cosmicMeatBalls.get());
 	}
 }

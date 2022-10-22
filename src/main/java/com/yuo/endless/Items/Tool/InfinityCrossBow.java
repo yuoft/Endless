@@ -3,7 +3,7 @@ package com.yuo.endless.Items.Tool;
 import com.google.common.collect.Lists;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Entity.*;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,7 +42,7 @@ import java.util.function.Predicate;
 
 public class InfinityCrossBow extends CrossbowItem {
     public static final Predicate<ItemStack> ARROWS = (stack) ->
-            stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == ItemRegistry.infinityArrow.get() || stack.getItem() == Items.FIREWORK_ROCKET;
+            stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == EndlessItems.infinityArrow.get() || stack.getItem() == Items.FIREWORK_ROCKET;
 
     private boolean isLoadingStart = false;
 
@@ -96,7 +96,7 @@ public class InfinityCrossBow extends CrossbowItem {
                 PlayerInventory inventory = player.inventory;
                 for (int i = 0; i < inventory.getSizeInventory(); i++) { //优先无尽箭矢
                     ItemStack stack = inventory.getStackInSlot(i);
-                    if (stack.getItem() == ItemRegistry.infinityArrow.get()) return stack;
+                    if (stack.getItem() == EndlessItems.infinityArrow.get()) return stack;
                 }
                 for (int i = 0; i < inventory.getSizeInventory(); i++) {
                     ItemStack stack = inventory.getStackInSlot(i);
@@ -139,7 +139,7 @@ public class InfinityCrossBow extends CrossbowItem {
                     }
                 }else { // 无尽箭矢 扇形射出大量箭矢 中间为无尽箭
                     if (i == 10){
-                        fireProjectile(worldIn, shooter, stack, new ItemStack(ItemRegistry.infinityArrow.get()), afloat[0], flag, velocityIn, inaccuracyIn, 0);
+                        fireProjectile(worldIn, shooter, stack, new ItemStack(EndlessItems.infinityArrow.get()), afloat[0], flag, velocityIn, inaccuracyIn, 0);
                     }else {
                         fireProjectile(worldIn, shooter, stack, new ItemStack(Items.ARROW), afloat[i < 10 ? 1 : 2], flag, velocityIn, inaccuracyIn, getArrowAngle(i, i < 10));
                     }
@@ -256,7 +256,7 @@ public class InfinityCrossBow extends CrossbowItem {
             arrow.setDamage(Config.SERVER.noArrowDamage.get());
             arrow.setPierceLevel((byte) 1);
         }else {
-            if (ammo.getItem() == ItemRegistry.infinityArrow.get()){
+            if (ammo.getItem() == EndlessItems.infinityArrow.get()){
                 arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, worldIn, false);
                 arrow.setPierceLevel((byte) 5);//5级穿透效果
             }else {
@@ -391,7 +391,7 @@ public class InfinityCrossBow extends CrossbowItem {
     private static boolean deleteStack(LivingEntity living, ItemStack stack, ItemStack itemStack, boolean flag0, boolean flag1) {
         boolean flag = flag1 && itemStack.getItem() instanceof ArrowItem;  //普通弹药被消耗
         ItemStack itemstack;
-        if (itemStack.getItem() == ItemRegistry.infinityArrow.get()){
+        if (itemStack.getItem() == EndlessItems.infinityArrow.get()){
             itemstack = itemStack.copy();
         }else if (!flag && !flag1 && !flag0) {
             itemstack = itemStack.split(1);

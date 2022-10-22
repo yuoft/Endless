@@ -43,9 +43,9 @@ public enum EndlessChestType {
     public static Block get(EndlessChestType type) {
         switch (type) {
             case COMPRESSOR:
-                return BlockRegistry.compressedChest.get();
+                return EndlessBlocks.compressedChest.get();
             case INFINITY:
-                return BlockRegistry.infinityBox.get();
+                return EndlessBlocks.infinityBox.get();
             default:
                 return Blocks.CHEST;
         }

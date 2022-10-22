@@ -2,7 +2,7 @@ package com.yuo.endless.integration.Jei;
 
 import com.yuo.endless.Container.ExtremeCraftContainer;
 import com.yuo.endless.Endless;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
@@ -56,7 +56,7 @@ public class EndlessJei implements IModPlugin {
     //注册机器合成
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ItemRegistry.extremeCraftingTable.get()), ExtremeCraftRecipeCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ItemRegistry.neutronCompressor.get()), NeutroniumCRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(EndlessItems.extremeCraftingTable.get()), ExtremeCraftRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(EndlessItems.neutronCompressor.get()), NeutroniumCRecipeCategory.UID);
     }
 }

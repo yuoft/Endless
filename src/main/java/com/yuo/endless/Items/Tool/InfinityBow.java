@@ -4,7 +4,7 @@ import com.yuo.endless.Config.Config;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityArrowEntity;
 import com.yuo.endless.Entity.InfinityArrowSubEntity;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class InfinityBow extends BowItem {
-    public static final Predicate<ItemStack> ARROWS = (stack) -> stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == ItemRegistry.infinityArrow.get();
+    public static final Predicate<ItemStack> ARROWS = (stack) -> stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == EndlessItems.infinityArrow.get();
 
     public InfinityBow() {
         super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
@@ -68,7 +68,7 @@ public class InfinityBow extends BowItem {
             if (!worldIn.isRemote) {
                 AbstractArrowEntity arrow;
                 if (!itemStack.isEmpty()) {
-                    if (itemStack.getItem() == ItemRegistry.infinityArrow.get()) { //无尽箭矢
+                    if (itemStack.getItem() == EndlessItems.infinityArrow.get()) { //无尽箭矢
                         arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, true);
                         arrow.setPierceLevel((byte) 3);
                     } else {
@@ -118,7 +118,7 @@ public class InfinityBow extends BowItem {
                 PlayerInventory inventory = player.inventory;
                 for (int i = 0; i < inventory.getSizeInventory(); i++) { //优先无尽箭矢
                     ItemStack stack = inventory.getStackInSlot(i);
-                    if (stack.getItem() == ItemRegistry.infinityArrow.get()) return stack;
+                    if (stack.getItem() == EndlessItems.infinityArrow.get()) return stack;
                 }
                 for (int i = 0; i < inventory.getSizeInventory(); i++) {
                     ItemStack stack = inventory.getStackInSlot(i);

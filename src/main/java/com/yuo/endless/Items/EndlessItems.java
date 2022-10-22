@@ -3,7 +3,7 @@ package com.yuo.endless.Items;
 import com.yuo.endless.Armor.InfinityArmor;
 import com.yuo.endless.Armor.MyArmorMaterial;
 import com.yuo.endless.Armor.OrdinaryArmor;
-import com.yuo.endless.Blocks.BlockRegistry;
+import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.tab.ModGroup;
@@ -17,7 +17,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 //物品注册管理器
-public class ItemRegistry {
+public class EndlessItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Endless.MOD_ID);
 
 	//食物
@@ -100,31 +100,31 @@ public class ItemRegistry {
 
 	//注册方块物品
 	public static RegistryObject<BlockItem> blockInfinity = ITEMS.register("infinity_block",
-			() -> new BlockItem(BlockRegistry.infinityBlock.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.infinityBlock.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> crystalMatrixBlock = ITEMS.register("crystal_matrix_block",
-			() -> new BlockItem(BlockRegistry.crystalMatrixBlock.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.crystalMatrixBlock.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> neutroniumBlock = ITEMS.register("neutronium_block",
-			() -> new BlockItem(BlockRegistry.neutroniumBlock.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.neutroniumBlock.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> compressedCraftingTable = ITEMS.register("compressed_crafting_table",
-			() -> new BlockItem(BlockRegistry.compressedCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.compressedCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> doubleCompressedCraftingTable = ITEMS.register("double_compressed_crafting_table",
-			() -> new BlockItem(BlockRegistry.doubleCompressedCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.doubleCompressedCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> extremeCraftingTable = ITEMS.register("extreme_crafting_table",
-			() -> new BlockItem(BlockRegistry.extremeCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.extremeCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> neutroniumCollector = ITEMS.register("neutronium_collector",
-			() -> new BlockItem(BlockRegistry.neutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.neutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> denseNeutroniumCollector = ITEMS.register("dense_neutronium_collector",
-			() -> new BlockItem(BlockRegistry.denseNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.denseNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> denserNeutroniumCollector = ITEMS.register("denser_neutronium_collector",
-			() -> new BlockItem(BlockRegistry.denserNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.denserNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> densestNeutroniumCollector = ITEMS.register("densest_neutronium_collector",
-			() -> new BlockItem(BlockRegistry.densestNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.densestNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> neutronCompressor = ITEMS.register("neutron_compressor",
-			() -> new BlockItem(BlockRegistry.neutronCompressor.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.neutronCompressor.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> compressedChest = ITEMS.register("compressed_chest",
-			() -> new BlockItem(BlockRegistry.compressedChest.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
+			() -> new BlockItem(EndlessBlocks.compressedChest.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_chest",
-			() -> new BlockItem(BlockRegistry.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
+			() -> new BlockItem(EndlessBlocks.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 
 	//联动奇点
 	public static RegistryObject<Item> singularityRuby; //红宝石

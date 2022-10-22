@@ -1,8 +1,7 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Container.ExtremeCraftInventory;
-import com.yuo.endless.Endless;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
@@ -138,9 +137,9 @@ public class ExtremeCraftingManager {
                 ingredient = Ingredient.fromStacks(new ItemStack((Block) recipe[i + 1]));
             } else if (recipe[i + 1] instanceof ItemStack) {
                 ingredient = Ingredient.fromStacks((ItemStack) recipe[i + 1]);
-            } else if (result.getItem() == ItemRegistry.infinityBow.get()){
+            } else if (result.getItem() == EndlessItems.infinityBow.get()){
                 ingredient = Ingredient.fromStacks(getStackList(0).stream());
-            } else if (result.getItem() == ItemRegistry.skullfireSword.get()){
+            } else if (result.getItem() == EndlessItems.skullfireSword.get()){
                 ingredient = Ingredient.fromStacks(getStackList(1).stream());
             } else ingredient = Ingredient.EMPTY;
 

@@ -2,7 +2,7 @@ package com.yuo.endless.Armor;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.yuo.endless.Items.ItemRegistry;
+import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.Modifiers;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -26,40 +26,40 @@ public class OrdinaryArmor extends ArmorItem {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlotType.HEAD){
-            if (stack.getItem() == ItemRegistry.crystalMatrixHead.get()){
+            if (stack.getItem() == EndlessItems.crystalMatrixHead.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(0, 1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutroniumHead.get()){
+            }else if (stack.getItem() == EndlessItems.neutroniumHead.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(0,3d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(0,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0,-0.05d));
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.CHEST){
-            if (stack.getItem() == ItemRegistry.crystalMatrixChest.get()){
+            if (stack.getItem() == EndlessItems.crystalMatrixChest.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(1,4d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutroniumChest.get()){
+            }else if (stack.getItem() == EndlessItems.neutroniumChest.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(1,8d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(1,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(1,-0.05d));
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.LEGS){
-            if (stack.getItem() == ItemRegistry.crystalMatrixLeggings.get()){
+            if (stack.getItem() == EndlessItems.crystalMatrixLeggings.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(2,3d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutroniumLegs.get()){
+            }else if (stack.getItem() == EndlessItems.neutroniumLegs.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(2,6d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(2,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(2,-0.05d));
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.FEET){
-            if (stack.getItem() == ItemRegistry.crystalMatrixFeet.get()){
+            if (stack.getItem() == EndlessItems.crystalMatrixFeet.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(3,1.5d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
-            }else if (stack.getItem() == ItemRegistry.neutroniumFeet.get()){
+            }else if (stack.getItem() == EndlessItems.neutroniumFeet.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(3,3d));
                 builder.put(ForgeMod.SWIM_SPEED.get(), Modifiers.getModifierSwim(3,-0.05d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(3,-0.05d));
