@@ -1,0 +1,49 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "refinedstorage"
+    }
+  ],
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "HH     HH",
+    "H       H",
+    " BCCCCCB ",
+    " CDDFEEC ",
+    " CGFAFGC ",
+    " CDDFEEC ",
+    " BCCCCCB ",
+    "H       H",
+    "HH     HH"
+  ],
+  "key": {
+    "A": {
+      "item": "endless:endest_pearl"
+    },
+    "B": {
+      "item": "refinedstorage:range_upgrade"
+    },
+    "C": {
+      "tag": "refinedstorage:wireless_transmitter"
+    },
+    "D": {
+      "item": "refinedstorage:destruction_core"
+    },
+    "E": {
+      "item": "refinedstorage:construction_core"
+    },
+    "F": {
+      "item": "refinedstorage:wireless_grid"
+    },
+    "G": {
+      "item": "refinedstorage:network_receiver"
+    },
+    "H": {
+      "item": "refinedstorage:storage_housing"
+    }
+  },
+  "result": {
+    "item": "refinedstorage:creative_wireless_grid"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "refinedstorage"
+    }
+  ],
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "CAAABAAAC",
+    "AAAABAAAA",
+    "AAAABAAAA",
+    "AAADCDAAA",
+    "BBBCDCBBB",
+    "AAADCDAAA",
+    "AAAABAAAA",
+    "AAAABAAAA",
+    "CAAABAAAC"
+  ],
+  "key": {
+    "A": {
+      "item": "endless:infinity_block"
+    },
+    "B": {
+      "item": "endless:neutron_compressor"
+    },
+    "C": {
+      "item": "refinedstorage:creative_controller"
+    },
+    "D": {
+      "item": "refinedstorage:64k_storage_part"
+    }
+  },
+  "result": {
+    "item": "refinedstorage:creative_storage_disk"
+  }
+}
