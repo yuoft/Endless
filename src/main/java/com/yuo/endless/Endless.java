@@ -86,6 +86,9 @@ public class Endless {
         if (isPE){
             EndlessItems.registerPE();
         }
+        if (isTC3){
+            EndlessItems.registerTC3();
+        }
 
         modEventBus.addListener(this::commonSetup);
         //注册物品至mod总线
