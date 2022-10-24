@@ -9,10 +9,13 @@ import com.refinedmods.refinedstorage.apiimpl.storage.FluidStorageType;
 import com.refinedmods.refinedstorage.apiimpl.storage.ItemStorageType;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
+import com.yuo.enchants.Items.YEItems;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.spacearms.Blocks.BlockRegistry;
+import com.yuo.morecoal.Items.MoreCoalItems;
+import com.yuo.spacearms.Blocks.SABlocks;
+import com.yuo.spacearms.Items.SAItems;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
@@ -89,15 +92,15 @@ public class ModRecipeManager {
 
         if (Endless.isSpaceArms) {
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityRuby.get()), (Config.SERVER.singularityRuby.get() + countEnd) * rateEnd,
-                    getList(new ItemStack(BlockRegistry.rubyBlock.get())) );
+                    getList(new ItemStack(SABlocks.rubyBlock.get())) );
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityDragon.get()), (Config.SERVER.singularityDragon.get() + countEnd) * rateEnd,
-                    getList(new ItemStack(BlockRegistry.dragonBlock.get())));
+                    getList(new ItemStack(SABlocks.dragonBlock.get())));
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularitySpace.get()), (Config.SERVER.singularitySpace.get() + countEnd) * rateEnd,
-                    getList(new ItemStack(BlockRegistry.spaceBlock.get())));
+                    getList(new ItemStack(SABlocks.spaceBlock.get())));
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityXray.get()), (Config.SERVER.singularityXray.get() + countEnd) * rateEnd,
-                    getList(new ItemStack(BlockRegistry.xrayBlock.get()), new ItemStack(BlockRegistry.superXrayBlock.get(), 5)));
+                    getList(new ItemStack(SABlocks.xrayBlock.get()), new ItemStack(SABlocks.superXrayBlock.get(), 5)));
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularityUltra.get()), (Config.SERVER.singularityUltra.get() + countEnd) * rateEnd,
-                    getList(new ItemStack(BlockRegistry.superBlock.get()), new ItemStack(BlockRegistry.ultraBlock.get(), 5)));
+                    getList(new ItemStack(SABlocks.superBlock.get()), new ItemStack(SABlocks.ultraBlock.get(), 5)));
         }
         if (Endless.isIAF){
             CompressorManager.addRecipe(new ItemStack(EndlessItems.singularitySilver.get()), (Config.SERVER.singularitySilver.get() + countEnd) * rateEnd,
@@ -260,7 +263,7 @@ public class ModRecipeManager {
                     "    N    ",
                     "    N    ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opPickaxe.get()),
+                    'Y', new ItemStack(SAItems.opPickaxe.get()),
                     'C', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.infinitySword.get()),
@@ -274,7 +277,7 @@ public class ModRecipeManager {
                     " N  C    ",
                     "X        ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opSword.get()),
+                    'Y', new ItemStack(SAItems.opSword.get()),
                     'X', new ItemStack(EndlessItems.infinityCatalyst.get()),
                     'C', new ItemStack(EndlessItems.crystalMatrixIngot.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
@@ -289,7 +292,7 @@ public class ModRecipeManager {
                     " N       ",
                     "N        ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.spaceShovel.get()),
+                    'Y', new ItemStack(SAItems.spaceShovel.get()),
                     'X', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
 
@@ -304,7 +307,7 @@ public class ModRecipeManager {
                     "    N    ",
                     "    N    ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.spaceAxe.get()),
+                    'Y', new ItemStack(SAItems.spaceAxe.get()),
                     'X', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
 
@@ -319,7 +322,7 @@ public class ModRecipeManager {
                     "     N   ",
                     "     N   ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.spaceHoe.get()),
+                    'Y', new ItemStack(SAItems.spaceHoe.get()),
                     'X', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
 
@@ -334,7 +337,7 @@ public class ModRecipeManager {
                     "    I W  ",
                     "     II  ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.amosiBow.get()),
+                    'Y', new ItemStack(SAItems.amosiBow.get()),
                     'X', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'W', ItemTags.WOOL);
 
@@ -349,7 +352,7 @@ public class ModRecipeManager {
                     " NIIIIIN ",
                     "  NNNNN  ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opChest.get()),
+                    'Y', new ItemStack(SAItems.opChest.get()),
                     'X', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
 
@@ -361,7 +364,7 @@ public class ModRecipeManager {
                     " NIIIIIN ",
                     " NI I IN ",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opHead.get()),
+                    'Y', new ItemStack(SAItems.opHead.get()),
                     'X', new ItemStack(EndlessItems.infinityCatalyst.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
 
@@ -376,7 +379,7 @@ public class ModRecipeManager {
                     "NIN   NIN",
                     "NNN   NNN",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opLegs.get()),
+                    'Y', new ItemStack(SAItems.opLegs.get()),
                     'X', new ItemStack(EndlessItems.infinityCatalyst.get()),
                     'C', new ItemStack(EndlessItems.crystalMatrixBlock.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
@@ -389,7 +392,7 @@ public class ModRecipeManager {
                     "NIIN NIIN",
                     "NNNN NNNN",
                     'I', new ItemStack(EndlessItems.infinityIngot.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.opFeet.get()),
+                    'Y', new ItemStack(SAItems.opFeet.get()),
                     'N', new ItemStack(EndlessItems.neutroniumIngot.get()));
 
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.skullfireSword.get()),
@@ -403,7 +406,7 @@ public class ModRecipeManager {
                     " W  B    ",
                     "D        ",
                     'I', new ItemStack(EndlessItems.infinityCatalyst.get()),
-                    'Y', new ItemStack(com.yuo.spacearms.Items.ItemRegistry.beheadSword.get()),
+                    'Y', new ItemStack(SAItems.beheadSword.get()),
                     'X', new ItemStack(Items.BLAZE_POWDER),
                     'B', new ItemStack(Items.BONE),
                     'D', new ItemStack(Items.NETHER_STAR),
@@ -634,16 +637,16 @@ public class ModRecipeManager {
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(EndlessItems.singularityRuby.get()), new ItemStack(EndlessItems.singularityDragon.get()),
                     new ItemStack(EndlessItems.singularitySpace.get()), new ItemStack(EndlessItems.singularityXray.get()),
-                    new ItemStack(EndlessItems.singularityUltra.get()), new ItemStack(com.yuo.spacearms.Items.ItemRegistry.jiejing.get()),
+                    new ItemStack(EndlessItems.singularityUltra.get()), new ItemStack(SAItems.jiejing.get()),
                     new ItemStack(Items.BEDROCK));
             ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
-                    new ItemStack(com.yuo.spacearms.Items.ItemRegistry.superRabbitStew.get()));
+                    new ItemStack(SAItems.superRabbitStew.get()));
             ExtremeCraftingManager.getInstance().addRecipeInput(stew,
-                    new ItemStack(com.yuo.spacearms.Items.ItemRegistry.superCookie.get()),
-                    new ItemStack(com.yuo.spacearms.Items.ItemRegistry.superBeetrootSoup.get()),
-                    new ItemStack(com.yuo.spacearms.Items.ItemRegistry.superPumpkinPie.get()));
+                    new ItemStack(SAItems.superCookie.get()),
+                    new ItemStack(SAItems.superBeetrootSoup.get()),
+                    new ItemStack(SAItems.superPumpkinPie.get()));
             CompressorManager.addInputs(EndlessItems.singularityEmerald.get(),
-                    getList(new ItemStack(BlockRegistry.emeraldIngotBlock.get(), 5)));
+                    getList(new ItemStack(SABlocks.emeraldIngotBlock.get(), 5)));
         }
         if (Endless.isPaimeng) { //23+1 14+26 18+22
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
@@ -701,11 +704,11 @@ public class ModRecipeManager {
         }
         if (Endless.isEnchants) { //24+1 40 40
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(com.yuo.yuoenchants.Items.ItemRegistry.BrokenMagicPearlSuper.get()));
+                    new ItemStack(YEItems.BrokenMagicPearlSuper.get()));
         }
         if (Endless.isMoreCoals) { //25+1 40 40
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(com.yuo.morecoal.Items.ItemRegistry.lavaCoal.get()));
+                    new ItemStack(MoreCoalItems.lavaCoal.get()));
         }
         if (Endless.isIAF){ //26+4 40+1 40+1
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
