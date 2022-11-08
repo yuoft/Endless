@@ -67,6 +67,7 @@
   "item.endless.skullfire_sword":"§dSkullfire Sword",
   "item.endless.infinity_bow":"§cLongbow of the Heavens",
   "item.endless.infinity_crossbow":"§cCrossbow of the Inferno",
+  "item.endless.infinity_bucket":"§cInfinity Bucket",
 
   "item.endless.infinity_helmet":"§cInfinity Helmet",
   "item.endless.infinity_chestplate":"§cInfinity Chestplate",
@@ -123,6 +124,8 @@
   "endless.text.itemInfo.singularity_clay":"Unlimited checks and balances",
   "endless.text.itemInfo.singularity_netherite":"Nether clearing plan",
   "endless.text.itemInfo.star_fuel":"§7The light of the universe shines everywhere",
+  "endless.text.itemInfo.bucket_fluid":"Fluid:",
+  "endless.text.itemInfo.bucket_num":"Fluid Number: %s",
 
   "endless.message.login":"§bWelcome to this mod [Avaritia endless · pseudo], §aclick here§b to feedback!",
   "endless.message.login0":"§ahttps://space.bilibili.com/21854371",

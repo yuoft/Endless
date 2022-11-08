@@ -56,6 +56,7 @@
     "item.endless.skullfire_sword":"§d炽焰之啄颅剑",
     "item.endless.infinity_bow":"§c天堂陨落之弓",
     "item.endless.infinity_crossbow":"§c地狱升华之弩",
+    "item.endless.infinity_bucket":"§c远海鲸吞之桶",
 
     "item.endless.crystal_matrix_pickaxe":"§b水晶矩阵镐",
     "item.endless.crystal_matrix_axe":"§b水晶矩阵斧",
@@ -123,6 +124,8 @@
     "endless.text.itemInfo.singularity_clay":"无限制衡",
     "endless.text.itemInfo.singularity_netherite":"下界清除计划",
     "endless.text.itemInfo.star_fuel":"§7宇宙之光，挥洒四方",
+    "endless.text.itemInfo.bucket_fluid":"流体：",
+    "endless.text.itemInfo.bucket_num":"流体数量：%s",
 
     "endless.message.login":"§b欢迎游玩本模组[无尽贪婪·伪]，问题反馈§a点击此处!",
     "endless.message.login0":"§ahttps://space.bilibili.com/21854371",
