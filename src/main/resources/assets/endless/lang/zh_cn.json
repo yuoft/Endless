@@ -57,6 +57,7 @@
     "item.endless.infinity_bow":"§c天堂陨落之弓",
     "item.endless.infinity_crossbow":"§c地狱升华之弩",
     "item.endless.infinity_bucket":"§c远海鲸吞之桶",
+    "item.endless.infinity_fluid_bucket":"§6熔融无尽桶",
 
     "item.endless.crystal_matrix_pickaxe":"§b水晶矩阵镐",
     "item.endless.crystal_matrix_axe":"§b水晶矩阵斧",
@@ -96,6 +97,8 @@
     "block.endless.compressed_chest":"压缩箱子",
     "block.endless.infinity_chest":"§c无尽箱子",
 
+    "fluid.endless.infinity_fluid":"§c熔融无尽",
+
     "entity.endless.infinity_arrow":"无尽箭",
     "entity.endless.infinity_arrow_sub":"无尽光箭",
     "entity.endless.endest_pearl":"终望珍珠",
@@ -126,6 +129,10 @@
     "endless.text.itemInfo.star_fuel":"§7宇宙之光，挥洒四方",
     "endless.text.itemInfo.bucket_fluid":"流体：",
     "endless.text.itemInfo.bucket_num":"流体数量：%s",
+    "minecraft:water":"水",
+    "minecraft:lava":"岩浆",
+    "endless:infinity_fluid":"§6熔融无尽",
+
 
     "endless.message.login":"§b欢迎游玩本模组[无尽贪婪·伪]，问题反馈§a点击此处!",
     "endless.message.login0":"§ahttps://space.bilibili.com/21854371",

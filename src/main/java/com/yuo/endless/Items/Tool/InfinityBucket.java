@@ -1,12 +1,10 @@
 package com.yuo.endless.Items.Tool;
 
 import com.simibubi.create.content.contraptions.fluids.FlowSource;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.block.ILiquidContainer;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -14,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,17 +47,17 @@ public class InfinityBucket extends Item {
     private final static String FLUID_NAME = "fluid_name";
     private final static String FLUID_NUMBER = "fluid_number";
 
-    public InfinityBucket(Supplier<? extends Fluid> supplier) {
+    public InfinityBucket() {
         super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
 //        this.fluid = Fluids.EMPTY;
 //        this.fluidSupplier = supplier;
     }
 
-    public InfinityBucket(Fluid fluid) {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
+//    public InfinityBucket() {
+//        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
 //        this.fluid = Fluids.EMPTY;
 //        this.fluidSupplier = fluid.delegate;
-    }
+//    }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
@@ -100,6 +99,13 @@ public class InfinityBucket extends Item {
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, bucket, rayTraceResult);
         if (ret != null) return ret;
         if (rayTraceResult.getType() == RayTraceResult.Type.MISS) {
+            if (playerIn.isSneaking() && bucket.getOrCreateTag().getInt(FLUID_NUMBER) > 0){ //潜行右键清空流体
+                bucket.getOrCreateTag().remove(FLUID_NAME);
+                bucket.getOrCreateTag().remove(FLUID_NUMBER);
+                playerIn.swingArm(handIn);
+                worldIn.playSound(playerIn, playerIn.getPosition(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                return ActionResult.func_233538_a_(bucket, worldIn.isRemote);
+            }
             return ActionResult.resultPass(bucket);
         } else if (rayTraceResult.getType() != RayTraceResult.Type.BLOCK) {
             return ActionResult.resultPass(bucket);
@@ -114,6 +120,18 @@ public class InfinityBucket extends Item {
                     if (state.getBlock() instanceof IBucketPickupHandler) {
                         Fluid fluid0 = ((IBucketPickupHandler)state.getBlock()).pickupFluid(worldIn, blockpos, state);
                         if (fluid0 != Fluids.EMPTY) {
+                            //范围装取流体
+                            int fluidNum = 0;
+                            int range = Config.SERVER.infinityBucketRange.get();
+                            for (BlockPos pos : BlockPos.getAllInBoxMutable(blockpos.add(-range, -range, -range), blockpos.add(range, range, range))) {
+                                if (pos == blockpos) continue;
+                                FluidState fluidState = worldIn.getFluidState(pos);
+                                if (fluidState.getFluid() == fluid0){
+                                    worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+                                    fluidNum++;
+                                }
+                            }
+
                             playerIn.addStat(Stats.ITEM_USED.get(this)); //使用状态
                             //播放对应声音
                             SoundEvent soundevent = fluid.getAttributes().getFillSound();
@@ -121,7 +139,7 @@ public class InfinityBucket extends Item {
                             playerIn.playSound(soundevent, 1.0F, 1.0F);
                             //添加流体数据
                             tag.putString(FLUID_NAME, fluid0.getRegistryName().toString());
-                            tag.putInt(FLUID_NUMBER, 1);
+                            tag.putInt(FLUID_NUMBER, fluidNum + 1);
                             //填充桶？
                             if (!worldIn.isRemote) {
                                 CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, bucket);
@@ -139,8 +157,9 @@ public class InfinityBucket extends Item {
                     if (fluidNum >= 1 && this.tryPlaceContainedLiquid(playerIn, worldIn, pos, fluid, rayTraceResult)) {
                         if (fluidNum == 1){
                             tag.putString(FLUID_NAME, "empty");
+                        }else {
+                            tag.putInt(FLUID_NUMBER, Math.max(fluidNum - 1, 1));
                         }
-                        tag.putInt(FLUID_NUMBER, Math.max(fluidNum - 1, 0));
                         if (playerIn instanceof ServerPlayerEntity) {
                             CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)playerIn, pos, bucket);
                         }
@@ -155,13 +174,6 @@ public class InfinityBucket extends Item {
                 return ActionResult.resultFail(bucket);
             }
         }
-    }
-
-    protected ItemStack emptyBucket(ItemStack stack, PlayerEntity player) {
-        return !player.abilities.isCreativeMode ? new ItemStack(Items.BUCKET) : stack;
-    }
-
-    public void onLiquidPlaced(World worldIn, ItemStack stack, BlockPos pos) {
     }
 
     //尝试放置流体

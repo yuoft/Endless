@@ -68,6 +68,7 @@
   "item.endless.infinity_bow":"§cLongbow of the Heavens",
   "item.endless.infinity_crossbow":"§cCrossbow of the Inferno",
   "item.endless.infinity_bucket":"§cInfinity Bucket",
+  "item.endless.infinity_fluid_bucket":"§6Infinity Fluid Bucket",
 
   "item.endless.infinity_helmet":"§cInfinity Helmet",
   "item.endless.infinity_chestplate":"§cInfinity Chestplate",
@@ -95,6 +96,8 @@
   "block.endless.neutron_compressor":"Neutron Compressor",
   "block.endless.compressed_chest":"Compressed Chest",
   "block.endless.infinity_chest":"§cInfinity Chest",
+
+  "fluid.endless.infinity_fluid":"§cInfinity Fluid",
 
   "entity.endless.infinity_arrow":"Infinity Arrow",
   "entity.endless.infinity_arrow_sub":"Infinity Arrow Sub",
@@ -126,6 +129,9 @@
   "endless.text.itemInfo.star_fuel":"§7The light of the universe shines everywhere",
   "endless.text.itemInfo.bucket_fluid":"Fluid:",
   "endless.text.itemInfo.bucket_num":"Fluid Number: %s",
+  "minecraft:water":"Water",
+  "minecraft:lava":"Lava",
+  "endless:infinity_fluid":"§6Infinity Fluid",
 
   "endless.message.login":"§bWelcome to this mod [Avaritia endless · pseudo], §aclick here§b to feedback!",
   "endless.message.login0":"§ahttps://space.bilibili.com/21854371",

@@ -82,6 +82,7 @@ public class Config {
         public final ForgeConfigSpec.BooleanValue isCraftTable; //无尽工作台是否兼容原版工作台配方
         public final ForgeConfigSpec.BooleanValue isLogoInfo; //登录游戏时是否提示反馈信息
         public final ForgeConfigSpec.BooleanValue isArrowLightning; //是否开启无尽矢的召雷功能
+        public final ForgeConfigSpec.IntValue infinityBucketRange; //无尽桶的最大装取范围，0：一格，1：3*3*3，2:5*5*5
 
         public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
         public final ForgeConfigSpec.IntValue singularityClay;
@@ -148,6 +149,7 @@ public class Config {
             this.isCraftTable = buildBoolean(builder, "Is Craft Table", true,  "Whether to allow the extreme crafting table to use vanilla crafting table recipes.");
             this.isLogoInfo = buildBoolean(builder, "Is Logo Info", true,  "Whether to show feedback when player log into the game.");
             this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false,  "Whether to allow the infinity arrow to channel lightning.");
+            this.infinityBucketRange = buildInt(builder, "Infinity Bucket Range", 2, 0, 16, "Maximum loading range of endless barrels.");
             builder.pop();
 
             builder.comment("Basic amount of singularities required by the compressor.").push("singularity");

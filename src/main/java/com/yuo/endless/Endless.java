@@ -4,6 +4,7 @@ import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Entity.EntityRegistry;
+import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.Proxy.ClientProxy;
@@ -13,6 +14,17 @@ import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Sound.ModSounds;
 import com.yuo.endless.Tiles.TileTypeRegistry;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.IDispenseItemBehavior;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.World;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -95,6 +107,7 @@ public class Endless {
         EndlessItems.ITEMS.register(modEventBus);
         EndlessBlocks.BLOCKS.register(modEventBus);
         EntityRegistry.ENTITY_TYPES.register(modEventBus);
+        EndlessFluids.FLUIDS.register(modEventBus);
         TileTypeRegistry.TILE_ENTITIES.register(modEventBus);
         ContainerTypeRegistry.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
@@ -108,6 +121,26 @@ public class Endless {
         ModRecipeManager.lastMinuteChanges();
         Config.loadConfig(); //加载工具黑名单
         event.enqueueWork(NetWorkHandler::registerMessage); //创建数据包
+        //添加发射器
+        IDispenseItemBehavior itemBehavior = new DefaultDispenseItemBehavior() {
+            private final DefaultDispenseItemBehavior defaultBehaviour = new DefaultDispenseItemBehavior();
+
+            /**
+             * 分配指定的堆栈，播放分配声音并生成粒子。
+             */
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                BucketItem bucketitem = (BucketItem)stack.getItem();
+                BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+                World world = source.getWorld();
+                if (bucketitem.tryPlaceContainedLiquid(null, world, blockpos, null)) {
+                    bucketitem.onLiquidPlaced(world, stack, blockpos);
+                    return new ItemStack(Items.BUCKET);
+                } else {
+                    return this.defaultBehaviour.dispense(source, stack);
+                }
+            }
+        };
+        DispenserBlock.registerDispenseBehavior(EndlessItems.infinityFluidBucket.get(), itemBehavior);
     }
 
     private void checkMods(){
