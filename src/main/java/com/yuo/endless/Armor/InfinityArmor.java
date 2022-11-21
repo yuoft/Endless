@@ -1,5 +1,6 @@
 package com.yuo.endless.Armor;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.ColorText;
@@ -35,7 +36,7 @@ import java.util.function.Consumer;
 
 public class InfinityArmor extends ArmorItem {
 
-    public static AttributeModifier modifierWalk = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed", 0.2, AttributeModifier.Operation.ADDITION);
+    public static AttributeModifier modifierWalk = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed", 0.1 * Config.SERVER.infinityLegsWalk.get(), AttributeModifier.Operation.ADDITION);
     public static AttributeModifier modifierFly = new AttributeModifier(UUID.fromString("bf93174c-8a89-42ed-a702-e6fd99c28be2"), Endless.MOD_ID + ":flying_speed", 0.15, AttributeModifier.Operation.ADDITION);
 
     public InfinityArmor(EquipmentSlotType slot) {
@@ -136,17 +137,17 @@ public class InfinityArmor extends ArmorItem {
         if (slot == EquipmentSlotType.CHEST) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_chestplate"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% FlySpeed")));
+                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+" + Config.SERVER.infinityChestFly.get() + "00% FlySpeed")));
         }
         if (slot == EquipmentSlotType.LEGS) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_leggings"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+300% WalkSpeed")));
+                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+" + Config.SERVER.infinityLegsWalk.get() + "00% WalkSpeed")));
         }
         if (slot == EquipmentSlotType.FEET) {
             tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_boots"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+400% JumpHeight")));
+                tooltip.add(new StringTextComponent(ColorText.makeSANIC("+" + Config.SERVER.infinityFeetJump.get() + "00% JumpHeight")));
 //				tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + TextFormatting.ITALIC + "400" +
 //						TextFormatting.RESET + "" + TextFormatting.BLUE + "% JumpHeight"));
         }

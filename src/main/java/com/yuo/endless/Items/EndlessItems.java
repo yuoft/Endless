@@ -72,8 +72,8 @@ public class EndlessItems {
 	public static RegistryObject<Item> infinityCrossBow = ITEMS.register("infinity_crossbow", InfinityCrossBow::new);
 	public static RegistryObject<Item> infinityBucket = ITEMS.register("infinity_bucket", InfinityBucket::new);
 
-	public static RegistryObject<Item> infinityFluidBucket = ITEMS.register("infinity_fluid_bucket",
-			() -> new BucketItem(EndlessFluids.infinityFluid, new Item.Properties().group(ModGroup.endless).containerItem(Items.BUCKET)));
+	public static RegistryObject<InfinityFluidBucket> infinityFluidBucket = ITEMS.register("infinity_fluid_bucket",
+			() -> new InfinityFluidBucket(EndlessFluids.infinityFluid));
 
 	public static RegistryObject<Item> crystalMatrixSword = ITEMS.register("crystal_matrix_sword", () -> new OrdinarySword(MyItemTier.CRYSTAL));
 	public static RegistryObject<Item> crystalMatrixPickaxe = ITEMS.register("crystal_matrix_pickaxe", () -> new OrdinaryPickaxe(MyItemTier.CRYSTAL));

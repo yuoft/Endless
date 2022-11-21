@@ -65,8 +65,12 @@ public class InfinityBucket extends Item {
         String fluidKey = tag.getString(FLUID_NAME);
         Fluid fluid = getFluidForKey(fluidKey);
         if (fluid != Fluids.EMPTY){
-            tooltip.add(new TranslationTextComponent("endless.text.itemInfo.bucket_fluid").appendSibling(
-                    new TranslationTextComponent(fluid.getRegistryName().toString())));
+            ResourceLocation registryName = fluid.getRegistryName();
+            if (registryName != null)
+                tooltip.add(new TranslationTextComponent("endless.text.itemInfo.bucket_fluid").appendSibling(
+                        new TranslationTextComponent(registryName.toString())));
+            else tooltip.add(new TranslationTextComponent("endless.text.itemInfo.bucket_fluid").appendSibling(
+                    new TranslationTextComponent("minecraft:null")));
             int fluidNum = tag.getInt(FLUID_NUMBER);
             if (fluidNum > 0){
                 tooltip.add(new TranslationTextComponent("endless.text.itemInfo.bucket_num", fluidNum));
@@ -75,7 +79,7 @@ public class InfinityBucket extends Item {
     }
 
     private Fluid getFluidForKey(String str){
-        return Registry.FLUID.getOrDefault(new ResourceLocation(str));
+        return getFluidForKey(new ResourceLocation(str));
     }
 
     private Fluid getFluidForKey(ResourceLocation res){
@@ -98,7 +102,7 @@ public class InfinityBucket extends Item {
         BlockRayTraceResult rayTraceResult = rayTrace(worldIn, playerIn, fluid == Fluids.EMPTY ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, bucket, rayTraceResult);
         if (ret != null) return ret;
-        if (rayTraceResult.getType() == RayTraceResult.Type.MISS) {
+        if (rayTraceResult.getType() == RayTraceResult.Type.MISS) { //右键空气
             if (playerIn.isSneaking() && bucket.getOrCreateTag().getInt(FLUID_NUMBER) > 0){ //潜行右键清空流体
                 bucket.getOrCreateTag().remove(FLUID_NAME);
                 bucket.getOrCreateTag().remove(FLUID_NUMBER);
@@ -131,26 +135,26 @@ public class InfinityBucket extends Item {
                                     fluidNum++;
                                 }
                             }
-
                             playerIn.addStat(Stats.ITEM_USED.get(this)); //使用状态
                             //播放对应声音
                             SoundEvent soundevent = fluid.getAttributes().getFillSound();
                             if (soundevent == null) soundevent = fluid0.isIn(FluidTags.LAVA) ? SoundEvents.ITEM_BUCKET_FILL_LAVA : SoundEvents.ITEM_BUCKET_FILL;
                             playerIn.playSound(soundevent, 1.0F, 1.0F);
                             //添加流体数据
-                            tag.putString(FLUID_NAME, fluid0.getRegistryName().toString());
+                            ResourceLocation registryName = fluid0.getRegistryName();
+                            if (registryName != null){
+                                tag.putString(FLUID_NAME, registryName.toString());
+                            }else tag.putString(FLUID_NAME, "minecraft:null");
                             tag.putInt(FLUID_NUMBER, fluidNum + 1);
                             //填充桶？
                             if (!worldIn.isRemote) {
                                 CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)playerIn, bucket);
                             }
-
                             return ActionResult.func_233538_a_(bucket, worldIn.isRemote());
                         }
                     }
-
                     return ActionResult.resultFail(bucket);
-                } else { //放
+                }else { //放
                     BlockState blockstate = worldIn.getBlockState(blockpos);
                     BlockPos pos = canBlockContainFluid(worldIn, blockpos, blockstate, fluid) ? blockpos : blockpos1;
                     int fluidNum = tag.getInt(FLUID_NUMBER);
@@ -230,8 +234,7 @@ public class InfinityBucket extends Item {
     public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @Nullable net.minecraft.nbt.CompoundNBT nbt) {
         if (this.getClass() == InfinityBucket.class)
             return new net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper(stack);
-        else
-            return super.initCapabilities(stack, nbt);
+        else return super.initCapabilities(stack, nbt);
     }
 
     //是否是流体容器

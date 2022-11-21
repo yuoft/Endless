@@ -2,10 +2,9 @@ package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Endless;
 import com.yuo.endless.Fluid.EndlessFluids;
+import com.yuo.endless.Fluid.InfinityFluidBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Items;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -35,8 +34,7 @@ public class EndlessBlocks {
     public static RegistryObject<Block> compressedChest = BLOCKS.register("compressed_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_chest", InfinityBox::new);
 
-    public static RegistryObject<FlowingFluidBlock> infinityFluid = BLOCKS.register("infinity_fluid",
-            () -> new FlowingFluidBlock(EndlessFluids.infinityFluid,
-                    Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(Float.MAX_VALUE).noDrops()));
+    public static RegistryObject<InfinityFluidBlock> infinityFluid = BLOCKS.register("infinity_fluid",
+            () -> new InfinityFluidBlock(EndlessFluids.infinityFluid));
 
 }

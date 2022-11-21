@@ -117,7 +117,7 @@ public class EventHandler {
                 if (hasChest) {
                     player.abilities.allowFlying = true;
                     if (chest.getOrCreateTag().getBoolean("flag")){
-                        player.abilities.setFlySpeed(0.2f);
+                        player.abilities.setFlySpeed(0.05f + 0.05f * Config.SERVER.infinityChestFly.get());
                     }
                 }else {
                     if (!player.isCreative()) {
@@ -174,7 +174,7 @@ public class EventHandler {
             String key = player.getGameProfile().getName()+":"+player.world.isRemote;
             ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
             if (playersWithFeet.contains(key) && feet.hasTag() && feet.getOrCreateTag().getBoolean("flag")) {
-                player.setMotion(0, 1.0f, 0);
+                player.setMotion(0, 0.42f + 0.1f * (Config.SERVER.infinityFeetJump.get() + 1), 0);
             }
         }
     }
