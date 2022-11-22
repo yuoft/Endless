@@ -1,19 +1,27 @@
 package com.yuo.endless.Fluid;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Rarity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+
+import java.util.List;
+import java.util.Random;
 
 public class InfinityFluid extends ForgeFlowingFluid {
     public static final ITag.INamedTag<Fluid> INFINITY = FluidTags.makeWrapperTag("infinity");
@@ -37,17 +45,27 @@ public class InfinityFluid extends ForgeFlowingFluid {
         return direction == Direction.DOWN && fluidIn.isIn(INFINITY);
     }
 
+    //能否流动到此方块
+    @Override
+    protected boolean canFlow(IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fluidIn) {
+        float hardness = toBlockState.getBlockHardness(worldIn, toPos);
+        if (hardness > 0 && hardness < 50) return true;
+        return super.canFlow(worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn);
+    }
+
+    //流动到此，设置流体
     @Override
     protected void flowInto(IWorld worldIn, BlockPos pos, BlockState blockStateIn, Direction direction, FluidState fluidStateIn) {
         beforeReplacingBlock(worldIn, pos, blockStateIn);
         worldIn.setBlockState(pos, fluidStateIn.getBlockState(), 3);
     }
 
+    //替换方块
     @Override
     protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
         float hardness = state.getBlockHardness(worldIn, pos);
         if (hardness > 0 && hardness < 50){
-            worldIn.destroyBlock(pos, true);
+            worldIn.destroyBlock(pos, false);
             if (worldIn.isAirBlock(pos))
                 worldIn.removeBlock(pos, true);
         }
@@ -63,6 +81,7 @@ public class InfinityFluid extends ForgeFlowingFluid {
                 .viscosity(100000)
                 .rarity(Rarity.EPIC);
     }
+
     public static class Flowing extends InfinityFluid {
         public Flowing(Properties properties) {
             super(properties);

@@ -627,6 +627,21 @@ public class ModRecipeManager {
                 'H', new ItemStack(Blocks.HOPPER),
                 'R', new ItemStack(Blocks.REDSTONE_BLOCK),
                 'O', new ItemStack(EndlessItems.neutroniumBlock.get()));
+
+        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.infinityBucket.get()),
+                "II     II",
+                "IIO   OII",
+                "IAAO OAAI",
+                "IAAX XAAI",
+                "IAAX XAAI",
+                "IAAXXXAAI",
+                "IIAAAAAII",
+                " IIAAAII ",
+                "  IIIII  ",
+                'X', new ItemStack(EndlessItems.infinityIngot.get()),
+                'I', new ItemStack(EndlessItems.neutroniumIngot.get()),
+                'A', new ItemStack(Items.BUCKET),
+                'O', new ItemStack(EndlessItems.infinityCatalyst.get()));
     }
 
 
