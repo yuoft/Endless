@@ -16,6 +16,11 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,6 +28,11 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * 客户端属性注册
@@ -68,6 +78,40 @@ public class ClientProxy implements IProxy {
         //流体半透明渲染
         RenderTypeLookup.setRenderLayer(EndlessFluids.infinityFluid.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(EndlessFluids.infinityFluidFlowing.get(), RenderType.getTranslucent());
+        event.enqueueWork(this::addLayer);
+    }
+
+    /**
+     * 添加额外渲染
+     * 参考模组：wings
+     */
+    private void addLayer(){
+        //盔甲翅膀和发光眼睛
+        Minecraft mc = Minecraft.getInstance();
+        EntityRendererManager manager = mc.getRenderManager();
+        Stream.concat(manager.getSkinMap().values().stream(), manager.renderers.values().stream()) //流操作
+                .filter(LivingRenderer.class::isInstance) //匹配LivingRender实例
+                .map(r -> (LivingRenderer<?, ?>) r) //类型转换
+                .filter(render -> render.getEntityModel() instanceof BipedModel<?>) //匹配模型为BipedModel的元素
+                .unordered() //无序
+                .distinct() //返回流元素
+                .forEach(render -> {
+                    @SuppressWarnings("unchecked")
+                    LivingRenderer<PlayerEntity, BipedModel<PlayerEntity>> livingRender = (LivingRenderer<PlayerEntity, BipedModel<PlayerEntity>>) render;
+                    livingRender.addLayer(new InfinityEyeLayer<>(livingRender));
+                    livingRender.addLayer(new InfinityWingLayer<>(livingRender));
+                });
+        //            Stream<EntityRenderer<?>> renderers = manager.renderers.values().stream();
+        //            renderers.filter(LivingRenderer.class::isInstance)
+        //                    .map(r -> (LivingRenderer<?,?>) r)
+        //                    .filter(render -> render.getEntityModel() instanceof BipedModel<?>)
+        //                    .unordered()
+        //                    .distinct()
+        //                    .forEach(render -> {
+        //                        @SuppressWarnings("unchecked")
+        //                        LivingRenderer<PlayerEntity, BipedModel<PlayerEntity>> livingRenderer = (LivingRenderer<PlayerEntity, BipedModel<PlayerEntity>>) render;
+        //                        livingRenderer.addLayer(new InfinityWingLayer<>(livingRenderer));
+        //                    });
     }
 
     //使用动态属性来切换无尽镐，铲形态

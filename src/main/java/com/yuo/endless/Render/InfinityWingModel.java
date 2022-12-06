@@ -2,16 +2,18 @@ package com.yuo.endless.Render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
-public class InfinityWingModel extends EntityModel<PlayerEntity> {
+public class InfinityWingModel extends BipedModel<PlayerEntity> {
     private final ModelRenderer wing;
 
     public InfinityWingModel() {
+        super(0.5f);
         this.textureWidth = 64;
         this.textureHeight = 64;
 

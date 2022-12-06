@@ -116,7 +116,7 @@ public class EventHandler {
             if (playersWithChest.contains(key)) {
                 if (hasChest) {
                     player.abilities.allowFlying = true;
-                    if (chest.getOrCreateTag().getBoolean("flag")){
+                    if (chest.getOrCreateTag().getBoolean("flag") && player.world.isRemote){
                         player.abilities.setFlySpeed(0.05f + 0.05f * Config.SERVER.infinityChestFly.get());
                     }
                 }else {
@@ -124,7 +124,8 @@ public class EventHandler {
                         player.abilities.allowFlying = false;
                         player.abilities.isFlying = false;
                     }
-                    player.abilities.setFlySpeed(0.05f);
+                    if (player.world.isRemote)
+                        player.abilities.setFlySpeed(0.05f);
                     playersWithChest.remove(key);
                 }
             }else if (hasChest) {

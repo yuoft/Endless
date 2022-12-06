@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SkullfireSword extends SwordItem {
     public SkullfireSword() {
-        super(MyItemTier.SKULLFIRE, 0, -2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.SKULL_FIRE, 0, -2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
     }
 
     @Override

@@ -116,17 +116,6 @@ public class InfinityArmor extends ArmorItem {
         } else return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
-//	@Nullable
-//	@Override
-//	public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-//		ModelRenderer wing = new ModelRenderer(_default);
-//		wing.setRotationPoint(0, 0, 0);
-//		wing.setTextureOffset(0,32);
-//		wing.addBox(-16.0F, -16.0F, 8.0F, 32.0F, 16.0F,0, 0.0f, false);
-//		_default.bipedBody.addChild(wing);
-//		return _default;
-//	}
-
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (slot == EquipmentSlotType.HEAD) {

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,21 +19,23 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class InfinityWingLayer<T extends PlayerEntity> extends LayerRenderer<T, PlayerModel<T>> {
+public class InfinityWingLayer<T extends PlayerEntity> extends LayerRenderer<T, BipedModel<T>> {
     private static final ResourceLocation WING = new ResourceLocation(Endless.MOD_ID, "textures/models/infinity_wing.png");
     private static final ResourceLocation WING_GLOW = new ResourceLocation(Endless.MOD_ID, "textures/models/infinity_wingglow.png");
 
-    public InfinityWingLayer(IEntityRenderer<T, PlayerModel<T>> entityRendererIn) {
+    public InfinityWingLayer(IEntityRenderer<T, BipedModel<T>> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, PlayerEntity player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (isInfinityChest(player) && Config.CLIENT.isRenderLayer.get()){
+        if (isInfinityChest(player)){
             if (!player.isSpectator() && player.abilities.isFlying){
                 matrixStackIn.push();
-                IVertexBuilder builder = bufferIn.getBuffer(RenderType.getEntityCutout(WING_GLOW));
-//                IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(partialTicks % 2 == 0 ? WING : WING_GLOW));
+                IVertexBuilder builder;
+                if (Config.CLIENT.isChangeWing.get()){
+                    builder = bufferIn.getBuffer(RenderType.getEntityCutout(player.world.getDayTime() % 2 == 0 ? WING : WING_GLOW));
+                } else builder = bufferIn.getBuffer(RenderType.getEntityCutout(WING_GLOW));
                 InfinityWingModel model = new InfinityWingModel();
                 model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f,1.0f,1.0f,1.0f);
                 matrixStackIn.pop();

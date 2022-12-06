@@ -1,5 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
+import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
@@ -10,8 +11,8 @@ import java.util.function.Supplier;
 
 public enum MyItemTier implements IItemTier {
 
-    SKULLFIRE(1561, 10.0f, 10, 2, 10, () -> {
-        return Ingredient.fromItems(EndlessItems.infinityIngot.get());
+    SKULL_FIRE(1561, 10.0f, 10, 2, 10, () -> {
+        return Ingredient.fromItems(EndlessBlocks.crystalMatrixBlock.get());
     }),
     NEUTRON(3152, 15.0f, 10, 6, 21, () -> {
         return Ingredient.fromItems(EndlessItems.neutroniumIngot.get());

@@ -208,11 +208,13 @@ public class Config {
     }
 
     public static class ClientConfig{
-        public final ForgeConfigSpec.BooleanValue isRenderLayer; //是否开启渲染（会导致游戏帧率大幅下降）
+        public final ForgeConfigSpec.BooleanValue isChangeWing; //是否切换翅膀纹理
+        public final ForgeConfigSpec.BooleanValue isRenderEye; //是否开启发光眼睛
 
         public ClientConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Client Config").push("general");
-            this.isRenderLayer = buildBoolean(builder, "Is Render Layer", false,  "Whether to turn on rendering (it may decline the fps significantly)");
+            this.isChangeWing = buildBoolean(builder, "Is Change Wing", true,  "Whether to switch the wing texture");
+            this.isRenderEye = buildBoolean(builder, "Is Render Eye", true,  "Whether to open the luminous eyes");
             builder.pop();
 
         }
