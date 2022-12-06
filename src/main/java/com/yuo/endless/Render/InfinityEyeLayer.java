@@ -40,12 +40,11 @@ public class InfinityEyeLayer<T extends PlayerEntity> extends AbstractEyesLayer<
             matrixStackIn.translate(0, -0.0245, 0);
             matrixStackIn.scale(1.25f, 1.25f, 1.25f);
             float xAngle = 0;
-            float yAngle = 0;
+            float yAngle = netHeadYaw * ((float)Math.PI / 180F);;
             float zAngle = 0;
             float swimAnimation = player.getSwimAnimation(partialTicks);
             boolean flag = player.getTicksElytraFlying() > 4;
             boolean flag1 = player.isActualySwimming();
-            yAngle = netHeadYaw * ((float)Math.PI / 180F);
             if (flag) {
                 xAngle = (-(float)Math.PI / 4F);
             } else if (swimAnimation > 0.0F) {
