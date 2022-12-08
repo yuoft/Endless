@@ -4,6 +4,7 @@ import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.blamejared.crafttweaker.api.item.IItemStack;
+import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,9 @@ public class CompressorCrt {
                 }
 
                 //添加到模组配方管理
-                NeutroniumRecipe recipe = new NeutroniumRecipe(res, ingredients, count, output.getInternal());
+                ItemStack internal = output.getInternal();
+                String type = internal.getOrCreateTag().getString(Singularity.NBT_TYPE);
+                NeutroniumRecipe recipe = new NeutroniumRecipe(res, ingredients, count, Singularity.getSingularity(type));
                 CompressorManager.addRecipe(recipe);
             }
 
@@ -51,7 +54,9 @@ public class CompressorCrt {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
-                CompressorManager.removeRecipe(stack.getInternal());
+                ItemStack internal = stack.getInternal();
+                String type = internal.getOrCreateTag().getString(Singularity.NBT_TYPE);
+                CompressorManager.removeRecipe(Singularity.getSingularity(type));
             }
 
             @Override

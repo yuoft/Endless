@@ -1,6 +1,7 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.PaiMeng.Recipes.ModRecipeType;
+import com.yuo.endless.Items.Singularity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
@@ -74,7 +75,7 @@ public class CompressorManager {
             Iterator<NeutroniumRecipe> iterator = recipes.iterator();
             while (iterator.hasNext()){
                 NeutroniumRecipe next = iterator.next();
-                if (next.getRecipeOutput().isItemEqual(output)){
+                if (next.hasOutput(output)){
                     iterator.remove();
                     recipes.add(new NeutroniumRecipe(output.getItem().getRegistryName(), input, amount, output));
                     flag = false;
@@ -113,7 +114,7 @@ public class CompressorManager {
             return 0;
 
         for (NeutroniumRecipe recipe : recipes) {
-            if (recipe.getRecipeOutput().isItemEqual(output))
+            if (recipe.hasOutput(output))
                 return recipe.getRecipeCount();
         }
         return 0;
@@ -140,10 +141,10 @@ public class CompressorManager {
      * @param output  输出
      * @param map 输入
      */
-    public static void addInputs(Item output, NonNullList<ItemStack> map) {
+    public static void addInputs(ItemStack output, NonNullList<ItemStack> map) {
         if (map.isEmpty()) return;
         for (NeutroniumRecipe recipe : recipes) {
-            if (recipe.getRecipeOutput().isItemEqual(new ItemStack(output))){
+            if (recipe.hasOutput(output)){
                 recipe.addInput(map);
             }
         }

@@ -76,7 +76,7 @@ public class Endless {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SERVER_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        checkMods();
+        checkMods();/*
         if (isSpaceArms){
             EndlessItems.registerSpaceArmsItem(); //在模组存在的前提下 注册物品
         }
@@ -100,7 +100,7 @@ public class Endless {
         }
         if (isTC3){
             EndlessItems.registerTC3();
-        }
+        }*/
 
         modEventBus.addListener(this::commonSetup);
         //注册物品至mod总线

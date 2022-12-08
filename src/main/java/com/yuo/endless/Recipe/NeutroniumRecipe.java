@@ -1,9 +1,9 @@
 package com.yuo.endless.Recipe;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import com.yuo.endless.Items.Singularity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,7 +48,9 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
             list.add(input);
             int count = JSONUtils.getInt(json, "count");
             ItemStack output = deserializeItem(JSONUtils.getJsonObject(json, "output"));
-            return new NeutroniumRecipe(recipeId, list, count, output);
+            String type = output.getOrCreateTag().getString("type");
+            ItemStack singularity = Singularity.getSingularity(type);
+            return new NeutroniumRecipe(recipeId, list, count, singularity);
         }
 
         @Nullable
@@ -96,7 +98,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
 
     //输出是否相同
     public boolean hasOutput(ItemStack stack){
-        return output.isItemEqual(stack);
+        return Singularity.isEqual(output, stack);
     }
 
     //设置数量

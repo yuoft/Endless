@@ -40,26 +40,18 @@ public class EndlessItems {
 	public static RegistryObject<Item> infinityArrow = ITEMS.register("infinity_arrow", InfinityArrow::new);
 
 	//奇点
-	public static RegistryObject<Item> singularityCoal = ITEMS.register("singularity_coal",
-			() -> new Singularity(0x1f1e1e, Blocks.COAL_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityIron = ITEMS.register("singularity_iron",
-			() -> new Singularity(0xe6e6e6, Blocks.IRON_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityGold = ITEMS.register("singularity_gold",
-			() -> new Singularity(0xfffd90, Blocks.GOLD_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityDiamond = ITEMS.register("singularity_diamond",
-			() -> new Singularity(0x9efeeb, Blocks.DIAMOND_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityNetherite = ITEMS.register("singularity_netherite",
-			() -> new Singularity(0x4c4143, 0x4d494d));
-	public static RegistryObject<Item> singularityEmerald = ITEMS.register("singularity_emerald",
-			() -> new Singularity(0x82f6ad, Blocks.EMERALD_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityLapis = ITEMS.register("singularity_lapis",
-			() -> new Singularity(0x31618b, Blocks.LAPIS_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityRedstone = ITEMS.register("singularity_redstone",
-			() -> new Singularity(0xbd2008, Blocks.REDSTONE_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityQuartz = ITEMS.register("singularity_quartz",
-			() -> new Singularity(0xeee6de, Blocks.QUARTZ_BLOCK.getMaterialColor().colorValue));
-	public static RegistryObject<Item> singularityClay = ITEMS.register("singularity_clay",
-			() -> new Singularity(0xacaebd, 0xafb9d6));
+	public static RegistryObject<Item> singularity = ITEMS.register("singularity", Singularity::new);
+	/*
+	public static RegistryObject<Item> singularityCoal = ITEMS.register("singularity_coal", Singularity::new);
+	public static RegistryObject<Item> singularityIron = ITEMS.register("singularity_iron", Singularity::new);
+	public static RegistryObject<Item> singularityGold = ITEMS.register("singularity_gold", Singularity::new);
+	public static RegistryObject<Item> singularityDiamond = ITEMS.register("singularity_diamond", Singularity::new);
+	public static RegistryObject<Item> singularityNetherite = ITEMS.register("singularity_netherite", Singularity::new);
+	public static RegistryObject<Item> singularityEmerald = ITEMS.register("singularity_emerald", Singularity::new);
+	public static RegistryObject<Item> singularityLapis = ITEMS.register("singularity_lapis", Singularity::new);
+	public static RegistryObject<Item> singularityRedstone = ITEMS.register("singularity_redstone", Singularity::new);
+	public static RegistryObject<Item> singularityQuartz = ITEMS.register("singularity_quartz", Singularity::new);
+	public static RegistryObject<Item> singularityClay = ITEMS.register("singularity_clay", Singularity::new);*/
 
 	//工具
 	public static RegistryObject<Item> infinityPickaxe = ITEMS.register("infinity_pickaxe", InfinityPickaxe::new);
@@ -129,7 +121,7 @@ public class EndlessItems {
 			() -> new BlockItem(EndlessBlocks.compressedChest.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_chest",
 			() -> new BlockItem(EndlessBlocks.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
-
+	/*
 	//联动奇点
 	public static RegistryObject<Item> singularityRuby; //红宝石
 	public static RegistryObject<Item> singularityDragon; //龙晶
@@ -157,62 +149,56 @@ public class EndlessItems {
 
 	//强力装备
 	public static void registerSpaceArmsItem(){
-		singularityRuby = ITEMS.register("singularity_ruby",
-				() -> new Singularity(0xe02e35, 0xe25e63));
-		singularityDragon = ITEMS.register("singularity_dragon",
-				() -> new Singularity(0x550a56, 0xe04fe2));
-		singularitySpace = ITEMS.register("singularity_space",
-				() -> new Singularity(0x000000, 0xffffff));
-		singularityXray = ITEMS.register("singularity_xray",
-				() -> new Singularity(0x3affff, 0xe4ffff));
-		singularityUltra = ITEMS.register("singularity_ultra",
-				() -> new Singularity(0x7f6a00, 0x4cff00));
+		singularityRuby = ITEMS.register("singularity_ruby", Singularity::new);
+		singularityDragon = ITEMS.register("singularity_dragon", Singularity::new);
+		singularitySpace = ITEMS.register("singularity_space", Singularity::new);
+		singularityXray = ITEMS.register("singularity_xray", Singularity::new);
+		singularityUltra = ITEMS.register("singularity_ultra", Singularity::new);
 	}
 
 	//冰与火
 	public static void registerIafItem(){
-		singularitySilver = ITEMS.register("singularity_silver",
-				() -> new Singularity(0xf3faff, 0xe5ecf7));
-		singularityCopper = ITEMS.register("singularity_copper",
-				() -> new Singularity(0x95654c, 0xbd896d));
+		singularitySilver = ITEMS.register("singularity_silver", Singularity::new);
+		singularityCopper = ITEMS.register("singularity_copper", Singularity::new);
 	}
 
 	//机械动力
 	public static void registerCreate(){
-		singularityZinc = ITEMS.register("singularity_zinc", () -> new Singularity(0xaab59d, 0xb5d1ba));
+		singularityZinc = ITEMS.register("singularity_zinc", Singularity::new);
 	}
 
 	//热力
 	public static void registerThermal(){
 //		singularityPlatinum = ITEMS.register("singularity_platinum", () -> new Singularity(0x649db2, 0xd3fcff));
 //		singularityAluminum = ITEMS.register("singularity_aluminum", () -> new Singularity(0x, 0x));
-		singularityNickel = ITEMS.register("singularity_nickel", () -> new Singularity(0x916e4d, 0xf9f5ab));
-		singularityLead = ITEMS.register("singularity_lead", () -> new Singularity(0x232457, 0x393c61));
-		singularityTin = ITEMS.register("singularity_tin", () -> new Singularity(0x517c88, 0x88a2a7));
+		singularityNickel = ITEMS.register("singularity_nickel", Singularity::new);
+		singularityLead = ITEMS.register("singularity_lead", Singularity::new);
+		singularityTin = ITEMS.register("singularity_tin", Singularity::new);
 //		singularityIridium = ITEMS.register("singularity_iridium", () -> new Singularity(0xaab59d, 0xb5d1ba));
 	}
 
 	//龙之研究
 	public static void registerDE(){
-		singularityDragonIum = ITEMS.register("singularity_draconium", () -> new Singularity(0x6b369b, 0x6c389a));
-		singularityAwakenDragon = ITEMS.register("singularity_awakened_draconium", () -> new Singularity(0xf45100, 0xeecb3d));
+		singularityDragonIum = ITEMS.register("singularity_draconium", Singularity::new);
+		singularityAwakenDragon = ITEMS.register("singularity_awakened_draconium", Singularity::new);
 	}
 
 	//植物魔法
 	public static void registerBOT(){
-		singularityMana = ITEMS.register("singularity_manasteel", () -> new Singularity(0x49a5ee, 0x50b4ff));
-		singularityTara = ITEMS.register("singularity_terrasteel", () -> new Singularity(0x51dc24, 0x57ef26));
-		singularityElementIum = ITEMS.register("singularity_elementium", () -> new Singularity(0xe464ff, 0xe784ff));
+		singularityMana = ITEMS.register("singularity_manasteel", Singularity::new);
+		singularityTara = ITEMS.register("singularity_terrasteel", Singularity::new);
+		singularityElementIum = ITEMS.register("singularity_elementium", Singularity::new);
 	}
 
 	//等价交换
 	public static void registerPE(){
-		singularityDarkMatter = ITEMS.register("singularity_dark_matter", () -> new Singularity(0x0c0c0c, 0x171717));
-		singularityRedMatter = ITEMS.register("singularity_red_matter", () -> new Singularity(0x340303, 0x4d0404));
+		singularityDarkMatter = ITEMS.register("singularity_dark_matter", Singularity::new);
+		singularityRedMatter = ITEMS.register("singularity_red_matter", Singularity::new);
 	}
 	//匠魂3
 	public static void registerTC3(){
-		singularityCobalt = ITEMS.register("singularity_cobalt", () -> new Singularity(0x0753b8, 0x59a6ef));
-		singularityManyullyn = ITEMS.register("singularity_manyullyn", () -> new Singularity(0xa97de0, 0xcfacf9));
+		singularityCobalt = ITEMS.register("singularity_cobalt", Singularity::new);
+		singularityManyullyn = ITEMS.register("singularity_manyullyn", Singularity::new);
 	}
+	*/
 }

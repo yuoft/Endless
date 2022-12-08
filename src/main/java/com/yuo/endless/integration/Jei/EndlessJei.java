@@ -1,20 +1,21 @@
 package com.yuo.endless.integration.Jei;
 
 import com.yuo.endless.Container.ExtremeCraftContainer;
+import com.yuo.endless.Container.NeutroniumCompressorContainer;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
+import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IRecipeTransferRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Objects;
@@ -51,6 +52,7 @@ public class EndlessJei implements IModPlugin {
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(ExtremeCraftContainer.class, ExtremeCraftRecipeCategory.UID, 0, 81, 82, 36);
+        registration.addRecipeTransferHandler(NeutroniumCompressorContainer.class, NeutroniumCRecipeCategory.UID, 0, 1, 2, 36);
     }
 
     //注册机器合成
@@ -58,5 +60,16 @@ public class EndlessJei implements IModPlugin {
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(EndlessItems.extremeCraftingTable.get()), ExtremeCraftRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(EndlessItems.neutronCompressor.get()), NeutroniumCRecipeCategory.UID);
+    }
+
+    //注册物品不同nbt  使用nbt来在jei中显示
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        IModPlugin.super.registerItemSubtypes(registration);
+        registration.registerSubtypeInterpreter(EndlessItems.singularity.get(), (e, u) -> {
+            CompoundNBT nbt = (CompoundNBT) e.getOrCreateTag().get(Singularity.NBT_MOD);
+            if (nbt != null) return nbt.getString(Singularity.NBT_TYPE);
+            return "";
+        });
     }
 }

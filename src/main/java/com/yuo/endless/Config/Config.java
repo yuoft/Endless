@@ -1,5 +1,6 @@
 package com.yuo.endless.Config;
 
+import com.yuo.endless.Items.Singularity;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -34,6 +35,8 @@ public class Config {
     public static Set<Block> hoeBlocks = new HashSet<>();
     public static Set<String> errorInfo = new HashSet<>();
 
+    public static Set<Singularity> customSingularities = new HashSet<>();
+
     public static void loadConfig(){
         getToolBlocks(SERVER.pickaxeBlackList.get(), pickaxeBlocks);
         getToolBlocks(SERVER.axeBlackList.get(), axeBlocks);
@@ -46,7 +49,7 @@ public class Config {
      * @param list 方块id
      * @param set 指定set集合
      */
-    public static void getToolBlocks(List<? extends String> list, Set<Block> set){
+    private static void getToolBlocks(List<? extends String> list, Set<Block> set){
         for (String s : list) {
             ResourceLocation resourceLocation = new ResourceLocation(s);
             Block block = Registry.BLOCK.getOrDefault(resourceLocation);
@@ -54,6 +57,14 @@ public class Config {
                 errorInfo.add("error block for["+ s + "]");
             }else set.add(block);
         }
+    }
+
+    private static void getCustomSingularities(List<? extends String> list, Set<Singularity> set){
+        int size = list.size();
+        for (String s : list) {
+
+        }
+
     }
 
     public static class ServerConfig{
@@ -125,6 +136,8 @@ public class Config {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> axeBlackList;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> shovelBlackList;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> hoeBlackList;
+
+        public final ForgeConfigSpec.ConfigValue<List<? extends String[]>> singularityCustomList; //自定义奇点
 
         public ServerConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Base Config").push("general");
@@ -204,6 +217,11 @@ public class Config {
             this.shovelBlackList = buildConfig(builder, "Shovel Black List", "Blacklist of the super mode of the infinity shovel");
             this.hoeBlackList = buildConfig(builder, "Hoe Black List", "Blacklist of the super mode of the infinity hoe");
             builder.pop();
+
+            builder.comment("Custom Singularities,However, the existing name cannot be used.Provide a name (use lowercase letters and sliding line), and two hexadecimal color codes to define a new singularity." +
+                    " eg:[{\"name\":\"wood\",\"color0\":\"0x112233\",\"color1\":\"0x445566\"},{...}]").push("singularityCustom");
+            this.singularityCustomList = buildConfigs(builder, "Singularity Custom List", "Custom Singularity List");
+            builder.pop();
         }
     }
 
@@ -234,5 +252,9 @@ public class Config {
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> buildConfig(ForgeConfigSpec.Builder builder, String name, String comment){
         return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> s instanceof String && ResourceLocation.tryCreate((String) s) != null);
+    }
+
+    private static ForgeConfigSpec.ConfigValue<List<? extends String[]>> buildConfigs(ForgeConfigSpec.Builder builder, String name, String comment){
+        return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> ((String[]) s).length == 3);
     }
 }
