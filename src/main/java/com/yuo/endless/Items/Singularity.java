@@ -1,42 +1,35 @@
 package com.yuo.endless.Items;
 
-import appeng.core.features.ItemStackSrc;
-import com.yuo.PaiMeng.Items.RelicsHelper;
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Items.Tool.ColorText;
 import com.yuo.endless.tab.ModGroup;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Singularity extends Item{
-    //初始奇点
-    private static final String[] types = new String[]{ "coal", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay",
+    //原版+联动奇点
+    public static final List<String> linkageTypes = Arrays.asList("coal", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay",
             "ruby", "dragon", "space", "xray", "ultra", "silver", "copper", "zinc", "nickel", "lead", "tin", "draconium", "awakened_draconium",
-            "manasteel", "terrasteel", "elementium", "dark_matter", "red_matter", "cobalt", "manyullyn"};
-    private static final Integer[] colors = new Integer[]{ 0x1f1e1e, 0xe6e6e6, 0xfffd90, 0x9efeeb, 0x4c4143, 0x82f6ad, 0x31618b, 0xbd2008, 0xeee6de, 0xacaebd,
-            0xe02e35, 0x550a56, 0x000000, 0x3affff, 0x7f6a00, 0xf3faff, 0x95654c, 0xaab59d, 0x916e4d, 0x232457, 0x517c88, 0x6b369b, 0xf45100,
-            0x49a5ee, 0x51dc24, 0xe464ff, 0x0c0c0c, 0x340303, 0x0753b8, 0xa97de0};
-    private static final Integer[] colors2 = new Integer[]{ 0x050505, 0xf2f2f2, 0xffd83e, 0x70fbf0, 0x4d494d, 0x17dd62, 0x1b3588, 0x941400, 0xf2efed, 0xafb9d6,
-            0xe25e63, 0xe04fe2, 0xffffff, 0xe4ffff, 0x4cff00, 0xe5ecf7, 0xbd896d, 0xb5d1ba, 0xf9f5ab, 0x393c61, 0x88a2a7, 0x6c389a, 0xeecb3d,
-            0x50b4ff, 0x57ef26, 0xe784ff, 0x171717, 0x4d0404, 0x59a6ef, 0xcfacf9};
+            "manasteel", "terrasteel", "elementium", "dark_matter", "red_matter", "cobalt", "manyullyn");
+    //原版奇点
+    private static final String[] baseTypes = new String[]{ "coal", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay"};
+    private static final Integer[] colors = new Integer[]{ 0x1f1e1e, 0xe6e6e6, 0xfffd90, 0x9efeeb, 0x4c4143, 0x82f6ad, 0x31618b, 0xbd2008, 0xeee6de, 0xacaebd};
+    private static final Integer[] colors2 = new Integer[]{ 0x050505, 0xf2f2f2, 0xffd83e, 0x70fbf0, 0x4d494d, 0x17dd62, 0x1b3588, 0x941400, 0xf2efed, 0xafb9d6};
     //用于添加新奇点
     public static final List<String> TYPE = new ArrayList<>(); //奇点类型
     public static final List<Integer> INDEX = new ArrayList<>(); //底色
@@ -51,13 +44,26 @@ public class Singularity extends Item{
     static {
         EMPTY = new ItemStack(new Singularity());
         setStackData(EMPTY, new SingularityData());
-        TYPE.addAll(Arrays.asList(types));
+        TYPE.addAll(Arrays.asList(baseTypes));
         INDEX.addAll(Arrays.asList(colors));
         MAIN.addAll(Arrays.asList(colors2));
     }
 
     public Singularity() {
         super(new Properties().group(ModGroup.endless));
+    }
+
+    /**
+     * 添加新奇点
+     * @param data 奇点数据
+     */
+    public static void addSingularity(SingularityData data){
+        TYPE.add(data.type);
+        INDEX.add(data.index);
+        MAIN.add(data.main);
+//        ItemStack stack = new ItemStack(EndlessItems.singularity.get());
+//        setStackData(stack, data);
+//        return stack;
     }
 
     /**
@@ -92,7 +98,7 @@ public class Singularity extends Item{
     /**
      * 奇点nbt数据类
      */
-    private static class SingularityData{
+    public static class SingularityData{
         private final String type;
         private final int index;
         private final int main;
@@ -102,7 +108,7 @@ public class Singularity extends Item{
             this.main = 0x000000;
         }
 
-        SingularityData(String typeIn, int indexIn, int mainIn){
+        public SingularityData(String typeIn, int indexIn, int mainIn){
             this.type = typeIn;
             this.index = indexIn;
             this.main = mainIn;
@@ -148,6 +154,12 @@ public class Singularity extends Item{
         CompoundNBT nbt = (CompoundNBT) tag.get(NBT_MOD);
         if (nbt != null){
             String type = nbt.getString(NBT_TYPE);
+            if (Config.customSingularities.contains(type)){
+                char[] chars = type.toCharArray();
+                chars[0] -= 32;
+                String s = String.valueOf(chars);
+                return new StringTextComponent(s + " Singularity").mergeStyle(TextFormatting.YELLOW);
+            }
             return new TranslationTextComponent(this.getTranslationKey() + "_" + type);
         }
         return super.getDisplayName(stack);
@@ -223,6 +235,9 @@ public class Singularity extends Item{
             }
             if ("netherite".equals(type)){
                 tooltip.add(new StringTextComponent(ColorText.makeSANIC(I18n.format("endless.text.itemInfo.singularity_netherite"))));
+            }
+            if (Config.customSingularities.contains(type)){
+                tooltip.add(new TranslationTextComponent("endless.text.itemInfo.custom_singularity"));
             }
         }
     }

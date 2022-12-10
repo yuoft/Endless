@@ -8,9 +8,10 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.tab.ModGroup;
-import net.minecraft.block.Blocks;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -146,59 +147,59 @@ public class EndlessItems {
 	public static RegistryObject<Item> singularityRedMatter; //红物质
 	public static RegistryObject<Item> singularityCobalt; //钴
 	public static RegistryObject<Item> singularityManyullyn; //玛玉灵
+	*/
 
 	//强力装备
 	public static void registerSpaceArmsItem(){
-		singularityRuby = ITEMS.register("singularity_ruby", Singularity::new);
-		singularityDragon = ITEMS.register("singularity_dragon", Singularity::new);
-		singularitySpace = ITEMS.register("singularity_space", Singularity::new);
-		singularityXray = ITEMS.register("singularity_xray", Singularity::new);
-		singularityUltra = ITEMS.register("singularity_ultra", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("ruby", 0xe02e35,0xe25e63));
+		Singularity.addSingularity(new Singularity.SingularityData("dragon", 0x550a56,0xe04fe2));
+		Singularity.addSingularity(new Singularity.SingularityData("space", 0x000000,0xffffff));
+		Singularity.addSingularity(new Singularity.SingularityData("xray", 0x3affff,0xe4ffff));
+		Singularity.addSingularity(new Singularity.SingularityData("ultra", 0x7f6a00,0x4cff00));
 	}
 
 	//冰与火
 	public static void registerIafItem(){
-		singularitySilver = ITEMS.register("singularity_silver", Singularity::new);
-		singularityCopper = ITEMS.register("singularity_copper", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("silver", 0xf3faff,0xe5ecf7));
+		Singularity.addSingularity(new Singularity.SingularityData("copper", 0x95654c,0xbd896d));
 	}
 
 	//机械动力
 	public static void registerCreate(){
-		singularityZinc = ITEMS.register("singularity_zinc", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("zinc", 0xaab59d,0xb5d1ba));
 	}
 
 	//热力
 	public static void registerThermal(){
+		Singularity.addSingularity(new Singularity.SingularityData("nickel", 0x916e4d,0xf9f5ab));
+		Singularity.addSingularity(new Singularity.SingularityData("lead", 0x232457,0x393c61));
+		Singularity.addSingularity(new Singularity.SingularityData("tin", 0x517c88,0x88a2a7));
 //		singularityPlatinum = ITEMS.register("singularity_platinum", () -> new Singularity(0x649db2, 0xd3fcff));
 //		singularityAluminum = ITEMS.register("singularity_aluminum", () -> new Singularity(0x, 0x));
-		singularityNickel = ITEMS.register("singularity_nickel", Singularity::new);
-		singularityLead = ITEMS.register("singularity_lead", Singularity::new);
-		singularityTin = ITEMS.register("singularity_tin", Singularity::new);
 //		singularityIridium = ITEMS.register("singularity_iridium", () -> new Singularity(0xaab59d, 0xb5d1ba));
 	}
 
 	//龙之研究
 	public static void registerDE(){
-		singularityDragonIum = ITEMS.register("singularity_draconium", Singularity::new);
-		singularityAwakenDragon = ITEMS.register("singularity_awakened_draconium", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("draconium", 0x6b369b,0x6c389a));
+		Singularity.addSingularity(new Singularity.SingularityData("awakened_draconium", 0xf45100,0xeecb3d));
 	}
 
 	//植物魔法
 	public static void registerBOT(){
-		singularityMana = ITEMS.register("singularity_manasteel", Singularity::new);
-		singularityTara = ITEMS.register("singularity_terrasteel", Singularity::new);
-		singularityElementIum = ITEMS.register("singularity_elementium", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("manasteel", 0x49a5ee,0x50b4ff));
+		Singularity.addSingularity(new Singularity.SingularityData("terrasteel", 0x51dc24,0x57ef26));
+		Singularity.addSingularity(new Singularity.SingularityData("elementium", 0xe464ff,0xe784ff));
 	}
 
 	//等价交换
 	public static void registerPE(){
-		singularityDarkMatter = ITEMS.register("singularity_dark_matter", Singularity::new);
-		singularityRedMatter = ITEMS.register("singularity_red_matter", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("dark_matter", 0x0c0c0c,0x171717));
+		Singularity.addSingularity(new Singularity.SingularityData("red_matter", 0x340303,0x4d0404));
 	}
 	//匠魂3
 	public static void registerTC3(){
-		singularityCobalt = ITEMS.register("singularity_cobalt", Singularity::new);
-		singularityManyullyn = ITEMS.register("singularity_manyullyn", Singularity::new);
+		Singularity.addSingularity(new Singularity.SingularityData("cobalt", 0x0753b8,0x59a6ef));
+		Singularity.addSingularity(new Singularity.SingularityData("manyullyn", 0xa97de0,0xcfacf9));
 	}
-	*/
 }

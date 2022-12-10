@@ -18,12 +18,10 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IDispenseItemBehavior;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -76,7 +74,7 @@ public class Endless {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SERVER_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        checkMods();/*
+        checkMods();
         if (isSpaceArms){
             EndlessItems.registerSpaceArmsItem(); //在模组存在的前提下 注册物品
         }
@@ -100,7 +98,7 @@ public class Endless {
         }
         if (isTC3){
             EndlessItems.registerTC3();
-        }*/
+        }
 
         modEventBus.addListener(this::commonSetup);
         //注册物品至mod总线

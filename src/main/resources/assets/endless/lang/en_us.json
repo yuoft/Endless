@@ -130,6 +130,7 @@
   "endless.text.itemInfo.star_fuel":"§7The light of the universe shines everywhere",
   "endless.text.itemInfo.bucket_fluid":"Fluid:",
   "endless.text.itemInfo.bucket_num":"Fluid Number: %s",
+  "endless.text.itemInfo.custom_singularity":"§7Player Custom",
   "minecraft:null":"Unknown",
   "minecraft:water":"Water",
   "minecraft:lava":"Lava",

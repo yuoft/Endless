@@ -8,7 +8,10 @@ import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Config {
     public static ForgeConfigSpec SERVER_CONFIG;
@@ -35,13 +38,14 @@ public class Config {
     public static Set<Block> hoeBlocks = new HashSet<>();
     public static Set<String> errorInfo = new HashSet<>();
 
-    public static Set<Singularity> customSingularities = new HashSet<>();
+    public static Set<String> customSingularities = new HashSet<>();
 
     public static void loadConfig(){
         getToolBlocks(SERVER.pickaxeBlackList.get(), pickaxeBlocks);
         getToolBlocks(SERVER.axeBlackList.get(), axeBlocks);
         getToolBlocks(SERVER.shovelBlackList.get(), shovelBlocks);
         getToolBlocks(SERVER.hoeBlackList.get(), hoeBlocks);
+        getCustomSingularities(SERVER.singularityCustomList.get(), customSingularities);
     }
 
     /**
@@ -54,17 +58,54 @@ public class Config {
             ResourceLocation resourceLocation = new ResourceLocation(s);
             Block block = Registry.BLOCK.getOrDefault(resourceLocation);
             if (block == Blocks.AIR){
-                errorInfo.add("error block for["+ s + "]");
+                errorInfo.add("error block for ["+ s + "]");
             }else set.add(block);
         }
     }
 
-    private static void getCustomSingularities(List<? extends String> list, Set<Singularity> set){
+    private static void getCustomSingularities(List<? extends String> list, Set<String> set){
         int size = list.size();
-        for (String s : list) {
-
+        if (size % 3 != 0){
+            errorInfo.add("error singularity definition for [String size]");
+        }else {
+            for (int i = 0; i < list.size(); i += 3){
+                String s = list.get(i);
+                if (!isTypeFlag(s)) {
+                    errorInfo.add("Error singularity definition for ["+ list.get(i) +"]");
+                    continue;
+                }
+                String s1 = list.get(i + 1);
+                if (!s1.matches("^color0:0x[a-z0-9]{6}$")) {
+                    errorInfo.add("Error singularity definition for ["+ s1 +"]");
+                    continue;
+                }
+                String s2 = list.get(i + 2);
+                if (!s2.matches("^color1:0x[a-z0-9]{6}$")) {
+                    errorInfo.add("Error singularity definition for ["+ list.get(i + 2) +"]");
+                    continue;
+                }
+                String[] split = s.split(":");
+                String[] split1 = s1.split(":");
+                String[] split2 = s2.split(":");
+                Singularity.addSingularity(new Singularity.SingularityData(split[1],
+                        Integer.parseInt(split1[1].substring(2), 16), Integer.parseInt(split2[1].substring(2), 16)));
+                set.add(split[1]);
+            }
         }
+    }
 
+    /**
+     * 判断字符串是否符合要求
+     * @param s 字符串
+     * @return 符合
+     */
+    private static boolean isTypeFlag(String s){
+        //字符串结构是否正确
+        if (s.matches("^name:[a-z_]+$") && !s.matches(":_")){
+            String[] split = s.split(":");
+            return !Singularity.linkageTypes.contains(split[1]); //名称是否冲突
+        }
+        return false;
     }
 
     public static class ServerConfig{
@@ -137,7 +178,7 @@ public class Config {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> shovelBlackList;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> hoeBlackList;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String[]>> singularityCustomList; //自定义奇点
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> singularityCustomList; //自定义奇点
 
         public ServerConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Base Config").push("general");
@@ -219,8 +260,8 @@ public class Config {
             builder.pop();
 
             builder.comment("Custom Singularities,However, the existing name cannot be used.Provide a name (use lowercase letters and sliding line), and two hexadecimal color codes to define a new singularity." +
-                    " eg:[{\"name\":\"wood\",\"color0\":\"0x112233\",\"color1\":\"0x445566\"},{...}]").push("singularityCustom");
-            this.singularityCustomList = buildConfigs(builder, "Singularity Custom List", "Custom Singularity List");
+                    " eg:[{\"name:wood\",\"color0:0x112233\",\"color1:0x445566\"},{...}]").push("singularityCustom");
+            this.singularityCustomList = buildConfig(builder, "Singularity Custom List", "Custom Singularity List");
             builder.pop();
         }
     }
@@ -254,7 +295,4 @@ public class Config {
         return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> s instanceof String && ResourceLocation.tryCreate((String) s) != null);
     }
 
-    private static ForgeConfigSpec.ConfigValue<List<? extends String[]>> buildConfigs(ForgeConfigSpec.Builder builder, String name, String comment){
-        return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> ((String[]) s).length == 3);
-    }
 }
