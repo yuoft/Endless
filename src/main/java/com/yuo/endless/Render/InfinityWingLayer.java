@@ -9,21 +9,17 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
-public class InfinityWingLayer<T extends PlayerEntity> extends LayerRenderer<T, BipedModel<T>> {
+public class InfinityWingLayer extends LayerRenderer<PlayerEntity, PlayerModel<PlayerEntity>> {
     private static final ResourceLocation WING = new ResourceLocation(Endless.MOD_ID, "textures/models/infinity_wing.png");
     private static final ResourceLocation WING_GLOW = new ResourceLocation(Endless.MOD_ID, "textures/models/infinity_wingglow.png");
 
-    public InfinityWingLayer(IEntityRenderer<T, BipedModel<T>> entityRendererIn) {
+    public InfinityWingLayer(IEntityRenderer<PlayerEntity, PlayerModel<PlayerEntity>> entityRendererIn) {
         super(entityRendererIn);
     }
 
