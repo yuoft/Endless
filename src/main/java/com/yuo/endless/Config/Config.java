@@ -272,8 +272,8 @@ public class Config {
 
         public ClientConfig(ForgeConfigSpec.Builder builder){
             builder.comment("Endless Client Config").push("general");
-            this.isChangeWing = buildBoolean(builder, "Is Change Wing", true,  "Whether to switch the wing texture");
-            this.isRenderEye = buildBoolean(builder, "Is Render Eye", true,  "Whether to open the luminous eyes");
+            this.isChangeWing = buildBoolean(builder, "Is Change Wing", false,  "Whether to switch the wing texture");
+            this.isRenderEye = buildBoolean(builder, "Is Render Eye", false,  "Whether to open the luminous eyes");
             builder.pop();
 
         }

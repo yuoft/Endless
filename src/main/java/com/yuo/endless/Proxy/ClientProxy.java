@@ -18,8 +18,8 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.Items;
@@ -90,12 +90,12 @@ public class ClientProxy implements IProxy {
         Stream.concat(manager.getSkinMap().values().stream(), manager.renderers.values().stream()) //流操作
                 .filter(LivingRenderer.class::isInstance) //匹配LivingRender实例
                 .map(r -> (LivingRenderer<?,?>) r) //类型转换
-                .filter(render -> render.getEntityModel() instanceof PlayerModel<?>) //匹配模型为BipedModel的元素
+                .filter(render -> render.getEntityModel() instanceof BipedModel<?>) //匹配模型为BipedModel的元素
                 .unordered() //无序
                 .distinct() //返回流元素
                 .forEach(render -> {
                     @SuppressWarnings("unchecked")
-                    LivingRenderer<PlayerEntity, PlayerModel<PlayerEntity>> livingRender = (LivingRenderer<PlayerEntity, PlayerModel<PlayerEntity>>) render;
+                    LivingRenderer<LivingEntity, BipedModel<LivingEntity>> livingRender = (LivingRenderer<LivingEntity, BipedModel<LivingEntity>>) render;
                     livingRender.addLayer(new InfinityEyeLayer(livingRender));
                     livingRender.addLayer(new InfinityWingLayer(livingRender));
                 });
