@@ -65,7 +65,7 @@ public class Config {
 
     private static void getCustomSingularities(List<? extends String> list, Set<String> set){
         int size = list.size();
-        if (size % 3 != 0){
+        if (size % 3 != 0 || size == 0){
             errorInfo.add("error singularity definition for [String size]");
         }else {
             for (int i = 0; i < list.size(); i += 3){
