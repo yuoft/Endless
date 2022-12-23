@@ -70,6 +70,7 @@
   "item.endless.infinity_crossbow":"§cCrossbow of the Inferno",
   "item.endless.infinity_bucket":"§cInfinity Bucket",
   "item.endless.infinity_fluid_bucket":"§6Infinity Fluid Bucket",
+  "item.endless.infinity_totem":"§cInfinity Totem",
 
   "item.endless.infinity_helmet":"§cInfinity Helmet",
   "item.endless.infinity_chestplate":"§cInfinity Chestplate",
@@ -135,6 +136,7 @@
   "minecraft:water":"Water",
   "minecraft:lava":"Lava",
   "endless:infinity_fluid":"§6Infinity Fluid",
+  "endless.text.msg.totem_break":"The totem will no longer shelter you",
 
   "endless.message.login":"§bWelcome to this mod [Avaritia endless · pseudo], §aclick here§b to feedback!",
   "endless.message.login0":"§ahttps://space.bilibili.com/21854371",

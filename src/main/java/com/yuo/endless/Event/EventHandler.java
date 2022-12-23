@@ -6,6 +6,8 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
+import com.yuo.endless.NetWork.NetWorkHandler;
+import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -16,15 +18,19 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
@@ -37,6 +43,7 @@ import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -245,6 +252,29 @@ public class EventHandler {
                 player.setHealth(player.getMaxHealth());
                 event.setCanceled(true);
             }
+            ItemStack totem = getPlayerBagItem(player);
+            if (!totem.isEmpty()){
+                NetWorkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new TotemPacket(totem, player));
+
+                player.clearActivePotions();
+                int damage = totem.getDamage();
+                if (damage == 9){ //最后一次
+                    player.setHealth(player.getMaxHealth());
+                    player.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 800, 1));
+                    player.addPotionEffect(new EffectInstance(Effects.SPEED, 800, 1));
+                    attackAOE(player, 8, 1000.0f);
+                    player.sendMessage(new TranslationTextComponent("endless.text.msg.totem_break"), UUID.randomUUID());
+                }else {
+                    player.setHealth(10.0F);
+                }
+                player.addPotionEffect(new EffectInstance(Effects.REGENERATION, 2600, 4));
+                player.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 400, 1));
+                player.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 700, 2));
+                player.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 1100, 0));
+//                player.world.setEntityState(player, (byte)35);
+                totem.damageItem(1, player, e -> e.sendBreakAnimation(Hand.MAIN_HAND));
+                event.setCanceled(true);
+            }
         }
     }
 
@@ -413,6 +443,41 @@ public class EventHandler {
         ItemStack stack1 = new ItemStack(item, count);
         ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack1);
         event.getDrops().add(itemEntity);
+    }
+
+    /**
+     * 获取玩家背包中的图腾
+     * @param player 玩家
+     * @return 图腾
+     */
+    private static ItemStack getPlayerBagItem(PlayerEntity player){
+        ItemStack mainhand = player.getHeldItemMainhand();
+        if (mainhand.getItem() == EndlessItems.infinityTotem.get()){
+            return mainhand;
+        }
+        ItemStack offhand = player.getHeldItemOffhand();
+        if (offhand.getItem() == EndlessItems.infinityTotem.get()){
+            return offhand;
+        }
+        for (ItemStack stack : player.inventory.mainInventory) {
+            if (stack.getItem() == EndlessItems.infinityTotem.get())
+                return stack;
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    private static void attackAOE(PlayerEntity player,float range, float damage) {
+        AxisAlignedBB aabb = player.getBoundingBox().grow(range);//范围
+        List<Entity> toAttack = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, aabb);//生物列表
+        DamageSource src = DamageSource.causePlayerDamage(player);//伤害类型
+        for (Entity entity : toAttack) { //循环遍历
+            if (entity instanceof LivingEntity){
+                if (entity instanceof IMob) {
+                    InfinitySword.attackEntity(entity, src, damage);
+                }
+            }
+        }
     }
 }
 

@@ -643,6 +643,21 @@ public class ModRecipeManager {
                 'I', new ItemStack(EndlessItems.neutroniumIngot.get()),
                 'A', new ItemStack(Items.BUCKET),
                 'O', new ItemStack(EndlessItems.infinityCatalyst.get()));
+
+        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.infinityTotem.get()),
+                "   AAA   ",
+                "  ABBBA  ",
+                "  ACBCA  ",
+                "DDDBBBDDD",
+                " DDBBBDD ",
+                "  ABBBA  ",
+                "  AAAAA  ",
+                "   DDD   ",
+                "    D    ",
+                'A', new ItemStack(EndlessItems.neutroniumIngot.get()),
+                'B', new ItemStack(EndlessItems.infinityNugget.get()),
+                'C', new ItemStack(Items.TOTEM_OF_UNDYING),
+                'D', new ItemStack(EndlessItems.crystalMatrixIngot.get()));
     }
 
 

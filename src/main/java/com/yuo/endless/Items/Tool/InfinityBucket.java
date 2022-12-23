@@ -1,6 +1,5 @@
 package com.yuo.endless.Items.Tool;
 
-import com.simibubi.create.content.contraptions.fluids.FlowSource;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -16,9 +15,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
@@ -29,14 +26,12 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * 右键范围装取流体（水和岩浆），并记录数量用于消耗

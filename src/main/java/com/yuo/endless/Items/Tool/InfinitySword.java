@@ -204,7 +204,7 @@ public class InfinitySword extends SwordItem{
     }
 
     //aoe伤害
-    protected void attackAOE(PlayerEntity player,float range, float damage,boolean type) {
+    private void attackAOE(PlayerEntity player,float range, float damage,boolean type) {
         if (player.world.isRemote) return;
         AxisAlignedBB aabb = player.getBoundingBox().grow(range);//范围
         List<Entity> toAttack = player.getEntityWorld().getEntitiesWithinAABBExcludingEntity(player, aabb);//生物列表
@@ -228,7 +228,7 @@ public class InfinitySword extends SwordItem{
      * @param src 伤害类型
      * @param damage 伤害值
      */
-    private void attackEntity(Entity entity, DamageSource src, float damage){
+    public static void attackEntity(Entity entity, DamageSource src, float damage){
         if (entity instanceof EnderDragonEntity){
             EnderDragonEntity dragon = (EnderDragonEntity) entity;
             dragon.attackEntityPartFrom(dragon.dragonPartHead, src, damage);

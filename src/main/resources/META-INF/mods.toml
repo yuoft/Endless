@@ -3,7 +3,7 @@ loaderVersion="[36,)"
 license="All rights reserved"
 [[mods]] #mandatory
 modId="endless"
-version="1.16.5-1.4.4"
+version="1.16.5-1.4.5"
 displayName="Endless"
 authors="yuo"
 description='''

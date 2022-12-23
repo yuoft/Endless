@@ -27,5 +27,10 @@ public class NetWorkHandler {
                 NmCPacket::toBytes, //序列化数据包
                 NmCPacket::new, //反序列化
                 NmCPacket::handler); //接收数据后进行操作
+        INSTANCE.registerMessage(nextID(),
+                TotemPacket.class,
+                TotemPacket::toBytes,
+                TotemPacket::new,
+                TotemPacket::handler);
     }
 }
