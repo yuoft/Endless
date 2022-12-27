@@ -4,20 +4,15 @@ import com.google.common.base.Predicate;
 import com.mojang.authlib.GameProfile;
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Event.EventHandler;
-import com.yuo.endless.Items.Tool.EndlessItemEntity;
-import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import com.yuo.endless.Sound.ModSounds;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.fluid.WaterFluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -26,12 +21,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -311,4 +304,5 @@ public class GapingVoidEntity extends Entity {
     public boolean isInRangeToRenderDist(double distance) { //在范围内才渲染
         return true; //一直渲染
     }
+
 }

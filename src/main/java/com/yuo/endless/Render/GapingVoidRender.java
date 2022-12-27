@@ -14,7 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/void.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/gaping_void.png");
 
     private final EntityModel<Entity> gapingVoid;
 
@@ -35,7 +35,7 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         IVertexBuilder builder = bufferIn.getBuffer(this.gapingVoid.getRenderType(this.getEntityTexture(entityIn)));
         float scale = GapingVoidEntity.getVoidScale(entityIn.getAge()); //缩放值
         matrixStackIn.scale(scale, scale, scale); //缩放模型
-        matrixStackIn.translate(0, -scale * 0.11d,0);
+        matrixStackIn.translate(0, -scale * 0.125d,0);
         this.gapingVoid.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f,1.0f,1.0f,1.0f);
         matrixStackIn.pop();
     }

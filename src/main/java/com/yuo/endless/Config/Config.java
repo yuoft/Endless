@@ -170,6 +170,7 @@ public class Config {
         public final ForgeConfigSpec.IntValue singularityRedMatter;
         public final ForgeConfigSpec.IntValue singularityCobalt;
         public final ForgeConfigSpec.IntValue singularityManyullyn;
+
         public final ForgeConfigSpec.IntValue modRatioRate; //模组影响后的最大倍率
         public final ForgeConfigSpec.IntValue modRatioCount; //模组影响后的最大数量
 
