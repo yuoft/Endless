@@ -757,9 +757,9 @@ public class ModRecipeManager {
                     new ItemStack(Api.instance().definitions().materials().singularity()));
         }
         if (Endless.isDE){ //37+3 41 42
-            Block block = Registry.BLOCK.getOrDefault(new ResourceLocation("draconicevolution:chaos_shard")); //混沌碎片
-            if (block != Blocks.AIR){
-                ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(block),
+            Item item = Registry.ITEM.getOrDefault(new ResourceLocation("draconicevolution:chaos_shard")); //混沌碎片
+            if (item != Items.AIR){
+                ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(item),
                         Singularity.getSingularity("draconium"), Singularity.getSingularity("awakened_draconium"));
             }
         }

@@ -1,11 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " x ",
+    "mxn",
     "xyx",
-    " x "
+    "mxn"
   ],
   "key": {
+    "m": {
+      "item": "minecraft:crafting_table"
+    },
+    "n": {
+      "item": "minecraft:furnace"
+    },
     "x": {
       "item": "endless:infinity_ingot"
     },
