@@ -75,3 +75,4 @@ public enum MyItemTier implements IItemTier {
         return this.repairMaterial.getValue();
     }
     }
+

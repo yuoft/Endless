@@ -28,6 +28,13 @@ public class InfinityBoxScreen extends ContainerScreen<InfinityBoxContainer> {
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize, 500, 500);
+        if (this.container.isBurning()) {
+            int k = this.container.getBurnProgress();
+            blit(matrixStack, i + 63, j + 213 + 14- k, 0, 276 + 14 - k, 14, k, 500, 500);
+        }
+
+        int l = this.container.getCookProgress();
+        blit(matrixStack, i + 86, j + 211, 0, 290, l, 16, 500, 500);
     }
 
     @Override

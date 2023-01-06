@@ -5,6 +5,7 @@ import com.yuo.endless.Items.Tool.ColorText;
 import com.yuo.endless.tab.ModGroup;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -49,8 +50,21 @@ public class Singularity extends Item{
         MAIN.addAll(Arrays.asList(colors2));
     }
 
-    public Singularity() {
+    Singularity(){
         super(new Properties().group(ModGroup.endless));
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        CompoundNBT tag = stack.getOrCreateTag();
+        CompoundNBT nbt = (CompoundNBT) tag.get(NBT_MOD);
+        if (nbt != null){
+            String string = nbt.getString(NBT_TYPE);
+            if (!"".equals(string) && !"null".equals(string)){
+                ItemStack singularity = getSingularity(string);
+                stack.setTag(singularity.getTag());
+            }
+        }
     }
 
     /**

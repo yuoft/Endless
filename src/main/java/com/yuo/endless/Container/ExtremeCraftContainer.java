@@ -5,15 +5,12 @@ import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
-import net.minecraft.block.CraftingTableBlock;
-import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.RecipeBookContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.inventory.container.WorkbenchContainer;
@@ -51,7 +48,7 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
             }
         }
         //添加输出栏
-        this.addSlot(new ExtremeCraftReslutSlot(playerInventory.player, inputInventory, outputInventory, 81, 210 , 80));
+        this.addSlot(new ExtremeCraftResultSlot(playerInventory.player, inputInventory, outputInventory, 81, 210 , 80));
         //添加玩家物品栏
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {

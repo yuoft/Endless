@@ -8,12 +8,13 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 
 public enum EndlessChestType {
-    COMPRESSOR("compressed",108, 9, 256, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/compressor_chest.png"), 256, 276),
-    INFINITY("infinity",243, 9, 500, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/infinity_chest.png"), 500, 500),
-    NORMAL("normal",27, 3, 176, 168, new ResourceLocation("textures/gui/container/shulker_box.png"), 256, 256);
+    COMPRESSOR("compressed",1024,108, 9, 256, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/compressor_chest.png"), 256, 276),
+    INFINITY("infinity", Integer.MAX_VALUE, 256, 9, 500, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/infinity_chest.png"), 500, 500),
+    NORMAL("normal",64, 27, 3, 176, 168, new ResourceLocation("textures/gui/container/shulker_box.png"), 256, 256);
 
     private final String name;
     public final int size;
+    public final int stackLimit;
     public final int rowLength;
     public final int xSize;
     public final int ySize;
@@ -21,9 +22,10 @@ public enum EndlessChestType {
     public final int textureXSize;
     public final int textureYSize;
 
-    EndlessChestType(@Nullable String name, int size, int rowLength, int xSize, int ySize, ResourceLocation guiTexture, int textureXSize, int textureYSize) {
+    EndlessChestType(@Nullable String name, int limit, int size, int rowLength, int xSize, int ySize, ResourceLocation guiTexture, int textureXSize, int textureYSize) {
         this.name = name;
         this.size = size;
+        this.stackLimit = limit;
         this.rowLength = rowLength;
         this.xSize = xSize;
         this.ySize = ySize;

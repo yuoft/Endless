@@ -42,6 +42,7 @@ public class EndlessItems {
 
 	//奇点
 	public static RegistryObject<Item> singularity = ITEMS.register("singularity", Singularity::new);
+
 	/*
 	public static RegistryObject<Item> singularityCoal = ITEMS.register("singularity_coal", Singularity::new);
 	public static RegistryObject<Item> singularityIron = ITEMS.register("singularity_iron", Singularity::new);

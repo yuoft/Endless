@@ -27,6 +27,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,23 +36,23 @@ import java.util.function.Supplier;
 
 @OnlyIn(value = Dist.CLIENT, _interface = IChestLid.class)
 public class AbsEndlessChestTile extends LockableLootTileEntity implements IChestLid, ITickableTileEntity {
-    private NonNullList<ItemStack> chestContents;
     protected float lidAngle;
     protected float prevLidAngle;
     protected int numPlayersUsing;
     private int ticksSinceSync;
     private final Supplier<Block> blockSupplier;
     private final EndlessChestType type;
-    private net.minecraftforge.common.util.LazyOptional<net.minecraftforge.items.IItemHandlerModifiable> chestHandler;
+    protected final InfinityStackHandler stackHandler;
+    private net.minecraftforge.common.util.LazyOptional<IItemHandlerModifiable> chestHandler;
 
-    public AbsEndlessChestTile(TileEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier){
+    public AbsEndlessChestTile(TileEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier) {
         super(typeIn);
         this.type = chestType;
-        this.chestContents = NonNullList.withSize(chestType.size, ItemStack.EMPTY);
+        this.stackHandler = new InfinityStackHandler(chestType.size);
         this.blockSupplier = supplier;
     }
 
-    public Block getBlock(){
+    public Block getBlock() {
         return blockSupplier.get();
     }
 
@@ -61,7 +63,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
 
     @Override
     public boolean isEmpty() {
-        for (ItemStack itemstack : this.chestContents) {
+        for (ItemStack itemstack : this.stackHandler.getStacks()) {
             if (!itemstack.isEmpty()) {
                 return false;
             }
@@ -75,10 +77,10 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         NbtRead(nbt);
     }
 
-    public void NbtRead(CompoundNBT nbt){
-        this.chestContents = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
+    public void NbtRead(CompoundNBT nbt) {
+        this.stackHandler.setStacks(NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY));
         if (!this.checkLootAndRead(nbt)) {
-            ItemStackHelper.loadAllItems(nbt, this.chestContents);
+            ItemStackHelper.loadAllItems(nbt, this.stackHandler.getStacks());
         }
     }
 
@@ -89,9 +91,9 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         return compound;
     }
 
-    public CompoundNBT NbtWrite(CompoundNBT compound){
+    public CompoundNBT NbtWrite(CompoundNBT compound) {
         if (!this.checkLootAndWrite(compound)) {
-            ItemStackHelper.saveAllItems(compound, this.chestContents);
+            ItemStackHelper.saveAllItems(compound, this.stackHandler.getStacks());
         }
         return compound;
     }
@@ -103,7 +105,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return ChestContainer.createGeneric9X3(id,player,this);
+        return ChestContainer.createGeneric9X3(id, player, this);
     }
 
     public void tick() {
@@ -139,6 +141,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         }
 
     }
+
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
@@ -175,8 +178,8 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         int i = 0;
         float f = 5.0f;
 
-        for(PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class,
-                new AxisAlignedBB((float)x - f, (float)y - f, (float)z - f, (float)(x + 1) + f, (float)(y + 1) + f, (float)(z + 1) + f))) {
+        for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class,
+                new AxisAlignedBB((float) x - f, (float) y - f, (float) z - f, (float) (x + 1) + f, (float) (y + 1) + f, (float) (z + 1) + f))) {
             Container openContainer = playerentity.openContainer;
             if (openContainer instanceof CompressorChestContainer || openContainer instanceof InfinityBoxContainer) {
                 ++i;
@@ -187,9 +190,9 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     private void playSound(SoundEvent soundIn) {
-        double d0 = (double)this.pos.getX() + 0.5D;
-        double d1 = (double)this.pos.getY() + 0.5D;
-        double d2 = (double)this.pos.getZ() + 0.5D;
+        double d0 = (double) this.pos.getX() + 0.5D;
+        double d1 = (double) this.pos.getY() + 0.5D;
+        double d2 = (double) this.pos.getZ() + 0.5D;
         if (world != null)
             this.world.playSound(null, d0, d1, d2, soundIn, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
     }
@@ -227,7 +230,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     protected void onOpenOrClose() {
-        if (world != null){
+        if (world != null) {
             Block block = this.getBlockState().getBlock();
             if (block instanceof AbsEndlessChest) {
                 this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
@@ -246,7 +249,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         if (blockstate.hasTileEntity()) {
             TileEntity tileentity = reader.getTileEntity(posIn);
             if (tileentity instanceof AbsEndlessChestTile) {
-                return ((AbsEndlessChestTile)tileentity).numPlayersUsing;
+                return ((AbsEndlessChestTile) tileentity).numPlayersUsing;
             }
         }
 
@@ -254,16 +257,17 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     @Override
-    protected NonNullList<ItemStack> getItems() {
-        return this.chestContents;
+    public NonNullList<ItemStack> getItems() {
+        return this.stackHandler.getStacks();
     }
 
     @Override
     protected void setItems(NonNullList<ItemStack> itemsIn) {
-        this.chestContents = itemsIn;
+//        this.stackHandler = itemsIn;
+        this.stackHandler.setStacks(itemsIn);
     }
 
-//    @Override
+    //    @Override
     public void updateContainingBlockInfo() {
         super.updateContainingBlockInfo();
         if (this.chestHandler != null) {
@@ -284,13 +288,13 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     @Nonnull
-    private net.minecraftforge.items.IItemHandlerModifiable createHandler() {
+    private IItemHandlerModifiable createHandler() {
         BlockState state = this.getBlockState();
         if (!(state.getBlock() instanceof AbsEndlessChest)) {
-            return new net.minecraftforge.items.wrapper.InvWrapper(this);
+            return new InvWrapper(this);
         }
         IInventory inv = AbsEndlessChest.getChestInventory((AbsEndlessChest) state.getBlock(), state, getWorld(), getPos(), true);
-        return new net.minecraftforge.items.wrapper.InvWrapper(inv == null ? this : inv);
+        return new InvWrapper(inv == null ? this : inv);
     }
 
     @Override

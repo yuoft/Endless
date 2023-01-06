@@ -24,7 +24,7 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
 //    private final IDrawableStatic extreme;
 
     public ExtremeCraftRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 0,0,190,164); //绘制背景
+        this.background = helper.createDrawable(TEXTURE, 2,0,184,164); //绘制背景
         this.icon = helper.createDrawableIngredient(new ItemStack(EndlessItems.extremeCraftingTable.get())); //绘制合成方块
 //        this.extreme = helper.createDrawable(TEXTURE);
     }
@@ -83,10 +83,10 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
     public void setRecipe(IRecipeLayout recipeLayout, ExtremeCraftRecipe recipe, IIngredients ingredients) {
         for (int m = 0; m < 9; m++){
             for (int n = 0; n < 9; n++){
-                recipeLayout.getItemStacks().init(n + m * 9, true, 1 + n * 18, 1 + m * 18);
+                recipeLayout.getItemStacks().init(n + m * 9, true, -1 + n * 18, 1 + m * 18);
             }
         }
-        recipeLayout.getItemStacks().init(81, false, 167, 72);
+        recipeLayout.getItemStacks().init(81, false, 164, 72);
         recipeLayout.getItemStacks().set(ingredients);
     }
 

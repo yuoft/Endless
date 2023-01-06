@@ -658,6 +658,21 @@ public class ModRecipeManager {
                 'B', new ItemStack(EndlessItems.infinityNugget.get()),
                 'C', new ItemStack(Items.TOTEM_OF_UNDYING),
                 'D', new ItemStack(EndlessItems.crystalMatrixIngot.get()));
+        ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.densestNeutroniumCollector.get()),
+                "CC     CC",
+                "C  BBB  C",
+                "  AAAAA  ",
+                " BAXXXAB ",
+                " BAXYXAB ",
+                " BAXXXAB ",
+                "  AAAAA  ",
+                "C  BBB  C",
+                "CC     CC",
+                'A', new ItemStack(Items.REDSTONE_BLOCK),
+                'B', new ItemStack(EndlessItems.neutroniumIngot.get()),
+                'C', new ItemStack(EndlessItems.neutroniumGear.get()),
+                'X', new ItemStack(EndlessItems.denserNeutroniumCollector.get()),
+                'Y', Singularity.getSingularity("redstone"));
     }
 
 
