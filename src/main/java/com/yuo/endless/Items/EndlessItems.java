@@ -98,7 +98,7 @@ public class EndlessItems {
 
 
 	//注册方块物品
-	public static RegistryObject<BlockItem> blockInfinity = ITEMS.register("infinity_block",
+	public static RegistryObject<BlockItem> infinityBlock = ITEMS.register("infinity_block",
 			() -> new BlockItem(EndlessBlocks.infinityBlock.get(), new Item.Properties().group(ModGroup.endless).isImmuneToFire()));
 	public static RegistryObject<BlockItem> crystalMatrixBlock = ITEMS.register("crystal_matrix_block",
 			() -> new BlockItem(EndlessBlocks.crystalMatrixBlock.get(), new Item.Properties().group(ModGroup.endless)));

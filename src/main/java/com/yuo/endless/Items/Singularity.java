@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -43,7 +44,7 @@ public class Singularity extends Item{
 
     public static ItemStack EMPTY; //默认奇点 错误奇点
     static {
-        EMPTY = new ItemStack(new Singularity());
+        EMPTY = new ItemStack(Items.DIAMOND);
         setStackData(EMPTY, new SingularityData());
         TYPE.addAll(Arrays.asList(baseTypes));
         INDEX.addAll(Arrays.asList(colors));
