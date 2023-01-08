@@ -43,33 +43,11 @@ public class OrdinaryItem extends Item {
 		if (item == EndlessItems.neutroniumIngot.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.neutronium_ingot"));
 		}
-		if (item == EndlessItems.infinityCatalyst.get()){
-			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_catalyst"));
-		}
-		if (item == EndlessItems.infinityIngot.get()){
-			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.infinity_ingot"));
-		}
 		if (item == EndlessItems.recordFragment.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.record_fragment"));
 		}
 		if (item == EndlessItems.starFuel.get()){
 			tooltip.add(new TranslationTextComponent("endless.text.itemInfo.star_fuel"));
 		}
-	}
-
-	@Override
-	public ItemStack getDefaultInstance() {
-		if (this == EndlessItems.neutroniumPile.get()){
-			return setEmc(this, 100L);
-		}else if (this == EndlessItems.infinityCatalyst.get()){
-			return setEmc(this, 214905788L);
-		}
-		return super.getDefaultInstance();
-	}
-
-	private static ItemStack setEmc(Item item, Long value){
-		ItemStack stack = new ItemStack(item);
-		stack.getOrCreateTag().putLong("StoredEMC", value);
-		return stack;
 	}
 }

@@ -31,13 +31,13 @@ public class EndlessItems {
 	public static RegistryObject<Item> neutroniumNugget = ITEMS.register("neutronium_nugget", OrdinaryItem::new);
 	public static RegistryObject<Item> neutroniumIngot = ITEMS.register("neutronium_ingot", OrdinaryItem::new);
 	public static RegistryObject<Item> endestPearl = ITEMS.register("endest_pearl", EndestPearl::new);
-	public static RegistryObject<Item> infinityCatalyst = ITEMS.register("infinity_catalyst", OrdinaryItem::new);
-	public static RegistryObject<Item> infinityIngot = ITEMS.register("infinity_ingot", OrdinaryItem::new);
+	public static RegistryObject<Item> infinityCatalyst = ITEMS.register("infinity_catalyst", InfinityItem::new);
+	public static RegistryObject<Item> infinityIngot = ITEMS.register("infinity_ingot", InfinityItem::new);
 	public static RegistryObject<Item> recordFragment = ITEMS.register("record_fragment", OrdinaryItem::new);
 	public static RegistryObject<Item> matterCluster = ITEMS.register("matter_cluster", MatterCluster::new);
 	public static RegistryObject<Item> neutroniumGear = ITEMS.register("neutronium_gear", OrdinaryItem::new);
 	public static RegistryObject<Item> starFuel = ITEMS.register("star_fuel", OrdinaryItem::new);
-	public static RegistryObject<Item> infinityNugget = ITEMS.register("infinity_nugget", OrdinaryItem::new);
+	public static RegistryObject<Item> infinityNugget = ITEMS.register("infinity_nugget", InfinityItem::new);
 	public static RegistryObject<Item> infinityArrow = ITEMS.register("infinity_arrow", InfinityArrow::new);
 
 	//奇点
@@ -99,7 +99,7 @@ public class EndlessItems {
 
 	//注册方块物品
 	public static RegistryObject<BlockItem> blockInfinity = ITEMS.register("infinity_block",
-			() -> new BlockItem(EndlessBlocks.infinityBlock.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.infinityBlock.get(), new Item.Properties().group(ModGroup.endless).isImmuneToFire()));
 	public static RegistryObject<BlockItem> crystalMatrixBlock = ITEMS.register("crystal_matrix_block",
 			() -> new BlockItem(EndlessBlocks.crystalMatrixBlock.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> neutroniumBlock = ITEMS.register("neutronium_block",
@@ -109,7 +109,7 @@ public class EndlessItems {
 	public static RegistryObject<BlockItem> doubleCompressedCraftingTable = ITEMS.register("double_compressed_crafting_table",
 			() -> new BlockItem(EndlessBlocks.doubleCompressedCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> extremeCraftingTable = ITEMS.register("extreme_crafting_table",
-			() -> new BlockItem(EndlessBlocks.extremeCraftingTable.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.extremeCraftingTable.get(), new Item.Properties().group(ModGroup.endless).isImmuneToFire()));
 	public static RegistryObject<BlockItem> neutroniumCollector = ITEMS.register("neutronium_collector",
 			() -> new BlockItem(EndlessBlocks.neutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> denseNeutroniumCollector = ITEMS.register("dense_neutronium_collector",
@@ -117,13 +117,13 @@ public class EndlessItems {
 	public static RegistryObject<BlockItem> denserNeutroniumCollector = ITEMS.register("denser_neutronium_collector",
 			() -> new BlockItem(EndlessBlocks.denserNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> densestNeutroniumCollector = ITEMS.register("densest_neutronium_collector",
-			() -> new BlockItem(EndlessBlocks.densestNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless)));
+			() -> new BlockItem(EndlessBlocks.densestNeutroniumCollector.get(), new Item.Properties().group(ModGroup.endless).isImmuneToFire()));
 	public static RegistryObject<BlockItem> neutronCompressor = ITEMS.register("neutron_compressor",
 			() -> new BlockItem(EndlessBlocks.neutronCompressor.get(), new Item.Properties().group(ModGroup.endless)));
 	public static RegistryObject<BlockItem> compressedChest = ITEMS.register("compressed_chest",
 			() -> new BlockItem(EndlessBlocks.compressedChest.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_chest",
-			() -> new BlockItem(EndlessBlocks.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1)));
+			() -> new BlockItem(EndlessBlocks.infinityBox.get(), new Item.Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire()));
 	/*
 	//联动奇点
 	public static RegistryObject<Item> singularityRuby; //红宝石
@@ -201,7 +201,7 @@ public class EndlessItems {
 	}
 	//匠魂3
 	public static void registerTC3(){
-		Singularity.addSingularity(new Singularity.SingularityData("cobalt", 0x0753b8,0x59a6ef));
+		Singularity.addSingularity(new Singularity.SingularityData("coblat", 0x0753b8,0x59a6ef));
 		Singularity.addSingularity(new Singularity.SingularityData("manyullyn", 0xa97de0,0xcfacf9));
 	}
 }

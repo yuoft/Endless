@@ -1,0 +1,30 @@
+{
+  "parent": "endless:neutronium_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_chest"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_box.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_box.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": {
+    "infinity_box": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items":[
+          {
+            "item": "endless:infinity_chest"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

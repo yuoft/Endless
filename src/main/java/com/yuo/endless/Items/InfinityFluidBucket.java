@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class InfinityFluidBucket extends BucketItem {
     public InfinityFluidBucket(Supplier<? extends Fluid> supplier) {
-        super(supplier, new Item.Properties().group(ModGroup.endless).containerItem(Items.BUCKET).maxStackSize(1));
+        super(supplier, new Item.Properties().group(ModGroup.endless).containerItem(Items.BUCKET).maxStackSize(1).isImmuneToFire());
     }
 
     @Override

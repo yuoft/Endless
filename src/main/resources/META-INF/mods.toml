@@ -25,31 +25,31 @@ description='''
 [[dependencies.spacearms]]
     modId="spacearms"
     mandatory=true
-    versionRange="[1.16.5-1.3.9, )"
+    versionRange="[1.16.5-1.4.1, )"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.orecrop]]
     modId="orecrop"
     mandatory=true
-    versionRange="[1.16.5-1.2.5, )"
+    versionRange="[1.16.5-1.2.6, )"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.yuoenchants]]
     modId="yuoenchants"
     mandatory=true
-    versionRange="[1.16.5-1.3.0, )"
+    versionRange="[1.16.5-1.3.6, )"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.morecoal]]
     modId="morecoal"
     mandatory=true
-    versionRange="[1.16.5-1.0.0, )"
+    versionRange="[1.16.5-1.0.2, )"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.paimeng]]
     modId="paimeng"
     mandatory=true
-    versionRange="[1.16.5-1.1.5, )"
+    versionRange="[1.16.5-1.2.0, )"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.iceandfire]]

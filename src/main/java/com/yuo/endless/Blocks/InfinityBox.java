@@ -4,7 +4,6 @@ import com.yuo.endless.Tiles.InfinityBoxTile;
 import com.yuo.endless.Tiles.TileTypeRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
