@@ -81,12 +81,46 @@ public class ModRecipeManager {
         if (Endless.isSlashBlade2) rate += 2;
         if (Endless.isThermal) count += 100;
         if (Endless.isTimeBottle) rate += 1;
-        if (Endless.isDE) count += 150;
+        if (Endless.isDE) rate += 2;
         if (Endless.isInfernalMobs) count -= 25;
         if (Endless.isChampions) count -= 25;
         if (Endless.isZombieAwareness) rate -= 2;
         if (Endless.isMysticalAgriculture) rate += 3;
         if (Endless.isRS) count += 150;
+
+        if (Endless.isDS) rate += 2;
+        if (Endless.isIPN) count += 50;
+        if (Endless.isWDA) count += 50;
+        if (Endless.isFarmersDelight) count += 100;
+        if (Endless.isGoblinTraders) rate += 1;
+        if (Endless.isFTBUltimine) rate += 2;
+        if (Endless.isVampirism) count += 100;
+        if (Endless.isCroparia) rate += 3;
+        if (Endless.isMinecolonies) count += 100;
+        if (Endless.isDivineRPG) rate += 2;
+        if (Endless.isDEAdd) rate += 2;
+        if (Endless.isDoggyTalents) count += 100;
+        if (Endless.isIE) rate += 1;
+        if (Endless.isEnigmaticLegacy) rate += 2;
+        if (Endless.isApotheosis) rate += 2;
+        if (Endless.isQuark) count += 50;
+        if (Endless.isArsNouveau) rate += 1;
+        if (Endless.isEXBOT) count += 50;
+        if (Endless.isIronChests) rate += 1;
+        if (Endless.isMobGrindingUtils) count += 50;
+        if (Endless.isAR) rate += 2;
+        if (Endless.isEverlastingAbilities) rate += 3;
+        if (Endless.isBM3) rate += 2;
+        if (Endless.isPEI) rate += 1;
+        if (Endless.isER) count += 50;
+        if (Endless.isLB) rate += 5;
+        if (Endless.isPEX) rate += 5;
+        if (Endless.isMorph) rate += 2;
+        if (Endless.isLootr) rate += 2;
+        if (Endless.isExtremeReactors) rate += 3;
+        if (Endless.isPlayerRevive) count += 50;
+        if (Endless.isXPTmoe) count += 50;
+        if (Endless.isIronFurnaces) rate += 1;
 
         //限制
         int countEnd = Math.min(Config.SERVER.modRatioCount.get(), count);
