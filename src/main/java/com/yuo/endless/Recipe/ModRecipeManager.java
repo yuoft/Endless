@@ -121,6 +121,7 @@ public class ModRecipeManager {
         if (Endless.isPlayerRevive) count += 50;
         if (Endless.isXPTmoe) count += 50;
         if (Endless.isIronFurnaces) rate += 1;
+        if (Endless.isCA) rate += 3;
 
         //限制
         int countEnd = Math.min(Config.SERVER.modRatioCount.get(), count);

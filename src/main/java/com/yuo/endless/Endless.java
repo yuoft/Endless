@@ -78,7 +78,6 @@ public class Endless {
     public static boolean isCroparia = false; //魔种之咏
     public static boolean isMinecolonies = false; //模拟殖民地
     public static boolean isDivineRPG = false; //神圣RPG
-    public static boolean isEB = false; //经验存储书
     public static boolean isDEAdd = false; //龙之进化拓展
     public static boolean isDoggyTalents = false; //小狗天才
     public static boolean isIE = false; //沉浸工程
@@ -102,6 +101,7 @@ public class Endless {
     public static boolean isPlayerRevive = false; //玩家救援
     public static boolean isXPTmoe = false; //经验之书
     public static boolean isIronFurnaces = false; //更多熔炉
+    public static boolean isCA = false; //混沌觉醒
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
@@ -242,6 +242,7 @@ public class Endless {
         isPlayerRevive = checkMod("playerrevive");
         isXPTmoe = checkMod("xpbook");
         isIronFurnaces = checkMod("ironfurnaces");
+        isCA = checkMod("chaosawakens");
     }
 
     /**
