@@ -865,7 +865,7 @@ public class ModRecipeManager {
         }
         if (Endless.isTC3){//52 48 49
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(TinkerModifiers.dragonScale), Singularity.getSingularity("coblat"), Singularity.getSingularity("manyullyn"));
+                    new ItemStack(TinkerModifiers.dragonScale), Singularity.getSingularity("cobalt"), Singularity.getSingularity("manyullyn"));
         }
         if (Endless.isIAF && Endless.isTC3){ //52 48 49
             CompressorManager.addInputs(Singularity.getSingularity("copper"),
