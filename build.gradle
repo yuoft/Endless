@@ -10,9 +10,11 @@ buildscript {
         }
         mavenLocal()
         mavenCentral()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -39,6 +41,9 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -49,6 +54,9 @@ minecraft {
         }
         server {
             workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -59,6 +67,9 @@ minecraft {
         }
         data {
             workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             args '--mod', 'endless', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -134,10 +145,10 @@ dependencies {
 //    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2")
 //    runtimeOnly('vazkii.patchouli:Patchouli:1.16.4-53.2') //bug minix
 
-    compileOnly("com.yuo.spacearms:spacearms:1.16.5-1.4.1") //联动
+    compileOnly("com.yuo.spacearms:spacearms:1.16.5-1.4.2") //联动
     compileOnly("com.yuo.orecrop:orecrop:1.16.5-1.2.6")
     compileOnly("com.yuo.paimeng:paimeng:1.16.5-1.2.0")
-    compileOnly("com.yuo.enchants:yuomoreenchants:1.16.5-1.3.6")
+    compileOnly("com.yuo.enchants:yuomoreenchants:1.16.5-1.4.0")
     compileOnly("com.yuo.morecoal:morecoal:1.16.5-1.0.2")
 //    compileOnly("vazkii.botania:Botania:1.16.5-420.2:api")
     compileOnly("vazkii.botania:Botania:1.16.5-420.2")
@@ -171,6 +182,7 @@ dependencies {
 //    runtimeOnly fg.deobf("com.yuo.morecoal:morecoal:1.16.5-1.0.0")
 //    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.2") //bug minix
     runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.5:7.1.2.510")
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -179,11 +191,12 @@ jar {
         attributes([
             "Specification-Title": "endless",
             "Specification-Vendor": "yuoft",
-            "Specification-Version": "1.4.4", // We are version 1 of ourselves
+            "Specification-Version": "1.4.7", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"yuoft",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs" : "endless.mixins.json"
         ])
     }
 }

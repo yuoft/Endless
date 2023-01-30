@@ -760,7 +760,7 @@ public class ModRecipeManager {
         }
         if (Endless.isEnchants) { //24+1 40 40
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(YEItems.BrokenMagicPearlSuper.get()));
+                    new ItemStack(YEItems.SuperBrokenMagicPearl.get()));
         }
         if (Endless.isMoreCoals) { //25+1 40 40
             ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
