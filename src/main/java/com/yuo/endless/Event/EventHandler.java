@@ -366,12 +366,14 @@ public class EventHandler {
     public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event){
         //重置双爆属性
         PlayerEntity player = event.getPlayer();
-        //发送消息
-        if (Config.SERVER.isLogoInfo.get()){
+        //首次登录时发送消息
+        if (!player.getPersistentData().getBoolean("endless:login")){
+            player.getPersistentData().putBoolean("endless:login", true);
             player.sendMessage(new TranslationTextComponent("endless.message.login")
                     .setStyle(Style.EMPTY.setHoverEvent(HoverEvent.Action.SHOW_TEXT.deserialize(new TranslationTextComponent("endless.message.login0")))
                             .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/21854371"))), UUID.randomUUID());
         }
+        //配置文件内容错误消息
         if (Config.errorInfo.size() > 0){
             player.sendMessage(new StringTextComponent("The following errors were found in the configuration file:\n"
                     + StringUtils.join(Config.errorInfo.toArray(), ",")).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.RED))), UUID.randomUUID());
