@@ -201,7 +201,7 @@ public class EndlessItems {
 	}
 	//匠魂3
 	public static void registerTC3(){
-		Singularity.addSingularity(new Singularity.SingularityData("coblat", 0x0753b8,0x59a6ef));
+		Singularity.addSingularity(new Singularity.SingularityData("cobalt", 0x0753b8,0x59a6ef));
 		Singularity.addSingularity(new Singularity.SingularityData("manyullyn", 0xa97de0,0xcfacf9));
 	}
 }
