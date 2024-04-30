@@ -46,7 +46,7 @@ public class OrdinaryArmor extends ArmorItem {
             }
             return builder.build();
         }else if (slot == EquipmentSlotType.LEGS){
-            if (stack.getItem() == EndlessItems.crystalMatrixLeggings.get()){
+            if (stack.getItem() == EndlessItems.crystalMatrixLegs.get()){
                 builder.put(Attributes.MAX_HEALTH, Modifiers.getModifierHealth(2,3d));
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(0, 0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumLegs.get()){

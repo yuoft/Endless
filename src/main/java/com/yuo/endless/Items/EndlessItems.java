@@ -5,6 +5,8 @@ import com.yuo.endless.Armor.MyArmorMaterial;
 import com.yuo.endless.Armor.OrdinaryArmor;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
+import com.yuo.endless.Entity.EntityRegistry;
+import com.yuo.endless.Event.ModSpawnEgg;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.tab.ModGroup;
@@ -39,6 +41,9 @@ public class EndlessItems {
 	public static RegistryObject<Item> starFuel = ITEMS.register("star_fuel", OrdinaryItem::new);
 	public static RegistryObject<Item> infinityNugget = ITEMS.register("infinity_nugget", InfinityItem::new);
 	public static RegistryObject<Item> infinityArrow = ITEMS.register("infinity_arrow", InfinityArrow::new);
+
+	public static RegistryObject<ModSpawnEgg> infinityMobSpawnEgg = ITEMS.register("infinity_mob_spawn_egg", () ->
+			new ModSpawnEgg(EntityRegistry.INFINITY_MOB, 0xff2233, 0x3ff211));
 
 	//奇点
 	public static RegistryObject<Item> singularity = ITEMS.register("singularity", Singularity::new);
@@ -89,7 +94,7 @@ public class EndlessItems {
 	public static RegistryObject<ArmorItem> infinityFeet = ITEMS.register("infinity_boots", () -> new InfinityArmor(EquipmentSlotType.FEET));
 	public static RegistryObject<ArmorItem> crystalMatrixHead = ITEMS.register("crystal_matrix_helmet", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.HEAD));
 	public static RegistryObject<ArmorItem> crystalMatrixChest = ITEMS.register("crystal_matrix_chestplate", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.CHEST));
-	public static RegistryObject<ArmorItem> crystalMatrixLeggings = ITEMS.register("crystal_matrix_leggings", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.LEGS));
+	public static RegistryObject<ArmorItem> crystalMatrixLegs = ITEMS.register("crystal_matrix_leggings", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.LEGS));
 	public static RegistryObject<ArmorItem> crystalMatrixFeet = ITEMS.register("crystal_matrix_boots", () -> new OrdinaryArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.FEET));
 	public static RegistryObject<ArmorItem> neutroniumHead = ITEMS.register("neutronium_helmet", () -> new OrdinaryArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.HEAD));
 	public static RegistryObject<ArmorItem> neutroniumChest = ITEMS.register("neutronium_chestplate", () -> new OrdinaryArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.CHEST));

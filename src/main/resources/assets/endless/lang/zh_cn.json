@@ -86,6 +86,8 @@
     "item.endless.neutronium_leggings":"§b中子素护腿",
     "item.endless.neutronium_boots":"§b中子素靴子",
 
+    "item.endless.infinity_mob_spawn_egg":"§b无尽生物",
+
     "block.endless.infinity_block":"§c无尽块",
     "block.endless.crystal_matrix_block":"§b水晶矩阵块",
     "block.endless.neutronium_block":"§b中子素块",
@@ -107,7 +109,8 @@
     "entity.endless.endest_pearl":"终望珍珠",
     "entity.endless.gaping_void":"黑洞",
     "entity.endless.infinity_firework":"无尽烟花",
-    
+    "entity.endless.infinity_mob":"§b无尽生物",
+
     "sound.endless.gaping_void":"黑洞：吸收",
     
     "endless.text.itemInfo.infinity_helmet":"§6饱腹，氧气",

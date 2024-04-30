@@ -19,7 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 
 public class InfinityEyeLayer extends AbstractEyesLayer<LivingEntity, BipedModel<LivingEntity>> {
-    private static final RenderType RENDER_TYPE = RenderType.getEyes(new ResourceLocation(Endless.MOD_ID, "textures/models/alex.png"));
+    private static final RenderType RENDER_TYPE = RenderType.getEyes(new ResourceLocation(Endless.MOD_ID, "textures/models/steve_eye.png"));
 
     public InfinityEyeLayer(IEntityRenderer<LivingEntity, BipedModel<LivingEntity>> renderer) {
         super(renderer);

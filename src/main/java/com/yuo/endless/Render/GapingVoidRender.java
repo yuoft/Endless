@@ -35,7 +35,7 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         IVertexBuilder builder = bufferIn.getBuffer(this.gapingVoid.getRenderType(this.getEntityTexture(entityIn)));
         float scale = GapingVoidEntity.getVoidScale(entityIn.getAge()); //缩放值
         matrixStackIn.scale(scale, scale, scale); //缩放模型
-        matrixStackIn.translate(0, -scale * 0.125d,0);
+        matrixStackIn.translate(-scale * 0.5, -scale * 0.125d,-scale * 0.5);
         this.gapingVoid.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f,1.0f,1.0f,1.0f);
         matrixStackIn.pop();
     }

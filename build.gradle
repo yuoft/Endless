@@ -23,7 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.16.5-1.4.8'
+version = '1.16.5-1.4.9'
 group = 'com.github.yuoft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -108,6 +108,10 @@ repositories {
         url('https://maven.blamejared.com')
     }
     maven {
+        name = "CCL"
+        url('https://maven.covers1624.net/')
+    }
+    maven {
         name = "curios"
         url "https://maven.theillusivec4.top/"
     }
@@ -143,8 +147,11 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
 
+//    implementation fg.deobf("codechicken:CodeChickenLib:1.16.5-4.0.7.445:deobf")
     compileOnly("mezz.jei:jei-1.16.5:7.7.1.152") //引入mod API
     runtimeOnly fg.deobf("curse.maven:jei-238222:3681294") //引入mod
+    runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:1.16.5-1.4.2")
+    runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
     //前置
 //    runtimeOnly("com.github.alexthe666.citadel:citadel:1.8.1-1.16.5") //bug minix
 //    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2")

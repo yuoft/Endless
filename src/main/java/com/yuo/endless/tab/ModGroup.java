@@ -14,6 +14,6 @@ public class ModGroup extends ItemGroup{
 	//图标
 	@Override
 	public ItemStack createIcon() {
-		return new ItemStack(EndlessItems.cosmicMeatBalls.get());
+		return new ItemStack(EndlessItems.infinityCatalyst.get());
 	}
 }

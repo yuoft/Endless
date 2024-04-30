@@ -63,6 +63,11 @@ public class Config {
         }
     }
 
+    /**
+     * 通过配置文件获取自定义奇点
+     * @param list 字符串列表
+     * @param set 奇点集合
+     */
     private static void getCustomSingularities(List<? extends String> list, Set<String> set){
         int size = list.size();
         if (size == 0) return;

@@ -86,6 +86,8 @@
   "item.endless.neutronium_leggings":"§bNeutronium Leggings",
   "item.endless.neutronium_boots":"§bNeutronium Boots",
 
+  "item.endless.infinity_mob_spawn_egg":"§bInfinity Mob Spawn Egg",
+
   "block.endless.infinity_block":"§cInfinity Block",
   "block.endless.crystal_matrix_block":"§bCrystal Matrix Block",
   "block.endless.neutronium_block":"§bNeutronium Block",
@@ -107,6 +109,7 @@
   "entity.endless.endest_pearl":"Endest Pearl",
   "entity.endless.gaping_void":"Gaping Void",
   "entity.endless.infinity_firework":"Infinity Crossbow Firework",
+  "entity.endless.infinity_mob":"§bInfinity Mob",
 
   "sound.endless.gaping_void":"Gaping Inhalation",
 

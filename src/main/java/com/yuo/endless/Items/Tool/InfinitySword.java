@@ -144,7 +144,7 @@ public class InfinitySword extends SwordItem{
         for(LivingEntity livingentity : world.getEntitiesWithinAABB(LivingEntity.class, targetEntity.getBoundingBox().grow(1.0D, 0.25D, 1.0D))) {
             if (livingentity != player && livingentity != targetEntity && !player.isOnSameTeam(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity)livingentity).hasMarker()) && player.getDistanceSq(livingentity) < 9.0D) {
                 livingentity.applyKnockback(0.4F, MathHelper.sin(player.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(player.rotationYaw * ((float)Math.PI / 180F)));
-                livingentity.attackEntityFrom(DamageSource.causePlayerDamage(player), Float.MAX_VALUE);
+                livingentity.attackEntityFrom(new InfinityDamageSource(player), Float.MAX_VALUE);
             }
         }
         //横扫音效
@@ -185,8 +185,13 @@ public class InfinitySword extends SwordItem{
                 return true;
             }
         }
-        target.setHealth(-1);
-//        target.deathTime = 20;
+        if (target.isAlive() || target.getHealth() > 0){
+            target.setHealth(-1);
+            target.onDeath(new InfinityDamageSource(attacker));
+            target.onKillCommand();
+            target.deathTime = 20;
+            target.remove(true);
+        }
         return true;
     }
 

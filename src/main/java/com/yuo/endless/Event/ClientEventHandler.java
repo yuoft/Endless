@@ -4,15 +4,22 @@ import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
+import com.yuo.endless.Render.Pulse.PulseModel;
 import net.minecraft.client.renderer.Atlases;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Description: 客户端事件
@@ -35,6 +42,37 @@ public class ClientEventHandler {
             default:
                 return NORMAL_CHEST_LOCATION;
         }
+    }
+
+    //物品脉冲效果
+    @SubscribeEvent
+    public  static void registerModel(ModelBakeEvent event){
+        Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
+        ArrayList<ModelResourceLocation> locations = new ArrayList<>();
+        //获取物品模型资源
+        ModelResourceLocation location = new ModelResourceLocation(EndlessItems.infinityIngot.get().getRegistryName(), "inventory");
+        ModelResourceLocation location0 = new ModelResourceLocation(EndlessItems.infinityCatalyst.get().getRegistryName(), "inventory");
+        ModelResourceLocation location1 = new ModelResourceLocation(EndlessItems.endestPearl.get().getRegistryName(), "inventory");
+        locations.add(0, location);
+        locations.add(1, location0);
+        locations.add(2, location1);
+        //获取模型
+        IBakedModel model = registry.get(location);
+        IBakedModel model0 = registry.get(location0);
+        IBakedModel model1 = registry.get(location1);
+        ArrayList<IBakedModel> models= new ArrayList<>();
+        models.add(0,model);
+        models.add(1,model0);
+        models.add(2,model1);
+        for (int i = 0; i < locations.size(); i++) {
+            if (models.get(i) == null) throw new RuntimeException("error_null + " + i);
+            else if (models.get(i) instanceof PulseModel) throw  new RuntimeException("error_model + " + i);
+            else {
+                //将脉冲模型添加到注册器
+                event.getModelRegistry().put(locations.get(i), new PulseModel(models.get(i)));
+            }
+        }
+
     }
 
     //箱子贴图
