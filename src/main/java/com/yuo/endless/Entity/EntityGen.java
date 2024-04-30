@@ -1,5 +1,6 @@
 package com.yuo.endless.Entity;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Endless;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.MobSpawnInfo;
@@ -13,7 +14,7 @@ import java.util.List;
 public class EntityGen {
     @SubscribeEvent
     public static void onEntitySpawn(final BiomeLoadingEvent event) {
-        addEntityToAllBiomes(event, EntityRegistry.INFINITY_MOB.get(), 10, 1,1);
+        addEntityToAllBiomes(event, EntityRegistry.INFINITY_MOB.get(), Config.SERVER.mobWeigh.get(), 1,1);
     }
     //所有群系
     private static void addEntityToAllBiomes(BiomeLoadingEvent event, EntityType<?> type,

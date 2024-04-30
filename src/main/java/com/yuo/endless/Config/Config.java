@@ -176,6 +176,9 @@ public class Config {
         public final ForgeConfigSpec.IntValue singularityCobalt;
         public final ForgeConfigSpec.IntValue singularityManyullyn;
 
+        public final ForgeConfigSpec.IntValue mobWeigh; //无尽生物生成权重
+        public final ForgeConfigSpec.BooleanValue mobHpInfo; //无尽生物血条
+
         public final ForgeConfigSpec.IntValue modRatioRate; //模组影响后的最大倍率
         public final ForgeConfigSpec.IntValue modRatioCount; //模组影响后的最大数量
 
@@ -249,6 +252,9 @@ public class Config {
             this.singularityRedMatter = buildInt(builder, "Red Matter", 100, 10, 100000, "base count");
             this.singularityCobalt = buildInt(builder, "Cobalt", 150, 10, 100000, "base count");
             this.singularityManyullyn = buildInt(builder, "Manyullyn", 100, 10, 100000, "base count");
+
+            this.mobWeigh = buildInt(builder, "Mob Weigh", 5, 0, 20, "Infinity mob spawn weigh");
+            this.mobHpInfo = buildBoolean(builder, "Mob HP Info", true, "Infinity mob hp info");
             builder.pop();
 
             builder.comment("Mod Impact").push("modRatio");

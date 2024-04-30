@@ -1,5 +1,6 @@
 package com.yuo.endless.Entity;
 
+import com.yuo.endless.Config.Config;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import net.minecraft.block.BlockState;
@@ -108,6 +109,7 @@ public class InfinityMobEntity extends ZombieEntity {
     @Override
     public void addTrackingPlayer(ServerPlayerEntity player) {
         super.addTrackingPlayer(player);
+        if (Config.SERVER.mobHpInfo.get())
         this.bossInfo.addPlayer(player);
     }
 
@@ -118,6 +120,7 @@ public class InfinityMobEntity extends ZombieEntity {
     @Override
     public void removeTrackingPlayer(ServerPlayerEntity player) {
         super.removeTrackingPlayer(player);
+        if (Config.SERVER.mobHpInfo.get())
         this.bossInfo.removePlayer(player);
     }
 
@@ -198,15 +201,15 @@ public class InfinityMobEntity extends ZombieEntity {
         if (rand.nextFloat() < 0.25F * (difficulty.getDifficulty() == Difficulty.HARD ? 2 : 1)) {
             int i = rand.nextInt(2);
             float f = this.world.getDifficulty() == Difficulty.HARD ? 0.05F : 0.15F;
-            if (rand.nextFloat() < 0.225F) {
+            if (rand.nextFloat() < 0.105F) {
                 ++i;
             }
 
-            if (rand.nextFloat() < 0.175F) {
+            if (rand.nextFloat() < 0.085F) {
                 ++i;
             }
 
-            if (rand.nextFloat() < 0.125F) {
+            if (rand.nextFloat() < 0.075F) {
                 ++i;
             }
 
@@ -352,13 +355,20 @@ public class InfinityMobEntity extends ZombieEntity {
         ItemStack stack4 = new ItemStack(Items.GOLD_BLOCK, MathHelper.nextInt(rand, 3, 5 + looting));
         ItemStack stack5 = new ItemStack(EndlessItems.diamondLattice.get(), MathHelper.nextInt(rand, 1, 3 + looting));
         ItemStack stack6 = new ItemStack(EndlessItems.neutroniumNugget.get(), MathHelper.nextInt(rand, 1, 5 + looting));
+        ItemStack stack7 = new ItemStack(EndlessItems.infinityCatalyst.get(), 1);
         this.entityDropItem(stack);
         this.entityDropItem(stack0);
         this.entityDropItem(stack1);
         this.entityDropItem(stack2);
         this.entityDropItem(stack3);
         this.entityDropItem(stack4);
-        this.entityDropItem(stack5);
-        this.entityDropItem(stack6);
+        if (looting > 0){
+            if (rand.nextFloat() < 0.1f)
+                this.entityDropItem(stack5);
+            if (rand.nextFloat() < 0.05f)
+                this.entityDropItem(stack6);
+            if (rand.nextFloat() < 0.001f)
+                this.entityDropItem(stack7);
+        }
     }
 }

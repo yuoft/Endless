@@ -31,7 +31,7 @@ public class MobTPGoal extends Goal {
         if (!world.isRemote && world.getDayTime() % 200 == 0){
             BlockPos blockPos = target.getPosition();
             Difficulty difficulty = world.getDifficulty();
-            if (world.rand.nextFloat() < 0.05f + (difficulty == Difficulty.HARD ? 0.075f : 0.05f)){
+            if (world.rand.nextFloat() < 0.075f + (difficulty == Difficulty.HARD ? 0.075f : 0.05f)){
                 BlockPos pos1 = new BlockPos(blockPos.getX() + MathHelper.nextFloat(world.rand, 0.1f, 0.3f), blockPos.getY() + 0.25f, blockPos.getZ() + MathHelper.nextFloat(world.rand, 0.1f, 0.3f));
                 zombie.setPositionAndUpdate(pos1.getX(), pos1.getY(), pos1.getZ());
                 for (int i = 0; i < 50; i++){
