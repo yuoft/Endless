@@ -204,6 +204,10 @@
     "gui.endless.compressed_chest":"压缩箱子",
     "gui.endless.infinity_chest":"无尽箱子",
 
+
+    "jei.endless.extreme_craft":"终极有序合成",
+    "jei.endless.extreme_craft_shape":"终极无序合成",
+
     "death.attack.infinity":"%1$s被彻底湮灭",
     "death.attack.infinity_weapon.0":"%1$s被%2$s使用%3$s切成了条",
     "death.attack.infinity.0":"%1$s被%2$s彻底粉碎",

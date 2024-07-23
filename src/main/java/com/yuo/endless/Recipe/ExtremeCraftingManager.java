@@ -18,7 +18,7 @@ public class ExtremeCraftingManager {
     //实例
     private static final ExtremeCraftingManager instance = new ExtremeCraftingManager();
     //配方列表
-    private final List<ExtremeCraftRecipe> recipes = new ArrayList();
+    private final List<ExtremeCraftRecipe> recipes = new ArrayList<>();
 
     //获取实例
     public static ExtremeCraftingManager getInstance() {
@@ -295,39 +295,4 @@ public class ExtremeCraftingManager {
         return false;
     }
 
-    /**
-     * 向配方追加物品 追加后不能超过81个物品
-     * @param recipe 配方 部分
-     * @param stacks 物品列表
-     */
-    public void addRecipeInput(ExtremeCraftRecipe recipe, ItemStack... stacks){
-        //只能向以下3个配方追加物品
-        if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls && recipe != ModRecipeManager.stew) return;
-        List<ItemStack> list = new ArrayList<>(Arrays.asList(stacks));
-        if (list.size() <= 0) return;
-        if (recipe.getIngredients().size() + list.size() > 81) return;
-        for (ExtremeCraftRecipe craftRecipe : recipes) {
-            if (craftRecipe.hasOutput(recipe.getRecipeOutput())){
-                craftRecipe.addInputs(getList(list));
-            }
-        }
-    }
-
-    /**
-     * 可替换物品
-     * @param recipe 配方
-     * @param ingredients 物品
-     */
-    public void addRecipeInput(ExtremeCraftRecipe recipe, Ingredient... ingredients){
-        if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls && recipe != ModRecipeManager.stew) return;
-        NonNullList<Ingredient> list = NonNullList.create();
-        list.addAll(Arrays.asList(ingredients));
-        if (list.size() <= 0) return;
-        if (recipe.getIngredients().size() + list.size() > 81) return;
-        for (ExtremeCraftRecipe craftRecipe : recipes) {
-            if (craftRecipe.hasOutput(recipe.getRecipeOutput())){
-                craftRecipe.addInputs(list);
-            }
-        }
-    }
 }

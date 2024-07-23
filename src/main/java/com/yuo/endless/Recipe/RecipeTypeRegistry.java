@@ -13,9 +13,11 @@ public class RecipeTypeRegistry {
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Endless.MOD_ID);
 
     public static final RegistryObject<ExtremeCraftRecipe.Serializer> EXTREME_CRAFT_SERIALIZER = RECIPE_TYPES.register("extreme_craft", ExtremeCraftRecipe.Serializer::new);
+    public static final RegistryObject<ExtremeCraftShapeRecipe.Serializer> EXTREME_CRAFT_SHAPE_SERIALIZER = RECIPE_TYPES.register("extreme_craft_shape", ExtremeCraftShapeRecipe.Serializer::new);
     public static final RegistryObject<NeutroniumRecipe.Serializer> NEUTRONIUM_SERIALIZER = RECIPE_TYPES.register("neutronium", NeutroniumRecipe.Serializer::new);
 
     public static IRecipeType<ExtremeCraftRecipe> EXTREME_CRAFT_RECIPE = new ExtremeCraftRecipe.RecipeType();
+    public static IRecipeType<ExtremeCraftShapeRecipe> EXTREME_CRAFT_SHAPE_RECIPE = new ExtremeCraftShapeRecipe.RecipeType();
     public static IRecipeType<NeutroniumRecipe> NEUTRONIUM_RECIPE = new NeutroniumRecipe.RecipeType();
 
 
@@ -23,6 +25,7 @@ public class RecipeTypeRegistry {
         RECIPE_TYPES.register(eventBus);
 
         Registry.register(Registry.RECIPE_TYPE, ExtremeCraftRecipe.TYPE_ID, EXTREME_CRAFT_RECIPE);
+        Registry.register(Registry.RECIPE_TYPE, ExtremeCraftShapeRecipe.TYPE_SHAPE_ID, EXTREME_CRAFT_SHAPE_RECIPE);
         Registry.register(Registry.RECIPE_TYPE, NeutroniumRecipe.TYPE_ID, NEUTRONIUM_RECIPE);
     }
 }

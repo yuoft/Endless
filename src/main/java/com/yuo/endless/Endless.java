@@ -149,6 +149,7 @@ public class Endless {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         ModRecipeManager.addExtremeCrafts();
+        ModRecipeManager.addExtremeCraftShape();
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
         Config.loadConfig(); //加载工具黑名单

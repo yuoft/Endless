@@ -1,9 +1,7 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Config.Config;
-import com.yuo.endless.Recipe.ExtremeCraftRecipe;
-import com.yuo.endless.Recipe.ExtremeCraftingManager;
-import com.yuo.endless.Recipe.RecipeTypeRegistry;
+import com.yuo.endless.Recipe.*;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -70,12 +68,20 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         ItemStack itemStack = ItemStack.EMPTY;
         //获取配方 先检查无尽配方
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
-        if (recipeOptional.isPresent()){
+        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, inputInventory, world);
+        if (recipeOptional.isPresent()){ //json配方
             ExtremeCraftRecipe recipe = recipeOptional.get();
             if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
                 itemStack = recipe.getCraftingResult(inputInventory);
             }
+        }else if (recipeOptionalIn.isPresent()){
+            ExtremeCraftShapeRecipe recipe = recipeOptionalIn.get();
+            if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
+                itemStack = recipe.getCraftingResult(inputInventory);
+            }
         }else {
+            ItemStack recipeOutPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
+            ItemStack recipeOutPut1 = ExtremeCraftShpaelessManager.getInstance().getRecipeOutPut(inputInventory, world);
             if (Config.SERVER.isCraftTable.get()){
                 CraftingInventory craftingInv = getCraftingInv();
                 Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
@@ -85,9 +91,9 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
                         itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
                     }
                 }else {
-                    itemStack = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
+                    itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;
                 }
-            }else itemStack = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
+            }else itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;
         }
         outputInventory.setInventorySlotContents(81, itemStack);
         serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemStack));
@@ -142,12 +148,9 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
                 if (!this.mergeItemStack(itemStack1, 82, 118, true)) return ItemStack.EMPTY;
                 slot.onSlotChange(itemStack1, itemstack);
             } else if (index >= 82){
-                if (ExtremeCraftingManager.getInstance().isRecipeInput(itemStack1)){
+                if (index < 109){//从物品栏到工作台
                     if (!this.mergeItemStack(itemStack1, 0, 81, false)) return ItemStack.EMPTY;
-                }
-                if (index < 109) { //从物品栏到快捷栏
-                    if (!this.mergeItemStack(itemStack1, 109, 118, false)) return ItemStack.EMPTY;
-                } else if (index < 118) {
+                } else if (index < 118) {  //快捷栏到物品栏
                     if (!this.mergeItemStack(itemStack1, 82, 109, false)) return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemStack1, 82, 118, false)) return ItemStack.EMPTY; //从合成台取出来

@@ -61,7 +61,7 @@ public class Singularity extends Item{
         CompoundNBT nbt = (CompoundNBT) tag.get(NBT_MOD);
         if (nbt != null){
             String string = nbt.getString(NBT_TYPE);
-            if (!"".equals(string) && !"null".equals(string)){
+            if (!string.isEmpty() && !"null".equals(string)){
                 ItemStack singularity = getSingularity(string);
                 stack.setTag(singularity.getTag());
             }
@@ -157,6 +157,7 @@ public class Singularity extends Item{
             if (type.equals(TYPE.get(i))){
                 nbt.putInt(NBT_INDEX, INDEX.get(i));
                 nbt.putInt(NBT_MAIN, MAIN.get(i));
+                break;
             }
         }
         tag.put(NBT_MOD, nbt);

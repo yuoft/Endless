@@ -9,6 +9,7 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
@@ -41,7 +42,7 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
 
     @Override
     public String getTitle() {
-        return EndlessItems.extremeCraftingTable.get().getName().getString();
+        return I18n.format("jei.endless.extreme_craft");
     }
 
     @Override

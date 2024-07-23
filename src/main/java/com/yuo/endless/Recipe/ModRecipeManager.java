@@ -47,10 +47,11 @@ import java.util.Arrays;
  */
 public class ModRecipeManager {
 
-    public static ExtremeCraftRecipe infinityCatalyst; //催化剂
-    public static ExtremeCraftRecipe meatBalls; //寰宇肉丸
-    public static ExtremeCraftRecipe stew; //超级煲
+    public static ExtremeCraftShapeRecipe infinityCatalyst; //催化剂
+    public static ExtremeCraftShapeRecipe meatBalls; //寰宇肉丸
+    public static ExtremeCraftShapeRecipe stew; //超级煲
 
+    //压缩机所需矿物块数量
     public static void addCompressorCraft() {
         int count = 0; //模组影响的额外数量 +25 +50 +100 +150 -25
         int rate = 1; //模组影响的额外倍率  *1 *2 *3 *4
@@ -219,7 +220,7 @@ public class ModRecipeManager {
                 getList(new ItemStack(Blocks.CLAY)));
     }
 
-    //无尽工作台配方
+    //无尽工作台有序配方
     public static void addExtremeCrafts() {
 
         ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.neutroniumCollector.get()),
@@ -246,49 +247,7 @@ public class ModRecipeManager {
                 'C', new ItemStack(EndlessItems.crystalMatrixIngot.get()),
                 'N', new ItemStack(EndlessItems.neutroniumIngot.get()),
                 'X', new ItemStack(EndlessItems.infinityCatalyst.get()));
-        //无尽催化剂
-        infinityCatalyst = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.infinityCatalyst.get()),
-                new ItemStack(EndlessItems.crystalMatrixIngot.get()), new ItemStack(EndlessItems.neutroniumIngot.get()),
-                new ItemStack(EndlessItems.cosmicMeatBalls.get()), new ItemStack(EndlessItems.ultimateStew.get()),
-                new ItemStack(EndlessItems.endestPearl.get()), new ItemStack(EndlessItems.recordFragment.get()),
-                Singularity.getSingularity("coal"), Singularity.getSingularity("iron"),
-                Singularity.getSingularity("gold"), Singularity.getSingularity("diamond"),
-                Singularity.getSingularity("netherite"), Singularity.getSingularity("emerald"),
-                Singularity.getSingularity("lapis"), Singularity.getSingularity("redstone"),
-                Singularity.getSingularity("quartz"), Singularity.getSingularity("clay"));
 
-        if (Endless.isPaimeng || Endless.isSpaceArms) {
-            meatBalls = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.cosmicMeatBalls.get()),
-                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.BEEF),
-                    new ItemStack(Items.MUTTON), new ItemStack(Items.COD), new ItemStack(Items.SALMON), new ItemStack(Items.TROPICAL_FISH),
-                    new ItemStack(Items.PUFFERFISH), new ItemStack(Items.RABBIT), new ItemStack(Items.CHICKEN),
-                    new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.EGG));
-
-            stew = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.ultimateStew.get()),
-                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
-                    new ItemStack(Items.BREAD), new ItemStack(Items.KELP), new ItemStack(Items.COCOA_BEANS), new ItemStack(Blocks.CAKE),
-                    new ItemStack(Items.GLISTERING_MELON_SLICE), new ItemStack(Items.CARROT), new ItemStack(Items.POISONOUS_POTATO),
-                    new ItemStack(Items.CHORUS_FRUIT), new ItemStack(Items.BEETROOT), new ItemStack(Items.MUSHROOM_STEW),
-                    new ItemStack(Items.HONEY_BOTTLE), new ItemStack(Items.SWEET_BERRIES));
-        } else {
-            meatBalls = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.cosmicMeatBalls.get()),
-                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.COOKED_PORKCHOP),
-                    new ItemStack(Items.BEEF), new ItemStack(Items.COOKED_BEEF), new ItemStack(Items.MUTTON), new ItemStack(Items.COOKED_MUTTON),
-                    new ItemStack(Items.COD), new ItemStack(Items.COOKED_COD), new ItemStack(Items.SALMON), new ItemStack(Items.COOKED_SALMON),
-                    new ItemStack(Items.TROPICAL_FISH), new ItemStack(Items.PUFFERFISH), new ItemStack(Items.RABBIT), new ItemStack(Items.RABBIT_STEW),
-                    new ItemStack(Items.COOKED_RABBIT), new ItemStack(Items.CHICKEN), new ItemStack(Items.COOKED_CHICKEN),
-                    new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.EGG));
-
-            stew = ExtremeCraftingManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.ultimateStew.get()),
-                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
-                    new ItemStack(Items.WHEAT), new ItemStack(Items.BREAD), new ItemStack(Items.KELP), new ItemStack(Items.DRIED_KELP),
-                    new ItemStack(Items.COCOA_BEANS), new ItemStack(Items.COOKIE), new ItemStack(Items.MELON_SLICE),
-                    new ItemStack(Items.GLISTERING_MELON_SLICE), new ItemStack(Items.CARROT), new ItemStack(Items.POTATO),
-                    new ItemStack(Items.BAKED_POTATO), new ItemStack(Items.POISONOUS_POTATO), new ItemStack(Items.CHORUS_FRUIT),
-                    new ItemStack(Blocks.CAKE), new ItemStack(Items.PUMPKIN_PIE), new ItemStack(Items.BEETROOT),
-                    new ItemStack(Items.BEETROOT_SOUP), new ItemStack(Items.MUSHROOM_STEW), new ItemStack(Items.HONEY_BOTTLE),
-                    new ItemStack(Items.SWEET_BERRIES));
-        }
 
         if (Endless.isSpaceArms) {
             ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.infinityPickaxe.get()),
@@ -712,28 +671,74 @@ public class ModRecipeManager {
                 'Y', Singularity.getSingularity("redstone"));
     }
 
+    //无尽工作台无序配方
+    public static void addExtremeCraftShape(){
+        //无尽催化剂
+        infinityCatalyst = ExtremeCraftShpaelessManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.infinityCatalyst.get()),
+                new ItemStack(EndlessItems.crystalMatrixIngot.get()), new ItemStack(EndlessItems.neutroniumIngot.get()),
+                new ItemStack(EndlessItems.cosmicMeatBalls.get()), new ItemStack(EndlessItems.ultimateStew.get()),
+                new ItemStack(EndlessItems.endestPearl.get()), new ItemStack(EndlessItems.recordFragment.get()),
+                Singularity.getSingularity("coal"), Singularity.getSingularity("iron"),
+                Singularity.getSingularity("gold"), Singularity.getSingularity("diamond"),
+                Singularity.getSingularity("netherite"), Singularity.getSingularity("emerald"),
+                Singularity.getSingularity("lapis"), Singularity.getSingularity("redstone"),
+                Singularity.getSingularity("quartz"), Singularity.getSingularity("clay"));
+
+        if (Endless.isPaimeng || Endless.isSpaceArms) {
+            meatBalls = ExtremeCraftShpaelessManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.cosmicMeatBalls.get()),
+                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.BEEF),
+                    new ItemStack(Items.MUTTON), new ItemStack(Items.COD), new ItemStack(Items.SALMON), new ItemStack(Items.TROPICAL_FISH),
+                    new ItemStack(Items.PUFFERFISH), new ItemStack(Items.RABBIT), new ItemStack(Items.CHICKEN),
+                    new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.EGG));
+
+            stew = ExtremeCraftShpaelessManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.ultimateStew.get()),
+                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
+                    new ItemStack(Items.BREAD), new ItemStack(Items.KELP), new ItemStack(Items.COCOA_BEANS), new ItemStack(Blocks.CAKE),
+                    new ItemStack(Items.GLISTERING_MELON_SLICE), new ItemStack(Items.CARROT), new ItemStack(Items.POISONOUS_POTATO),
+                    new ItemStack(Items.CHORUS_FRUIT), new ItemStack(Items.BEETROOT), new ItemStack(Items.MUSHROOM_STEW),
+                    new ItemStack(Items.HONEY_BOTTLE), new ItemStack(Items.SWEET_BERRIES));
+        } else {
+            meatBalls = ExtremeCraftShpaelessManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.cosmicMeatBalls.get()),
+                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.PORKCHOP), new ItemStack(Items.COOKED_PORKCHOP),
+                    new ItemStack(Items.BEEF), new ItemStack(Items.COOKED_BEEF), new ItemStack(Items.MUTTON), new ItemStack(Items.COOKED_MUTTON),
+                    new ItemStack(Items.COD), new ItemStack(Items.COOKED_COD), new ItemStack(Items.SALMON), new ItemStack(Items.COOKED_SALMON),
+                    new ItemStack(Items.TROPICAL_FISH), new ItemStack(Items.PUFFERFISH), new ItemStack(Items.RABBIT), new ItemStack(Items.RABBIT_STEW),
+                    new ItemStack(Items.COOKED_RABBIT), new ItemStack(Items.CHICKEN), new ItemStack(Items.COOKED_CHICKEN),
+                    new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.SPIDER_EYE), new ItemStack(Items.EGG));
+
+            stew = ExtremeCraftShpaelessManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.ultimateStew.get()),
+                    new ItemStack(EndlessItems.neutroniumNugget.get()), new ItemStack(Items.APPLE), new ItemStack(Items.GOLDEN_APPLE),
+                    new ItemStack(Items.WHEAT), new ItemStack(Items.BREAD), new ItemStack(Items.KELP), new ItemStack(Items.DRIED_KELP),
+                    new ItemStack(Items.COCOA_BEANS), new ItemStack(Items.COOKIE), new ItemStack(Items.MELON_SLICE),
+                    new ItemStack(Items.GLISTERING_MELON_SLICE), new ItemStack(Items.CARROT), new ItemStack(Items.POTATO),
+                    new ItemStack(Items.BAKED_POTATO), new ItemStack(Items.POISONOUS_POTATO), new ItemStack(Items.CHORUS_FRUIT),
+                    new ItemStack(Blocks.CAKE), new ItemStack(Items.PUMPKIN_PIE), new ItemStack(Items.BEETROOT),
+                    new ItemStack(Items.BEETROOT_SOUP), new ItemStack(Items.MUSHROOM_STEW), new ItemStack(Items.HONEY_BOTTLE),
+                    new ItemStack(Items.SWEET_BERRIES));
+        }
+    }
 
     /**
      * 根据其他模组修改配方
      */
     public static void lastMinuteChanges() {
         if (Endless.isSpaceArms) { // 16+7 13+1 15+3
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     Singularity.getSingularity("ruby"), Singularity.getSingularity("dragon"), Singularity.getSingularity("space"),
                     Singularity.getSingularity("xray"), Singularity.getSingularity("ultra"), new ItemStack(SAItems.jiejing.get()),
                     new ItemStack(Items.BEDROCK));
-            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     new ItemStack(SAItems.superRabbitStew.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(SAItems.superCookie.get()), new ItemStack(SAItems.superBeetrootSoup.get()), new ItemStack(SAItems.superPumpkinPie.get()));
             CompressorManager.addInputs(Singularity.getSingularity("emerald"),
                     getList(new ItemStack(SABlocks.emeraldIngotBlock.get(), 5)));
         }
         if (Endless.isPaimeng) { //23+1 14+26 18+22
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(PMItems.relicsBoxOne.get()));
-            
-            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     new ItemStack(PMItems.paimengFood.get()), new ItemStack(PMItems.xiantiaoqiang.get()),
                     new ItemStack(PMItems.cishenPinpan.get()), new ItemStack(PMItems.daHuangjinShunzhiji.get()),
                     new ItemStack(PMItems.huangjinxie.get()), new ItemStack(PMItems.huangyouXiexie.get()),
@@ -747,7 +752,7 @@ public class ModRecipeManager {
                     new ItemStack(PMItems.tiantianhuaNiangji.get()), new ItemStack(PMItems.chouziShucaiDunrou.get()),
                     new ItemStack(PMItems.molarou.get()), new ItemStack(PMItems.mengdeKaoyu.get()),
                     new ItemStack(PMItems.tiwateJiandan.get()), new ItemStack(PMItems.yeguJirouchuan.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(PMItems.bugFood.get()), new ItemStack(PMItems.xiantiaoqiang.get()),
                     new ItemStack(PMItems.feiyuShijindai.get()), new ItemStack(PMItems.jidouhua.get()),
                     new ItemStack(PMItems.yueliangpai.get()), new ItemStack(PMItems.riluoguo.get()),
@@ -761,92 +766,92 @@ public class ModRecipeManager {
                     new ItemStack(PMItems.boheGuodong.get()), new ItemStack(PMItems.luoboShishutang.get()));
         }
         if (Endless.isEnchants) { //24+1 40 40
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(YEItems.SuperBrokenMagicPearl.get()));
         }
         if (Endless.isMoreCoals) { //25+1 40 40
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(MoreCoalItems.lavaCoal.get()));
         }
         if (Endless.isIAF){ //26+4 40+1 40+1
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     Singularity.getSingularity("silver"), Singularity.getSingularity("copper"));
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     Ingredient.fromStacks(new ItemStack(IafItemRegistry.AMBROSIA)), Ingredient.fromStacks(
                             new ItemStack(IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK), new ItemStack(IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK),
                             new ItemStack(IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK)));
-            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     Ingredient.fromStacks(new ItemStack(IafItemRegistry.FIRE_DRAGON_FLESH), new ItemStack(IafItemRegistry.ICE_DRAGON_FLESH),
                             new ItemStack(IafItemRegistry.LIGHTNING_DRAGON_FLESH)));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     Ingredient.fromStacks(new ItemStack(IafItemRegistry.FIRE_STEW), new ItemStack(IafItemRegistry.FROST_STEW),
                             new ItemStack(IafItemRegistry.LIGHTNING_STEW)));
         }
         if (Endless.isBOT){ //30+4 41 41+1
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(ModItems.gaiaIngot), Singularity.getSingularity("manasteel"),
                     Singularity.getSingularity("terrasteel"), Singularity.getSingularity("elementium"));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew, new ItemStack(ModItems.manaCookie));
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew, new ItemStack(ModItems.manaCookie));
         }
         if (Endless.isAE2){ //34+3 41 42
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(Api.instance().definitions().items().cell64k()), new ItemStack(Api.instance().definitions().items().fluidCell64k()),
                     new ItemStack(Api.instance().definitions().materials().singularity()));
         }
         if (Endless.isDE){ //37+3 41 42
             Item item = Registry.ITEM.getOrDefault(new ResourceLocation("draconicevolution:chaos_shard")); //混沌碎片
             if (item != Items.AIR){
-                ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(item),
+                ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(item),
                         Singularity.getSingularity("draconium"), Singularity.getSingularity("awakened_draconium"));
             }
         }
         if (Endless.isPE){ //40+2 41 42
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     Singularity.getSingularity("dark_matter"), Singularity.getSingularity("red_matter"));
         }
         if (Endless.isTTF){ //42+1 41+1 42+1
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(TFBlocks.ironwood_block.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     new ItemStack(TFItems.hydra_chop.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(TFItems.maze_wafer.get()));
         }
         if (Endless.isCreate){ //43+1 42 43+1
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, Singularity.getSingularity("zinc"));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, Singularity.getSingularity("zinc"));
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(AllItems.BAR_OF_CHOCOLATE.get()));
         }
         if (Endless.isAOA3){ //44+1 42+3 44+3
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(AoABlocks.SHYREGEM_BLOCK.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     new ItemStack(AoAItems.COOKED_CHIMERA_CHOP.get()), new ItemStack(AoAItems.RAW_RAINBOWFISH.get()),
                     new ItemStack(AoAItems.COOKED_CHARGER_SHANK.get()));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(AoAItems.GOLDICAP_PETALS.get()), new ItemStack(AoAItems.MAGIC_MARANG.get()),
                     new ItemStack(AoAItems.NATURAL_TEA.get()));
         }
         if (Endless.isAS){ //45+1 45 47
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(BlocksAS.STARMETAL));
         }
         if (Endless.isSlashBlade2){ //46+1 45 47
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(SBItems.proudsoul_trapezohedron));
         }
         if (Endless.isMysticalAgriculture){ //47+2 45 47
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(com.blakebr0.mysticalagriculture.init.ModBlocks.SUPREMIUM_GEMSTONE_BLOCK.get()),
                     new ItemStack(com.blakebr0.mysticalagriculture.init.ModBlocks.SUPREMIUM_BLOCK.get()));
         }
         if (Endless.isThermal){ //49+1 45+3 47+2
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ThermalCore.BLOCKS.get("enderium_block")),
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(ThermalCore.BLOCKS.get("enderium_block")),
                     Singularity.getSingularity("nickel"), Singularity.getSingularity("lead"), Singularity.getSingularity("tin"));
-            ExtremeCraftingManager.getInstance().addRecipeInput(meatBalls,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     new ItemStack(ThermalCore.ITEMS.get("stuffed_pepper")), new ItemStack(ThermalCore.ITEMS.get("sushi_maki")),
                     new ItemStack(ThermalCore.ITEMS.get("stuffed_pumpkin")));
-            ExtremeCraftingManager.getInstance().addRecipeInput(stew,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(ThermalCore.ITEMS.get("xp_stew")), new ItemStack(ThermalCore.ITEMS.get("spring_salad")));
             CompressorManager.addInputs(Singularity.getSingularity("gold"),
                     getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
@@ -861,12 +866,12 @@ public class ModRecipeManager {
                     getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
         }
         if (Endless.isRS){ //50+2 48 49
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(RSItems.ITEM_STORAGE_DISKS.get(ItemStorageType.SIXTY_FOUR_K).get()),
                     new ItemStack(RSItems.FLUID_STORAGE_DISKS.get(FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get()));
         }
         if (Endless.isTC3){//52 48 49
-            ExtremeCraftingManager.getInstance().addRecipeInput(infinityCatalyst,
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     new ItemStack(TinkerModifiers.dragonScale), Singularity.getSingularity("cobalt"), Singularity.getSingularity("manyullyn"));
         }
         if (Endless.isIAF && Endless.isTC3){ //52 48 49

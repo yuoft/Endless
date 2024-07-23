@@ -9,6 +9,7 @@ import net.minecraft.util.registry.Registry;
 
 public interface IExtremeCraftRecipe extends IRecipe<IInventory> {
     ResourceLocation TYPE_ID = new ResourceLocation(Endless.MOD_ID, "extreme_craft");
+    ResourceLocation TYPE_SHAPE_ID = new ResourceLocation(Endless.MOD_ID, "extreme_craft_shape");
 
     @Override
     default IRecipeType<?> getType(){

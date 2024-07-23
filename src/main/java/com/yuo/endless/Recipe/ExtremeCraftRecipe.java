@@ -40,11 +40,6 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         this.result = result;
     }
 
-    //追加输入
-    public void addInputs(NonNullList<Ingredient> ingredients){
-        this.items.addAll(ingredients);
-    }
-
     public static class RecipeType implements IRecipeType<ExtremeCraftRecipe> {
         @Override
         public String toString() {

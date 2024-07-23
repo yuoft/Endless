@@ -2,6 +2,7 @@ package com.yuo.endless.Container;
 
 import com.yuo.endless.Config.Config;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
+import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,8 +34,11 @@ public class ExtremeCraftResultSlot extends CraftingResultSlot {
         NonNullList<ItemStack> nonnulllist; //优先匹配工作台配方，没有则配方无尽配方
         World world = thePlayer.world;
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
+        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
         if (recipeOptional.isPresent()){
             nonnulllist = world.getRecipeManager().getRecipeNonNull(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
+        }else if (recipeOptionalIn .isPresent()){
+            nonnulllist = world.getRecipeManager().getRecipeNonNull(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
         }else {
             if (Config.SERVER.isCraftTable.get()){
                 Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, this.craftMatrix, world);
