@@ -253,7 +253,7 @@ public class Config {
             this.singularityCobalt = buildInt(builder, "Cobalt", 150, 10, 100000, "base count");
             this.singularityManyullyn = buildInt(builder, "Manyullyn", 100, 10, 100000, "base count");
 
-            this.mobWeigh = buildInt(builder, "Mob Weigh", 5, 0, 20, "Infinity mob spawn weigh");
+            this.mobWeigh = buildInt(builder, "Mob Weigh", 2, 0, 10, "Infinity mob spawn weigh");
             this.mobHpInfo = buildBoolean(builder, "Mob HP Info", true, "Infinity mob hp info");
             builder.pop();
 

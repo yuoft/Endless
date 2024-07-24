@@ -26,28 +26,26 @@ public class ExtremeCraftShapeCrt {
      * @param inputs  输入物品项 二维数组9*9
      */
     @ZenCodeType.Method
-    public static void addShaped(String id, IItemStack output, IIngredient[][] inputs) {
+    public static void addShaped(String id, IItemStack output, IIngredient[] inputs) {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
                 ResourceLocation res = new ResourceLocation("crafttweaker", id);
                 //转化为列表
                 NonNullList<Ingredient> ingredients = NonNullList.create();
-                for (IIngredient[] input : inputs) {
-                    for (IIngredient iIngredient : input) {
-                        Ingredient ingredient = iIngredient.asVanillaIngredient();
-                        ItemStack singularity = new ItemStack(EndlessItems.singularity.get());
-                        if (test(ingredient, singularity)){ //如果配方中有奇点，则补全奇点数据后替换
-                            ItemStack[] matchingStacks = ingredient.getMatchingStacks();
-                            for (int i = 0; i < matchingStacks.length; i++){
-                                ItemStack stack = matchingStacks[i];
-                                if (stack.getItem() instanceof Singularity){
-                                    matchingStacks[i] = Singularity.getSingularity(stack.getOrCreateTag().getString(Singularity.NBT_TYPE));
-                                }
+                for (IIngredient input : inputs) {
+                    Ingredient ingredient = input.asVanillaIngredient();
+                    ItemStack singularity = new ItemStack(EndlessItems.singularity.get());
+                    if (test(ingredient, singularity)) { //如果配方中有奇点，则补全奇点数据后替换
+                        ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+                        for (int i = 0; i < matchingStacks.length; i++) {
+                            ItemStack stack = matchingStacks[i];
+                            if (stack.getItem() instanceof Singularity) {
+                                matchingStacks[i] = Singularity.getSingularity(stack.getOrCreateTag().getString(Singularity.NBT_TYPE));
                             }
-                            ingredients.add(Ingredient.fromStacks(matchingStacks));
-                        } else ingredients.add(ingredient);
-                    }
+                        }
+                        ingredients.add(Ingredient.fromStacks(matchingStacks));
+                    } else ingredients.add(ingredient);
                 }
 
                 //添加到模组配方管理
