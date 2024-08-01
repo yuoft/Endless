@@ -1,6 +1,9 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "endless:item/neutronium_ingot"
+    "layer0": "endless:item/halo",
+    "layer1": "endless:item/halo128",
+    "layer2": "endless:item/halo_noise",
+    "layer3": "endless:item/neutronium_ingot"
   }
 }

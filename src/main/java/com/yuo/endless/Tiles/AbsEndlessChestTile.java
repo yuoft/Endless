@@ -2,8 +2,8 @@ package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Blocks.AbsEndlessChest;
 import com.yuo.endless.Blocks.EndlessChestType;
-import com.yuo.endless.Container.CompressorChestContainer;
-import com.yuo.endless.Container.InfinityBoxContainer;
+import com.yuo.endless.Container.Chest.CompressorChestContainer;
+import com.yuo.endless.Container.Chest.InfinityBoxContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,8 +12,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.*;
@@ -21,6 +23,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -29,6 +32,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.registries.IRegistryDelegate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,12 +50,41 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     private final EndlessChestType type;
     protected final InfinityStackHandler stackHandler;
     private net.minecraftforge.common.util.LazyOptional<IItemHandlerModifiable> chestHandler;
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String NBT_COUNT = "infinity_count";
 
     public AbsEndlessChestTile(TileEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier) {
         super(typeIn);
         this.type = chestType;
         this.stackHandler = new InfinityStackHandler(chestType.size);
         this.blockSupplier = supplier;
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        this.fillWithLoot((PlayerEntity)null);
+//        ItemStack itemstack = this.stackHandler.getStacks().get(index);
+//        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack); //相同物品
+//        int size = stack.getMaxStackSize();
+//        if (size <= 1)
+        if (stack.getCount() > getInventoryStackLimit()) {
+            stack.setCount(getInventoryStackLimit());
+        }
+
+        this.stackHandler.getStacks().set(index, stack);
+//        if (!flag) {
+            this.markDirty();
+//        }
+    }
+
+    @Override
+    public ItemStack decrStackSize(int index, int count) {
+        return super.decrStackSize(index, count);
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return this.type.stackLimit;
     }
 
     public Block getBlock() {
@@ -80,7 +115,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     public void NbtRead(CompoundNBT nbt) {
         this.stackHandler.setStacks(NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY));
         if (!this.checkLootAndRead(nbt)) {
-            ItemStackHelper.loadAllItems(nbt, this.stackHandler.getStacks());
+            loadAllItems(nbt, this.stackHandler.getStacks());
         }
     }
 
@@ -93,9 +128,56 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
 
     public CompoundNBT NbtWrite(CompoundNBT compound) {
         if (!this.checkLootAndWrite(compound)) {
-            ItemStackHelper.saveAllItems(compound, this.stackHandler.getStacks());
+            saveAllItems(compound, this.stackHandler.getStacks());
         }
         return compound;
+    }
+
+    /**
+     * 将所有物品保存到nbt中
+     * @param nbt nbt
+     * @param stacks 物品列表
+     * @return new nbt
+     */
+    public static CompoundNBT saveAllItems(CompoundNBT nbt, NonNullList<ItemStack> stacks) {
+        ListNBT listNBT = new ListNBT();
+
+        for(int i = 0; i < stacks.size(); ++i) {
+            ItemStack stack = stacks.get(i);
+            if (!stack.isEmpty()) {
+                CompoundNBT tag = new CompoundNBT();
+                tag.putByte("Slot", (byte)i);
+                stack.write(tag);
+                tag.putInt(NBT_COUNT, stack.getCount());
+                listNBT.add(tag);
+            }
+        }
+
+        if (!listNBT.isEmpty()) {
+            nbt.put("Items", listNBT);
+        }
+
+        return nbt;
+    }
+
+    /**
+     * 从nbt中读取物品列表
+     * @param nbt nbt
+     * @param stacks 物品列表
+     */
+    public static void loadAllItems(CompoundNBT nbt, NonNullList<ItemStack> stacks) {
+        ListNBT listNBT = nbt.getList("Items", 10);
+
+        for(int i = 0; i < listNBT.size(); ++i) {
+            CompoundNBT tag = listNBT.getCompound(i);
+            int slot = tag.getByte("Slot") & 255;
+            if (slot < stacks.size()) {
+                ItemStack stack = ItemStack.read(tag);
+                int count = tag.getInt(NBT_COUNT);
+                stack.setCount(count);
+                stacks.set(slot, stack);
+            }
+        }
     }
 
     @Override

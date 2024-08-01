@@ -39,4 +39,5 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         this.gapingVoid.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f,1.0f,1.0f,1.0f);
         matrixStackIn.pop();
     }
+
 }

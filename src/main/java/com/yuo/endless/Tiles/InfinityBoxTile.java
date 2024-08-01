@@ -3,7 +3,7 @@ package com.yuo.endless.Tiles;
 import com.google.common.collect.Lists;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Blocks.EndlessChestType;
-import com.yuo.endless.Container.InfinityBoxContainer;
+import com.yuo.endless.Container.Chest.InfinityBoxContainer;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Blocks;
@@ -194,20 +194,6 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
         return new InfinityBoxContainer(id, player, this, burnData);
-    }
-
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        ItemStack itemstack = this.stackHandler.getStacks().get(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack); //相同物品
-        this.stackHandler.getStacks().set(index, stack);
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
-        }
-
-        if (!flag) {
-            this.markDirty();
-        }
     }
 
     @Override

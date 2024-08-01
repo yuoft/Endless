@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 
 public enum EndlessChestType {
-    COMPRESSOR("compressed",1024,108, 9, 256, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/compressor_chest.png"), 256, 276),
+    COMPRESSOR("compressed",243,108, 9, 256, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/compressor_chest.png"), 256, 276),
     INFINITY("infinity", Integer.MAX_VALUE, 256, 9, 500, 276, new ResourceLocation(Endless.MOD_ID, "textures/gui/infinity_chest.png"), 500, 500),
     NORMAL("normal",64, 27, 3, 176, 168, new ResourceLocation("textures/gui/container/shulker_box.png"), 256, 256);
 

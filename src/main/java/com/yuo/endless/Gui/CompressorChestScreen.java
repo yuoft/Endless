@@ -2,7 +2,7 @@ package com.yuo.endless.Gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yuo.endless.Container.CompressorChestContainer;
+import com.yuo.endless.Container.Chest.CompressorChestContainer;
 import com.yuo.endless.Endless;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;

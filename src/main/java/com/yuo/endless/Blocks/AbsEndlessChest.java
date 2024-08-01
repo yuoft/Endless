@@ -179,7 +179,7 @@ public class AbsEndlessChest extends Block implements IWaterLoggable {
 
             if (compoundnbt.contains("Items", 9)) {
                 NonNullList<ItemStack> nonnulllist = NonNullList.withSize(type.getSize(), ItemStack.EMPTY);
-                ItemStackHelper.loadAllItems(compoundnbt, nonnulllist);
+                AbsEndlessChestTile.loadAllItems(compoundnbt, nonnulllist);
                 int i = 0;
                 int j = 0;
 

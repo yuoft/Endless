@@ -14,6 +14,7 @@ import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Sound.ModSounds;
 import com.yuo.endless.Tiles.TileTypeRegistry;
+import com.yuo.endless.World.Structure.ModStructures;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
@@ -144,6 +145,7 @@ public class Endless {
         ContainerTypeRegistry.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
+        ModStructures.STRUCTURES.register(modEventBus);
         proxy.registerHandlers();
     }
 
@@ -174,6 +176,7 @@ public class Endless {
             }
         };
         DispenserBlock.registerDispenseBehavior(EndlessItems.infinityFluidBucket.get(), itemBehavior);
+        event.enqueueWork(ModStructures::setupStructures);
     }
 
     private void checkMods(){

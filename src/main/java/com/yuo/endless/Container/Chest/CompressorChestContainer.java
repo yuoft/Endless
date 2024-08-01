@@ -1,14 +1,21 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Chest;
 
+import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Tiles.CompressorChestTile;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.registry.Registry;
 
-public class CompressorChestContainer extends Container {
-    private final CompressorChestTile chestTile;
+import java.util.Iterator;
+
+public class CompressorChestContainer extends InfinityChestContainer {
 
     public CompressorChestContainer(int id, PlayerInventory playerInventory){
         this(id, playerInventory, new CompressorChestTile());
@@ -37,11 +44,6 @@ public class CompressorChestContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.chestTile.isUsableByPlayer(playerIn);
-    }
-
-    @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
@@ -51,7 +53,7 @@ public class CompressorChestContainer extends Container {
             itemstack = itemstack1.copy();
 
             if (index < 54) { //取出
-                if (!this.mergeItemStack(itemstack1, 54, this.inventorySlots.size(), true)) {
+                if (!super.mergeItemStack(itemstack1, 54, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }//放入
             } else if (!this.mergeItemStack(itemstack1, 0, 54, false)) {
@@ -74,4 +76,5 @@ public class CompressorChestContainer extends Container {
         super.onContainerClosed(playerIn);
         this.chestTile.closeInventory(playerIn);
     }
+
 }

@@ -20,7 +20,7 @@ public class InfinityStackHandler extends ItemStackHandler {
 
     @Override
     protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-        return 128;
+        return 64;
     }
 
     public NonNullList<ItemStack> getStacks(){

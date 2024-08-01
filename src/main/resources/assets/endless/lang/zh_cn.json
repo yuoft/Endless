@@ -203,6 +203,7 @@
     "gui.endless.neutron_compressor":"中子态压缩机",
     "gui.endless.compressed_chest":"压缩箱子",
     "gui.endless.infinity_chest":"无尽箱子",
+    "gui.endless.stack_count":"数量：%s",
 
 
     "jei.endless.extreme_craft":"终极有序合成",

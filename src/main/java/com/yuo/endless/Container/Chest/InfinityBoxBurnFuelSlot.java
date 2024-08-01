@@ -1,4 +1,4 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Chest;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;

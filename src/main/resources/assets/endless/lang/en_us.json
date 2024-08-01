@@ -202,6 +202,7 @@
   "gui.endless.neutron_compressor":"Neutron Compressor",
   "gui.endless.compressed_chest":"Compressed Chest",
   "gui.endless.infinity_chest":"Infinity Chest",
+  "gui.endless.stack_count":"Count:%s",
 
   "jei.endless.extreme_craft":"Ultimate Ordered Synthesis",
   "jei.endless.extreme_craft_shape":"Ultimate Disorderly Synthesis",

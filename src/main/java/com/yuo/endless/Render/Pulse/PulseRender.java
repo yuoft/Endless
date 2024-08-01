@@ -33,8 +33,6 @@ public class PulseRender extends ItemStackTileEntityRenderer {
 
         itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, false, matrixStack,typeBuffer,i, j, bakedModel );
         matrixStack.pop();
-        matrixStack.push();
-        matrixStack.pop();
     }
 
     /**

@@ -1,12 +1,17 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Chest;
 
+import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Tiles.InfinityBoxTile;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.inventory.container.WorkbenchContainer;
@@ -16,14 +21,15 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Iterator;
 import java.util.Optional;
 
-public class InfinityBoxContainer extends Container {
-    private final InfinityBoxTile chestTile;
+public class InfinityBoxContainer extends InfinityChestContainer {
     private final InfinityBoxCraftInventory craftInputInv;
     private final InfinityBoxCraftInventoryResult craftOutputInv;
     private final IIntArray burnData;
@@ -37,8 +43,8 @@ public class InfinityBoxContainer extends Container {
     public InfinityBoxContainer(int id, PlayerInventory playerInventory, InfinityBoxTile tile, IIntArray intArray) {
         super(ContainerTypeRegistry.infinityBoxContainer.get(), id);
         this.chestTile = tile;
-        this.craftInputInv = new InfinityBoxCraftInventory(this, chestTile);
-        this.craftOutputInv = new InfinityBoxCraftInventoryResult(chestTile);
+        this.craftInputInv = new InfinityBoxCraftInventory(this, (InfinityBoxTile) chestTile);
+        this.craftOutputInv = new InfinityBoxCraftInventoryResult((InfinityBoxTile) chestTile);
         this.burnData = intArray;
         trackIntArray(this.burnData);
         this.player = playerInventory.player;
@@ -94,11 +100,6 @@ public class InfinityBoxContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.chestTile.isUsableByPlayer(playerIn);
-    }
-
-    @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
@@ -108,11 +109,11 @@ public class InfinityBoxContainer extends Container {
             itemstack = itemStack1.copy();
 
             if (index < 243) { //取出
-                if (!this.mergeItemStack(itemStack1, 253, this.inventorySlots.size(), true)) {
+                if (!super.mergeItemStack(itemStack1, 253, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }//放入
             } else if (index == 252){
-                if (!this.mergeItemStack(itemStack1, 253, this.inventorySlots.size(), true)) {
+                if (!super.mergeItemStack(itemStack1, 253, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.onSlotChange(itemStack1, itemstack);
@@ -184,4 +185,5 @@ public class InfinityBoxContainer extends Container {
         inventory.setInventorySlotContents(8, craftInputInv.getStackInSlot(251));
         return inventory;
     }
+
 }

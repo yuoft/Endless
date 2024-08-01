@@ -1,4 +1,4 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Chest;
 
 import com.yuo.endless.Tiles.InfinityBoxTile;
 import net.minecraft.inventory.CraftingInventory;

@@ -46,6 +46,7 @@ public class InfinityMobEntity extends ZombieEntity {
 
     public InfinityMobEntity(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
+        this.persistenceRequired = true;
     }
 
     protected void registerGoals() {
@@ -80,6 +81,11 @@ public class InfinityMobEntity extends ZombieEntity {
     }
 
     @Override
+    public void enablePersistence() {
+        this.persistenceRequired = true;
+    }
+
+    @Override
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -95,13 +101,13 @@ public class InfinityMobEntity extends ZombieEntity {
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         Entity entity = source.getTrueSource();
-        //攻击者为玩家且是无尽伤害 伤害最高10点
+        //攻击者为玩家且是无尽伤害
         if (InfinityDamageSource.isInfinity(source) && entity instanceof PlayerEntity) {
+            amount *= 0.1f;
+        } else { //伤害最高10点
             amount *= 0.01f;
-        } else {
-            amount *= 0.001f;
-            amount = amount > 5 ? 5 : amount; //否则最高伤害5点
-            amount = Math.max(amount, 0.5f);
+            amount = amount > 10 ? 10 : amount;
+            amount = Math.max(amount, 0.5f); //最低0.5
         }
         return super.attackEntityFrom(source, amount);
     }

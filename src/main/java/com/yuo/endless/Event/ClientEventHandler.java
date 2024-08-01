@@ -72,7 +72,6 @@ public class ClientEventHandler {
                 event.getModelRegistry().put(locations.get(i), new PulseModel(models.get(i)));
             }
         }
-
     }
 
     //箱子贴图

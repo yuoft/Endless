@@ -1,4 +1,4 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Chest;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
