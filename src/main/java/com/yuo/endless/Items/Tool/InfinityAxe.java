@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config.Config;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.Config;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.entity.Entity;
@@ -26,7 +26,7 @@ public class InfinityAxe extends AxeItem {
     private final ToolHelper hander;
 
     public InfinityAxe() {
-        super(MyItemTier.INFINITY_TOOL, 10, -3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, 10, -3.0f, new Properties().group(EndlessTab.endless).isImmuneToFire());
         this.hander = new ToolHelper();
     }
 

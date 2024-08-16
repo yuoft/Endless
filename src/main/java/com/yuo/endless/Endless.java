@@ -1,7 +1,7 @@
 package com.yuo.endless;
 
 import com.yuo.endless.Blocks.EndlessBlocks;
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Fluid.EndlessFluids;
@@ -12,7 +12,6 @@ import com.yuo.endless.Proxy.CommonProxy;
 import com.yuo.endless.Proxy.IProxy;
 import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
-import com.yuo.endless.Sound.ModSounds;
 import com.yuo.endless.Tiles.TileTypeRegistry;
 import com.yuo.endless.World.Structure.ModStructures;
 import net.minecraft.block.DispenserBlock;
@@ -127,6 +126,7 @@ public class Endless {
         }
         if (isBOT){
             EndlessItems.registerBOT();
+            EndlessBlocks.regisBotania();
         }
         if (isPE){
             EndlessItems.registerPE();
@@ -134,8 +134,8 @@ public class Endless {
         if (isTC3){
             EndlessItems.registerTC3();
         }
-
         modEventBus.addListener(this::commonSetup);
+
         //注册物品至mod总线
         EndlessItems.ITEMS.register(modEventBus);
         EndlessBlocks.BLOCKS.register(modEventBus);

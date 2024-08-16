@@ -101,6 +101,7 @@
   "block.endless.neutron_compressor":"Neutron Compressor",
   "block.endless.compressed_chest":"Compressed Chest",
   "block.endless.infinity_chest":"§cInfinity Chest",
+  "block.endless.infinity_potato":"Infinity Potato",
 
   "fluid.endless.infinity_fluid":"§cInfinity Fluid",
 
@@ -219,5 +220,11 @@
   "death.attack.infinity_weapon.4":"%1$s was annihilated by %2$s using %3$s",
   "death.attack.infinity_weapon.5":"%1$s was pierced by %2$s using %3$s",
 
-  "itemGroup.Endless":"Avaritia Endless"
+  "itemGroup.Endless":"Avaritia Endless",
+
+  "endless.armorset.crystal.name": "Crystal",
+  "endless.armorset.neutronium.name": "Neutronium",
+  "endless.armorset.infinity.desc": "99%% less Mana cost on Mana Tools and Rods",
+  "endless.armorset.crystal.desc": "15%% less Mana cost on Mana Tools and Rods",
+  "endless.armorset.neutronium.desc": "25%% less Mana cost on Mana Tools and Rods"
 }

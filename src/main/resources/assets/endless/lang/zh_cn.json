@@ -101,6 +101,7 @@
     "block.endless.neutron_compressor":"中子态压缩机",
     "block.endless.compressed_chest":"压缩箱子",
     "block.endless.infinity_chest":"§c无尽箱子",
+    "block.endless.infinity_potato":"无尽小土豆",
 
     "fluid.endless.infinity_fluid":"§c熔融无尽",
 
@@ -221,5 +222,11 @@
     "death.attack.infinity_weapon.4":"%1$s被%2$s使用%3$s所湮灭",
     "death.attack.infinity_weapon.5":"%1$s被%2$s使用%3$s击穿了",
 
-    "itemGroup.Endless":"无尽贪婪"
+    "itemGroup.Endless":"无尽贪婪",
+
+    "endless.armorset.crystal.name": "水晶套装",
+    "endless.armorset.neutronium.name": "中子套装",
+    "endless.armorset.infinity.desc": "魔力工具消耗魔力减免99%",
+    "endless.armorset.crystal.desc": "魔力工具消耗魔力减免15%",
+    "endless.armorset.neutronium.desc": "魔力工具消耗魔力减免25%"
 }

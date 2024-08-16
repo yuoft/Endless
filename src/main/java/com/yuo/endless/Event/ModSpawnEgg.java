@@ -1,6 +1,6 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
@@ -23,7 +23,7 @@ public class ModSpawnEgg extends SpawnEggItem {
     private final Lazy<? extends EntityType<?>> entityTypeSupplier;
 
     public ModSpawnEgg(final RegistryObject<? extends EntityType<?>> entityTypeSupplier, int primaryColorIn, int secondaryColorIn) {
-        super(null, primaryColorIn, secondaryColorIn, new Properties().group(ModGroup.endless));
+        super(null, primaryColorIn, secondaryColorIn, new Properties().group(EndlessTab.endless));
         this.entityTypeSupplier = Lazy.of(entityTypeSupplier::get);
         UNADDED_EGGS.add(this);
     }

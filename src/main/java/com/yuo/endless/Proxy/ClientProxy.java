@@ -1,16 +1,17 @@
 package com.yuo.endless.Proxy;
 
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Client.Gui.*;
+import com.yuo.endless.Client.Render.*;
+import com.yuo.endless.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Fluid.EndlessFluids;
-import com.yuo.endless.Gui.*;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.InfinityCrossBow;
-import com.yuo.endless.Render.*;
 import com.yuo.endless.Tiles.TileTypeRegistry;
+import com.yuo.endless.integration.BA.InfinityPotatoRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
@@ -72,6 +73,7 @@ public class ClientProxy implements IProxy {
         event.enqueueWork(() ->{
             ClientRegistry.bindTileEntityRenderer(TileTypeRegistry.COMPRESS_CHEST_TILE.get(), EndlessChestTileRender::new);
             ClientRegistry.bindTileEntityRenderer(TileTypeRegistry.INFINITY_CHEST_TILE.get(), EndlessChestTileRender::new);
+            ClientRegistry.bindTileEntityRenderer(TileTypeRegistry.INFINITY_POTATO_TILE.get(), InfinityPotatoRender::new);
         });
         //流体半透明渲染
         RenderTypeLookup.setRenderLayer(EndlessFluids.infinityFluid.get(), RenderType.getTranslucent());

@@ -1,6 +1,6 @@
 package com.yuo.endless.Entity;
 
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import net.minecraft.block.BlockState;

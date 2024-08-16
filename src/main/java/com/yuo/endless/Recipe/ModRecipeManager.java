@@ -11,7 +11,7 @@ import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.yuo.PaiMeng.Items.PMItems;
 import com.yuo.enchants.Items.YEItems;
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
@@ -669,6 +669,22 @@ public class ModRecipeManager {
                 'C', new ItemStack(EndlessItems.neutroniumGear.get()),
                 'X', new ItemStack(EndlessItems.denserNeutroniumCollector.get()),
                 'Y', Singularity.getSingularity("redstone"));
+
+        if (Endless.isBOT){
+            ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.infinityPotato.get()),
+                    "AAAAAAAAA",
+                    "AAAAAAAAA",
+                    "AAACACAAA",
+                    "AAAAAAAAA",
+                    "AACABACAA",
+                    "AAACCCAAA",
+                    "AAAAAAAAA",
+                    "AAAAAAAAA",
+                    "AAAAAAAAA",
+                    'A', new ItemStack(ModBlocks.tinyPotato),
+                    'B', new ItemStack(EndlessItems.infinityCatalyst.get()),
+                    'C', new ItemStack(Items.DIAMOND));
+        }
     }
 
     //无尽工作台无序配方

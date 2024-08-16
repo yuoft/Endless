@@ -1,6 +1,6 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -20,7 +20,7 @@ import java.util.List;
 public class OrdinaryItem extends Item {
 
 	public OrdinaryItem() {
-		super(new Properties().group(ModGroup.endless)); //设置物品所在 创造模式物品栏
+		super(new Properties().group(EndlessTab.endless)); //设置物品所在 创造模式物品栏
 	}
 
 	@Override

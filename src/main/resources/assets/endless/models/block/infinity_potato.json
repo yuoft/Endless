@@ -1,0 +1,24 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "block/block",
+  "texture_size": [64, 64],
+  "textures": {
+    "particle": "endless:block/infinity_potato",
+    "2": "endless:block/infinity_potato"
+  },
+  "elements": [
+    {
+      "from": [4, 0, 4],
+      "to": [12, 12, 12],
+      "rotation": {"angle": 0, "axis": "y", "origin": [4, 0, 4]},
+      "faces": {
+        "north": {"uv": [4, 4, 8, 10], "texture": "#2"},
+        "east": {"uv": [0, 4, 4, 10], "texture": "#2"},
+        "south": {"uv": [12, 4, 16, 10], "texture": "#2"},
+        "west": {"uv": [8, 4, 12, 10], "texture": "#2"},
+        "up": {"uv": [8, 4, 4, 0], "texture": "#2"},
+        "down": {"uv": [12, 0, 8, 4], "texture": "#2"}
+      }
+    }
+  ]
+}

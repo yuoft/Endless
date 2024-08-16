@@ -2,8 +2,8 @@ package com.yuo.endless.Items;
 
 import com.yuo.endless.Entity.EndestPearlEntity;
 import com.yuo.endless.Entity.EntityRegistry;
-import com.yuo.endless.Render.Pulse.PulseRender;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.Client.Render.Pulse.PulseRender;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class EndestPearl extends Item {
 
     public EndestPearl() {
-        super(new Properties().group(ModGroup.endless).setISTER(() -> PulseRender::new).maxStackSize(16));
+        super(new Properties().group(EndlessTab.endless).setISTER(() -> PulseRender::new).maxStackSize(16));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config.Config;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.Config;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -43,7 +43,7 @@ public class InfinityBucket extends Item {
     private final static String FLUID_NUMBER = "fluid_number";
 
     public InfinityBucket() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
+        super(new Properties().group(EndlessTab.endless).maxStackSize(1).isImmuneToFire());
 //        this.fluid = Fluids.EMPTY;
 //        this.fluidSupplier = supplier;
     }

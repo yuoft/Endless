@@ -1,12 +1,10 @@
 package com.yuo.endless.Entity;
 
 import com.google.common.collect.Sets;
-import com.yuo.endless.Config.Config;
-import net.minecraft.client.Minecraft;
+import com.yuo.endless.Config;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;

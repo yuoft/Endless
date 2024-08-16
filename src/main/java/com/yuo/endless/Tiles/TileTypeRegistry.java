@@ -2,6 +2,7 @@ package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
+import com.yuo.endless.integration.BA.InfinityPotatoTile;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,6 +29,9 @@ public class TileTypeRegistry {
             () -> TileEntityType.Builder.create(CompressorChestTile::new, EndlessBlocks.compressedChest.get()).build(null));
     public static final RegistryObject<TileEntityType<InfinityBoxTile>> INFINITY_CHEST_TILE = TILE_ENTITIES.register("infinity_chest_tile",
             () -> TileEntityType.Builder.create(InfinityBoxTile::new, EndlessBlocks.infinityBox.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<InfinityPotatoTile>> INFINITY_POTATO_TILE = TILE_ENTITIES.register("infinity_potato_tile",
+            () -> TileEntityType.Builder.create(InfinityPotatoTile::new, EndlessBlocks.infinityPotato.get()).build(null));
 
     public static void registerBotania(){
     }

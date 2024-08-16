@@ -1,8 +1,8 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Items.Tool.ColorText;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -52,7 +52,7 @@ public class Singularity extends Item{
     }
 
     Singularity(){
-        super(new Properties().group(ModGroup.endless));
+        super(new Properties().group(EndlessTab.endless));
     }
 
     @Override

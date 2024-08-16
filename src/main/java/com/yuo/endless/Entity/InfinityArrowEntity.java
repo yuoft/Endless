@@ -3,7 +3,7 @@ package com.yuo.endless.Entity;
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.google.common.collect.Lists;
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
@@ -33,7 +33,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 

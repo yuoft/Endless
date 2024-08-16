@@ -1,7 +1,7 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.Render.Pulse.PulseRender;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.Client.Render.Pulse.PulseRender;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class InfinityItem extends Item {
     public InfinityItem() {
-        super(new Properties().group(ModGroup.endless).setISTER(() -> PulseRender::new).isImmuneToFire());
+        super(new Properties().group(EndlessTab.endless).setISTER(() -> PulseRender::new).isImmuneToFire());
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -29,7 +29,7 @@ public class InfinityPickaxe extends PickaxeItem {
     private final ToolHelper hander;
 
     public InfinityPickaxe() {
-        super(MyItemTier.INFINITY_TOOL, -3, -2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -3, -2.8f, new Properties().group(EndlessTab.endless).isImmuneToFire());
         this.hander = new ToolHelper();
     }
 

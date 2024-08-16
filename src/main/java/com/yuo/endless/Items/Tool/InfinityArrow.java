@@ -2,10 +2,8 @@ package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.yuo.endless.Config.Config;
-import com.yuo.endless.tab.ModGroup;
-import net.minecraft.block.EnchantingTableBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
+import com.yuo.endless.Config;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +15,6 @@ import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.EnchantmentContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -34,7 +31,7 @@ public class InfinityArrow extends Item  {
     private final Multimap<Attribute, AttributeModifier> tridentAttributes;
 
     public InfinityArrow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
+        super(new Properties().group(EndlessTab.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 48.0D, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.0F, AttributeModifier.Operation.ADDITION));

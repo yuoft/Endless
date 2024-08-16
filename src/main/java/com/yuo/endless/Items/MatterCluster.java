@@ -1,7 +1,7 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.Config.Config;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.Config;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
@@ -29,7 +29,7 @@ public class MatterCluster extends Item  {
     public static String MAIN_NBT = "matterCluster";
 
     public MatterCluster() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1));
+        super(new Properties().group(EndlessTab.endless).maxStackSize(1));
     }
 
     /**

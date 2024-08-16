@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config.Config;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.Config;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 
 public class InfinityHoe extends HoeItem {
     public InfinityHoe() {
-        super(MyItemTier.INFINITY_TOOL, -10, 17.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -10, 17.0f, new Properties().group(EndlessTab.endless).isImmuneToFire());
     }
 
     @Override

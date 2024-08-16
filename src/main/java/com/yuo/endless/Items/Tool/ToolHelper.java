@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.Sets;
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Items.MatterCluster;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;

@@ -3,6 +3,7 @@ package com.yuo.endless.Blocks;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Fluid.InfinityFluidBlock;
+import com.yuo.endless.integration.BA.InfinityPotato;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
@@ -34,7 +35,12 @@ public class EndlessBlocks {
     public static RegistryObject<Block> compressedChest = BLOCKS.register("compressed_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_chest", InfinityBox::new);
 
+    public static RegistryObject<Block> infinityPotato;
+
     public static RegistryObject<InfinityFluidBlock> infinityFluid = BLOCKS.register("infinity_fluid",
             () -> new InfinityFluidBlock(EndlessFluids.infinityFluid));
 
+    public static void regisBotania(){
+        infinityPotato = BLOCKS.register("infinity_potato", InfinityPotato::new);
+    }
 }

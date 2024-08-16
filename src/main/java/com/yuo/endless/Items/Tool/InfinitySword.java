@@ -2,10 +2,10 @@ package com.yuo.endless.Items.Tool;
 
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -42,7 +42,7 @@ import java.util.function.Consumer;
 public class InfinitySword extends SwordItem{
 
     public InfinitySword() {
-        super(MyItemTier.INFINITY_SWORD, 0, -2.4f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.INFINITY_SWORD, 0, -2.4f, new Properties().group(EndlessTab.endless).isImmuneToFire());
     }
 
     /**

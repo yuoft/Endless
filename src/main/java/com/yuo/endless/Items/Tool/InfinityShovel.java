@@ -1,6 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.GrassBlock;
@@ -24,7 +24,7 @@ public class InfinityShovel extends ShovelItem {
     private final ToolHelper hander;
 
     public InfinityShovel() {
-        super(MyItemTier.INFINITY_TOOL, -2, -2.8f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(MyItemTier.INFINITY_TOOL, -2, -2.8f, new Properties().group(EndlessTab.endless).isImmuneToFire());
         this.hander = new ToolHelper();
     }
 

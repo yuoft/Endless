@@ -1,11 +1,11 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityArrowEntity;
 import com.yuo.endless.Entity.InfinityArrowSubEntity;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -27,7 +27,7 @@ public class InfinityBow extends BowItem {
     public static final Predicate<ItemStack> ARROWS = (stack) -> stack.getItem().isIn(ItemTags.ARROWS) || stack.getItem() == EndlessItems.infinityArrow.get();
 
     public InfinityBow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
+        super(new Properties().group(EndlessTab.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
     }
 
     //使用时间

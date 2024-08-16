@@ -4,7 +4,7 @@ import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
-import com.yuo.endless.Render.Pulse.PulseModel;
+import com.yuo.endless.Client.Render.Pulse.PulseModel;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;

@@ -23,7 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.16.5-1.5.1'
+version = '1.16.5-1.5.2'
 group = 'com.github.yuoft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -149,10 +149,6 @@ dependencies {
 
 //    implementation fg.deobf("codechicken:CodeChickenLib:1.16.5-4.0.7.445:deobf")
     compileOnly("mezz.jei:jei-${mc_ver}:${jei_ver}") //引入mod API
-    //前置
-//    runtimeOnly("com.github.alexthe666.citadel:citadel:1.8.1-1.16.5") //bug minix
-//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2")
-//    runtimeOnly('vazkii.patchouli:Patchouli:1.16.4-53.2') //bug minix
 
     compileOnly("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}") //联动
     compileOnly("com.yuo.orecrop:orecrop:${mc_ver}-${oreCrop_ver}")
@@ -189,11 +185,16 @@ dependencies {
 //    runtimeOnly fg.deobf("com.yuo.paimeng:paimeng:1.16.5-1.1.5")
 //    runtimeOnly fg.deobf("com.yuo.moreenchants:moreenchants:1.16.5-1.3.0")
 //    runtimeOnly fg.deobf("com.yuo.morecoal:morecoal:1.16.5-1.0.0")
-//    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.2") //bug minix
+    runtimeOnly fg.deobf("com.github.alexthe666.citadel:citadel:1.8.1-1.16.5") //bug minix
+    runtimeOnly fg.deobf("com.github.alexthe666.iceandfire:iceandfire:${iceandfire_ver}-${mc_ver}")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2")
+    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-53.2')
+    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.2")
     runtimeOnly fg.deobf("curse.maven:jei-238222:3681294") //引入mod
     runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
     runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_ver}:${crt_ver}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -203,7 +204,7 @@ jar {
         attributes([
             "Specification-Title": "endless",
             "Specification-Vendor": "yuoft",
-            "Specification-Version": "1.5.1", // We are version 1 of ourselves
+            "Specification-Version": "1.5.2", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"yuoft",

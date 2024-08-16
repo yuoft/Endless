@@ -1,6 +1,6 @@
 package com.yuo.endless.Container;
 
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;

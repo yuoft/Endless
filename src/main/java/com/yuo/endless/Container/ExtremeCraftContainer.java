@@ -1,6 +1,6 @@
 package com.yuo.endless.Container;
 
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Recipe.*;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
 import net.minecraft.entity.player.PlayerEntity;

@@ -3,7 +3,8 @@ package com.yuo.endless.Items.Tool;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -11,11 +12,15 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShovelItem;
+import vazkii.botania.api.mana.IManaUsingItem;
+import vazkii.botania.common.item.equipment.tool.ToolCommons;
 
-public class OrdinaryShovel extends ShovelItem {
+import java.util.function.Consumer;
+
+public class OrdinaryShovel extends ShovelItem implements IManaUsingItem {
 
     public OrdinaryShovel(IItemTier tier) {
-        super(tier, -1.5f,-3.0f, new Properties().group(ModGroup.endless).isImmuneToFire());
+        super(tier, -1.5f,-3.0f, new Properties().group(EndlessTab.endless).isImmuneToFire());
     }
 
     @Override
@@ -27,10 +32,20 @@ public class OrdinaryShovel extends ShovelItem {
             if (stack.getItem() == EndlessItems.crystalMatrixShovel.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumShovel.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,-0.05d));
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,-0.04d));
             }
             return builder.build();
         }
         return super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public boolean usesMana(ItemStack itemStack) {
+        return true;
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        return ToolCommons.damageItemIfPossible(stack, amount, entity, stack.getItem() == EndlessItems.crystalMatrixShovel.get() ? 10 : 20);
     }
 }

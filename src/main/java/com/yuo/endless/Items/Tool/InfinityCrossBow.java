@@ -1,10 +1,10 @@
 package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.Lists;
-import com.yuo.endless.Config.Config;
+import com.yuo.endless.Config;
 import com.yuo.endless.Entity.*;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -49,7 +49,7 @@ public class InfinityCrossBow extends CrossbowItem {
     private boolean isLoadingMiddle = false;
 
     public InfinityCrossBow() {
-        super(new Properties().group(ModGroup.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
+        super(new Properties().group(EndlessTab.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {

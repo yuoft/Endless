@@ -1,6 +1,6 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.tab.ModGroup;
+import com.yuo.endless.EndlessTab;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 
 public class InfinityFluidBucket extends BucketItem {
     public InfinityFluidBucket(Supplier<? extends Fluid> supplier) {
-        super(supplier, new Item.Properties().group(ModGroup.endless).containerItem(Items.BUCKET).maxStackSize(1).isImmuneToFire());
+        super(supplier, new Item.Properties().group(EndlessTab.endless).containerItem(Items.BUCKET).maxStackSize(1).isImmuneToFire());
     }
 
     @Override
