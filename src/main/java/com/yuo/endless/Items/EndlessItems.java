@@ -11,7 +11,7 @@ import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Event.ModSpawnEgg;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Items.Tool.*;
-import com.yuo.endless.integration.BA.ItemBlockPotato;
+import com.yuo.endless.integration.BOT.ItemBlockPotato;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
@@ -134,6 +134,8 @@ public class EndlessItems {
 			() -> new BlockItem(EndlessBlocks.infinityBox.get(), BLOCK_TAB.maxStackSize(1).isImmuneToFire()));
 
 	public static RegistryObject<BlockItem> infinityPotato;
+	public static RegistryObject<BlockItem> asgardFlower;
+	public static RegistryObject<BlockItem> asgardFlowerFloating;
 	/*
 	//联动奇点
 	public static RegistryObject<Item> singularityRuby; //红宝石
@@ -203,8 +205,9 @@ public class EndlessItems {
 		Singularity.addSingularity(new Singularity.SingularityData("terrasteel", 0x51dc24,0x57ef26));
 		Singularity.addSingularity(new Singularity.SingularityData("elementium", 0xe464ff,0xe784ff));
 //		infinityPotato = ITEMS.register("infinity_potato", OrdinaryItem::new);
-		infinityPotato = ITEMS.register("infinity_potato",
-				() -> new ItemBlockPotato(EndlessBlocks.infinityPotato.get(), BLOCK_TAB));
+		infinityPotato = ITEMS.register("infinity_potato", () -> new ItemBlockPotato(EndlessBlocks.infinityPotato.get(), BLOCK_TAB.maxStackSize(64)));
+		asgardFlower = ITEMS.register("asgard_flower", () -> new BlockItem(EndlessBlocks.asgardFlower.get(),  BLOCK_TAB.maxStackSize(64)));
+		asgardFlowerFloating = ITEMS.register("asgard_flower_floating", () -> new BlockItem(EndlessBlocks.asgardFlowerFloating.get(),  BLOCK_TAB.maxStackSize(64)));
 	}
 
 	//等价交换

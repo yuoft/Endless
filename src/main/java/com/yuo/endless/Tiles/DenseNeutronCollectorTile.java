@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class DenseNeutronCollectorTile extends AbsNeutronCollectorTile{
 
     public DenseNeutronCollectorTile(){
-        super(TileTypeRegistry.DENSE_NEUTRON_COLLECTOR_TILE.get());
+        super(EndlessTileTypes.DENSE_NEUTRON_COLLECTOR_TILE.get());
     }
 
     @Override

@@ -48,7 +48,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     private final int[] SLOT_OUT = new int[]{1};
 
     public NeutroniumCompressorTile() {
-        super(TileTypeRegistry.NEUTRONIUM_COMPRESSOR_TILE.get());
+        super(EndlessTileTypes.NEUTRONIUM_COMPRESSOR_TILE.get());
     }
 
     @Override

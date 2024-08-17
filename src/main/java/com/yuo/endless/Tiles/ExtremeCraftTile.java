@@ -26,7 +26,7 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
     private final NonNullList<ItemStack> reslut = NonNullList.withSize(1, ItemStack.EMPTY); //存储合成物品
 
     public ExtremeCraftTile() {
-        super(TileTypeRegistry.EXTREME_CRAFT_TILE.get());
+        super(EndlessTileTypes.EXTREME_CRAFT_TILE.get());
     }
 
     public NonNullList<ItemStack> getItems() {

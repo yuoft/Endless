@@ -3,7 +3,9 @@ package com.yuo.endless.Blocks;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Fluid.InfinityFluidBlock;
-import com.yuo.endless.integration.BA.InfinityPotato;
+import com.yuo.endless.integration.BOT.AsgardFlower;
+import com.yuo.endless.integration.BOT.AsgardFlowerFloating;
+import com.yuo.endless.integration.BOT.InfinityPotato;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
@@ -36,11 +38,15 @@ public class EndlessBlocks {
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_chest", InfinityBox::new);
 
     public static RegistryObject<Block> infinityPotato;
+    public static RegistryObject<Block> asgardFlower;
+    public static RegistryObject<Block> asgardFlowerFloating;
 
     public static RegistryObject<InfinityFluidBlock> infinityFluid = BLOCKS.register("infinity_fluid",
             () -> new InfinityFluidBlock(EndlessFluids.infinityFluid));
 
     public static void regisBotania(){
         infinityPotato = BLOCKS.register("infinity_potato", InfinityPotato::new);
+        asgardFlower = BLOCKS.register("asgard_flower", AsgardFlower::new);
+        asgardFlowerFloating = BLOCKS.register("asgard_flower_floating", AsgardFlowerFloating::new);
     }
 }

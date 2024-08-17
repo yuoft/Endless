@@ -1,4 +1,4 @@
-package com.yuo.endless.integration.BA;
+package com.yuo.endless.integration.BOT;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

@@ -12,7 +12,7 @@ import com.yuo.endless.Proxy.CommonProxy;
 import com.yuo.endless.Proxy.IProxy;
 import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
-import com.yuo.endless.Tiles.TileTypeRegistry;
+import com.yuo.endless.Tiles.EndlessTileTypes;
 import com.yuo.endless.World.Structure.ModStructures;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
@@ -141,7 +141,7 @@ public class Endless {
         EndlessBlocks.BLOCKS.register(modEventBus);
         EntityRegistry.ENTITY_TYPES.register(modEventBus);
         EndlessFluids.FLUIDS.register(modEventBus);
-        TileTypeRegistry.TILE_ENTITIES.register(modEventBus);
+        EndlessTileTypes.TILE_ENTITIES.register(modEventBus);
         ContainerTypeRegistry.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);

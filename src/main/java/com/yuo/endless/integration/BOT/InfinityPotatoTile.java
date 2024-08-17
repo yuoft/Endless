@@ -1,7 +1,7 @@
-package com.yuo.endless.integration.BA;
+package com.yuo.endless.integration.BOT;
 
 import com.yuo.endless.Blocks.EndlessBlocks;
-import com.yuo.endless.Tiles.TileTypeRegistry;
+import com.yuo.endless.Tiles.EndlessTileTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -50,7 +50,7 @@ public class InfinityPotatoTile extends TileExposedSimpleInventory implements IT
     private final LazyValue<int[]> slots = new LazyValue<>(() -> IntStream.range(0, getSizeInventory()).toArray());
 
     public InfinityPotatoTile() {
-        super(TileTypeRegistry.INFINITY_POTATO_TILE.get());
+        super(EndlessTileTypes.INFINITY_POTATO_TILE.get());
     }
 
     private void jump() {

@@ -1,4 +1,4 @@
-package com.yuo.endless.integration.BA;
+package com.yuo.endless.integration.BOT;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;

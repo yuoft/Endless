@@ -2,14 +2,15 @@ package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
-import com.yuo.endless.integration.BA.InfinityPotatoTile;
+import com.yuo.endless.integration.BOT.AsgardFlowerTile;
+import com.yuo.endless.integration.BOT.InfinityPotatoTile;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 //方块实体类型注册
-public class TileTypeRegistry {
+public class EndlessTileTypes {
 
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Endless.MOD_ID);
 
@@ -30,8 +31,12 @@ public class TileTypeRegistry {
     public static final RegistryObject<TileEntityType<InfinityBoxTile>> INFINITY_CHEST_TILE = TILE_ENTITIES.register("infinity_chest_tile",
             () -> TileEntityType.Builder.create(InfinityBoxTile::new, EndlessBlocks.infinityBox.get()).build(null));
 
+    //bot
     public static final RegistryObject<TileEntityType<InfinityPotatoTile>> INFINITY_POTATO_TILE = TILE_ENTITIES.register("infinity_potato_tile",
             () -> TileEntityType.Builder.create(InfinityPotatoTile::new, EndlessBlocks.infinityPotato.get()).build(null));
+    public static final RegistryObject<TileEntityType<AsgardFlowerTile>> ASGARD_FLOWER_TILE = TILE_ENTITIES.register("asgard_flower_tile",
+            () -> TileEntityType.Builder.create(AsgardFlowerTile::new,
+                    EndlessBlocks.asgardFlower.get(), EndlessBlocks.asgardFlowerFloating.get()).build(null));
 
     public static void registerBotania(){
     }

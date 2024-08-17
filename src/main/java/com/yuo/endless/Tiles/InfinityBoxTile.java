@@ -68,7 +68,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
 
     public InfinityBoxTile(){
-        super(TileTypeRegistry.INFINITY_CHEST_TILE.get(), EndlessChestType.INFINITY, () -> EndlessBlocks.infinityBox.get());
+        super(EndlessTileTypes.INFINITY_CHEST_TILE.get(), EndlessChestType.INFINITY, () -> EndlessBlocks.infinityBox.get());
     }
 
     @Override

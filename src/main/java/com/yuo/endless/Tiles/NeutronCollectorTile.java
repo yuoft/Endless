@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class NeutronCollectorTile extends AbsNeutronCollectorTile{
 
     public NeutronCollectorTile(){
-        super(TileTypeRegistry.NEUTRON_COLLECTOR_TILE.get());
+        super(EndlessTileTypes.NEUTRON_COLLECTOR_TILE.get());
     }
 
     @Override

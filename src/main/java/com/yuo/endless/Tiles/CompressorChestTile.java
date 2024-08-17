@@ -9,7 +9,7 @@ import net.minecraft.inventory.container.Container;
 public class CompressorChestTile extends AbsEndlessChestTile {
 
     public CompressorChestTile() {
-        super(TileTypeRegistry.COMPRESS_CHEST_TILE.get(), EndlessChestType.COMPRESSOR, () -> EndlessBlocks.compressedChest.get());
+        super(EndlessTileTypes.COMPRESS_CHEST_TILE.get(), EndlessChestType.COMPRESSOR, () -> EndlessBlocks.compressedChest.get());
     }
 
     @Override

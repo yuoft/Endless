@@ -228,5 +228,7 @@
     "endless.armorset.neutronium.name": "中子套装",
     "endless.armorset.infinity.desc": "魔力工具消耗魔力减免99%",
     "endless.armorset.crystal.desc": "魔力工具消耗魔力减免15%",
-    "endless.armorset.neutronium.desc": "魔力工具消耗魔力减免25%"
+    "endless.armorset.neutronium.desc": "魔力工具消耗魔力减免25%",
+    "block.endless.asgard_flower": "阿斯加德蒲公英",
+    "block.endless.asgard_flower_floating": "浮空阿斯加德蒲公英"
 }

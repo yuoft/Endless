@@ -684,6 +684,20 @@ public class ModRecipeManager {
                     'A', new ItemStack(ModBlocks.tinyPotato),
                     'B', new ItemStack(EndlessItems.infinityCatalyst.get()),
                     'C', new ItemStack(Items.DIAMOND));
+            ExtremeCraftingManager.getInstance().addRecipe(new ItemStack(EndlessItems.asgardFlower.get()),
+                    "   AAA   ",
+                    "  AAAAA  ",
+                    "  AABAA  ",
+                    "  AAAAA  ",
+                    "   AAA   ",
+                    " CC D CC ",
+                    "CCCCDCCCC",
+                    " CC D CC ",
+                    "    D    ",
+                    'A', new ItemStack(EndlessItems.infinityIngot.get()),
+                    'B', new ItemStack(EndlessItems.infinityCatalyst.get()),
+                    'C', new ItemStack(EndlessItems.neutroniumNugget.get()),
+                    'D', new ItemStack(EndlessItems.neutroniumIngot.get()));
         }
     }
 
