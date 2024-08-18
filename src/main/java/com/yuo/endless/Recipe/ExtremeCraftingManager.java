@@ -102,7 +102,7 @@ public class ExtremeCraftingManager {
      * @param result 合成输出物品
      * @param recipe 输入
      */
-    void addRecipe(ItemStack result, Object... recipe) {
+    public void addRecipe(ItemStack result, Object... recipe) {
         StringBuilder str = new StringBuilder();
         int i = 0;
         int width = 0;

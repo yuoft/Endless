@@ -1,18 +1,11 @@
 package com.yuo.endless.Recipe;
 
-import com.yuo.PaiMeng.Recipes.ModRecipeType;
-import com.yuo.endless.Items.Singularity;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.Difficulty;
-import net.minecraftforge.common.MinecraftForge;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 //配方管理
 public class CompressorManager {
@@ -69,9 +62,9 @@ public class CompressorManager {
      * @param amount 数量
      * @param input 输入
      */
-    static void addRecipe(ItemStack output, int amount, NonNullList<ItemStack> input) {
+    public static void addRecipe(ItemStack output, int amount, NonNullList<ItemStack> input) {
         boolean flag = true; //直接添加
-        if (recipes.size() > 0){
+        if (!recipes.isEmpty()){
             Iterator<NeutroniumRecipe> iterator = recipes.iterator();
             while (iterator.hasNext()){
                 NeutroniumRecipe next = iterator.next();
