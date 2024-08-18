@@ -155,8 +155,9 @@ dependencies {
     compileOnly("com.yuo.paimeng:paimeng:${mc_ver}-${paiMeng_ver}")
     compileOnly("com.yuo.enchants:yuomoreenchants:${mc_ver}-${yuoEnchants_ver}")
     compileOnly("com.yuo.morecoal:morecoal:${mc_ver}-${moreCoal_ver}")
-//    compileOnly("vazkii.botania:Botania:1.16.5-420.2:api")
+//    compileOnly("vazkii.botania:Botania:1.16.5-420.3:api")
     compileOnly("vazkii.botania:Botania:${mc_ver}-${botania_ver}")
+
     compileOnly("com.github.alexthe666.iceandfire:iceandfire:${iceandfire_ver}-${mc_ver}")
     compileOnly("com.blamejared.crafttweaker:CraftTweaker-${mc_ver}:${crt_ver}")
     compileOnly("appeng:appliedenergistics2:${ae2_ver}")
@@ -185,11 +186,11 @@ dependencies {
 //    runtimeOnly fg.deobf("com.yuo.paimeng:paimeng:1.16.5-1.1.5")
 //    runtimeOnly fg.deobf("com.yuo.moreenchants:moreenchants:1.16.5-1.3.0")
 //    runtimeOnly fg.deobf("com.yuo.morecoal:morecoal:1.16.5-1.0.0")
-    runtimeOnly fg.deobf("com.github.alexthe666.citadel:citadel:1.8.1-1.16.5") //bug minix
-    runtimeOnly fg.deobf("com.github.alexthe666.iceandfire:iceandfire:${iceandfire_ver}-${mc_ver}")
+//    runtimeOnly fg.deobf("com.github.alexthe666.citadel:citadel:1.8.1-1.16.5") //bug minix
+//    runtimeOnly fg.deobf("com.github.alexthe666.iceandfire:iceandfire:${iceandfire_ver}-${mc_ver}")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2")
     runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-53.2')
-    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.2")
+//    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.3")
     runtimeOnly fg.deobf("curse.maven:jei-238222:3681294") //引入mod
     runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")

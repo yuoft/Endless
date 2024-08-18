@@ -1,36 +1,86 @@
 package com.yuo.endless.integration.BOT;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
-import vazkii.botania.common.block.decor.BlockTinyPotato;
+import vazkii.botania.common.block.tile.TileSimpleInventory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class InfinityPotato extends BlockTinyPotato {
+import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+import static net.minecraft.state.properties.BlockStateProperties.WATERLOGGED;
+
+public class InfinityPotato extends Block implements IWaterLoggable, ITileEntityProvider {
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(4.0D, 0.0D, 4.0D, 12.0D, 12.0D, 12.0D);
 
     public InfinityPotato() {
         super(AbstractBlock.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE).harvestLevel(0).hardnessAndResistance(1.0f));
-//        this.setDefaultState(this.stateContainer.getBaseState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH));
+//        this.setDefaultState(getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH).with(BlockStateProperties.WATERLOGGED, false));
+    }
+
+    @Override
+    public void onReplaced(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof TileSimpleInventory) {
+                InventoryHelper.dropInventoryItems(world, pos, ((TileSimpleInventory) te).getItemHandler());
+            }
+            super.onReplaced(state, world, pos, newState, isMoving);
+        }
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(WATERLOGGED, HORIZONTAL_FACING);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : Fluids.EMPTY.getDefaultState();
+    }
+
+    @Nonnull
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+        return this.getDefaultState().with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER).with(BlockStateProperties.HORIZONTAL_FACING, context.getPlacementHorizontalFacing().getOpposite());
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction side, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.get(WATERLOGGED)) {
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        }
+
+        return stateIn;
+    }
+
+    @Override
+    public boolean eventReceived(BlockState state, World world, BlockPos pos, int id, int param) {
+        super.eventReceived(state, world, pos, id, param);
+        TileEntity tileentity = world.getTileEntity(pos);
+        return tileentity != null && tileentity.receiveClientEvent(id, param);
     }
 
     @Override
@@ -72,6 +122,11 @@ public class InfinityPotato extends BlockTinyPotato {
         }
     }
 
+    @Nonnull
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
@@ -83,4 +138,9 @@ public class InfinityPotato extends BlockTinyPotato {
         return new InfinityPotatoTile();
     }
 
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader iBlockReader) {
+        return new InfinityPotatoTile();
+    }
 }

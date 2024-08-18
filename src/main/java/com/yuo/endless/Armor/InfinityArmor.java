@@ -2,10 +2,10 @@ package com.yuo.endless.Armor;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.EndlessTab;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.ColorText;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
-import com.yuo.endless.EndlessTab;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -27,14 +27,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import vazkii.botania.api.item.IManaProficiencyArmor;
-import vazkii.botania.api.mana.IManaDiscountArmor;
-import vazkii.botania.client.core.handler.TooltipHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -43,18 +37,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class InfinityArmor extends ArmorItem implements IManaDiscountArmor, IManaProficiencyArmor {
+public class InfinityArmor extends ArmorItem {
 
     public static AttributeModifier modifierWalk = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed", 0.1 * Config.SERVER.infinityLegsWalk.get(), AttributeModifier.Operation.ADDITION);
     public static AttributeModifier modifierFly = new AttributeModifier(UUID.fromString("bf93174c-8a89-42ed-a702-e6fd99c28be2"), Endless.MOD_ID + ":flying_speed", 0.15, AttributeModifier.Operation.ADDITION);
 
     public InfinityArmor(EquipmentSlotType slot) {
         super(MyArmorMaterial.INFINITY, slot, new Properties().maxStackSize(1).group(EndlessTab.endless).isImmuneToFire());
-    }
-
-    @Override
-    public float getDiscount(ItemStack stack, int slot, PlayerEntity player, @Nullable ItemStack tool) {
-        return 0.99f;
     }
 
     //不会触发末影人仇恨
@@ -154,12 +143,6 @@ public class InfinityArmor extends ArmorItem implements IManaDiscountArmor, IMan
 //				tooltip.add(new StringTextComponent(TextFormatting.BLUE + "+" + TextFormatting.ITALIC + "400" +
 //						TextFormatting.RESET + "" + TextFormatting.BLUE + "% JumpHeight"));
         }
-        TooltipHandler.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, World world, List<ITextComponent> list, ITooltipFlag flags) {
-        list.add((new TranslationTextComponent("endless.armorset.infinity.desc")).mergeStyle(TextFormatting.GRAY));
     }
 
     @Override

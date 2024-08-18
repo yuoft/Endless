@@ -1,6 +1,0 @@
-{
-  "parent": "endless:block/cross",
-  "textures": {
-    "cross": "endless:block/asgardandelion"
-  }
-}

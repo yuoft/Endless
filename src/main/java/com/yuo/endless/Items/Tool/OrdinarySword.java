@@ -2,9 +2,8 @@ package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.EndlessTab;
-import net.minecraft.entity.LivingEntity;
+import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -12,12 +11,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
-import vazkii.botania.api.mana.IManaUsingItem;
-import vazkii.botania.common.item.equipment.tool.ToolCommons;
 
-import java.util.function.Consumer;
-
-public class OrdinarySword extends SwordItem implements IManaUsingItem {
+public class OrdinarySword extends SwordItem{
 
     public OrdinarySword(IItemTier tier) {
         super(tier, 0,-2.4f, new Properties().group(EndlessTab.endless).isImmuneToFire());
@@ -37,15 +32,5 @@ public class OrdinarySword extends SwordItem implements IManaUsingItem {
             return builder.build();
         }
         return super.getAttributeModifiers(slot, stack);
-    }
-
-    @Override
-    public boolean usesMana(ItemStack itemStack) {
-        return true;
-    }
-
-    @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        return ToolCommons.damageItemIfPossible(stack, amount, entity, stack.getItem() == EndlessItems.crystalMatrixSword.get() ? 10 : 20);
     }
 }

@@ -25,7 +25,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
-import vazkii.botania.common.block.tile.TileExposedSimpleInventory;
 import vazkii.botania.common.core.ModStats;
 import vazkii.botania.common.core.handler.ModSounds;
 import vazkii.botania.common.core.helper.PlayerHelper;
@@ -41,7 +40,7 @@ import java.util.stream.IntStream;
 
 import static vazkii.botania.common.lib.ResourceLocationHelper.prefix;
 
-public class InfinityPotatoTile extends TileExposedSimpleInventory implements ITickableTileEntity, INameable {
+public class InfinityPotatoTile extends TileExposedSimple implements ITickableTileEntity, INameable {
     private static final String TAG_NAME = "name";
     private static final int JUMP_EVENT = 0;
     public int jumpTicks = 0;

@@ -126,7 +126,6 @@ public class Endless {
         }
         if (isBOT){
             EndlessItems.registerBOT();
-            EndlessBlocks.regisBotania();
         }
         if (isPE){
             EndlessItems.registerPE();

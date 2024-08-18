@@ -3,10 +3,9 @@ package com.yuo.endless.Blocks;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Fluid.InfinityFluidBlock;
-import com.yuo.endless.integration.BOT.AsgardFlower;
-import com.yuo.endless.integration.BOT.AsgardFlowerFloating;
-import com.yuo.endless.integration.BOT.InfinityPotato;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
@@ -17,6 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class EndlessBlocks {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Endless.MOD_ID);
+    public static final AbstractBlock.Properties FLOWER_PROPS = AbstractBlock.Properties.from(Blocks.POPPY);
 
     public static RegistryObject<Block> infinityBlock = BLOCKS.register("infinity_block",
             () -> new OrdinaryBlock(Material.IRON, 6, ToolType.PICKAXE, 1000, 1000));
@@ -37,16 +37,7 @@ public class EndlessBlocks {
     public static RegistryObject<Block> compressedChest = BLOCKS.register("compressed_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_chest", InfinityBox::new);
 
-    public static RegistryObject<Block> infinityPotato;
-    public static RegistryObject<Block> asgardFlower;
-    public static RegistryObject<Block> asgardFlowerFloating;
-
     public static RegistryObject<InfinityFluidBlock> infinityFluid = BLOCKS.register("infinity_fluid",
             () -> new InfinityFluidBlock(EndlessFluids.infinityFluid));
 
-    public static void regisBotania(){
-        infinityPotato = BLOCKS.register("infinity_potato", InfinityPotato::new);
-        asgardFlower = BLOCKS.register("asgard_flower", AsgardFlower::new);
-        asgardFlowerFloating = BLOCKS.register("asgard_flower_floating", AsgardFlowerFloating::new);
-    }
 }

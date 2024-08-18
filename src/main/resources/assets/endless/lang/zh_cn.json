@@ -222,13 +222,5 @@
     "death.attack.infinity_weapon.4":"%1$s被%2$s使用%3$s所湮灭",
     "death.attack.infinity_weapon.5":"%1$s被%2$s使用%3$s击穿了",
 
-    "itemGroup.Endless":"无尽贪婪",
-
-    "endless.armorset.crystal.name": "水晶套装",
-    "endless.armorset.neutronium.name": "中子套装",
-    "endless.armorset.infinity.desc": "魔力工具消耗魔力减免99%",
-    "endless.armorset.crystal.desc": "魔力工具消耗魔力减免15%",
-    "endless.armorset.neutronium.desc": "魔力工具消耗魔力减免25%",
-    "block.endless.asgard_flower": "阿斯加德蒲公英",
-    "block.endless.asgard_flower_floating": "浮空阿斯加德蒲公英"
+    "itemGroup.Endless":"无尽贪婪"
 }

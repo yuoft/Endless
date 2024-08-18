@@ -3,9 +3,9 @@ package com.yuo.endless.integration.BOT;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.datafixers.util.Pair;
-import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Atlases;
@@ -117,10 +117,11 @@ public class InfinityPotatoRender extends TileEntityRenderer<InfinityPotatoTile>
         RenderType layer = getRenderLayer(shader);
 //        IBakedModel model = getModel(name);
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-        IBakedModel model = dispatcher.getModelForState(EndlessBlocks.infinityPotato.get().getDefaultState());
+        BlockState blockState = potato.getBlockState();
+        IBakedModel model = dispatcher.getModelForState(blockState);
 
         ms.translate(0.5F, 0F, 0.5F);
-        Direction potatoFacing = potato.getBlockState().get(BlockStateProperties.HORIZONTAL_FACING);
+        Direction potatoFacing = blockState.get(BlockStateProperties.HORIZONTAL_FACING);
         float rotY = 0;
         switch (potatoFacing) {
             default:
