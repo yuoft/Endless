@@ -1,6 +1,5 @@
 package com.yuo.endless.Proxy;
 
-import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Client.Gui.*;
 import com.yuo.endless.Client.Render.*;
 import com.yuo.endless.Config;
@@ -12,7 +11,6 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.InfinityCrossBow;
 import com.yuo.endless.Tiles.EndlessTileTypes;
-import com.yuo.endless.integration.BOT.InfinityPotatoRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
@@ -31,7 +29,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import vazkii.botania.client.render.tile.RenderTileSpecialFlower;
 
 import java.util.stream.Stream;
 
@@ -75,14 +72,10 @@ public class ClientProxy implements IProxy {
         event.enqueueWork(() ->{
             ClientRegistry.bindTileEntityRenderer(EndlessTileTypes.COMPRESS_CHEST_TILE.get(), EndlessChestTileRender::new);
             ClientRegistry.bindTileEntityRenderer(EndlessTileTypes.INFINITY_CHEST_TILE.get(), EndlessChestTileRender::new);
-            ClientRegistry.bindTileEntityRenderer(EndlessTileTypes.INFINITY_POTATO_TILE.get(), InfinityPotatoRender::new);
-            ClientRegistry.bindTileEntityRenderer(EndlessTileTypes.ASGARD_FLOWER_TILE.get(), RenderTileSpecialFlower::new);
         });
         //流体半透明渲染
         RenderTypeLookup.setRenderLayer(EndlessFluids.infinityFluid.get(), RenderType.getTranslucent());
         RenderTypeLookup.setRenderLayer(EndlessFluids.infinityFluidFlowing.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(EndlessBlocks.asgardFlower.get(), RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(EndlessBlocks.asgardFlowerFloating.get(), RenderType.getCutout());
         event.enqueueWork(this::addLayer);
     }
 
