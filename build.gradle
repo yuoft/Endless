@@ -35,7 +35,7 @@ tasks.withType(JavaCompile) {
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-//    mappings channel: 'official', version: '1.16.5' 0309
+//    mappings channel: 'official', version: '1.16.5'
     mappings channel: 'snapshot', version: '20210309-1.16.5'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -190,7 +190,7 @@ dependencies {
 //    runtimeOnly fg.deobf("com.github.alexthe666.iceandfire:iceandfire:${iceandfire_ver}-${mc_ver}")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.8.2")
     runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-53.2')
-//    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.3")
+    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.3")
     runtimeOnly fg.deobf("curse.maven:jei-238222:3681294") //引入mod
     runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
