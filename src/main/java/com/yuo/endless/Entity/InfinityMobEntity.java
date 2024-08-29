@@ -320,7 +320,7 @@ public class InfinityMobEntity extends ZombieEntity {
     @Override
     public void livingTick() {
         super.livingTick();
-        this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 20, 1));
+        this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 20, 0));
     }
 
     @Override

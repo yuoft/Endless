@@ -176,6 +176,7 @@ public class Config {
         public final ForgeConfigSpec.IntValue singularityCobalt;
         public final ForgeConfigSpec.IntValue singularityManyullyn;
 
+        public final ForgeConfigSpec.BooleanValue mobSpawn; //无尽生物是否自然生成
         public final ForgeConfigSpec.IntValue mobWeigh; //无尽生物生成权重
         public final ForgeConfigSpec.BooleanValue mobHpInfo; //无尽生物血条
 
@@ -253,6 +254,7 @@ public class Config {
             this.singularityCobalt = buildInt(builder, "Cobalt", 150, 10, 100000, "base count");
             this.singularityManyullyn = buildInt(builder, "Manyullyn", 100, 10, 100000, "base count");
 
+            this.mobSpawn = buildBoolean(builder, "Mob Spawn", false, "Infinity mob is it naturally generated");
             this.mobWeigh = buildInt(builder, "Mob Weigh", 1, 0, 5, "Infinity mob spawn weigh");
             this.mobHpInfo = buildBoolean(builder, "Mob HP Info", true, "Infinity mob hp info");
             builder.pop();

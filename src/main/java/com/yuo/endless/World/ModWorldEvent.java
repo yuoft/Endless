@@ -30,7 +30,8 @@ public class ModWorldEvent {
     @SubscribeEvent
     public static void biomeLoadingEvent(final BiomeLoadingEvent event) {
         ModStructureGen.genStructures(event);
-        ModEntityGen.addEntityToAllBiomes(event, EntityRegistry.INFINITY_MOB.get(), Config.SERVER.mobWeigh.get(), 1,1);
+        if (Config.SERVER.mobSpawn.get()) //默认不生成
+            ModEntityGen.addEntityToAllBiomes(event, EntityRegistry.INFINITY_MOB.get(), Config.SERVER.mobWeigh.get(), 1,1);
     }
 
     @SubscribeEvent
