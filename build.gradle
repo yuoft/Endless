@@ -175,6 +175,7 @@ dependencies {
     compileOnly("curse.maven:StorageDrawers-223852:3776277")
     compileOnly("slimeknights.mantle:Mantle:${mc_ver}-${mantle_ver}")
     compileOnly("slimeknights.tconstruct:TConstruct:${mc_ver}-${tconstruct_ver}")
+    compileOnly("curse.maven:jade-324717:3910873")
 
 //    runtimeOnly fg.deobf("com.teamcofh:cofh_core:1.16.5-1.5.0.+")
 //    runtimeOnly fg.deobf("com.teamcofh:thermal_foundation:1.16.5-1.5.0.+")
@@ -195,6 +196,7 @@ dependencies {
     runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
     runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_ver}:${crt_ver}")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:3910873")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

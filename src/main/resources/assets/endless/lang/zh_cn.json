@@ -210,6 +210,9 @@
     "jei.endless.extreme_craft":"终极有序合成",
     "jei.endless.extreme_craft_shape":"终极无序合成",
 
+    "jade.endless.neutron_collector_progress":"收集进度：%s%%",
+    "jade.endless.neutron_compressor_progress":"压缩进度：%s%%",
+
     "death.attack.infinity":"%1$s被彻底湮灭",
     "death.attack.infinity_weapon.0":"%1$s被%2$s使用%3$s切成了条",
     "death.attack.infinity.0":"%1$s被%2$s彻底粉碎",

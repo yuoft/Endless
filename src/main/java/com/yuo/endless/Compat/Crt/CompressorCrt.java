@@ -1,4 +1,4 @@
-package com.yuo.endless.integration.Crt;
+package com.yuo.endless.Compat.Crt;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.actions.IRuntimeAction;

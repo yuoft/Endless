@@ -47,16 +47,15 @@ public class AbsNeutronCollectorTile extends LockableTileEntity implements ITick
         if (this.timer >= time){
             this.timer = 0;
             this.data.set(0, this.timer);
-            ItemStack stack = output;
             //产物为空 设置产物 否则数量加1
-            if(stack.isEmpty()) this.output.set(0, outItem);
+            if(output.isEmpty()) this.output.set(0, outItem);
             else output.grow(1);
             markDirty();//标记变化
         }
     }
 
     //生产时间
-    protected int getCraftTime(){
+    public int getCraftTime(){
         return 3600;
     }
     //产物

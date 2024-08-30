@@ -1,4 +1,4 @@
-package com.yuo.endless.integration.Jei;
+package com.yuo.endless.Compat.Jei;
 
 import com.yuo.endless.Container.ExtremeCraftContainer;
 import com.yuo.endless.Container.NeutroniumCompressorContainer;

@@ -1,4 +1,4 @@
-package com.yuo.endless.integration.Jei;
+package com.yuo.endless.Compat.Jei;
 
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;

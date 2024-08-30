@@ -208,6 +208,9 @@
   "jei.endless.extreme_craft":"Ultimate Ordered Synthesis",
   "jei.endless.extreme_craft_shape":"Ultimate Disorderly Synthesis",
 
+  "jade.endless.neutron_collector_progress":"Collection progress:%s%%",
+  "jade.endless.neutron_compressor_progress":"Compression progress:%s%%",
+
   "death.attack.infinity":"%1$s was annihilated",
   "death.attack.infinity_weapon.0":"%1$s was sliced to ribbons by %2$s using %3$s",
   "death.attack.infinity.0":"%1$s was obliterated by %2$s",

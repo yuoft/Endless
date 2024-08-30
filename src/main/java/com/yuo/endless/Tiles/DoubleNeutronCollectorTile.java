@@ -20,7 +20,7 @@ public class DoubleNeutronCollectorTile extends AbsNeutronCollectorTile{
     }
 
     @Override
-    protected int getCraftTime() {
+    public int getCraftTime() {
         return 3600;
     }
 
