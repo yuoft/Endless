@@ -9,136 +9,16 @@ authors="yuo"
 description='''
 无尽贪婪。1.16.5
 '''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[36,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
-    ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
-    side="BOTH"
 # Here's another dependency 依赖指定
-[[dependencies.spacearms]]
-    modId="spacearms"
+[[dependencies.endless]]
+    modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5-1.4.2, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.orecrop]]
-    modId="orecrop"
-    mandatory=true
-    versionRange="[1.16.5-1.2.6, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.yuoenchants]]
-    modId="yuoenchants"
-    mandatory=true
-    versionRange="[1.16.5-1.4.0, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.morecoal]]
-    modId="morecoal"
-    mandatory=true
-    versionRange="[1.16.5-1.0.2, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.paimeng]]
-    modId="paimeng"
-    mandatory=true
-    versionRange="[1.16.5-1.2.0, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.iceandfire]]
-    modId="iceandfire"
-    mandatory=true
-    versionRange="[2.1.9-1.16.5, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.appliedenergistics2]]
-    modId="appliedenergistics2"
-    mandatory=true
-    versionRange="[8.4.7, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.projecte]]
-    modId="projecte"
-    mandatory=true
-    versionRange="[1.16.5-PE1.0.2, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.twilightforest]]
-    modId="twilightforest"
-    mandatory=true
-    versionRange="[4.0.546, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.draconicevolution]]
-    modId="draconicevolution"
-    mandatory=true
-    versionRange="[1.16.5-3.0.25.456, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.botania]]
-    modId="botania"
-    mandatory=true
-    versionRange="[1.16.5-420.2, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.create]]
-    modId="create"
-    mandatory=true
-    versionRange="[mc1.16.5_v0.3.2g+480, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.aoa3]]
-    modId="aoa3"
-    mandatory=true
-    versionRange="[1.16.5-3.6.6, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.slashblade]]
-    modId="slashblade"
-    mandatory=true
-    versionRange="[1.16-0.0.12, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.thermal-foundation]]
-    modId="thermal-foundation"
-    mandatory=true
-    versionRange="[1.16.5-1.5.0.14, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.astralsorcery]]
-    modId="astralsorcery"
-    mandatory=true
-    versionRange="[1.16.5-1.14.1, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.mysticalagriculture]]
-    modId="mysticalagriculture"
-    mandatory=true
-    versionRange="[1.16.5-4.2.6, )"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.refinedstorage]]
-    modId="refinedstorage"
-    mandatory=true
-    versionRange="[1.9.16,)"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.storagedrawers]]
-    modId="storagedrawers"
-    mandatory=true
-    versionRange="[8.4.0,)"
+    versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.tconstruct3]]
-    modId="tconstruct"
-    mandatory=true
-    versionRange="[3.3.4, )"
-    ordering="AFTER"
-    side="BOTH"
+#[[dependencies.endless]]
+#    modId="codechicken"
+#    mandatory=true
+#    versionRange="[4.0.7.445-universal, )"
+#    ordering="NONE"
+#    side="BOTH"

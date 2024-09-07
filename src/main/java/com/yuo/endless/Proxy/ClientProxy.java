@@ -98,6 +98,7 @@ public class ClientProxy implements IProxy {
                     LivingRenderer<LivingEntity, BipedModel<LivingEntity>> livingRender = (LivingRenderer<LivingEntity, BipedModel<LivingEntity>>) render;
                     livingRender.addLayer(new InfinityEyeLayer(livingRender));
                     livingRender.addLayer(new InfinityWingLayer(livingRender));
+                    livingRender.addLayer(new EndPortalLayer(livingRender));
                 });
         //            Stream<EntityRenderer<?>> renderers = manager.renderers.values().stream();
         //            renderers.filter(LivingRenderer.class::isInstance)
