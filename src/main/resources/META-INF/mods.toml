@@ -16,9 +16,3 @@ description='''
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
-#[[dependencies.endless]]
-#    modId="codechicken"
-#    mandatory=true
-#    versionRange="[4.0.7.445-universal, )"
-#    ordering="NONE"
-#    side="BOTH"
