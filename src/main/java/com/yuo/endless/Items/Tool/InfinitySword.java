@@ -4,8 +4,8 @@ import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
-import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.EndlessTab;
+import com.yuo.endless.Event.EventHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -187,9 +187,11 @@ public class InfinitySword extends SwordItem{
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
             target.onDeath(new InfinityDamageSource(attacker));
-            target.onKillCommand();
-            target.deathTime = 20;
-            target.remove(true);
+            if (Config.SERVER.swordKill.get()){
+                target.onKillCommand();
+                target.deathTime = 20;
+                target.remove(true);
+            }
         }
         return true;
     }

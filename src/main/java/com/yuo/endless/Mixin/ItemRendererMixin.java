@@ -1,12 +1,21 @@
 package com.yuo.endless.Mixin;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.yuo.endless.Client.Model.IItemRenderer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ForgeHooksClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
@@ -16,25 +25,6 @@ public abstract class ItemRendererMixin {
      * @author yuo
      * @reason 修改无尽箱子中的物品数量显示
      */
-//    @ModifyArgs(method = "renderItemOverlayIntoGUI", at = @At(value = "INVOKE",
-//            target = "Lnet/minecraft/client/gui/FontRenderer;renderString(Ljava/lang/String;FFIZLnet/minecraft/util/math/vector/Matrix4f;Lnet/minecraft/client/renderer/IRenderTypeBuffer;ZII)I"))
-//    public void renderItemOverlayIntoGUI(Args args, FontRenderer renderer, ItemStack stack, int x, int y, String name){
-//        String count = endless$getSimplifiedCount(stack.getCount());
-//        args.set(0, count);
-//        args.set(1, (float)(x + 19 - 2 - renderer.getStringWidth(count)));
-//    }
-
-//    @Inject(method = "renderItemOverlayIntoGUI",
-//            at = @At(value = "INVOKE",
-//            target = "Ljava/lang/String;valueOf(I)Ljava/lang/String;",
-//            shift = Shift.AFTER),
-//            locals = CAPTURE_FAILSOFT)
-//    public void renderItemOverlayIntoGUI(FontRenderer renderer, ItemStack stack, int x, int y, String str, CallbackInfo ci, String s) {
-//        if (stack.getCount() > 64){
-//            s = endless$getSimplifiedCount(stack.getCount());
-//        }
-//    }
-
     @ModifyVariable(method = "renderItemOverlayIntoGUI", at = @At("STORE"), ordinal = 1)
     private String injected(String x) {
         String s = x.replaceAll("\\D", ""); //去除非数字
@@ -54,4 +44,18 @@ public abstract class ItemRendererMixin {
             return count / 1_000_000_000 + "B";
         else return Integer.toString(count);
     }
+
+    @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/model/ItemCameraTransforms$TransformType;ZLcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IILnet/minecraft/client/renderer/model/IBakedModel;)V"
+            , at = {@At("HEAD")}, cancellable = true)
+    public void onRenderItem(ItemStack stack, ItemCameraTransforms.TransformType type, boolean left, MatrixStack m, IRenderTypeBuffer get, int f1, int f2, IBakedModel model, CallbackInfo ci) {
+        if (model instanceof IItemRenderer) {
+            ci.cancel();
+            m.push();
+            IItemRenderer renderer = (IItemRenderer) ForgeHooksClient.handleCameraTransforms(m, model, type, left);
+            m.translate(-0.5D, -0.5D, -0.5D);
+            renderer.renderItem(stack, type, m, get, f1, f2);
+            m.pop();
+        }
+    }
 }
+
