@@ -36,6 +36,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -231,7 +232,7 @@ public class InfinityCrossBow extends CrossbowItem {
 
             if (shooter instanceof ICrossbowUser) {
                 ICrossbowUser icrossbowuser = (ICrossbowUser)shooter;
-                icrossbowuser.fireProjectile(icrossbowuser.getAttackTarget(), crossbow, projectileentity, projectileAngle);
+                icrossbowuser.fireProjectile(Objects.requireNonNull(icrossbowuser.getAttackTarget()), crossbow, projectileentity, projectileAngle);
             } else {
                 Vector3d vector3d1 = shooter.getUpVector(1.0F);
                 Quaternion quaternion = new Quaternion(new Vector3f(vector3d1), projectileAngle, true);
@@ -312,7 +313,7 @@ public class InfinityCrossBow extends CrossbowItem {
             int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
             SoundEvent soundevent = this.getSoundEvent(i);
             SoundEvent soundevent1 = i == 0 ? SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE : null;
-            float f = (float)(stack.getUseDuration() - count) / (float)getChargeTime(stack);
+            float f = (float)(stack.getUseDuration() - count) / (float)getChargeTime();
             if (f < 0.2F) {
                 this.isLoadingStart = false;
                 this.isLoadingMiddle = false;
@@ -346,7 +347,7 @@ public class InfinityCrossBow extends CrossbowItem {
 
     //使用程度
     private static float getCharge(int useTime, ItemStack stack) {
-        float f = (float)useTime / (float)getChargeTime(stack);
+        float f = (float)useTime / (float)getChargeTime();
         if (f > 1.0F) {
             f = 1.0F;
         }
@@ -386,7 +387,7 @@ public class InfinityCrossBow extends CrossbowItem {
      * @param itemStack 弹药
      * @param flag0 弹药数量是否超过一
      * @param flag1 是否创造模式
-     * @return
+     * @return true
      */
     private static boolean deleteStack(LivingEntity living, ItemStack stack, ItemStack itemStack, boolean flag0, boolean flag1) {
         boolean flag = flag1 && itemStack.getItem() instanceof ArrowItem;  //普通弹药被消耗
@@ -424,10 +425,10 @@ public class InfinityCrossBow extends CrossbowItem {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return getChargeTime(stack) + 3; //使用时间
+        return getChargeTime() + 3; //使用时间
     }
 
-    public static int getChargeTime(ItemStack stack) {
+    public static int getChargeTime() {
         return 25 - 5 * 3;//快速装填3
     }
 

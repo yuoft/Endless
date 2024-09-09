@@ -1,13 +1,10 @@
 package com.yuo.endless.Container.Chest;
 
 import com.yuo.endless.Blocks.AbsEndlessChest;
-import com.yuo.endless.Tiles.CompressorChestTile;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import java.util.Locale;
 
@@ -31,7 +28,6 @@ public class InfinityBoxSlot extends Slot {
         ItemStack itemStack = this.inventory.getStackInSlot(this.getSlotIndex());
         if (itemStack.getMaxStackSize() <= 1) super.putStack(stack);
         else {
-//            stack.setCount(itemStack.getCount() + stack.getCount());
             this.inventory.setInventorySlotContents(this.getSlotIndex(), stack);
             this.onSlotChanged();
         }

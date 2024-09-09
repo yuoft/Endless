@@ -1,8 +1,8 @@
 {
     "parent": "item/crossbow",
     "textures": {
-        "layer0": "endless:item/tool/infinity_crossbow_standby",
-        "layer1": "endless:item/tool/infinity_crossbow_core"
+        "layer0": "endless:item/tool/infinity_crossbow/standby",
+        "layer1": "endless:item/tool/infinity_crossbow/core"
     },
     "overrides": [
         {

@@ -22,10 +22,12 @@ public class CompressorChestScreen extends ContainerScreen<CompressorChestContai
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(INFINITY_CHEST_GFUI_TEXTURE);
+        if (this.minecraft != null) {
+            this.minecraft.getTextureManager().bindTexture(INFINITY_CHEST_GFUI_TEXTURE);
+        }
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.xSize, ySize, 256, 276);
+        blit(matrixStack, i, j, 0, 0, this.xSize, ySize, 256, 276);
     }
 
     @Override

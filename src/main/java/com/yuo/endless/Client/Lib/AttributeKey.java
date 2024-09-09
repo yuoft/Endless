@@ -41,7 +41,7 @@ public class AttributeKey<T> {
         }
 
         public static <T> AttributeKey<T> getAttributeKey(int index) {
-            return MathHelper.<AttributeKey<T>>unsafeCast(attributeKeys.get(index));
+            return MathHelper.unsafeCast(attributeKeys.get(index));
         }
     }
 }

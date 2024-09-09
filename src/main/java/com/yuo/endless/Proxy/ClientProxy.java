@@ -1,9 +1,11 @@
 package com.yuo.endless.Proxy;
 
 import com.yuo.endless.Client.Gui.*;
+import com.yuo.endless.Client.AvaritiaShaders;
+import com.yuo.endless.Client.Model.CosmicModelLoader;
+import com.yuo.endless.Client.Model.HaloItemModelLoader;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Client.Render.*;
-import com.yuo.endless.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
@@ -16,13 +18,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
+import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -43,9 +49,9 @@ public class ClientProxy implements IProxy {
     @Override
     public void registerHandlers() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
-//        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
-//        AvaritiaShaders.init();
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
+        AvaritiaShaders.init();
         modBus.addListener(this::clientSetup);
     }
 
@@ -81,41 +87,19 @@ public class ClientProxy implements IProxy {
         event.enqueueWork(this::addLayer);
     }
 
-    /**
-     * 添加额外渲染
-     * 参考模组：wings
-     */
-//    private void addLayer(){
-//        //盔甲翅膀和发光眼睛
-//        Minecraft mc = Minecraft.getInstance();
-//        EntityRendererManager manager = mc.getRenderManager();
-//        Stream.concat(manager.getSkinMap().values().stream(), manager.renderers.values().stream()) //流操作
-//                .filter(LivingRenderer.class::isInstance) //匹配LivingRender实例
-//                .map(r -> (LivingRenderer<?,?>) r) //类型转换
-//                .filter(render -> render.getEntityModel() instanceof BipedModel<?>) //匹配模型为BipedModel的元素
-//                .unordered() //无序
-//                .distinct() //返回流元素
-//                .forEach(render -> {
-//                    @SuppressWarnings("unchecked")
-//                    LivingRenderer<LivingEntity, BipedModel<LivingEntity>> livingRender = (LivingRenderer<LivingEntity, BipedModel<LivingEntity>>) render;
-//                    livingRender.addLayer(new InfinityEyeLayer(livingRender));
-//                    livingRender.addLayer(new InfinityWingLayer(livingRender));
-//                    livingRender.addLayer(new EndPortalLayer(livingRender));
-//                });
-//    }
-
     public void addLayer() {
         EntityRendererManager m = Minecraft.getInstance().getRenderManager();
-        Stream.concat(m.getSkinMap().values().stream(), m.renderers.values().stream()).filter(LivingRenderer.class::isInstance).map(r -> (LivingRenderer)r).filter(render -> render.getEntityModel() instanceof net.minecraft.client.renderer.entity.model.PlayerModel).unordered().distinct().forEach(render -> {
-            EntityRenderer<? extends PlayerEntity> rendererPlayer = (EntityRenderer<? extends PlayerEntity>)render.getRenderManager().getSkinMap().get("default");
-            EntityRenderer<? extends PlayerEntity> rendererPlayerSlim = (EntityRenderer<? extends PlayerEntity>)render.getRenderManager().getSkinMap().get("slim");
-            if (rendererPlayer instanceof LivingRenderer) {
-                LivingRenderer livingRenderer = (LivingRenderer)rendererPlayer;
-                livingRenderer.addLayer((LayerRenderer)new InfinityArmorModel.PlayerRender((IEntityRenderer)livingRenderer));
+        Stream.concat(m.getSkinMap().values().stream(), m.renderers.values().stream()).filter(LivingRenderer.class::isInstance).map(r ->
+                (LivingRenderer)r).filter(render -> render.getEntityModel() instanceof PlayerModel).unordered().distinct().forEach(render -> {
+            EntityRenderer<? extends PlayerEntity> rendererPlayer = render.getRenderManager().getSkinMap().get("default");
+            EntityRenderer<? extends PlayerEntity> rendererPlayerSlim = render.getRenderManager().getSkinMap().get("slim");
+            if (rendererPlayer != null) {
+                LivingRenderer livingRenderer = (LivingRenderer) rendererPlayer;
+                livingRenderer.addLayer(new InfinityArmorModel.PlayerRender(livingRenderer));
             }
-            if (rendererPlayerSlim instanceof LivingRenderer) {
+            if (rendererPlayerSlim != null) {
                 LivingRenderer livingRenderer = (LivingRenderer)rendererPlayerSlim;
-                livingRenderer.addLayer((LayerRenderer)new InfinityArmorModel.PlayerRender((IEntityRenderer)livingRenderer));
+                livingRenderer.addLayer(new InfinityArmorModel.PlayerRender(livingRenderer));
             }
         });
     }
@@ -163,7 +147,7 @@ public class ClientProxy implements IProxy {
             if (livingEntity == null) {
                 return 0.0F;
             } else {
-                return InfinityCrossBow.isCharged(itemStack) ? 0.0F : (float)(itemStack.getUseDuration() - livingEntity.getItemInUseCount()) / (float) InfinityCrossBow.getChargeTime(itemStack);
+                return InfinityCrossBow.isCharged(itemStack) ? 0.0F : (float)(itemStack.getUseDuration() - livingEntity.getItemInUseCount()) / (float) InfinityCrossBow.getChargeTime();
             }
         });
         ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
@@ -178,7 +162,6 @@ public class ClientProxy implements IProxy {
     //物资团颜色变化
     private void setMatterClusterProperty(Item item){
         ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                "count"), (itemStack, clientWorld, livingEntity) -> !MatterCluster.getItemTag(itemStack).isEmpty() ?
-                (MatterCluster.getItemTag(itemStack).size() == Config.SERVER.matterClusterMaxTerm.get() ? 1f : 0.5f) :0f);
+                "count"), (itemStack, clientWorld, livingEntity) -> !MatterCluster.getItemTag(itemStack).isEmpty() ? 1f :0f);
     }
 }

@@ -20,11 +20,6 @@ public class DoubleNeutronCollectorTile extends AbsNeutronCollectorTile{
     }
 
     @Override
-    public int getCraftTime() {
-        return 3600;
-    }
-
-    @Override
     protected ItemStack getCraftOutputItem() {
         return new ItemStack(EndlessItems.neutroniumIngot.get());
     }

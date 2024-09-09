@@ -1,12 +1,12 @@
 package com.yuo.endless.Client.Model;
 
-import codechicken.lib.model.CachedFormat;
-import codechicken.lib.model.Quad;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.yuo.endless.Client.Lib.CachedFormat;
+import com.yuo.endless.Client.Lib.Quad;
 import com.yuo.endless.Client.Model.HaloItemModelLoader.HaloItemModelGeometry;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -20,9 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
-import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 
 import java.util.*;
 import java.util.function.Function;
@@ -37,9 +35,7 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
         IntArrayList intArrayList = new IntArrayList();
         JsonArray layerColorsArr = object.getAsJsonArray("layerColors");
         if (layerColorsArr != null) {
-            Iterator<JsonElement> var6 = layerColorsArr.iterator();
-            while (var6.hasNext()) {
-                JsonElement jsonElement = var6.next();
+            for (JsonElement jsonElement : layerColorsArr) {
                 intArrayList.add(jsonElement.getAsInt());
             }
         }
@@ -50,8 +46,8 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
         JsonObject clean = object.getAsJsonObject();
         clean.remove("halo");
         clean.remove("loader");
-        BlockModel baseModel = (BlockModel)json.deserialize((JsonElement)clean, BlockModel.class);
-        return new HaloItemModelGeometry(baseModel, (IntList)intArrayList, texture, color, size, pulse);
+        BlockModel baseModel = json.deserialize(clean, BlockModel.class);
+        return new HaloItemModelGeometry(baseModel, intArrayList, texture, color, size, pulse);
     }
 
     public static class HaloItemModelGeometry implements IModelGeometry<HaloItemModelGeometry> {
@@ -98,20 +94,16 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
                 return model;
             Map<Direction, List<BakedQuad>> faceQuads = new HashMap<>();
             Direction[] var3 = Direction.values();
-            int var4 = var3.length;
-            for (int var5 = 0; var5 < var4; var5++) {
-                Direction face = var3[var5];
-                faceQuads.put(face, transformQuads(model.getQuads(null, face, new Random(), (IModelData) EmptyModelData.INSTANCE), layerColors));
+            for (Direction face : var3) {
+                faceQuads.put(face, transformQuads(model.getQuads(null, face, new Random(), EmptyModelData.INSTANCE), layerColors));
             }
-            List<BakedQuad> unculled = transformQuads(model.getQuads(null, null, new Random(), (IModelData)EmptyModelData.INSTANCE), layerColors);
+            List<BakedQuad> unculled = transformQuads(model.getQuads(null, null, new Random(), EmptyModelData.INSTANCE), layerColors);
             return new SimpleBakedModel(unculled, faceQuads, model.isGui3d(), model.isBuiltInRenderer(), model.isAmbientOcclusion(), model.getParticleTexture(), model.getItemCameraTransforms(), ItemOverrideList.EMPTY);
         }
 
         static List<BakedQuad> transformQuads(List<BakedQuad> quads, IntList layerColors) {
             List<BakedQuad> newQuads = new ArrayList<>(quads.size());
-            Iterator<BakedQuad> var3 = quads.iterator();
-            while (var3.hasNext()) {
-                BakedQuad quad = var3.next();
+            for (BakedQuad quad : quads) {
                 newQuads.add(transformQuad(quad, layerColors));
             }
             return newQuads;
@@ -125,19 +117,15 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
                     return quad;
                 Quad newQuad = new Quad();
                 newQuad.reset(CachedFormat.BLOCK);
-                quad.pipe((IVertexConsumer)newQuad);
+                quad.pipe(newQuad);
                 float r = (tint >> 16 & 0xFF) / 255.0F;
                 float g = (tint >> 8 & 0xFF) / 255.0F;
                 float b = (tint & 0xFF) / 255.0F;
                 Quad.Vertex[] var8 = newQuad.vertices;
-                int var9 = var8.length;
-                for (int var10 = 0; var10 < var9; var10++) {
-                    Quad.Vertex v = var8[var10];
+                for (Quad.Vertex v : var8) {
                     float[] var10000 = v.color;
                     var10000[0] = var10000[0] * r;
-                    var10000 = v.color;
                     var10000[1] = var10000[1] * g;
-                    var10000 = v.color;
                     var10000[2] = var10000[2] * b;
                 }
                 newQuad.tintIndex = -1;

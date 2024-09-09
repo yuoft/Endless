@@ -37,22 +37,12 @@ import java.util.List;
  * 右键范围装取流体（水和岩浆），并记录数量用于消耗
  */
 public class InfinityBucket extends Item {
-//    private java.util.function.Supplier<? extends Fluid> fluidSupplier; //桶内流体
-//    private Fluid fluid;
     private final static String FLUID_NAME = "fluid_name";
     private final static String FLUID_NUMBER = "fluid_number";
 
     public InfinityBucket() {
         super(new Properties().group(EndlessTab.endless).maxStackSize(1).isImmuneToFire());
-//        this.fluid = Fluids.EMPTY;
-//        this.fluidSupplier = supplier;
     }
-
-//    public InfinityBucket() {
-//        super(new Properties().group(ModGroup.endless).maxStackSize(1).isImmuneToFire());
-//        this.fluid = Fluids.EMPTY;
-//        this.fluidSupplier = fluid.delegate;
-//    }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {

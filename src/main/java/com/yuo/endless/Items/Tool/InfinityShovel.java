@@ -97,7 +97,7 @@ public class InfinityShovel extends ShovelItem {
                     int height = 3;
                     BlockPos minPos = blockpos.add(-rang, -height, -rang);
                     BlockPos maxPos = blockpos.add(rang, height, rang);
-                    if (playerentity.isSneaking()){
+                    if (playerentity != null && playerentity.isSneaking()){
                         for (BlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
                             BlockState state = world.getBlockState(pos);
                             if (state.getBlock() instanceof GrassBlock && world.isAirBlock(pos.up())){ //当前方块时草方块，并且上方是空气

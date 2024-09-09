@@ -2,11 +2,11 @@ package com.yuo.endless.Client.Lib;
 
 public abstract class Transformation extends ITransformation<Vector3, Transformation> implements IVertexOperation {
     public Transformation at(Vector3 m) {
-        return new TransformationList(new Transformation[] { new Translation(-m.x, -m.y, -m.z), this, m.translation() });
+        return new TransformationList(new Translation(-m.x, -m.y, -m.z), this, m.translation());
     }
 
     public TransformationList with(Transformation t) {
-        return new TransformationList(new Transformation[] { this, t });
+        return new TransformationList(this, t);
     }
 
     public boolean load(CCRenderState c) {

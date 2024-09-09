@@ -91,7 +91,7 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
     //可由玩家使用吗
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        if (this.world.getTileEntity(this.pos) != this) {
+        if (this.world != null && this.world.getTileEntity(this.pos) != this) {
             return false;
         } else {
             return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
@@ -114,7 +114,9 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
         this.items = NonNullList.withSize(this.getSizeInventory() - 1, ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(nbt, this.items);
         CompoundNBT resultNbt = (CompoundNBT) nbt.get("Result");
-        this.reslut.set(0, ItemStack.read(resultNbt));
+        if (resultNbt != null) {
+            this.reslut.set(0, ItemStack.read(resultNbt));
+        }
     }
 
     @Override
@@ -138,7 +140,9 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        if (world != null) {
+            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        }
     }
 
     @Override

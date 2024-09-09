@@ -76,9 +76,6 @@ public class Singularity extends Item{
         TYPE.add(data.type);
         INDEX.add(data.index);
         MAIN.add(data.main);
-//        ItemStack stack = new ItemStack(EndlessItems.singularity.get());
-//        setStackData(stack, data);
-//        return stack;
     }
 
     /**

@@ -85,10 +85,6 @@ public class InfinityBow extends BowItem {
                 if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
                     arrow.setFire(100);
                 }
-//                int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-//                if (k > 0) {
-//                    arrow.setKnockbackStrength(k);
-//                }
                 arrow.setIsCritical(true); //暴击粒子
                 arrow.setShooter(player);
 

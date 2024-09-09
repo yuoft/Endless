@@ -187,7 +187,7 @@ public class MatterCluster extends Item  {
         if (!worldIn.isRemote){
             //生成物质团类所有物品
             Map<ItemStack, Integer> map = getItemTag(stack);
-            if (map.size() > 0){
+            if (!map.isEmpty()){
                 for (ItemStack key : map.keySet()) {
                     Integer integer = map.get(key);
                     int size = key.getMaxStackSize();
@@ -237,7 +237,7 @@ public class MatterCluster extends Item  {
             }
         }
         //添加新项
-        if (map1.size() > 0){
+        if (!map1.isEmpty()){
             Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
             while (iterator.hasNext()){
                 Map.Entry<ItemStack, Integer> entry = iterator.next();
@@ -252,10 +252,10 @@ public class MatterCluster extends Item  {
         }
         //重新添加修改后的数据
         setItemTag(stack, map);
-        if (map1.size() == 0){ //2以空，则清除nbt
+        if (map1.isEmpty()){ //2以空，则清除nbt
             itemStack.getOrCreateTag().remove(MAIN_NBT);
         }else setItemTag(itemStack, map1);
-        return map1.size() > 0;
+        return !map1.isEmpty();
     }
 
     /**
@@ -265,7 +265,7 @@ public class MatterCluster extends Item  {
      */
     public static boolean isMaxSize(ItemStack stack){
         Map<ItemStack, Integer> map = getItemTag(stack);
-        if (map.size() == 0) return false;
+        if (map.isEmpty()) return false;
         return map.size() >= Config.SERVER.matterClusterMaxTerm.get();
     }
 
@@ -277,7 +277,7 @@ public class MatterCluster extends Item  {
     public static boolean isEmpty(ItemStack stack){
         if (!stack.getOrCreateTag().contains(MAIN_NBT)) return true;
         Map<ItemStack, Integer> itemTag = getItemTag(stack);
-        return itemTag.size() == 0;
+        return itemTag.isEmpty();
     }
 
     /**

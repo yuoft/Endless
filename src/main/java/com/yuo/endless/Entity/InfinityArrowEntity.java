@@ -176,21 +176,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         this.playSound(this.hitSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
         if (this.getPierceLevel() <= 0) {
             this.remove();
-        }
-//        } else { //反弹箭矢
-//            entity.forceFireTicks(k);
-//            this.setMotion(this.getMotion().scale(-0.1D));
-//            this.rotationYaw += 180.0F;
-//            this.prevRotationYaw += 180.0F;
-//            if (!this.world.isRemote && this.getMotion().lengthSquared() < 1.0E-7D) {
-//                if (this.pickupStatus == AbstractArrowEntity.PickupStatus.ALLOWED) {
-//                    this.entityDropItem(this.getArrowStack(), 0.1F);
-//                }
-//
-//                this.remove();
-//            }
-//        }
-
+        }//反弹箭矢
     }
 
     @Override

@@ -1,11 +1,13 @@
-package com.yuo.endless.Armor;
+package com.yuo.endless.Items.Armor;
 
+import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.ColorText;
 import com.yuo.endless.Items.Tool.EndlessItemEntity;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -29,6 +31,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -162,6 +166,17 @@ public class InfinityArmor extends ArmorItem {
             stack.getOrCreateTag().putBoolean("Unbreakable",true);
             items.add(stack);
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public BipedModel getArmorModel(LivingEntity entity, ItemStack itemstack, EquipmentSlotType armorSlot, BipedModel _deafult) {
+        InfinityArmorModel model = (armorSlot == EquipmentSlotType.LEGS) ? (new InfinityArmorModel(0.5F)).setLegs(true) : new InfinityArmorModel(1.0F);
+        model.update(entity, itemstack, armorSlot);
+        return model;
+    }
+
+    public String getArmorTexture(ItemStack i, Entity e, EquipmentSlotType s, String t) {
+        return "endless:textures/models/infinity_armor.png";
     }
 
     @Nullable

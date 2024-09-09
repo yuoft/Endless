@@ -53,13 +53,11 @@ public class ModWorldEvent {
                         + " is using Terraforged's ChunkGenerator.");
             }
 
-            // Prevent spawning our structure in Vanilla's superflat world
             if (serverWorld.getChunkProvider().generator instanceof FlatChunkGenerator &&
                     serverWorld.getDimensionKey().equals(World.OVERWORLD)) {
                 return;
             }
 
-            // Adding our Structure to the Map
             Map<Structure<?>, StructureSeparationSettings> tempMap =
                     new HashMap<>(serverWorld.getChunkProvider().generator.func_235957_b_().func_236195_a_());
             tempMap.putIfAbsent(ModStructures.INFINITY_MOB.get(),

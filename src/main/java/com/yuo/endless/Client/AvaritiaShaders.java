@@ -1,4 +1,4 @@
-package com.yuo.endless.Client.Model;
+package com.yuo.endless.Client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.yuo.endless.Client.Lib.SpriteRegistryHelper;
@@ -9,13 +9,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.shader.IShaderManager;
 import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.client.shader.ShaderLoader;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IFutureReloadListener.IStage;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
 
@@ -25,9 +24,6 @@ import java.nio.FloatBuffer;
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 public class AvaritiaShaders {
 
@@ -51,19 +47,13 @@ public class AvaritiaShaders {
 
     public static TextureAtlasSprite[] MASK_SPRITES = new TextureAtlasSprite[1];
 
-    public static TextureAtlasSprite MASK;
-
     public static SpriteRegistryHelper MASK_HELPER = new SpriteRegistryHelper();
 
     public static TextureAtlasSprite[] MASK_SPRITES_INV = new TextureAtlasSprite[1];
 
-    public static TextureAtlasSprite MASK_INV;
-
     public static SpriteRegistryHelper MASK_HELPER_INV = new SpriteRegistryHelper();
 
     public static TextureAtlasSprite[] WING_SPRITES = new TextureAtlasSprite[1];
-
-    public static TextureAtlasSprite WING;
 
     public static SpriteRegistryHelper WING_HELPER = new SpriteRegistryHelper();
 
@@ -71,75 +61,40 @@ public class AvaritiaShaders {
 
     public static TextureAtlasSprite[] COSMIC_SPRITES = new TextureAtlasSprite[10];
 
-    public static TextureAtlasSprite COSMIC_0;
-
-    public static TextureAtlasSprite COSMIC_1;
-
-    public static TextureAtlasSprite COSMIC_2;
-
-    public static TextureAtlasSprite COSMIC_3;
-
-    public static TextureAtlasSprite COSMIC_4;
-
-    public static TextureAtlasSprite COSMIC_5;
-
-    public static TextureAtlasSprite COSMIC_6;
-
-    public static TextureAtlasSprite COSMIC_7;
-
-    public static TextureAtlasSprite COSMIC_8;
-
-    public static TextureAtlasSprite COSMIC_9;
-
     public static FloatBuffer cosmicUVs = BufferUtils.createFloatBuffer(40);
 
-    public static ShaderCallback shaderCallback = new ShaderCallback() {
-        public void c(int shader) {
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "yaw"), AvaritiaShaders.yaw);
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "pitch"), AvaritiaShaders.pitch);
-            ARBShaderObjects.glUniform3fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "lightlevel"), AvaritiaShaders.lightlevel[0], AvaritiaShaders.lightlevel[1], AvaritiaShaders.lightlevel[2]);
-            ARBShaderObjects.glUniformMatrix2fvARB(ARBShaderObjects.glGetUniformLocationARB(shader, "cosmicuvs"), false, AvaritiaShaders.cosmicUVs);
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "externalScale"), AvaritiaShaders.scale);
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "opacity"), AvaritiaShaders.cosmicOpacity);
-        }
+    private static final ShaderCallback shaderCallback = shader -> {
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "yaw"), AvaritiaShaders.yaw);
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "pitch"), AvaritiaShaders.pitch);
+        ARBShaderObjects.glUniform3fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "lightlevel"), AvaritiaShaders.lightlevel[0], AvaritiaShaders.lightlevel[1], AvaritiaShaders.lightlevel[2]);
+        ARBShaderObjects.glUniformMatrix2fvARB(ARBShaderObjects.glGetUniformLocationARB(shader, "cosmicuvs"), false, AvaritiaShaders.cosmicUVs);
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "externalScale"), AvaritiaShaders.scale);
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "opacity"), AvaritiaShaders.cosmicOpacity);
     };
 
-    public static ShaderCallback shaderCallback2 = new ShaderCallback() {
-        public void c(int shader) {
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "yaw"), AvaritiaShaders.yaw);
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "pitch"), AvaritiaShaders.pitch);
-            ARBShaderObjects.glUniform3fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "lightlevel"), AvaritiaShaders.lightlevel[0], AvaritiaShaders.lightlevel[1], AvaritiaShaders.lightlevel[2]);
-            ARBShaderObjects.glUniformMatrix2fvARB(ARBShaderObjects.glGetUniformLocationARB(shader, "cosmicuvs"), false, AvaritiaShaders.cosmicUVs);
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "externalScale"), AvaritiaShaders.scale);
-            ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "opacity"), AvaritiaShaders.cosmicOpacity2);
-        }
+    private static final ShaderCallback shaderCallback2 = shader -> {
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "yaw"), AvaritiaShaders.yaw);
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "pitch"), AvaritiaShaders.pitch);
+        ARBShaderObjects.glUniform3fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "lightlevel"), AvaritiaShaders.lightlevel[0], AvaritiaShaders.lightlevel[1], AvaritiaShaders.lightlevel[2]);
+        ARBShaderObjects.glUniformMatrix2fvARB(ARBShaderObjects.glGetUniformLocationARB(shader, "cosmicuvs"), false, AvaritiaShaders.cosmicUVs);
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "externalScale"), AvaritiaShaders.scale);
+        ARBShaderObjects.glUniform1fARB(ARBShaderObjects.glGetUniformLocationARB(shader, "opacity"), AvaritiaShaders.cosmicOpacity2);
     };
 
     public static void init() {
         MinecraftForge.EVENT_BUS.addListener(AvaritiaShaders::onRenderTick);
         MinecraftForge.EVENT_BUS.addListener(AvaritiaShaders::clientTick);
         initShaders();
-        TextureAtlasSprite[] s = COSMIC_SPRITES;
-        Consumer<TextureAtlasSprite> spriteConsumer = sprite -> {
-            // 在这里处理你的精灵，比如打印其宽度和高度
-            System.out.println("Registered sprite with width: " + sprite.getWidth() + ", height: " + sprite.getHeight());
-        };
-        //没有添加进去
+        //添加资源
         COSMIC_HELPER.addIIconRegister(registrar -> {
-            registrar.registerSprite(shader("cosmic_0"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_1"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_2"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_3"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_4"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_5"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_6"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_7"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_8"), spriteConsumer);
-            registrar.registerSprite(shader("cosmic_9"), spriteConsumer);
+            for (int i =0; i< 10; i++) {
+                int finalI = i;
+                registrar.registerSprite(shader("cosmic_" + finalI), e -> COSMIC_SPRITES[finalI] = e);
+            }
         });
-        MASK_HELPER.addIIconRegister(registrar -> registrar.registerSprite(mask("mask"), e -> {}));
-        MASK_HELPER_INV.addIIconRegister(registrar -> registrar.registerSprite(mask("mask_inv"), e -> {}));
-        WING_HELPER.addIIconRegister(registrar -> registrar.registerSprite(mask("mask_wings"), e -> {}));
+        MASK_HELPER.addIIconRegister(registrar -> registrar.registerSprite(mask("mask"), e -> MASK_SPRITES[0] = e));
+        MASK_HELPER_INV.addIIconRegister(registrar -> registrar.registerSprite(mask("mask_inv"), e -> MASK_SPRITES_INV[0] = e));
+        WING_HELPER.addIIconRegister(registrar -> registrar.registerSprite(mask("mask_wings"), e -> WING_SPRITES[0] = e));
     }
 
     static void onRenderTick(TickEvent.RenderTickEvent event) {
@@ -194,23 +149,26 @@ public class AvaritiaShaders {
         }
     }
 
+    /**
+     * 注册着色器
+     */
     public static void initShaders() {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+        ISelectiveResourceReloadListener shaderReloadListener; //防止报错  ？？？
         if (resourceManager instanceof IReloadableResourceManager)
-            ((IReloadableResourceManager) resourceManager).addReloadListener((IStage var1, IResourceManager var2, IProfiler var3, IProfiler var4, Executor var5, Executor var6) -> {
+            ((IReloadableResourceManager) resourceManager).addReloadListener(shaderReloadListener = (manager, predicate) ->{
                 PROGRAMS.values().forEach(ShaderLinkHelper::deleteShader);
                 PROGRAMS.clear();
                 for (AvaritiaShader shader : AvaritiaShader.values()) {
                     try {
                         ShaderProgram prog = new ShaderProgram(ARBShaderObjects.glCreateProgramObjectARB(),
-                                createShader(var2, shader.v, ShaderLoader.ShaderType.VERTEX),
-                                createShader(var2, shader.f, ShaderLoader.ShaderType.FRAGMENT));
+                                createShader(manager, shader.v, ShaderLoader.ShaderType.VERTEX),
+                                createShader(manager, shader.f, ShaderLoader.ShaderType.FRAGMENT));
                         ShaderLinkHelper.linkProgram(prog);
                         PROGRAMS.put(shader, prog);
                     } catch (IOException ignored) {
                     }
                 }
-                return new CompletableFuture<>();
             });
     }
 

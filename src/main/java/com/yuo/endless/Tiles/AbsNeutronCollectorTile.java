@@ -94,7 +94,9 @@ public class AbsNeutronCollectorTile extends LockableTileEntity implements ITick
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        if (world != null) {
+            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        }
     }
 
     @Override
@@ -160,7 +162,7 @@ public class AbsNeutronCollectorTile extends LockableTileEntity implements ITick
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        if (this.world.getTileEntity(this.pos) != this) {
+        if (this.world != null && this.world.getTileEntity(this.pos) != this) {
             return false;
         } else {
             return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;

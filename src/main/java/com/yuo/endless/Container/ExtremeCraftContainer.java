@@ -207,24 +207,4 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
     public RecipeBookCategory func_241850_m() {
         return null;
     }
-
-//    //获取配方输出
-//    @Nullable
-//    public ItemStack getRecipeOut(ExtremeCraftInventory inventory) {
-//        Set<IRecipe<?>> recipes = findRecipesByType(EndlessRecipeType.EXTREME_CRAFT, this.player.world);
-//        for (IRecipe<?> iRecipe : recipes) {
-//            ExtremeCraftRecipe recipe = (ExtremeCraftRecipe) iRecipe;
-//            if (recipe.matches(inventory, this.player.world)) {
-//                return recipe.getRecipeOutput();
-//            }
-//        }
-//
-//        return ItemStack.EMPTY;
-//    }
-
-//    public static Set<IRecipe<?>> findRecipesByType(IRecipeType<?> typeIn, World world) {
-//        return world != null ? world.getRecipeManager().getRecipes().stream()
-//                .filter(recipe -> recipe.getType() == typeIn).collect(Collectors.toSet()) : Collections.emptySet();
-//    }
-
 }

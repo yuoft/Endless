@@ -71,7 +71,6 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
 
     @Override
     public void draw(NeutroniumRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-//        this.progress.draw(matrixStack, 62, 10);
         this.singularity.draw(matrixStack, 52, 10);
     }
 }

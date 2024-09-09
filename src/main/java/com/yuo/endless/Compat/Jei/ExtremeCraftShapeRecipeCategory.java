@@ -24,12 +24,10 @@ public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeC
 
     private final IDrawable background;
     private final IDrawable icon;
-//    private final IDrawableStatic extreme;
 
     public ExtremeCraftShapeRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 2,0,184,164); //绘制背景
         this.icon = helper.createDrawableIngredient(new ItemStack(EndlessItems.extremeCraftingTable.get())); //绘制合成方块
-//        this.extreme = helper.createDrawable(TEXTURE);
     }
 
     @Override

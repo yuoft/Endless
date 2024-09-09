@@ -34,7 +34,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Random;
 
@@ -116,7 +115,7 @@ public class InfinityMobEntity extends ZombieEntity {
     public void addTrackingPlayer(ServerPlayerEntity player) {
         super.addTrackingPlayer(player);
         if (Config.SERVER.mobHpInfo.get())
-        this.bossInfo.addPlayer(player);
+            this.bossInfo.addPlayer(player);
     }
 
     /**
@@ -127,7 +126,7 @@ public class InfinityMobEntity extends ZombieEntity {
     public void removeTrackingPlayer(ServerPlayerEntity player) {
         super.removeTrackingPlayer(player);
         if (Config.SERVER.mobHpInfo.get())
-        this.bossInfo.removePlayer(player);
+            this.bossInfo.removePlayer(player);
     }
 
     @Override
@@ -173,11 +172,13 @@ public class InfinityMobEntity extends ZombieEntity {
                         }
                     } else if ((double) worldIn.getRandom().nextFloat() < 0.05D) {
                         ChickenEntity chickenentity1 = EntityType.CHICKEN.create(this.world);
-                        chickenentity1.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-                        chickenentity1.onInitialSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, null, null);
-                        chickenentity1.setChickenJockey(true);
-                        this.startRiding(chickenentity1);
-                        worldIn.addEntity(chickenentity1);
+                        if (chickenentity1 != null) {
+                            chickenentity1.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
+                            chickenentity1.onInitialSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, null, null);
+                            chickenentity1.setChickenJockey(true);
+                            this.startRiding(chickenentity1);
+                            worldIn.addEntity(chickenentity1);
+                        }
                     }
                 }
             }
@@ -189,8 +190,8 @@ public class InfinityMobEntity extends ZombieEntity {
 
         if (this.getItemStackFromSlot(EquipmentSlotType.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
-            int i = localdate.get(ChronoField.DAY_OF_MONTH);
-            int j = localdate.get(ChronoField.MONTH_OF_YEAR);
+            int i = localdate.getDayOfMonth();
+            int j = localdate.getMonthValue();
             if (j == 10 && i == 31 && rand.nextFloat() < 0.25F) {
                 this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(rand.nextFloat() < 0.1F ? Blocks.JACK_O_LANTERN : Blocks.CARVED_PUMPKIN));
                 this.inventoryArmorDropChances[EquipmentSlotType.HEAD.getIndex()] = 0.0F;

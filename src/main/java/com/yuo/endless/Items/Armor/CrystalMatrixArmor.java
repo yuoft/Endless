@@ -1,4 +1,4 @@
-package com.yuo.endless.Armor;
+package com.yuo.endless.Items.Armor;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;

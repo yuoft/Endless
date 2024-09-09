@@ -87,8 +87,6 @@ public class NeutroniumCompressorContainer extends Container {
      * @return 物品
      */
     public ItemStack getItem(){
-//        Ingredient recipeInput = TileUtils.getRecipeInput(world, tile);
-//        if (!recipeInput.isSimple()) return recipeInput;
         BlockPos pos = new BlockPos(data.get(2), data.get(3), data.get(4));
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof NeutroniumCompressorTile){

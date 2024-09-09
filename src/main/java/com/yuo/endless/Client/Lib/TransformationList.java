@@ -57,7 +57,7 @@ public class TransformationList extends Transformation {
     }
 
     public boolean isRedundant() {
-        return (this.transformations.size() == 0);
+        return (this.transformations.isEmpty());
     }
 
     public TransformationList with(Transformation t) {
@@ -104,9 +104,9 @@ public class TransformationList extends Transformation {
     }
 
     public Transformation inverse() {
-        TransformationList rev = new TransformationList(new Transformation[0]);
+        TransformationList rev = new TransformationList();
         for (int i = this.transformations.size() - 1; i >= 0; i--)
-            rev.with(((Transformation)this.transformations.get(i)).inverse());
+            rev.with(this.transformations.get(i).inverse());
         return rev;
     }
 

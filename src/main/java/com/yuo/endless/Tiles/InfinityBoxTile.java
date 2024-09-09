@@ -38,7 +38,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
     private int burnTime; //以烧炼时间
     private int burnTimeTotal; //燃料提供的烧炼时间
     private int cookingTime; //烧炼时间
-    private final int cookingTimeTotal = 160; //烧炼总时间
+    private static final int cookingTimeTotal = 160; //烧炼总时间
     private final IIntArray burnData = new IIntArray(){
         @Override
         public int get(int index) {
@@ -104,7 +104,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
                 }
                 if (this.isBurning() && this.canSmelt(recipe)) { //烧炼进度增加
                     this.cookingTime++;
-                    if (this.cookingTime == this.cookingTimeTotal) {
+                    if (this.cookingTime == cookingTimeTotal) {
                         this.cookingTime = 0;
                         this.smelt(recipe, world);
                         flag1 = true;
@@ -114,7 +114,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
                 }
             }
         }else if (!this.isBurning() && this.cookingTime > 0) { //燃料进度回退
-            this.cookingTime = MathHelper.clamp(this.cookingTime - 2, 0, this.cookingTimeTotal);
+            this.cookingTime = MathHelper.clamp(this.cookingTime - 2, 0, cookingTimeTotal);
         }
 
         if (flag != this.isBurning()) {

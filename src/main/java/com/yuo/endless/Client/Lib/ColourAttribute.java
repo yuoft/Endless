@@ -6,15 +6,15 @@ public class ColourAttribute extends VertexAttribute<int[]> {
     int[] colourRef;
 
     static {
-        attributeKey = (AttributeKey)new AttributeKey<>("colour", x$0 -> new int[x$0]);
+        attributeKey = new AttributeKey<>("colour", int[]::new);
     }
 
     public ColourAttribute() {
-        super((AttributeKey)attributeKey);
+        super(attributeKey);
     }
 
     public boolean load(CCRenderState ccrs) {
-        this.colourRef = ccrs.model.<int[]>getAttributes((AttributeKey)attributeKey);
+        this.colourRef = ccrs.model.getAttributes(attributeKey);
         return (this.colourRef != null || !ccrs.model.hasAttribute(attributeKey));
     }
 

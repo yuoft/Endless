@@ -3,9 +3,11 @@ package com.yuo.endless.Client.Model;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
@@ -15,12 +17,12 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -106,7 +108,11 @@ public class InfinityArmorModel extends BipedModel {
         copyBipedAngles(this, this.invuln);
         super.render(mStack, vertexBuilder, i1, i2, i3, i4, i5, i6);
         AvaritiaShaders.shading(this.buf);
-        long time = this.mc.player.world.getGameTime();
+        long time = 0;
+        ClientPlayerEntity player1 = this.mc.player;
+        if (player1 != null) {
+            time = player1.world.getGameTime();
+        }
         double pulse = Math.sin(time / 10.0D) * 0.5D + 0.5D;
         double pulse_mag_sqr = Math.pow(pulse, 6.0D);
         if (this.isChild) {
@@ -124,14 +130,16 @@ public class InfinityArmorModel extends BipedModel {
             AvaritiaShaders.scale = 25.0F;
         } else {
             AvaritiaShaders.scale = 1.0F;
-            AvaritiaShaders.yaw = (float)((this.mc.player.rotationYaw * 2.0F) * Math.PI / 360.0D);
-            AvaritiaShaders.pitch = -((float)((this.mc.player.rotationPitch * 2.0F) * Math.PI / 360.0D));
+            if (player1 != null) {
+                AvaritiaShaders.yaw = (float)((player1.rotationYaw * 2.0F) * Math.PI / 360.0D);
+                AvaritiaShaders.pitch = -((float)((player1.rotationPitch * 2.0F) * Math.PI / 360.0D));
+            }
         }
         if (this.invulnRender) {
             mStack.push();
             AvaritiaShaders.useShader2();
             if (!this.player)
-                this.invuln.render(mStack, mat(AvaritiaShaders.MASK_INV).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, i3, i4, i5, i6);
+                this.invuln.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, i3, i4, i5, i6);
             AvaritiaShaders.releaseShader(this.buf);
             mStack.pop();
         }
@@ -139,17 +147,17 @@ public class InfinityArmorModel extends BipedModel {
         mStack.push();
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.childHeadOffsetY / 16.0F * f2), -0.029999999329447746D);
-        this.bipedHeadwear.render(mStack, mat(AvaritiaShaders.MASK).getBuffer(this.buf, InfinityArmorModel::mask2), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.bipedHeadwear.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask2), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F);
         mStack.pop();
         mStack.push();
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.childHeadOffsetY / 16.0F * f2), (this.childHeadOffsetZ / 16.0F * f2));
-        this.bipedHead.render(mStack, mat(AvaritiaShaders.MASK).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.bipedHead.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F);
         mStack.pop();
         mStack.push();
         mStack.scale(f1, f1, f1);
         mStack.translate(0.0D, (this.childBodyOffsetY / 16.0F * f2), 0.0D);
-        func_225600_b_().forEach(t -> t.render(mStack, mat(AvaritiaShaders.MASK).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F));
+        func_225600_b_().forEach(t -> t.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F));
         mStack.pop();
         AvaritiaShaders.releaseShader(this.buf);
         mStack.push();
@@ -175,7 +183,7 @@ public class InfinityArmorModel extends BipedModel {
             renderToBufferWing(mStack, ver(RenderType.getArmorCutoutNoCull(this.wingTex)), i1, i2, i3, i4, i5, i6);
             AvaritiaShaders.shading(this.buf);
             AvaritiaShaders.useShader();
-            renderToBufferWing(mStack, mat(AvaritiaShaders.WING).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, i3, i4, i5, i6);
+            renderToBufferWing(mStack, mat(AvaritiaShaders.WING_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, i3, i4, i5, i6);
             AvaritiaShaders.releaseShader(this.buf);
             renderToBufferWing(mStack, ver(glow(this.wingGlowTex)), i1, i2, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5D));
             mStack.pop();
@@ -211,12 +219,12 @@ public class InfinityArmorModel extends BipedModel {
     }
 
     void renderToBufferWing(MatrixStack m, IVertexBuilder v, int i1, int i2, float i3, float i4, float i5, float i6) {
-        this.bipedLeftWing = new ModelRenderer((Model)this, 0, 0);
+        this.bipedLeftWing = new ModelRenderer(this, 0, 0);
         this.bipedLeftWing.mirror = true;
         this.bipedLeftWing.addBox(0.0F, -11.6F, 0.0F, 0.0F, 32.0F, 32.0F);
         this.bipedLeftWing.setRotationPoint(-1.5F, 0.0F, 2.0F);
         this.bipedLeftWing.rotateAngleY = 1.2566371F;
-        this.bipedRightWing = new ModelRenderer((Model)this, 0, 0);
+        this.bipedRightWing = new ModelRenderer(this, 0, 0);
         this.bipedRightWing.addBox(0.0F, -11.6F, 0.0F, 0.0F, 32.0F, 32.0F);
         this.bipedRightWing.setRotationPoint(1.5F, 0.0F, 2.0F);
         this.bipedRightWing.rotateAngleY = -1.2566371F;
@@ -229,11 +237,11 @@ public class InfinityArmorModel extends BipedModel {
     }
 
     public static RenderMaterial mat(TextureAtlasSprite t) {
-        return new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, t.getName());
+        return new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, t.getName());
     }
 
     public Iterable<ModelRenderer> func_225600_b_() {
-        return (Iterable<ModelRenderer>)ImmutableList.of(this.bipedBody, this.bipedRightArm, this.bipedLeftArm,
+        return ImmutableList.of(this.bipedBody, this.bipedRightArm, this.bipedLeftArm,
                 this.bipedRightLeg, this.bipedLeftLeg);
     }
 
@@ -266,11 +274,10 @@ public class InfinityArmorModel extends BipedModel {
                 AvaritiaShaders.shading(b);
                 m.push();
                 AvaritiaShaders.useShader2();
-                ImmutableList.of(((BipedModel)getEntityModel()).bipedHead, ((BipedModel)getEntityModel()).bipedHeadwear,
-                        ((BipedModel)getEntityModel()).bipedBody, ((BipedModel)getEntityModel()).bipedLeftArm,
-                        ((BipedModel)getEntityModel()).bipedRightArm, ((BipedModel)getEntityModel()).bipedLeftLeg,
-                        ((BipedModel)getEntityModel()).bipedRightLeg).forEach(t -> t.render(m,
-                        InfinityArmorModel.mat(AvaritiaShaders.MASK_INV).getBuffer(b, InfinityArmorModel::mask),
+                ImmutableList.of(getEntityModel().bipedHead, (getEntityModel()).bipedHeadwear, (getEntityModel()).bipedBody,
+                        (getEntityModel()).bipedLeftArm, (getEntityModel()).bipedRightArm, (getEntityModel()).bipedLeftLeg,
+                        (getEntityModel()).bipedRightLeg).forEach(t -> t.render(m,
+                        InfinityArmorModel.mat(AvaritiaShaders.MASK_SPRITES_INV[0]).getBuffer(b, InfinityArmorModel::mask),
                         i1, 1, 1.0F, 1.0F, 1.0F, 1.0F));
                 AvaritiaShaders.releaseShader(b);
                 m.pop();

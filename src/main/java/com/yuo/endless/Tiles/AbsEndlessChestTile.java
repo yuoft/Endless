@@ -9,10 +9,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -23,7 +21,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -32,7 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.registries.IRegistryDelegate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,19 +58,13 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        this.fillWithLoot((PlayerEntity)null);
-//        ItemStack itemstack = this.stackHandler.getStacks().get(index);
-//        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack); //相同物品
-//        int size = stack.getMaxStackSize();
-//        if (size <= 1)
+        this.fillWithLoot(null);
         if (stack.getCount() > getInventoryStackLimit()) {
             stack.setCount(getInventoryStackLimit());
         }
 
         this.stackHandler.getStacks().set(index, stack);
-//        if (!flag) {
-            this.markDirty();
-//        }
+        this.markDirty();
     }
 
     @Override
@@ -232,7 +222,9 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        if (world != null) {
+            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        }
     }
 
     @Nonnull
@@ -345,7 +337,6 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
 
     @Override
     protected void setItems(NonNullList<ItemStack> itemsIn) {
-//        this.stackHandler = itemsIn;
         this.stackHandler.setStacks(itemsIn);
     }
 

@@ -1,7 +1,8 @@
 {
   "parent": "item/bow",
   "textures": {
-    "layer0": "endless:item/tool/infinity_bow_standby"
+    "layer0": "endless:item/tool/infinity_bow/idle",
+    "mask": "endless:item/tool/infinity_bow/idle_mask"
   },
   "overrides": [
     {
@@ -24,5 +25,9 @@
       },
       "model": "endless:item/infinity_bow_pulling_2"
     }
-  ]
+  ],
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "#mask"
+  }
 }

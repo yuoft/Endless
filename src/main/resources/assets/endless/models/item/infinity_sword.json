@@ -1,7 +1,12 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "endless:item/tool/infinity_sword",
-    "layer1": "endless:item/tool/infinity_sword_pommel"
+    "layer0": "endless:item/tool/infinity_sword/layer_0",
+    "layer1": "endless:item/tool/infinity_sword/layer_1",
+    "mask": "endless:item/tool/infinity_sword/mask"
+  },
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "#mask"
   }
 }

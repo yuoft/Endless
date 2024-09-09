@@ -122,23 +122,7 @@ public class Matrix4 extends Transformation implements Copyable<Matrix4> {
     }
 
     public Matrix4 set(Matrix4 m) {
-        m00 = m00;
-        m01 = m01;
-        m02 = m02;
-        m03 = m03;
-        m10 = m10;
-        m11 = m11;
-        m12 = m12;
-        m13 = m13;
-        m20 = m20;
-        m21 = m21;
-        m22 = m22;
-        m23 = m23;
-        m30 = m30;
-        m31 = m31;
-        m32 = m32;
-        m33 = m33;
-        return this;
+        return m;
     }
 
     public Matrix4 set(float[] m) {

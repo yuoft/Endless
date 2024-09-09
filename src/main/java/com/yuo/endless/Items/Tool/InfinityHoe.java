@@ -133,7 +133,7 @@ public class InfinityHoe extends HoeItem {
                         if (!hasBox(pos, inBoxMutable)){ //外壳坐标
                             BlockState state = world.getBlockState(pos);
                             if (state.getMaterial().isLiquid() || state.getBlock() instanceof ILiquidContainer)//如果是液体，则将其填埋
-                            world.setBlockState(pos, Blocks.STONE.getDefaultState());
+                                world.setBlockState(pos, Blocks.STONE.getDefaultState());
                         }
                     }
                 }else world.setBlockState(blockpos, blockstate, 11); //未潜行耕种一个方块

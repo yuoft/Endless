@@ -1,6 +1,6 @@
 {
     "parent": "item/crossbow",
     "textures": {
-        "layer0": "endless:item/tool/infinity_crossbow_firework"
+        "layer0": "endless:item/tool/infinity_crossbow/firework"
     }
 }

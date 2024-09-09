@@ -11,8 +11,8 @@ import net.minecraft.util.text.ITextComponent;
 
 public class AbsNeutronCollectorScreen extends ContainerScreen<AbsNeutronCollectorContainer>{
     private final ResourceLocation RESOURCE = new ResourceLocation(Endless.MOD_ID, "textures/gui/neutron_collector_gui.png");
-    private final int textureWidth = 176;
-    private final int textureHeight = 166;
+    protected final int textureWidth = 176;
+    protected final int textureHeight = 166;
 
     public AbsNeutronCollectorScreen(AbsNeutronCollectorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn, int titleWidth) {
         super(screenContainer, inv, titleIn);
@@ -25,7 +25,9 @@ public class AbsNeutronCollectorScreen extends ContainerScreen<AbsNeutronCollect
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F); //确保颜色正常
-        this.minecraft.getTextureManager().bindTexture(RESOURCE);
+        if (this.minecraft != null) {
+            this.minecraft.getTextureManager().bindTexture(RESOURCE);
+        }
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         blit(matrixStack, i, j, 0, 0, xSize, ySize);

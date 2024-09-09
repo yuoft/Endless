@@ -45,17 +45,17 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         double age = (entityIn.getAge() + partialTicks);
         ColourRGBA colour = getColour(age);
         double scale = GapingVoidEntity.getVoidScale(age);
-        double halocoord = 0.58D * scale;
-        double haloscaledist = 2.2D * scale;
+        double halo_coord = 0.58D * scale;
+        double halo_scale_dist = 2.2D * scale;
         Vector3d camera = (getRenderManager()).info.getProjectedView();
         double dx = entityIn.getPosX() - camera.getX();
         double dy = entityIn.getPosY() - camera.getY();
         double dz = entityIn.getPosZ() - camera.getZ();
         double xzlen = Math.sqrt(dx * dx + dz * dz);
         double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (len <= haloscaledist) {
-            double close = (haloscaledist - len) / haloscaledist;
-            halocoord *= 1.0D + close * close * close * close * 1.5D;
+        if (len <= halo_scale_dist) {
+            double close = (halo_scale_dist - len) / halo_scale_dist;
+            halo_coord *= 1.0D + close * close * close * close * 1.5D;
         }
         double yang = Math.atan2(xzlen, dy) * 57.29577951308232D;
         double xang = Math.atan2(dx, dz) * 57.29577951308232D;
@@ -66,17 +66,17 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         pStack.push();
         pStack.rotate(new Quaternion(Vector3f.XP, 90.0F, true));
         TransformingVertexBuilder transformingVertexBuilder = new TransformingVertexBuilder(bufferIn.getBuffer(VOID_HALO), pStack);
-        transformingVertexBuilder.pos(-halocoord, 0.0D, -halocoord).color(colour.r, colour.g, colour.b, colour.a).tex(0.0F, 0.0F).endVertex();
-        transformingVertexBuilder.pos(-halocoord, 0.0D, halocoord).color(colour.r, colour.g, colour.b, colour.a).tex(0.0F, 1.0F).endVertex();
-        transformingVertexBuilder.pos(halocoord, 0.0D, halocoord).color(colour.r, colour.g, colour.b, colour.a).tex(1.0F, 1.0F).endVertex();
-        transformingVertexBuilder.pos(halocoord, 0.0D, -halocoord).color(colour.r, colour.g, colour.b, colour.a).tex(1.0F, 0.0F).endVertex();
+        transformingVertexBuilder.pos(-halo_coord, 0.0D, -halo_coord).color(colour.r, colour.g, colour.b, colour.a).tex(0.0F, 0.0F).endVertex();
+        transformingVertexBuilder.pos(-halo_coord, 0.0D, halo_coord).color(colour.r, colour.g, colour.b, colour.a).tex(0.0F, 1.0F).endVertex();
+        transformingVertexBuilder.pos(halo_coord, 0.0D, halo_coord).color(colour.r, colour.g, colour.b, colour.a).tex(1.0F, 1.0F).endVertex();
+        transformingVertexBuilder.pos(halo_coord, 0.0D, -halo_coord).color(colour.r, colour.g, colour.b, colour.a).tex(1.0F, 0.0F).endVertex();
         pStack.pop();
         pStack.scale((float)scale, (float)scale, (float)scale);
         CCRenderState cc = CCRenderState.instance();
         cc.reset();
         cc.bind(VOID_HEMISPHERE, bufferIn, pStack);
         cc.baseColour = colour.rgba();
-        this.hemisphere.render(cc, new IVertexOperation[0]);
+        this.hemisphere.render(cc);
         pStack.pop();
     }
 

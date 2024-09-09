@@ -176,8 +176,7 @@ public class ToolHelper
         if (itemStack.isEmpty()){
             map.put(drop, drop.getCount());
         }else {
-            Integer integer = map.get(itemStack);
-            map.put(itemStack, integer + drop.getCount());
+            map.computeIfPresent(itemStack, (k, integer) -> integer + drop.getCount());
         }
     }
 
@@ -231,20 +230,9 @@ public class ToolHelper
         }
         world.destroyBlock(origin, !player.isCreative(), player);
 
-//        for (Direction dir : Direction.values()) {
-//            BlockPos offset = origin.offset(dir);
-//            if (set.contains(offset)) continue;
-//            if (isLogAndLeaf(world, offset)){
-//                steps--;
-//                aoeBlocks(world, offset, player, steps, axe);
-//            }
-//        }
-
         for (BlockPos pos : getAroundPos(origin)) {
             if (set.contains(pos) || pos.equals(origin)) continue;
             if (isLogAndLeaf(world, pos)){
-//                int step = steps - 1; //剩余距离-1
-//                if (step == 0) return;
                 steps--;
                 set.add(pos); //添加当前坐标
                 aoeBlocks(world, pos, player, steps, axe); //递归

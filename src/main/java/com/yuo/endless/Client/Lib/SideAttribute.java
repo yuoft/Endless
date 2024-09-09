@@ -6,15 +6,15 @@ public class SideAttribute extends VertexAttribute<int[]> {
     int[] sideRef;
 
     static {
-        attributeKey = (AttributeKey)new AttributeKey<>("side", x$0 -> new int[x$0]);
+        attributeKey = new AttributeKey<>("side", int[]::new);
     }
 
     public SideAttribute() {
-        super((AttributeKey)attributeKey);
+        super(attributeKey);
     }
 
     public boolean load(CCRenderState ccrs) {
-        this.sideRef = ccrs.model.<int[]>getAttributes((AttributeKey)attributeKey);
+        this.sideRef = ccrs.model.getAttributes(attributeKey);
         if (ccrs.model.hasAttribute(attributeKey))
             return (this.sideRef != null);
         ccrs.pipeline.addDependency(ccrs.normalAttrib);

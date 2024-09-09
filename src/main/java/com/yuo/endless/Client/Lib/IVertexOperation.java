@@ -15,7 +15,7 @@ public interface IVertexOperation {
 
     int operationID();
 
-    public static class VertexOperationRegistry {
+    class VertexOperationRegistry {
         static int n;
     }
 }

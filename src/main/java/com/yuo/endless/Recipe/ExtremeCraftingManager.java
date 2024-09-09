@@ -173,7 +173,7 @@ public class ExtremeCraftingManager {
      * @return 无尽配方
      */
     ExtremeCraftRecipe addShapelessRecipe(ItemStack result, Object ... ingredients) {
-        List<ItemStack> arraylist = new ArrayList();
+        List<ItemStack> arraylist = new ArrayList<>();
 
         for (Object object1 : ingredients) {
             if (object1 instanceof ItemStack) {

@@ -6,17 +6,17 @@ public class LightingAttribute extends VertexAttribute<int[]> {
     int[] colourRef;
 
     static {
-        attributeKey = (AttributeKey)new AttributeKey<>("lighting", x$0 -> new int[x$0]);
+        attributeKey = new AttributeKey<>("lighting", int[]::new);
     }
 
     public LightingAttribute() {
-        super((AttributeKey)attributeKey);
+        super(attributeKey);
     }
 
     public boolean load(CCRenderState ccrs) {
         if (!ccrs.computeLighting || !ccrs.cFmt.hasColor || !ccrs.model.hasAttribute(attributeKey))
             return false;
-        this.colourRef = ccrs.model.<int[]>getAttributes((AttributeKey)attributeKey);
+        this.colourRef = ccrs.model.getAttributes(attributeKey);
         if (this.colourRef != null) {
             ccrs.pipeline.addDependency(ccrs.colourAttrib);
             return true;

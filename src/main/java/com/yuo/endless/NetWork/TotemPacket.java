@@ -20,7 +20,9 @@ public class TotemPacket {
     public TotemPacket(PacketBuffer buffer) {
         Minecraft instance = Minecraft.getInstance();
         stack = buffer.readItemStack();
-        entity = instance.world.getEntityByID(buffer.readInt());
+        if (instance.world != null) {
+            entity = instance.world.getEntityByID(buffer.readInt());
+        }else entity = null;
     }
 
     public TotemPacket(ItemStack stack, Entity entity) {

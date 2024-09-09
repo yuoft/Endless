@@ -7,7 +7,7 @@ public class UVTransformationList extends UVTransformation {
     ArrayList<UVTransformation> transformations = new ArrayList<>();
 
     public boolean isRedundant() {
-        return (this.transformations.size() == 0);
+        return (this.transformations.isEmpty());
     }
 
     public UVTransformationList(UVTransformation... transforms) {
@@ -72,9 +72,9 @@ public class UVTransformationList extends UVTransformation {
     }
 
     public String toString() {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (UVTransformation t : this.transformations)
-            s = s + "\n" + t.toString();
-        return s.trim();
+            s.append("\n").append(t.toString());
+        return s.toString().trim();
     }
 }

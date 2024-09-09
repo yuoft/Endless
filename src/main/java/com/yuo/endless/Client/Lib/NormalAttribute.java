@@ -7,15 +7,15 @@ public class NormalAttribute extends VertexAttribute<Vector3[]> {
     Vector3[] normalRef;
 
     static {
-        attributeKey = (AttributeKey)new AttributeKey<>("normal", x$0 -> new Vector3[x$0]);
+        attributeKey = new AttributeKey<>("normal", Vector3[]::new);
     }
 
     public NormalAttribute() {
-        super((AttributeKey)attributeKey);
+        super(attributeKey);
     }
 
     public boolean load(CCRenderState ccrs) {
-        this.normalRef = ccrs.model.<Vector3[]>getAttributes((AttributeKey)attributeKey);
+        this.normalRef = ccrs.model.getAttributes(attributeKey);
         if (ccrs.model.hasAttribute(attributeKey))
             return (this.normalRef != null);
         if (ccrs.model.hasAttribute(SideAttribute.attributeKey)) {

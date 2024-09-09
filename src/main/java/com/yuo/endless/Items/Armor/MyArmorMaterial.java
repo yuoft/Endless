@@ -1,4 +1,4 @@
-package com.yuo.endless.Armor;
+package com.yuo.endless.Items.Armor;
 
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;

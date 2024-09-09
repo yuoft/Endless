@@ -1,7 +1,8 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "endless:item/matter_cluster"
+    "layer0": "endless:item/matter_cluster",
+    "mask": "endless:item/matter_cluster_mask"
   },
   "overrides": [
     {
@@ -9,12 +10,10 @@
         "endless:count": 1
       },
       "model": "endless:item/matter_cluster_full"
-    },
-    {
-      "predicate": {
-        "endless:count": 0.5
-      },
-      "model": "endless:item/matter_cluster_has"
     }
-  ]
+  ],
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "#mask"
+  }
 }

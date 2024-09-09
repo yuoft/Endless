@@ -133,7 +133,9 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        if (world != null) {
+            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+        }
     }
 
     @Override

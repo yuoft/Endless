@@ -1,6 +1,7 @@
 package com.yuo.endless.Client.Model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Lib.WrappedItemModel;
 import com.yuo.endless.Config;
 import com.yuo.endless.Items.EndlessItems;
@@ -36,18 +37,16 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
             AvaritiaShaders.pitch = 0.0F;
         } else if (!AvaritiaShaders.inventoryRender) {
             AvaritiaShaders.scale = 1.0F;
-            AvaritiaShaders.yaw = (float)((mc.player.rotationYaw * 2.0F) * Math.PI / 360.0D);
-            AvaritiaShaders.pitch = -((float)((mc.player.rotationPitch * 2.0F) * Math.PI / 360.0D));
+            if (mc.player != null) {
+                AvaritiaShaders.yaw = (float)((mc.player.rotationYaw * 2.0F) * Math.PI / 360.0D);
+                AvaritiaShaders.pitch = -((float)((mc.player.rotationPitch * 2.0F) * Math.PI / 360.0D));
+            }
         }
         AvaritiaShaders.useShader();
         mc.getItemRenderer().renderQuads(mStack, source.getBuffer(RenderType.makeType("", DefaultVertexFormats.ENTITY, 7, 256, true, true,
                 RenderType.State.getBuilder().texture(RenderType.BLOCK_SHEET).transparency(RenderType.TRANSLUCENT_TRANSPARENCY).writeMask(RenderType.COLOR_WRITE)
                 .diffuseLighting(RenderType.DIFFUSE_LIGHTING_ENABLED).lightmap(RenderType.LIGHTMAP_ENABLED).overlay(RenderType.OVERLAY_ENABLED).build(true))), this.maskQuad, stack, light, overlay);
         AvaritiaShaders.releaseShader(source);
-    }
-
-    boolean isCosmic() {
-        return true;
     }
 
     public float getaa(ItemStack itemStack){

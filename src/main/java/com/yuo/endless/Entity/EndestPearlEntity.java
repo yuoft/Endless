@@ -37,11 +37,6 @@ public class EndestPearlEntity extends ProjectileItemEntity {
         return EndlessItems.endestPearl.get().asItem();
     }
 
-//    @Override
-//    protected void registerData() {
-//
-//    }
-
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }

@@ -1,8 +1,9 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.Armor.InfinityArmor;
+import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.Items.Armor.InfinityArmor;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
@@ -65,13 +66,13 @@ public class EventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void screenPre(GuiScreenEvent.DrawScreenEvent.Pre e) {
-//        AvaritiaShaders.inventoryRender = true;
+        AvaritiaShaders.inventoryRender = true;
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void screenPost(GuiScreenEvent.DrawScreenEvent.Post e) {
-//        AvaritiaShaders.inventoryRender = false;
+        AvaritiaShaders.inventoryRender = false;
     }
 
     //无尽鞋子 无摔落伤害
@@ -217,18 +218,6 @@ public class EventHandler {
         }
     }
 
-//    //不会被烧毁的物品
-//    @SubscribeEvent
-//    public static void entityItemUnDeath(ItemEvent event) { //物品实体事件
-//        ItemEntity entityItem = event.getEntityItem();
-//        Item item = entityItem.getItem().getItem();
-//        if(item instanceof InfinityArmor || item instanceof InfinityAxe || item instanceof InfinityBow ||
-//                item instanceof InfinityHoe || item instanceof InfinityShovel || item instanceof InfinityPickaxe ||
-//                item instanceof InfinitySword) {
-//            entityItem.setInvulnerable(true); // 设置物品实体不会死亡
-//        }
-//    }
-
     //原版掉落修改
     @SubscribeEvent
     public static void dropsItem(LivingDropsEvent event){
@@ -287,7 +276,6 @@ public class EventHandler {
                 player.addPotionEffect(new EffectInstance(Effects.RESISTANCE, 400, 1));
                 player.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 700, 2));
                 player.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 1100, 0));
-//                player.world.setEntityState(player, (byte)35);
                 totem.damageItem(1, player, e -> e.sendBreakAnimation(Hand.MAIN_HAND));
                 event.setCanceled(true);
             }
@@ -390,7 +378,7 @@ public class EventHandler {
                             .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/21854371"))), UUID.randomUUID());
         }
         //配置文件内容错误消息
-        if (Config.errorInfo.size() > 0){
+        if (!Config.errorInfo.isEmpty()){
             player.sendMessage(new StringTextComponent("The following errors were found in the configuration file:\n"
                     + StringUtils.join(Config.errorInfo.toArray(), ",")).setStyle(Style.EMPTY.setColor(Color.fromTextFormatting(TextFormatting.RED))), UUID.randomUUID());
         }

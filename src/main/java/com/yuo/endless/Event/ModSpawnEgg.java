@@ -24,7 +24,7 @@ public class ModSpawnEgg extends SpawnEggItem {
 
     public ModSpawnEgg(final RegistryObject<? extends EntityType<?>> entityTypeSupplier, int primaryColorIn, int secondaryColorIn) {
         super(null, primaryColorIn, secondaryColorIn, new Properties().group(EndlessTab.endless));
-        this.entityTypeSupplier = Lazy.of(entityTypeSupplier::get);
+        this.entityTypeSupplier = Lazy.of(entityTypeSupplier);
         UNADDED_EGGS.add(this);
     }
 
@@ -44,7 +44,9 @@ public class ModSpawnEgg extends SpawnEggItem {
         };
 
         for(final SpawnEggItem spawnEgg : UNADDED_EGGS) {
-            EGGS.put(spawnEgg.getType(null), spawnEgg);
+            if (EGGS != null) {
+                EGGS.put(spawnEgg.getType(null), spawnEgg);
+            }
             DispenserBlock.registerDispenseBehavior(spawnEgg, dispenseItemBehavior);
         }
 

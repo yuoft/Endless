@@ -1,9 +1,9 @@
 package com.yuo.endless.Client.Model;
 
-import codechicken.lib.colour.ColourARGB;
-import codechicken.lib.model.CachedFormat;
-import codechicken.lib.model.Quad;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.yuo.endless.Client.Lib.CachedFormat;
+import com.yuo.endless.Client.Lib.ColourARGB;
+import com.yuo.endless.Client.Lib.Quad;
 import com.yuo.endless.Client.Lib.WrappedItemModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class HaloBakedModel extends WrappedItemModel implements IItemRenderer {
     public void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack mStack, IRenderTypeBuffer source, int light, int overlay) {
         if (transformType == ItemCameraTransforms.TransformType.GUI) {
             Minecraft.getInstance().getItemRenderer().renderQuads(mStack, source.getBuffer(RenderType.makeType("item", DefaultVertexFormats.ENTITY, 7, 256, true, true,
-                    RenderType.State.getBuilder().texture(new RenderState.TextureState(AtlasTexture.LOCATION_BLOCKS_TEXTURE, false, false)).transparency(RenderType.TRANSLUCENT_TRANSPARENCY).writeMask(RenderType.COLOR_WRITE).build(true))), Collections.singletonList(this.haloQuad), stack, light, overlay);
+                    RenderType.State.getBuilder().texture(new RenderState.TextureState(PlayerContainer.LOCATION_BLOCKS_TEXTURE, false, false)).transparency(RenderType.TRANSLUCENT_TRANSPARENCY).writeMask(RenderType.COLOR_WRITE).build(true))), Collections.singletonList(this.haloQuad), stack, light, overlay);
             if (this.pulse) {
                 double scale = this.RANDOM.nextDouble() * 0.15D + 0.95D;
                 double trans = (1.0D - scale) / 2.0D;

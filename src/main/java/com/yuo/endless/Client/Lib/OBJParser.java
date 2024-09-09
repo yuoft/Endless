@@ -16,13 +16,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OBJParser {
-    static Pattern vertPattern = Pattern.compile("v(?: ([\\d\\.+-]+))+");
+    static Pattern vertPattern = Pattern.compile("v(?: ([\\d.+-]+))+");
 
-    static Pattern uvwPattern = Pattern.compile("vt(?: ([\\d\\.+-]+))+");
+    static Pattern uvwPattern = Pattern.compile("vt(?: ([\\d.+-]+))+");
 
-    static Pattern normalPattern = Pattern.compile("vn(?: ([\\d\\.+-]+))+");
+    static Pattern normalPattern = Pattern.compile("vn(?: ([\\d.+-]+))+");
 
-    static Pattern polyPattern = Pattern.compile("f(?: ((?:\\d*)(?:/\\d*)?(?:/\\d*)?))+");
+    static Pattern polyPattern = Pattern.compile("f(?: (\\d*(?:/\\d*)?(?:/\\d*)?))+");
 
     public static ThreadLocal<Matcher> vertMatcher = ThreadLocal.withInitial(() -> vertPattern.matcher(""));
 
@@ -56,13 +56,13 @@ public class OBJParser {
         ArrayList<Vector3> verts = new ArrayList<>();
         ArrayList<Vector3> uvs = new ArrayList<>();
         ArrayList<Vector3> normals = new ArrayList<>();
-        ArrayList<int[]> polys = (ArrayList)new ArrayList<>();
+        ArrayList<int[]> polys = new ArrayList<>();
         String modelName = "unnamed";
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         String line;
         while ((line = reader.readLine()) != null) {
             line = line.replaceAll("\\s+", " ").trim();
-            if (line.startsWith("#") || line.length() == 0)
+            if (line.startsWith("#") || line.isEmpty())
                 continue;
             if (line.startsWith("v ")) {
                 assertMatch(vertMatcher.get(), line);
@@ -93,26 +93,26 @@ public class OBJParser {
                 for (int i = 0; i < av.length; i++) {
                     String[] as = av[i].split("/");
                     for (int p = 0; p < as.length; p++) {
-                        if (as[p].length() > 0)
+                        if (!as[p].isEmpty())
                             polyVerts[i][p] = Integer.parseInt(as[p]);
                     }
                 }
                 if (vp == 3) {
-                    triangulate((List<int[]>)polys, polyVerts);
+                    triangulate(polys, polyVerts);
                 } else {
-                    quadulate((List<int[]>)polys, polyVerts);
+                    quadulate(polys, polyVerts);
                 }
             }
             if (line.startsWith("g ")) {
                 if (!polys.isEmpty()) {
-                    modelMap.put(modelName, CCModel.createModel(verts, uvs, normals, vertexMode, (List<int[]>)polys));
+                    modelMap.put(modelName, CCModel.createModel(verts, uvs, normals, vertexMode, polys));
                     polys.clear();
                 }
                 modelName = line.substring(2);
             }
         }
         if (!polys.isEmpty())
-            modelMap.put(modelName, CCModel.createModel(verts, uvs, normals, vertexMode, (List<int[]>)polys));
+            modelMap.put(modelName, CCModel.createModel(verts, uvs, normals, vertexMode, polys));
         return modelMap;
     }
 

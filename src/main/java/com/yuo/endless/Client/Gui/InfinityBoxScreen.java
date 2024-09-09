@@ -3,29 +3,13 @@ package com.yuo.endless.Client.Gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
-import com.yuo.endless.Container.Chest.InfinityBoxSlot;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.ColorText;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.client.util.ITooltipFlag.TooltipFlags;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.spongepowered.asm.mixin.MixinEnvironment.Side;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-
-import static javax.sound.sampled.AudioSystem.getLine;
 
 public class InfinityBoxScreen extends ContainerScreen<InfinityBoxContainer> {
     private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/gui/infinity_chest.png");
@@ -40,7 +24,9 @@ public class InfinityBoxScreen extends ContainerScreen<InfinityBoxContainer> {
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(INFINITY_CHEST_GFUI_TEXTURE);
+        if (this.minecraft != null) {
+            this.minecraft.getTextureManager().bindTexture(INFINITY_CHEST_GFUI_TEXTURE);
+        }
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize, 500, 500);
@@ -65,16 +51,5 @@ public class InfinityBoxScreen extends ContainerScreen<InfinityBoxContainer> {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
-
-//    @Override
-//    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {
-//        final Slot slot = getSlotUnderMouse();
-//        if (slot instanceof InfinityBoxSlot && slot.getHasStack()) {
-//            InfinityBoxSlot infinitySlot = (InfinityBoxSlot) slot;
-//            ItemStack itemStack = infinitySlot.getStack();
-//            List<ITextComponent> tooltip = itemStack.getTooltip(playerInventory.player, TooltipFlags.NORMAL);
-//            tooltip.add(new TranslationTextComponent("gui.endless.stack_count", getSimplifiedCount(itemStack.getCount())));
-//        } else super.renderHoveredTooltip(matrixStack, x, y);
-//    }
 
 }

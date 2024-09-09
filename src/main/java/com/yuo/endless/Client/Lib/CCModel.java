@@ -10,7 +10,7 @@ public class CCModel implements IVertexSource, Copyable<CCModel> {
 
     public Vertex5[] verts;
 
-    public ArrayList<Object> attributes = new ArrayList();
+    public ArrayList<Object> attributes = new ArrayList<>();
 
     CCModel(int vertexMode) {
         if (vertexMode != 7 && vertexMode != 4)
@@ -94,13 +94,13 @@ public class CCModel implements IVertexSource, Copyable<CCModel> {
             model.getOrAllocate((AttributeKey)NormalAttribute.attributeKey);
         for (int i = 0; i < polys.size(); i++) {
             int[] ai = polys.get(i);
-            Vector3 vert = ((Vector3)verts.get(ai[0] - 1)).copy();
-            Vector3 uv = (ai[1] <= 0) ? new Vector3() : ((Vector3)uvs.get(ai[1] - 1)).copy();
+            Vector3 vert = verts.get(ai[0] - 1).copy();
+            Vector3 uv = (ai[1] <= 0) ? new Vector3() : uvs.get(ai[1] - 1).copy();
             if (((ai[2] > 0)) != hasNormals)
                 throw new IllegalArgumentException();
             model.verts[i] = new Vertex5(vert, uv.x, uv.y);
             if (hasNormals)
-                model.normals()[i] = ((Vector3)normals.get(ai[2] - 1)).copy();
+                model.normals()[i] = normals.get(ai[2] - 1).copy();
         }
         return model;
     }
