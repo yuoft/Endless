@@ -28,6 +28,9 @@ public abstract class ItemRendererMixin {
     @ModifyVariable(method = "renderItemOverlayIntoGUI", at = @At("STORE"), ordinal = 1)
     private String injected(String x) {
         String s = x.replaceAll("\\D", ""); //去除非数字
+        if (s.isEmpty()) {
+            s = "1";
+        }
         return endless$getSimplifiedCount(Integer.parseInt(s));
     }
 
