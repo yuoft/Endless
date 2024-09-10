@@ -1,10 +1,15 @@
 {
   "parent": "item/bow",
   "textures": {
-    "layer0": "endless:item/tool/infinity_bow/idle",
-    "mask": "endless:item/tool/infinity_bow/idle_mask"
+    "layer0": "endless:item/tool/infinity_bow/idle"
   },
   "overrides": [
+    {
+      "predicate": {
+        "endless:pulling": 0
+      },
+      "model": "endless:item/infinity_bow_default"
+    },
     {
       "predicate": {
         "endless:pulling": 1
@@ -25,9 +30,5 @@
       },
       "model": "endless:item/infinity_bow_pulling_2"
     }
-  ],
-  "loader": "endless:cosmic",
-  "cosmic": {
-    "mask": "#mask"
-  }
+  ]
 }

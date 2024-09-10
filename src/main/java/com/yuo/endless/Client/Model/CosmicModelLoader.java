@@ -27,12 +27,23 @@ public class CosmicModelLoader implements IModelLoader<CosmicModelGeometry> {
         JsonObject cosmicObj = modelContents.getAsJsonObject("cosmic");
         if (cosmicObj == null)
             throw new IllegalStateException();
-        String maskTexture = JSONUtils.getString(cosmicObj, "mask");
-        JsonObject clean = modelContents.getAsJsonObject();
-        clean.remove("cosmic");
-        clean.remove("loader");
-        BlockModel baseModel = deserializationContext.deserialize(clean, BlockModel.class);
-        return new CosmicModelGeometry(baseModel, maskTexture);
+        else {
+//            List<String> maskTexture = new ArrayList<>();
+//            if (cosmicObj.has("mask") && cosmicObj.get("mask").isJsonArray()){
+//                JsonArray masks = cosmicObj.getAsJsonArray("mask");
+//                for (int i = 0; i < masks.size(); i++){
+//                    maskTexture.add(masks.get(i).getAsString());
+//                }
+//            } else {
+//                maskTexture.add(JSONUtils.getString(cosmicObj, "mask"));
+//            }
+            String maskTexture = JSONUtils.getString(cosmicObj, "mask");
+            JsonObject clean = modelContents.getAsJsonObject();
+            clean.remove("cosmic");
+            clean.remove("loader");
+            BlockModel baseModel = deserializationContext.deserialize(clean, BlockModel.class);
+            return new CosmicModelGeometry(baseModel, maskTexture);
+        }
     }
 
     public static class CosmicModelGeometry implements IModelGeometry<CosmicModelGeometry> {

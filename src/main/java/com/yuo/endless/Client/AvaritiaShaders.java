@@ -25,6 +25,10 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * 星空渲染 参考Avaritia Universal模组， 暮色森林，龙之研究
+ * Date: 2024/9/10
+ */
 public class AvaritiaShaders {
 
     public static float yaw;
@@ -85,7 +89,7 @@ public class AvaritiaShaders {
         MinecraftForge.EVENT_BUS.addListener(AvaritiaShaders::onRenderTick);
         MinecraftForge.EVENT_BUS.addListener(AvaritiaShaders::clientTick);
         initShaders();
-        //添加资源
+        //添加资源 龙之研究
         COSMIC_HELPER.addIIconRegister(registrar -> {
             for (int i =0; i< 10; i++) {
                 int finalI = i;
@@ -155,7 +159,7 @@ public class AvaritiaShaders {
     public static void initShaders() {
         IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         ISelectiveResourceReloadListener shaderReloadListener; //防止报错  ？？？
-        if (resourceManager instanceof IReloadableResourceManager)
+        if (resourceManager instanceof IReloadableResourceManager) //暮色森林
             ((IReloadableResourceManager) resourceManager).addReloadListener(shaderReloadListener = (manager, predicate) ->{
                 PROGRAMS.values().forEach(ShaderLinkHelper::deleteShader);
                 PROGRAMS.clear();
