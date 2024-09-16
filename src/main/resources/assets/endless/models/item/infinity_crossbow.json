@@ -2,14 +2,15 @@
     "parent": "item/crossbow",
     "textures": {
         "layer0": "endless:item/tool/infinity_crossbow/standby",
-        "layer1": "endless:item/tool/infinity_crossbow/core",
-        "mask": "endless:item/tool/infinity_bow/idle_mask"
-    },
-    "loader": "endless:cosmic",
-    "cosmic": {
-        "mask": "#mask"
+        "layer1": "endless:item/tool/infinity_crossbow/core"
     },
     "overrides": [
+        {
+            "predicate": {
+                "endless:pulling": 0
+            },
+            "model": "endless:item/infinity_crossbow_default"
+        },
         {
             "predicate": {
                 "endless:pulling": 1

@@ -15,6 +15,9 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,6 +26,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 //箭实体
@@ -133,6 +137,32 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
         if (inGround && timeInGround >= 100){
             setDead();
         }else if (ticksExisted > 100) setDead();
+
+        if (ticksExisted % 4 == 0 && !this.world.isRemote){
+            BlockPos pos = this.getPosition();
+            AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-16,-8,-16), pos.add(16,8,16));
+            List<LivingEntity> entityList = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb);
+            double dis = 1000;
+            LivingEntity living = null;
+            for (LivingEntity livingentity : entityList) {
+                double sq = livingentity.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
+                if (sq < dis) {
+                    dis = sq;
+                    living = livingentity; //选定最近目标
+                }
+            }
+            if (living != null && living.isAlive()) {
+                Vector3d originalPosVector = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
+                Vector3d finalVector = originalPosVector.subtract(living.getPositionVec());
+                if (finalVector.length() > 1) {
+                    finalVector.normalize();
+                }
+                double motionX = finalVector.x * -2;
+                double motionY = finalVector.y * -2;
+                double motionZ = finalVector.z * -2;
+                this.setMotion(motionX, motionY, motionZ); //向目标飞行
+            }
+        }
     }
 
     @Override
