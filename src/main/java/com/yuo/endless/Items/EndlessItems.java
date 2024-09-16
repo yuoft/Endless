@@ -49,6 +49,7 @@ public class EndlessItems {
 
 	//奇点
 	public static RegistryObject<Item> singularity = ITEMS.register("singularity", Singularity::new);
+	public static RegistryObject<Item> eternalSingularity = ITEMS.register("eternal_singularity", InfinityItem::new);
 
 	//工具
 	public static RegistryObject<Item> infinityPickaxe = ITEMS.register("infinity_pickaxe", InfinityPickaxe::new);

@@ -50,6 +50,8 @@
   "item.endless.singularity_cobalt":"§eCobalt Singularity",
   "item.endless.singularity_manyullyn":"§eManyullyn Singularity",
 
+  "item.endless.eternal_singularity":"§eEternal Singularity",
+
   "item.endless.crystal_matrix_pickaxe":"§bCrystal Matrix Pickaxe",
   "item.endless.crystal_matrix_axe":"§bCrystal Matrix Axe",
   "item.endless.crystal_matrix_shovel":"§bCrystal Matrix Shovel",
@@ -194,6 +196,8 @@
   "advancements.endless.infinity_arrow.desc":"Obtain an infinity arrow",
   "advancements.endless.infinity_box.title":"Move workstation",
   "advancements.endless.infinity_box.desc":"Make infinity box",
+  "advancements.endless.eternal_singularity.title":"Eternal Singularity",
+  "advancements.endless.eternal_singularity.desc":"Synthetic eternal singularity",
 
   "gui.endless.extreme_crafting_table":"Extreme Crafting Table",
   "gui.endless.neutronium_collector":"Neutronium Collector",

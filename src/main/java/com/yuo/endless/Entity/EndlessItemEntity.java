@@ -1,4 +1,4 @@
-package com.yuo.endless.Items.Tool;
+package com.yuo.endless.Entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;

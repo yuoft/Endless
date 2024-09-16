@@ -12,7 +12,7 @@
     "description": {
       "translate": "advancements.endless.singularity.desc"
     },
-    "frame": "challenge"
+    "frame": "goal"
   },
   "criteria": {
     "singularity": {

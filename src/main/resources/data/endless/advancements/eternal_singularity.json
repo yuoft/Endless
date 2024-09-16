@@ -1,0 +1,30 @@
+{
+  "parent": "endless:singularity",
+  "display": { 
+    "icon": { 
+      "item": "endless:eternal_singularity"
+    },
+    "title": {
+		"translate": "advancements.endless.eternal_singularity.title"
+	},
+    "description": {
+		"translate": "advancements.endless.eternal_singularity.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": { 
+    "infinity_sword": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:eternal_singularity"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 200
+  }
+}

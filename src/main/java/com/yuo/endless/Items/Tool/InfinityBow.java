@@ -1,11 +1,12 @@
 package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Config;
+import com.yuo.endless.EndlessTab;
+import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityArrowEntity;
 import com.yuo.endless.Entity.InfinityArrowSubEntity;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.EndlessTab;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;

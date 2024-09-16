@@ -106,9 +106,9 @@ public class ExtremeCraftShpaelessManager {
      */
     public void addRecipeInput(ExtremeCraftShapeRecipe recipe, ItemStack... stacks){
         //只能向以下3个配方追加物品
-        if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls && recipe != ModRecipeManager.stew) return;
+        if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls && recipe != ModRecipeManager.stew && recipe != ModRecipeManager.eternalSingularity) return;
         List<ItemStack> list = new ArrayList<>(Arrays.asList(stacks));
-        if (list.size() <= 0) return;
+        if (list.isEmpty()) return;
         if (recipe.getIngredients().size() + list.size() > 81) throw new RuntimeException("recipe size not pass to 81!");
         for (ExtremeCraftShapeRecipe craftRecipe : recipes) {
             if (craftRecipe.hasOutput(recipe.getRecipeOutput())){
@@ -126,7 +126,7 @@ public class ExtremeCraftShpaelessManager {
         if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls && recipe != ModRecipeManager.stew) return;
         NonNullList<Ingredient> list = NonNullList.create();
         list.addAll(Arrays.asList(ingredients));
-        if (list.size() <= 0) return;
+        if (list.isEmpty()) return;
         if (recipe.getIngredients().size() + list.size() > 81) throw new RuntimeException("recipe size not pass to 81!");
         for (ExtremeCraftShapeRecipe craftRecipe : recipes) {
             if (craftRecipe.hasOutput(recipe.getRecipeOutput())){

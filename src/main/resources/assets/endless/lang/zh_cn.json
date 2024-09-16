@@ -50,6 +50,8 @@
     "item.endless.singularity_cobalt":"§e奇点-钴",
     "item.endless.singularity_manyullyn":"§e奇点-玛玉灵",
 
+    "item.endless.eternal_singularity":"§e永恒奇点",
+
     "item.endless.infinity_pickaxe":"§c世界崩解之镐",
     "item.endless.infinity_axe":"§c自然荒芜之斧",
     "item.endless.infinity_shovel":"§c星球吞噬之铲",
@@ -195,6 +197,8 @@
     "advancements.endless.infinity_arrow.desc":"获得无尽箭矢",
     "advancements.endless.infinity_box.title":"移动工作站",
     "advancements.endless.infinity_box.desc":"制作无尽箱子",
+    "advancements.endless.eternal_singularity.title":"永恒奇点",
+    "advancements.endless.eternal_singularity.desc":"合成永恒奇点",
 
     "gui.endless.extreme_crafting_table":"终极工作台",
     "gui.endless.neutronium_collector":"中子素收集器",

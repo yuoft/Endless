@@ -5,6 +5,7 @@ import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
+import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Event.EventHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

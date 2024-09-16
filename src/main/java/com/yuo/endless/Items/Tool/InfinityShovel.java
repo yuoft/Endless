@@ -1,6 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.EndlessTab;
+import com.yuo.endless.Entity.EndlessItemEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.GrassBlock;

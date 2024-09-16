@@ -1,5 +1,5 @@
 {
-  "parent": "endless:singularity",
+  "parent": "endless:infinity_catalyst",
   "display": { 
     "icon": { 
       "item": "endless:star_fuel"

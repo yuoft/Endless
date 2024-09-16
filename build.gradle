@@ -23,7 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.16.5-1.5.4'
+version = '1.16.5-1.5.5'
 group = 'com.github.yuoft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -206,7 +206,7 @@ jar {
         attributes([
             "Specification-Title": "endless",
             "Specification-Vendor": "yuoft",
-            "Specification-Version": "1.5.2", // We are version 1 of ourselves
+            "Specification-Version": "1.5.5", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"yuoft",
