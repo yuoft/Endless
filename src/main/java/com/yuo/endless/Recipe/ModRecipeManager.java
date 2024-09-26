@@ -728,7 +728,7 @@ public class ModRecipeManager {
      */
     public static void lastMinuteChanges() {
         if (Endless.isSpaceArms) { // 16+7 13+1 15+3
-            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(SAItems.jiejing.get()), new ItemStack(Items.BEDROCK));
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(Items.BEDROCK));
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(eternalSingularity,
                     Singularity.getSingularity("ruby"), Singularity.getSingularity("dragon"), Singularity.getSingularity("space"),
                     Singularity.getSingularity("xray"), Singularity.getSingularity("ultra"));
@@ -741,7 +741,7 @@ public class ModRecipeManager {
         }
         if (Endless.isPaimeng) { //23+1 14+26 18+22
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(PMItems.relicsBoxOne.get()));
+                    new ItemStack(PMItems.relicsBoxOne.get()), new ItemStack(PMItems.jiejing.get()));
 
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(meatBalls,
                     new ItemStack(PMItems.paimengFood.get()), new ItemStack(PMItems.xiantiaoqiang.get()),
