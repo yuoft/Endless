@@ -187,7 +187,11 @@ public class InfinitySword extends SwordItem{
         }
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
-            target.onDeath(new InfinityDamageSource(attacker));
+            try {
+                target.onDeath(new InfinityDamageSource(attacker));
+            }catch (NullPointerException e){
+                e.printStackTrace(); //target.world.getServer()  空指针原因  神化模组冲突
+            }
             if (Config.SERVER.swordKill.get()){
                 target.onKillCommand();
                 target.deathTime = 20;
