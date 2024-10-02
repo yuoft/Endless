@@ -185,6 +185,9 @@ public class InfinitySword extends SwordItem{
                 return true;
             }
         }
+
+        spawnHealthParticle(target);
+
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
             try {
@@ -199,6 +202,22 @@ public class InfinitySword extends SwordItem{
             }
         }
         return true;
+    }
+
+    /**
+     * 生成被攻击粒子  根据血量生成相应数量粒子
+     * @param target 被攻击实体
+     */
+    private static void spawnHealthParticle(Entity target){
+        if (target instanceof LivingEntity){
+            LivingEntity living = (LivingEntity) target;
+            float maxHealth = living.getMaxHealth();
+            int max = Math.min(10,(int) Math.ceil(maxHealth / 5.0));
+            if (target.world instanceof ServerWorld) {
+                int k = (int)((double)maxHealth * 0.5);
+                ((ServerWorld)target.world).spawnParticle(ParticleTypes.DAMAGE_INDICATOR, target.getPosX(), target.getPosYHeight(0.5), target.getPosZ(), k, 0.1, 0.0, 0.1, 0.2);
+            }
+        }
     }
 
     //范围伤害

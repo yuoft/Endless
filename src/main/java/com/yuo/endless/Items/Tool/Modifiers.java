@@ -11,7 +11,7 @@ public class Modifiers {
             UUID.fromString("4898d4a4-64d1-4f2d-a177-09a4ab79db5a"),
             UUID.fromString("667f9d98-8d50-49c8-8653-9bc2f265e8d6"),
             UUID.fromString("2db91fae-60bd-46c2-9f2f-34f50ec2c9da")};
-    private static final UUID[] UUID_SWIM = new UUID[]{
+    private static final UUID[] UUID_ATK_SPEED = new UUID[]{
             UUID.fromString("731df8f9-0002-4f8c-9c89-529af7de38eb"), //0
             UUID.fromString("bce19f23-b799-4698-b8b5-e50fc5852835"), //1
             UUID.fromString("2d761976-460d-4d86-8d83-2e5a845e79ed"), //2
@@ -40,8 +40,8 @@ public class Modifiers {
         return new AttributeModifier(UUID_SPEED[type], Endless.MOD_ID + ":movement_speed", value, AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
-    public static AttributeModifier getModifierSwim(int type, double value){
-        return new AttributeModifier(UUID_SWIM[type], Endless.MOD_ID + ":swim_speed", value, AttributeModifier.Operation.MULTIPLY_BASE);
+    public static AttributeModifier getModifierAtkSpeed(int type, double value){
+        return new AttributeModifier(UUID_ATK_SPEED[type], Endless.MOD_ID + ":attack_speed", value, AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
 }

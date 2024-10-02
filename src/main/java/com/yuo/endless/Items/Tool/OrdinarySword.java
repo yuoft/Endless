@@ -27,7 +27,7 @@ public class OrdinarySword extends SwordItem{
             if (stack.getItem() == EndlessItems.crystalMatrixSword.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumSword.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,-0.04d));
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(4,0.04d));
             }
             return builder.build();
         }

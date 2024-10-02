@@ -14,10 +14,10 @@ public enum MyItemTier implements IItemTier {
     SKULL_FIRE(1561, 10.0f, 10, 2, 10, () -> {
         return Ingredient.fromItems(EndlessBlocks.crystalMatrixBlock.get());
     }),
-    NEUTRON(3152, 15.0f, 10, 6, 21, () -> {
+    NEUTRON(3152, 15.0f, 98, 6, 21, () -> {
         return Ingredient.fromItems(EndlessItems.neutroniumIngot.get());
     }),
-    CRYSTAL(2401, 10.0f, 8, 5, 17, () -> {
+    CRYSTAL(2401, 10.0f, 48, 5, 17, () -> {
         return Ingredient.fromItems(EndlessItems.crystalMatrixIngot.get());
     }),
     //数值无穷表示：Double或Float的POSITIVE_INFINITY（正）或NEGATIVE_INFINITY（负）

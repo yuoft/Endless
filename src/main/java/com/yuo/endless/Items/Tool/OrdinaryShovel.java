@@ -27,7 +27,7 @@ public class OrdinaryShovel extends ShovelItem {
             if (stack.getItem() == EndlessItems.crystalMatrixShovel.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumShovel.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,-0.04d));
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(7,0.04d));
             }
             return builder.build();
         }

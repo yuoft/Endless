@@ -27,7 +27,7 @@ public class OrdinaryHoe extends HoeItem {
             if (stack.getItem() == EndlessItems.crystalMatrixHoe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(8,0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumHoe.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(8,-0.04d));
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(8,0.04d));
             }
             return builder.build();
         }

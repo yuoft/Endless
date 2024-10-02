@@ -27,7 +27,7 @@ public class OrdinaryPickaxe extends PickaxeItem {
             if (stack.getItem() == EndlessItems.crystalMatrixPickaxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumPickaxe.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,-0.04d));
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(5,0.04d));
             }
             return builder.build();
         }

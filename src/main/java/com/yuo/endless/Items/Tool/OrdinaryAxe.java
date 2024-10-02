@@ -27,7 +27,7 @@ public class OrdinaryAxe extends AxeItem {
             if (stack.getItem() == EndlessItems.crystalMatrixAxe.get()){
                 builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.03d));
             }else if (stack.getItem() == EndlessItems.neutroniumAxe.get()){
-                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,-0.04d));
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.04d));
             }
             return builder.build();
         }
