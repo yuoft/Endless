@@ -190,11 +190,8 @@ public class InfinitySword extends SwordItem{
 
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
-            try {
+            if (!target.world.isRemote)
                 target.onDeath(new InfinityDamageSource(attacker));
-            }catch (NullPointerException e){
-                e.printStackTrace(); //target.world.getServer()  空指针原因  神化模组冲突
-            }
             if (Config.SERVER.swordKill.get()){
                 target.onKillCommand();
                 target.deathTime = 20;
@@ -212,7 +209,6 @@ public class InfinitySword extends SwordItem{
         if (target instanceof LivingEntity){
             LivingEntity living = (LivingEntity) target;
             float maxHealth = living.getMaxHealth();
-            int max = Math.min(10,(int) Math.ceil(maxHealth / 5.0));
             if (target.world instanceof ServerWorld) {
                 int k = (int)((double)maxHealth * 0.5);
                 ((ServerWorld)target.world).spawnParticle(ParticleTypes.DAMAGE_INDICATOR, target.getPosX(), target.getPosYHeight(0.5), target.getPosZ(), k, 0.1, 0.0, 0.1, 0.2);

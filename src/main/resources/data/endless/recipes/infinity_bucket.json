@@ -1,0 +1,31 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "II     II",
+    "IIO   OII",
+    "IAAO OAAI",
+    "IAAX XAAI",
+    "IAAX XAAI",
+    "IAAXXXAAI",
+    "IIAAAAAII",
+    " IIAAAII ",
+    "  IIIII  "
+  ],
+  "key": {
+    "X": {
+      "item": "endless:infinity_ingot"
+    },
+    "I": {
+      "item": "endless:neutronium_ingot"
+    },
+    "A": {
+      "item": "minecraft:bucket"
+    },
+    "O": {
+      "item": "endless:infinity_catalyst"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_bucket"
+  }
+}

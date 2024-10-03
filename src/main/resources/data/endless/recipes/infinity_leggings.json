@@ -1,0 +1,31 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "NNNNNNNNN",
+    "NIIIXIIIN",
+    "NINNXNNIN",
+    "NIN   NIN",
+    "NCN   NCN",
+    "NIN   NIN",
+    "NIN   NIN",
+    "NIN   NIN",
+    "NNN   NNN"
+  ],
+  "key": {
+    "I": {
+      "item": "endless:infinity_ingot"
+    },
+    "X": {
+      "item": "endless:infinity_catalyst"
+    },
+    "C": {
+      "item": "endless:crystal_matrix_block"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_leggings"
+  }
+}

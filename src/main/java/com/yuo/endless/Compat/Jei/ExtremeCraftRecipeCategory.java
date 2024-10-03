@@ -60,20 +60,23 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
 
         int width = recipe.getWidth(); //获取配方实际尺寸
         int height = recipe.getHeight();
+        int size = nullList.size();
         if (width != 9) {
             NonNullList<Ingredient> inputs = NonNullList.withSize(9 * height, Ingredient.EMPTY); //防止物品因为配方宽度不足9格错位
-            for (int i = 0; i < height; i++) {
+            for (int i = 0; i < height; i++) { //i = 3
                 for (int j = 0; j < 9; j++) {
                     int index = j + i * 9; //9*9中位置
-                    int oldidx = j + i * width; //配方中位置
-                    if (j < width) {
+                    int floor = (int) Math.floor((9 - width) / 2.0); //配方左边距离
+                    int ceil = (int) Math.ceil((9 - width) / 2.0); //配方右边距离
+                    int oldidx = Math.min(size - 1, Math.max(0, j - floor) + i * width); //旧配方中位置
+                    if (j > floor - 1 && j < 9 - ceil) { //两边留空
                         inputs.set(index, nullList.get(oldidx));
                     }
                 }
             }
             ingredients.setInputIngredients(inputs);
-        }
-        else ingredients.setInputIngredients(recipe.getIngredients());
+        } else ingredients.setInputIngredients(nullList);
+
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
     }
 

@@ -1,0 +1,31 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "   AAA   ",
+    "  ABBBA  ",
+    "  ACBCA  ",
+    "DDDBBBDDD",
+    " DDBBBDD ",
+    "  ABBBA  ",
+    "  AAAAA  ",
+    "   DDD   ",
+    "    D    "
+  ],
+  "key": {
+    "A": {
+      "item": "endless:neutronium_ingot"
+    },
+    "B": {
+      "item": "endless:infinity_nugget"
+    },
+    "C": {
+      "item": "minecraft:totem_of_undying"
+    },
+    "D": {
+      "item": "endless:crystal_matrix_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_totem"
+  }
+}
