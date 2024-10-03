@@ -4,11 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -21,9 +22,6 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
-
-import static com.yuo.endless.Recipe.ExtremeCraftRecipe.*;
 
 //9*9无序合成
 public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
@@ -103,23 +101,26 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
             if (!stack.isEmpty()) { stacks.add(stack); }
         }
 
+        if (items.size() != stacks.size()) { return false; }
+
         int num  =  0; //判断物品是否相同
-        for (Ingredient item : items) {
+        NonNullList<Ingredient> list = NonNullList.create(); //配方物品
+        list.addAll(items);
+
+        Iterator<Ingredient> ingredientIterator = list.iterator();
+        while(ingredientIterator.hasNext()) {
+            Ingredient ingredient = ingredientIterator.next();
             Iterator<ItemStack> iterator = stacks.iterator();
             while (iterator.hasNext()){
                 ItemStack stack = iterator.next();
-                if (item.test(stack)) {
+                if (ingredient.test(stack)) {
                     num++;
                     iterator.remove();
+                    break; //如果匹配成功 则退出当前循环
                 }
             }
+            ingredientIterator.remove();  //移除已匹配项
         }
-
-//        for (ItemStack stack : stacks) {
-//            for (Ingredient item : items) {
-//                if (item.test(stack)) num++;
-//            }
-//        }
 
         return num == items.size();
     }
@@ -159,7 +160,7 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
         for(int i = 0; i < jsonArray.size(); ++i) {
             JsonElement element = jsonArray.get(i);
             String asString = ((JsonObject) element).get("item").getAsString();
-            if ("endless:singularity".equals(asString)){
+            if ("endless:singularity".equals(asString)){ //获取奇点
                 ItemStack stack = CraftingHelper.getItemStack((JsonObject) element, true);
                 nonnulllist.add(Ingredient.fromStacks(stack));
             }else {

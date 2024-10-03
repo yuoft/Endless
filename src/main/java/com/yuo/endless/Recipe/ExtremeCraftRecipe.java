@@ -7,11 +7,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.yuo.endless.Blocks.EndlessBlocks;
+import com.yuo.endless.Items.Singularity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -21,7 +23,9 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
@@ -252,14 +256,25 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
     public static Map<String, Ingredient> deserializeKey(JsonObject json) {
         Map<String, Ingredient> map = Maps.newHashMap();
 
-        for(Map.Entry<String, JsonElement> entry : json.entrySet()) {
-            if (entry.getKey().length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+        for(Entry<String, JsonElement> entry : json.entrySet()) {
+            String key = entry.getKey();
+            if (key != null) {
+                if (key.length() != 1) {
+                    throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+                }
+                JsonElement element = ((JsonObject) entry.getValue()).get("item");
+                String asString = "";
+                if (element != null){
+                    asString = element.getAsString();
+                }
+                if (" ".equals(key)) {
+                    throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
+                } else if ("endless:singularity".equals(asString)){ //获取奇点
+                    ItemStack stack = CraftingHelper.getItemStack((JsonObject) entry.getValue(), true);
+                    CompoundNBT nbt = stack.getOrCreateTag();
+                    map.put(key, Ingredient.fromStacks(Singularity.getSingularity(nbt.getString(Singularity.NBT_TYPE))));
+                }else map.put(key, CraftingHelper.getIngredient(entry.getValue()));
             }
-
-            if (" ".equals(entry.getKey())) {
-                throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
-            } else map.put(entry.getKey(), CraftingHelper.getIngredient(entry.getValue()));
         }
 
         map.put(" ", Ingredient.EMPTY);
@@ -302,9 +317,20 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
                 if (ingredient == null) {
                     throw new JsonSyntaxException("Pattern references symbol '" + s + "' but it's not defined in the key");
                 }
-
-                set.remove(s);
-                nonnulllist.set(j + patternWidth * i, ingredient);
+//                if (ingredient.test(new ItemStack(EndlessItems.singularity.get()))){
+//                    ArrayList<ItemStack> stacks = new ArrayList<>();
+//                    for (ItemStack stack : ingredient.getMatchingStacks()) {
+//                        if (stack.getItem() instanceof Singularity){
+//                            CompoundNBT nbt = stack.getOrCreateTag();
+//                            ItemStack singularity = Singularity.getSingularity(nbt.getString("type"));
+//                            stacks.add(singularity);
+//                        }
+//                    }
+//                    Ingredient.fromStacks(getStacks(stacks));
+//                }else {
+                    set.remove(s);
+                    nonnulllist.set(j + patternWidth * i, ingredient);
+//                }
             }
         }
 
@@ -313,6 +339,19 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         } else {
             return nonnulllist;
         }
+    }
+
+    /**
+     * 将列表转为数组
+     * @param stacks 列表
+     * @return 数组
+     */
+    private static ItemStack[] getStacks(ArrayList<ItemStack> stacks){
+        ItemStack[] astack = new ItemStack[stacks.size()];
+        for(int i = 0; i < astack.length; ++i) {
+            astack[i] = stacks.get(i);
+        }
+        return astack;
     }
 
     public static ItemStack deserializeItem(JsonObject object) {

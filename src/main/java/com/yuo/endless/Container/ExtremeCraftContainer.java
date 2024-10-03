@@ -69,12 +69,12 @@ public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory
         //获取配方 先检查无尽配方
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
         Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, inputInventory, world);
-        if (recipeOptional.isPresent()){ //json配方
+        if (recipeOptional.isPresent()){ //json配方 有序
             ExtremeCraftRecipe recipe = recipeOptional.get();
             if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
                 itemStack = recipe.getCraftingResult(inputInventory);
             }
-        }else if (recipeOptionalIn.isPresent()){
+        }else if (recipeOptionalIn.isPresent()){ //无序配方
             ExtremeCraftShapeRecipe recipe = recipeOptionalIn.get();
             if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
                 itemStack = recipe.getCraftingResult(inputInventory);
