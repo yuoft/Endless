@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -49,6 +50,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.*;
 
@@ -457,6 +462,27 @@ public class EventHandler {
      * @return 图腾
      */
     private static ItemStack getPlayerBagItem(PlayerEntity player){
+        if (Endless.isCurios){
+            final ItemStack[] stack = new ItemStack[1];
+            LazyOptional<ICuriosItemHandler> curiosHandler = CuriosApi.getCuriosHelper().getCuriosHandler(player);
+            curiosHandler.ifPresent(handler -> {
+                Map<String, ICurioStacksHandler> curios = handler.getCurios();
+                for (String s : curios.keySet()) {
+                    ICurioStacksHandler stacksHandler = curios.get(s);
+                    if ("body".equals(s)){ //只查找胸饰栏
+                        IDynamicStackHandler stacks = stacksHandler.getStacks();
+                        int slots = stacks.getSlots();
+                        for (int i = 0; i < slots; i++){
+                            ItemStack itemStack = stacks.getStackInSlot(i);
+                            if (itemStack.getItem() instanceof InfinityTotem)
+                                stack[0] = itemStack;
+                        }
+                    }
+                }
+            });
+            return stack[0].isEmpty() ? ItemStack.EMPTY : stack[0];
+        }
+
         ItemStack mainhand = player.getHeldItemMainhand();
         if (mainhand.getItem() == EndlessItems.infinityTotem.get()){
             return mainhand;

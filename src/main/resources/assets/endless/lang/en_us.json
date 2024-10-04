@@ -144,6 +144,8 @@
   "minecraft:lava":"Lava",
   "endless:infinity_fluid":"§6Infinity Fluid",
   "endless.text.msg.totem_break":"The totem will no longer shelter you",
+  "endless.infinity_bucket.place": "Place Fluid:",
+  "endless.infinity_bucket.assume": "Assume Fluid:",
 
   "endless.message.login":"§bWelcome to this mod [Avaritia endless · pseudo], §aclick here§b to feedback!",
   "endless.message.login0":"§ahttps://space.bilibili.com/21854371",

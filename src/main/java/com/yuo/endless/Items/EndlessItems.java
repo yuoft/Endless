@@ -63,7 +63,7 @@ public class EndlessItems {
 	public static RegistryObject<Item> infinityBucket = ITEMS.register("infinity_bucket", InfinityBucket::new);
 	public static RegistryObject<Item> infinityTotem = ITEMS.register("infinity_totem", InfinityTotem::new);
 
-	public static RegistryObject<InfinityFluidBucket> infinityFluidBucket = ITEMS.register("infinity_fluid_bucket",
+	public static RegistryObject<Item> infinityFluidBucket = ITEMS.register("infinity_fluid_bucket",
 			() -> new InfinityFluidBucket(EndlessFluids.infinityFluid));
 
 	public static RegistryObject<Item> crystalMatrixSword = ITEMS.register("crystal_matrix_sword", () -> new OrdinarySword(MyItemTier.CRYSTAL));

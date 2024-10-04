@@ -144,6 +144,8 @@
     "minecraft:lava":"岩浆",
     "endless:infinity_fluid":"§6熔融无尽",
     "endless.text.msg.totem_break":"图腾将不再庇护与你",
+    "endless.infinity_bucket.place": "装入：",
+    "endless.infinity_bucket.assume": "装出：",
 
 
     "endless.message.login":"§b欢迎游玩本模组[无尽贪婪·伪]，问题反馈§a点击此处!",
