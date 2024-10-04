@@ -2,6 +2,7 @@ package com.yuo.endless;
 
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Client.Sound.ModSounds;
+import com.yuo.endless.Compat.Curios.CuriosCompat;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Fluid.EndlessFluids;
@@ -102,6 +103,7 @@ public class Endless {
     public static boolean isXPTmoe = false; //经验之书
     public static boolean isIronFurnaces = false; //更多熔炉
     public static boolean isCA = false; //混沌觉醒
+    public static boolean isCurios = false; //饰品栏
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
@@ -153,6 +155,10 @@ public class Endless {
         ModRecipeManager.addExtremeCraftShape();
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
+        if (isCurios){
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosCompat::sendImc);
+        }
+
         Config.loadConfig(); //加载工具黑名单
         event.enqueueWork(NetWorkHandler::registerMessage); //创建数据包
         //添加发射器
@@ -246,6 +252,7 @@ public class Endless {
         isXPTmoe = checkMod("xpbook");
         isIronFurnaces = checkMod("ironfurnaces");
         isCA = checkMod("chaosawakens");
+        isCurios = checkMod("curios");
     }
 
     /**
