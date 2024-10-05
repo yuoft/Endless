@@ -3,7 +3,7 @@
     "textures": {
         "layer0": "endless:item/tool/infinity_crossbow/standby",
         "layer1": "endless:item/tool/infinity_crossbow/core",
-        "mask": "endless:item/tool/infinity_crossbow/idle_mask"
+        "mask": "endless:item/tool/infinity_crossbow/standby_mask"
     },
     "loader": "endless:cosmic",
     "cosmic": {

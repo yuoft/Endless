@@ -190,8 +190,8 @@ dependencies {
 //    runtimeOnly fg.deobf("com.github.alexthe666.citadel:citadel:1.8.1-1.16.5") //bug minix
 //    runtimeOnly fg.deobf("com.github.alexthe666.iceandfire:iceandfire:${iceandfire_ver}-${mc_ver}")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
-    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-53.2')
-    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.3")
+//    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-53.2')
+//    runtimeOnly fg.deobf("vazkii.botania:Botania:1.16.5-420.3")
     runtimeOnly fg.deobf("curse.maven:jei-238222:3681294") //引入mod
 //    runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
@@ -199,8 +199,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:jade-324717:3910873")
 //    runtimeOnly fg.deobf("curse.maven:apotheosis-313970:3936649")
 //    runtimeOnly fg.deobf("curse.maven:placebo-283644:4501015")
-    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-1.6.158")
-    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tconstruct_ver}")
+//    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-1.6.158")
+//    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tconstruct_ver}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
