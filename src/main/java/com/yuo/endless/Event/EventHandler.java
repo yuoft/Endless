@@ -474,13 +474,17 @@ public class EventHandler {
                         int slots = stacks.getSlots();
                         for (int i = 0; i < slots; i++){
                             ItemStack itemStack = stacks.getStackInSlot(i);
-                            if (itemStack.getItem() instanceof InfinityTotem)
+                            if (itemStack.getItem() instanceof InfinityTotem){
                                 stack[0] = itemStack;
+                                break;
+                            }
                         }
                     }
                 }
             });
-            return stack[0].isEmpty() ? ItemStack.EMPTY : stack[0];
+            if (stack[0] != null){
+                return stack[0].isEmpty() ? ItemStack.EMPTY : stack[0];
+            }
         }
 
         ItemStack mainhand = player.getHeldItemMainhand();
