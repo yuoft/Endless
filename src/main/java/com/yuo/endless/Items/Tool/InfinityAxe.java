@@ -91,11 +91,6 @@ public class InfinityAxe extends AxeItem {
         }
     }
 
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
-    }
-
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {

@@ -2,6 +2,7 @@ package com.yuo.endless.Items.Tool;
 
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
+import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianPartEntity;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
@@ -195,7 +196,7 @@ public class InfinitySword extends SwordItem{
             if (Config.SERVER.swordKill.get()){
                 target.onKillCommand();
                 target.deathTime = 20;
-                target.remove(true);
+                target.remove();
             }
         }
         return true;
@@ -270,18 +271,33 @@ public class InfinitySword extends SwordItem{
      * @param entity 实体
      * @param player 玩家
      */
-    private void damageGuardian(Entity entity, PlayerEntity player){
-        if (Endless.isDE){
+    public static void damageGuardian(Entity entity, PlayerEntity player){
+        if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
             if (entity instanceof DraconicGuardianEntity){
                 DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
-                draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
+                draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
                 draconicGuardian.setHealth(-1);
-//                draconicGuardian.func_70097_a(new InfinityDamageSource(player), 10000);
                 draconicGuardian.onDeath(new InfinityDamageSource(player));
-            }else if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){
+            }else if (entity instanceof GuardianCrystalEntity){
                 GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;
-                crystal.func_174812_G();
-            }
+                crystal.onKillCommand();
+            }else if (entity instanceof DraconicGuardianPartEntity) {
+                    DraconicGuardianPartEntity draconicGuardian = (DraconicGuardianPartEntity) entity;
+                    DraconicGuardianEntity dragon = draconicGuardian.dragon;
+                    dragon.attackEntityFrom(DamageSource.causeThornsDamage(player), Float.POSITIVE_INFINITY);
+                    dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
+                    GuardianCrystalEntity crystal = dragon.closestGuardianCrystal;
+                    if (crystal != null) {
+                        crystal.onKillCommand();
+                    }
+                    if (dragon.isAlive() || dragon.getHealth() > 0) {
+                        dragon.setHealth(-1);
+                        if (!player.world.isRemote) {
+                            dragon.onDeath(new InfinityDamageSource(player));
+                        }
+                    }
+                    dragon.onKillCommand();
+                }
         }
     }
 
@@ -301,11 +317,6 @@ public class InfinitySword extends SwordItem{
         if (damage > 0){
             stack.getOrCreateTag().putInt("Damage", 0);
         }
-    }
-
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
     }
 
     @Nullable

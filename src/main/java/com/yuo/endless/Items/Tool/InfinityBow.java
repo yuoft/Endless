@@ -162,11 +162,6 @@ public class InfinityBow extends BowItem {
         }
     }
 
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
-    }
-
     @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {

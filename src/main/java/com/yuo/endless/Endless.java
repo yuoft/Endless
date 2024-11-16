@@ -106,7 +106,6 @@ public class Endless {
     public static boolean isCurios = false; //饰品栏
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SERVER_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

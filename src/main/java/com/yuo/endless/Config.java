@@ -15,16 +15,9 @@ import java.util.Set;
 
 public class Config {
     public static ForgeConfigSpec SERVER_CONFIG;
-    public static ForgeConfigSpec CLIENT_CONFIG;
     public static ServerConfig SERVER;
-    public static ClientConfig CLIENT;
 
     static {
-        {
-            final Pair<ClientConfig, ForgeConfigSpec> specPair1 = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
-            CLIENT = specPair1.getLeft();
-            CLIENT_CONFIG = specPair1.getRight();
-        }
         {
             final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
             SERVER_CONFIG = specPair.getRight();
@@ -278,19 +271,6 @@ public class Config {
                     " eg:[{\"name:wood\",\"color0:0x112233\",\"color1:0x445566\"},{...}]").push("singularityCustom");
             this.singularityCustomList = buildConfig(builder, "Singularity Custom List", "Custom Singularity List");
             builder.pop();
-        }
-    }
-
-    public static class ClientConfig{
-        public final ForgeConfigSpec.BooleanValue isChangeWing; //是否切换翅膀纹理
-        public final ForgeConfigSpec.BooleanValue isRenderEye; //是否开启发光眼睛
-
-        public ClientConfig(ForgeConfigSpec.Builder builder){
-            builder.comment("Endless Client Config").push("general");
-            this.isChangeWing = buildBoolean(builder, "Is Change Wing", false,  "Whether to switch the wing texture");
-            this.isRenderEye = buildBoolean(builder, "Is Render Eye", false,  "Whether to open the luminous eyes");
-            builder.pop();
-
         }
     }
 

@@ -1,12 +1,12 @@
 package com.yuo.endless.Entity;
 
-import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.google.common.collect.Lists;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
+import com.yuo.endless.Items.Tool.InfinitySword;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -121,13 +121,8 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
         if (shooter != null)
             shooter.setLastAttackedEntity(entity); //设置最后攻击者
 
-        if (Endless.isDE){
-            if (entity instanceof GuardianCrystalEntity && Config.SERVER.isBreakDECrystal.get()){
-                GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;
-                crystal.func_174812_G();
-                this.remove();
-                return;
-            }
+        if (shooter instanceof PlayerEntity){
+            InfinitySword.damageGuardian(entity, (PlayerEntity) shooter);
         }
 
         if (this.isBurning()) {
@@ -169,8 +164,7 @@ public class InfinityArrowEntity extends AbstractArrowEntity {
                     CriteriaTriggers.KILLED_BY_CROSSBOW.test(serverplayerentity, Collections.singletonList(entity));
                 }
             }
-        }
-        else {
+        } else {
             entity.attackEntityFrom(new InfinityDamageSource(this.shooter), (float)i);
         }
         this.playSound(this.hitSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));

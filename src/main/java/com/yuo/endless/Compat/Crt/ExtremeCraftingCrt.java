@@ -6,7 +6,6 @@ import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.blamejared.crafttweaker.api.item.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import net.minecraft.item.ItemStack;
@@ -38,14 +37,7 @@ public class ExtremeCraftingCrt {
                         Ingredient ingredient = iIngredient.asVanillaIngredient();
                         ItemStack singularity = new ItemStack(EndlessItems.singularity.get());
                         if (test(ingredient, singularity)){ //如果配方中有奇点，则补全奇点数据后替换
-                            ItemStack[] matchingStacks = ingredient.getMatchingStacks();
-                            for (int i = 0; i < matchingStacks.length; i++){
-                                ItemStack stack = matchingStacks[i];
-                                if (stack.getItem() instanceof Singularity){
-                                    matchingStacks[i] = Singularity.getSingularity(stack.getOrCreateTag().getString(Singularity.NBT_TYPE));
-                                }
-                            }
-                            ingredients.add(Ingredient.fromStacks(matchingStacks));
+                            ExtremeCraftShapeCrt.addStack(ingredients, ingredient);
                         } else ingredients.add(ingredient);
                     }
                 }
@@ -83,7 +75,7 @@ public class ExtremeCraftingCrt {
      * @param stack 测试物品
      * @return 是 true
      */
-    private static boolean test(Ingredient ingredient, ItemStack stack){
+    public static boolean test(Ingredient ingredient, ItemStack stack){
         if (stack == null) {
             return false;
         } else {

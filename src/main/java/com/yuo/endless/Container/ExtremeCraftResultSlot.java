@@ -35,14 +35,14 @@ public class ExtremeCraftResultSlot extends CraftingResultSlot {
         World world = thePlayer.world;
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
         Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
-        if (recipeOptional.isPresent()){
+        if (recipeOptional.isPresent()){ //有序配方
             nonnulllist = world.getRecipeManager().getRecipeNonNull(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
-        }else if (recipeOptionalIn .isPresent()){
+        }else if (recipeOptionalIn .isPresent()){ //无序配方  需单独匹配容器
             nonnulllist = world.getRecipeManager().getRecipeNonNull(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
         }else {
             if (Config.SERVER.isCraftTable.get()){
                 Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, this.craftMatrix, world);
-                if (optional.isPresent()){
+                if (optional.isPresent()){ // 原版配方
                     nonnulllist = world.getRecipeManager().getRecipeNonNull(IRecipeType.CRAFTING, this.craftMatrix, world);
                 }else nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, world);
             }else nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, world);

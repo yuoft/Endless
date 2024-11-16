@@ -56,11 +56,6 @@ public class InfinityArmor extends ArmorItem {
         return true;
     }
 
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
-    }
-
     //猪灵中立
     @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {

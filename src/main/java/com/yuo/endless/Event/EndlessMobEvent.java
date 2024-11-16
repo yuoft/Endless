@@ -23,4 +23,5 @@ public class EndlessMobEvent {
     public static void onRegisterEntitiesAttr(EntityAttributeCreationEvent event) {
         event.put(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntity.setCustomAttributes().create());
     }
+
 }

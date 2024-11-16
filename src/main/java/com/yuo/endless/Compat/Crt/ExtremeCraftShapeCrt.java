@@ -36,15 +36,8 @@ public class ExtremeCraftShapeCrt {
                 for (IIngredient input : inputs) {
                     Ingredient ingredient = input.asVanillaIngredient();
                     ItemStack singularity = new ItemStack(EndlessItems.singularity.get());
-                    if (test(ingredient, singularity)) { //如果配方中有奇点，则补全奇点数据后替换
-                        ItemStack[] matchingStacks = ingredient.getMatchingStacks();
-                        for (int i = 0; i < matchingStacks.length; i++) {
-                            ItemStack stack = matchingStacks[i];
-                            if (stack.getItem() instanceof Singularity) {
-                                matchingStacks[i] = Singularity.getSingularity(stack.getOrCreateTag().getString(Singularity.NBT_TYPE));
-                            }
-                        }
-                        ingredients.add(Ingredient.fromStacks(matchingStacks));
+                    if (ExtremeCraftingCrt.test(ingredient, singularity)) { //如果配方中有奇点，则补全奇点数据后替换
+                        addStack(ingredients, ingredient);
                     } else ingredients.add(ingredient);
                 }
 
@@ -60,6 +53,17 @@ public class ExtremeCraftShapeCrt {
         });
     }
 
+    public static void addStack(NonNullList<Ingredient> ingredients, Ingredient ingredient) {
+        ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+        for (int i = 0; i < matchingStacks.length; i++) {
+            ItemStack stack = matchingStacks[i];
+            if (stack.getItem() instanceof Singularity) {
+                matchingStacks[i] = Singularity.getSingularity(stack.getOrCreateTag().getString(Singularity.NBT_TYPE));
+            }
+        }
+        ingredients.add(Ingredient.fromStacks(matchingStacks));
+    }
+
     @ZenCodeType.Method
     public static void remove(IItemStack stack) {
         CraftTweakerAPI.apply(new IRuntimeAction() {
@@ -73,30 +77,5 @@ public class ExtremeCraftShapeCrt {
                 return "Removing ExtremeCraft recipes for " + stack.getCommandString();
             }
         });
-    }
-
-    /**
-     * 测试Ingredient是否含有相同物品
-     * @param ingredient ig
-     * @param stack 测试物品
-     * @return 是 true
-     */
-    private static boolean test(Ingredient ingredient, ItemStack stack){
-        if (stack == null) {
-            return false;
-        } else {
-            ingredient.determineMatchingStacks();
-            if (ingredient.getMatchingStacks().length == 0) {
-                return stack.isEmpty();
-            } else {
-                for(ItemStack itemstack : ingredient.getMatchingStacks()) {
-                    if (itemstack.getItem() == stack.getItem()) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        }
     }
 }

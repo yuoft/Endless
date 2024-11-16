@@ -125,11 +125,6 @@ public class InfinityPickaxe extends PickaxeItem {
         }
     }
 
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
-    }
-
     //创建一个能被快速捡起的物品实体
     @Nullable
     @Override
