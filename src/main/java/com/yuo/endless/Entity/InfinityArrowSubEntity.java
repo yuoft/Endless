@@ -140,11 +140,14 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
 
         if (ticksExisted % 4 == 0 && !this.world.isRemote){
             BlockPos pos = this.getPosition();
-            AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-16,-8,-16), pos.add(16,8,16));
+            int distance = 32; //水平追踪距离
+            int height = 16; //垂直
+            AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-distance, -height, -distance), pos.add(distance, height, distance));
             List<LivingEntity> entityList = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb);
             double dis = 1000;
             LivingEntity living = null;
             for (LivingEntity livingentity : entityList) {
+                if (getShooter() != null && livingentity == getShooter()) continue;
                 double sq = livingentity.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
                 if (sq < dis) {
                     dis = sq;
