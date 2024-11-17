@@ -23,6 +23,7 @@ import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,6 +32,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.tslat.aoa3.common.registration.AoABlocks;
 import net.tslat.aoa3.common.registration.AoAItems;
 import slimeknights.tconstruct.shared.TinkerMaterials;
@@ -51,6 +53,24 @@ public class ModRecipeManager {
     public static ExtremeCraftShapeRecipe eternalSingularity; //永恒奇点
     public static ExtremeCraftShapeRecipe meatBalls; //寰宇肉丸
     public static ExtremeCraftShapeRecipe stew; //超级煲
+
+    /**
+     * 匹配硬编码配方
+     * @param input 输入
+     * @param world 世界
+     * @return 匹配上的配方
+     */
+    public static ExtremeCraftShapeRecipe matchesRecipe(IInventory input, World world){
+        ExtremeCraftShapeRecipe[] recipes = new ExtremeCraftShapeRecipe[]{
+                infinityCatalyst, eternalSingularity, meatBalls, stew
+        };
+        for (ExtremeCraftShapeRecipe shapeRecipe : recipes) {
+            boolean matches = shapeRecipe.matches(input, world);
+            if (matches) return shapeRecipe;
+        }
+
+        return null;
+    }
 
     //压缩机所需矿物块数量
     public static void addCompressorCraft() {

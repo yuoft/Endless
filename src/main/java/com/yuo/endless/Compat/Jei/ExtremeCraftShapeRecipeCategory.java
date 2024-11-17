@@ -17,6 +17,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeCraftShapeRecipe> {
     public static final ResourceLocation UID = new ResourceLocation(Endless.MOD_ID, "extreme_craft_shape");
     //合成配方背景
@@ -62,26 +65,38 @@ public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeC
         NonNullList<Ingredient> nullList = NonNullList.create();
         for (Ingredient ingredient : list) {
             if (ingredient != null){
-                for (ItemStack stack : ingredient.getMatchingStacks()) { //通过奇点nbt来获取stack后填入list
-                    if (!stack.isEmpty() && stack.getItem() instanceof Singularity){
-                        CompoundNBT tag = stack.getTag();
-                        if (tag != null) {
-                            CompoundNBT nbt = (CompoundNBT) tag.get(Singularity.NBT_MOD);
-                            if (nbt == null) { //没有完整奇点nbt数据 则重新获取
-                                ItemStack stack1 = Singularity.getSingularity(tag.getString(Singularity.NBT_TYPE));
-                                Ingredient ingredient1 = Ingredient.fromStacks(stack1);
-                                nullList.add(ingredient1);
-                                continue;
-                            }
-                        }
-                    }
-                    nullList.add(ingredient);
-                }
+                nullList.add(getSingularityIngredient(ingredient));
             }
         }
 
         ingredients.setInputIngredients(nullList);
         ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+    }
+
+    /**
+     * 对奇点ing进行nbt数据重新设定
+     * @param ingredient 输入
+     * @return 输出
+     */
+    private Ingredient getSingularityIngredient(Ingredient ingredient) {
+        ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+        List<ItemStack> singularityStacks = new ArrayList<>();
+        for (ItemStack stack : matchingStacks) { //通过奇点nbt来获取stack后填入list
+            if (!stack.isEmpty() && stack.getItem() instanceof Singularity){
+                CompoundNBT tag = stack.getTag();
+                if (tag != null) {
+                    CompoundNBT nbt = (CompoundNBT) tag.get(Singularity.NBT_MOD);
+                    if (nbt == null) { //没有完整奇点nbt数据 则重新获取
+                        ItemStack stack1 = Singularity.getSingularity(tag.getString(Singularity.NBT_TYPE));
+                        singularityStacks.add(stack1); //将奇点添加进列表
+                    }
+                }
+            }
+        }
+        if (!singularityStacks.isEmpty()) {
+            return Ingredient.fromStacks(singularityStacks.stream());
+        }
+        return ingredient;
     }
 
     //绘制输入输出的物品图标

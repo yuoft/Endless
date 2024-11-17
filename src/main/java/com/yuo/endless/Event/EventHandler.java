@@ -9,9 +9,6 @@ import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.TotemPacket;
-import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
-import com.yuo.endless.Recipe.ModRecipeManager;
-import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -39,7 +36,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,7 +45,6 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -72,19 +67,6 @@ public class EventHandler {
     public static List<String> playersWithLegs = new ArrayList<>();
     public static List<String> playersWithFeet = new ArrayList<>();
 
-
-    @SubscribeEvent
-    public static void loot(WorldEvent.Load event){
-        IWorld world = event.getWorld();
-        if (world instanceof World) { //将硬编码配方添加进原版配方系统
-            World world1 = (World) world;
-            List<ExtremeCraftShapeRecipe> extremeCraftShapeRecipes = world1.getRecipeManager().getRecipesForType(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE);
-            extremeCraftShapeRecipes.add(ModRecipeManager.infinityCatalyst);
-            extremeCraftShapeRecipes.add(ModRecipeManager.eternalSingularity);
-            extremeCraftShapeRecipes.add(ModRecipeManager.stew);
-            extremeCraftShapeRecipes.add(ModRecipeManager.meatBalls);
-        }
-    }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent

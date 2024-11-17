@@ -1,10 +1,7 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Config;
-import com.yuo.endless.Recipe.ExtremeCraftRecipe;
-import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
-import com.yuo.endless.Recipe.ExtremeCraftingManager;
-import com.yuo.endless.Recipe.RecipeTypeRegistry;
+import com.yuo.endless.Recipe.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
@@ -35,10 +32,13 @@ public class ExtremeCraftResultSlot extends CraftingResultSlot {
         World world = thePlayer.world;
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
         Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
+        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(this.craftMatrix, world);
         if (recipeOptional.isPresent()){ //有序配方
             nonnulllist = world.getRecipeManager().getRecipeNonNull(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
         }else if (recipeOptionalIn .isPresent()){ //无序配方  需单独匹配容器
             nonnulllist = world.getRecipeManager().getRecipeNonNull(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
+        }else if (shapeRecipe != null){
+            nonnulllist = shapeRecipe.getRemainingItems(this.craftMatrix);
         }else {
             if (Config.SERVER.isCraftTable.get()){
                 Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, this.craftMatrix, world);

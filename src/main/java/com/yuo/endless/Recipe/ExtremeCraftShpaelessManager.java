@@ -123,7 +123,8 @@ public class ExtremeCraftShpaelessManager {
      * @param ingredients 物品
      */
     public void addRecipeInput(ExtremeCraftShapeRecipe recipe, Ingredient... ingredients){
-        if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls && recipe != ModRecipeManager.stew) return;
+        if (recipe != ModRecipeManager.infinityCatalyst && recipe != ModRecipeManager.meatBalls
+                && recipe != ModRecipeManager.stew && recipe != ModRecipeManager.eternalSingularity) return;
         NonNullList<Ingredient> list = NonNullList.create();
         list.addAll(Arrays.asList(ingredients));
         if (list.isEmpty()) return;
