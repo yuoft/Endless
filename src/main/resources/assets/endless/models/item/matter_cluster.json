@@ -1,13 +1,13 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "endless:item/matter_cluster",
-    "mask": "endless:item/matter_cluster_mask"
+    "layer0": "endless:item/matter_cluster/matter_cluster",
+    "mask": "endless:item/matter_cluster/matter_cluster_mask"
   },
   "overrides": [
     {
       "predicate": {
-        "endless:count": 1
+        "endless:num": 1
       },
       "model": "endless:item/matter_cluster_full"
     }

@@ -51,7 +51,6 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
 
     public float getaa(ItemStack itemStack){
         float i = MatterCluster.getItemTag(itemStack).size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0f);
-        float opacity = (float) (Math.floor(i * 100) / 100.f);
-        return !MatterCluster.getItemTag(itemStack).isEmpty() ? opacity : 0f;
+        return (float) (Math.floor(i * 100) / 100.f);
     }
 }

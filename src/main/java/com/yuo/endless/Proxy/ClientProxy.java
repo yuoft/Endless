@@ -1,11 +1,12 @@
 package com.yuo.endless.Proxy;
 
-import com.yuo.endless.Client.Gui.*;
 import com.yuo.endless.Client.AvaritiaShaders;
+import com.yuo.endless.Client.Gui.*;
 import com.yuo.endless.Client.Model.CosmicModelLoader;
 import com.yuo.endless.Client.Model.HaloItemModelLoader;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Client.Render.*;
+import com.yuo.endless.Config;
 import com.yuo.endless.Container.ContainerTypeRegistry;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
@@ -162,6 +163,6 @@ public class ClientProxy implements IProxy {
     //物资团颜色变化
     private void setMatterClusterProperty(Item item){
         ItemModelsProperties.registerProperty(item, new ResourceLocation(Endless.MOD_ID,
-                "count"), (itemStack, clientWorld, livingEntity) -> !MatterCluster.getItemTag(itemStack).isEmpty() ? 1f :0f);
+                "num"), (itemStack, clientWorld, livingEntity) -> livingEntity != null && MatterCluster.getItemTag(itemStack).size() >= Config.SERVER.matterClusterMaxTerm.get() ? 1F : 0F);
     }
 }

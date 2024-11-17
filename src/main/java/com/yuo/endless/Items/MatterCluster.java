@@ -1,7 +1,6 @@
 package com.yuo.endless.Items;
 
 import com.yuo.endless.Config;
-import com.yuo.endless.EndlessTab;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
@@ -22,6 +21,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 //物质团
 public class MatterCluster extends Item  {
@@ -29,7 +30,14 @@ public class MatterCluster extends Item  {
     public static String MAIN_NBT = "matterCluster";
 
     public MatterCluster() {
-        super(new Properties().group(EndlessTab.endless).maxStackSize(1));
+        super(new Properties().maxStackSize(1));
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        if (getItemTag(stack).size() >= Config.SERVER.matterClusterMaxTerm.get())
+            return new TranslationTextComponent("item.endless.matter_cluster_full");
+        return super.getDisplayName(stack);
     }
 
     /**
@@ -38,20 +46,54 @@ public class MatterCluster extends Item  {
      */
     public static List<ItemStack> createMatterCluster(Map<ItemStack, Integer> map){
         List<ItemStack> list = new ArrayList<>();
-        for (int i = 0; i < Math.ceil(map.size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0d)); i++){ //物品组数量影响物质团数量 64 -- 1
+        if (map.size() <= Config.SERVER.matterClusterMaxTerm.get()){
             if (map.isEmpty()) return list;
-            Map<ItemStack, Integer> spawnMap = spawnMap(map);
-            int mapCount = getMaxCountFromMap(spawnMap);
-            int maxCount = Config.SERVER.matterClusterMaxCount.get();
-            for (int j = 0; j < Math.ceil(mapCount * 1.0d / maxCount); j++){ //数量数量限制 超过则新建物质团
-                if (spawnMap.isEmpty()) return list;
-                Map<ItemStack, Integer> newMap = spawnNewMap(spawnMap, maxCount);
-                ItemStack stack = new ItemStack(EndlessItems.matterCluster.get());
-                setItemTag(stack, newMap);
-                list.add(stack);
+            if (createMatterCluster(map, list)) return list;
+        }else {
+            int num = (int) Math.ceil(map.size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0d));
+            for (int i = 0; i < num; i++){ //物品组数量影响物质团数量 64 -- 1
+                if (map.isEmpty()) return list;
+                Map<ItemStack, Integer> topN = getTopN(map, Config.SERVER.matterClusterMaxTerm.get());
+                removeFirstNEntries(map, Config.SERVER.matterClusterMaxTerm.get());
+                if (createMatterCluster(topN, list)) return list;
             }
         }
         return  list;
+    }
+
+    public static boolean createMatterCluster(Map<ItemStack, Integer> map, List<ItemStack> list) {
+        Map<ItemStack, Integer> spawnMap = spawnMap(map);
+        int mapCount = getMaxCountFromMap(spawnMap);
+        int maxCount = Config.SERVER.matterClusterMaxCount.get();
+        for (int j = 0; j < Math.ceil(mapCount * 1.0d / maxCount); j++){ //数量数量限制 超过则新建物质团
+            if (spawnMap.isEmpty()) return true;
+            Map<ItemStack, Integer> newMap = spawnNewMap(spawnMap, maxCount);
+            ItemStack stack = new ItemStack(EndlessItems.matterCluster.get());
+            setItemTag(stack, newMap);
+            list.add(stack);
+        }
+        return false;
+    }
+
+    //截取前n个
+    public static <K, V> Map<K, V> getTopN(Map<K, V> map, int n) {
+        return map.entrySet().stream()
+                .limit(n)
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        Entry::getValue,
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new));
+    }
+
+    //删除前n个
+    public static void removeFirstNEntries(Map<ItemStack, Integer> map, int n) {
+        Iterator<Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
+        for (int i = 0; i < n && iterator.hasNext(); ) {
+            iterator.next();
+            iterator.remove();
+            i++;
+        }
     }
 
     /**
