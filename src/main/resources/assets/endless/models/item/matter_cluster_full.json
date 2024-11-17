@@ -1,6 +1,12 @@
 {
     "parent": "item/generated",
     "textures": {
-      "layer0": "endless:item/matter_cluster/matter_cluster_full"
+        "layer0": "endless:item/matter_cluster/matter_cluster_full",
+        "layer1": "endless:item/tool/infinity_crossbow/core",
+        "mask": "endless:item/matter_cluster/matter_cluster_full_mask"
+    },
+    "loader": "endless:cosmic",
+    "cosmic": {
+        "mask": "#mask"
     }
 }

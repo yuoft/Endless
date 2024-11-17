@@ -9,7 +9,7 @@
       "predicate": {
         "endless:num": 1
       },
-      "model": "endless:item/matter_cluster_full"
+      "model": "endless:item/infinity_boots"
     }
   ],
   "loader": "endless:cosmic",
