@@ -7,13 +7,15 @@
   "overrides": [
     {
       "predicate": {
-        "endless:num": 1
+        "endless:num": 0.0
       },
-      "model": "endless:item/infinity_boots"
+      "model": "endless:item/matter_cluster_empty"
+    },
+    {
+      "predicate": {
+        "endless:num": 1.0
+      },
+      "model": "endless:item/matter_cluster_full"
     }
-  ],
-  "loader": "endless:cosmic",
-  "cosmic": {
-    "mask": "#mask"
-  }
+  ]
 }
