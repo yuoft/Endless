@@ -7,13 +7,13 @@
   "overrides": [
     {
       "predicate": {
-        "endless:num": 0.0
+        "endless:num": 0
       },
       "model": "endless:item/matter_cluster_empty"
     },
     {
       "predicate": {
-        "endless:num": 1.0
+        "endless:num": 1
       },
       "model": "endless:item/matter_cluster_full"
     }

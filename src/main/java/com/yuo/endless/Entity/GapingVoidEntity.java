@@ -2,9 +2,9 @@ package com.yuo.endless.Entity;
 
 import com.google.common.base.Predicate;
 import com.mojang.authlib.GameProfile;
+import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Config;
 import com.yuo.endless.Event.EventHandler;
-import com.yuo.endless.Client.Sound.ModSounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;

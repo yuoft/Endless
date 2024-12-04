@@ -179,9 +179,9 @@ dependencies {
 
 //    runtimeOnly fg.deobf("com.teamcofh:cofh_core:1.16.5-1.5.0.+")
 //    runtimeOnly fg.deobf("com.teamcofh:thermal_foundation:1.16.5-1.5.0.+")
-    runtimeOnly fg.deobf("curse.maven:brandons-core-231382:3775813")
-    runtimeOnly fg.deobf("java.codechicken:CodeChickenLib:1.16.5-4.0.7.445-universal")
-    runtimeOnly fg.deobf("curse.maven:draconic-evolution-223565:3779345")
+//    runtimeOnly fg.deobf("curse.maven:brandons-core-231382:3775813")
+//    runtimeOnly fg.deobf("java.codechicken:CodeChickenLib:1.16.5-4.0.7.445-universal")
+//    runtimeOnly fg.deobf("curse.maven:draconic-evolution-223565:3779345")
 //    runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:1.16.5-1.3.7")
 //    runtimeOnly fg.deobf("com.yuo.orecrop:orecrop:1.16.5-1.2.5")
 //    runtimeOnly fg.deobf("com.yuo.paimeng:paimeng:1.16.5-1.1.5")
@@ -195,8 +195,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:jei-238222:3681294") //引入mod
 //    runtimeOnly fg.deobf("com.yuo.spacearms:spacearms:${mc_ver}-${spaceArms_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
-    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_ver}:${crt_ver}")
+//    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_ver}:${crt_ver}")
     runtimeOnly fg.deobf("curse.maven:jade-324717:3910873")
+    runtimeOnly fg.deobf("curse.maven:mob-grinding-utils-254241:4368330")
 //    runtimeOnly fg.deobf("curse.maven:apotheosis-313970:3936649")
 //    runtimeOnly fg.deobf("curse.maven:placebo-283644:4501015")
 //    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-1.6.158")
