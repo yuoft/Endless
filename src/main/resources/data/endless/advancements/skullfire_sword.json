@@ -1,0 +1,30 @@
+{
+  "parent": "endless:diamond_lattice",
+  "display": { 
+    "icon": { 
+      "item": "endless:skullfire_sword"
+    },
+    "title": {
+		"translate": "advancements.endless.skullfire_sword.title"
+	},
+    "description": {
+		"translate": "advancements.endless.skullfire_sword.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": { 
+    "skullfire_sword": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item":"endless:skullfire_sword"
+			}
+		]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

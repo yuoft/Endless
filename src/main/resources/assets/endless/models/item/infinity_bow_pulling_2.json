@@ -1,0 +1,11 @@
+{
+    "parent": "item/bow",
+    "textures": {
+        "layer0": "endless:item/tool/infinity_bow/pull_2",
+        "mask": "endless:item/tool/infinity_bow/pull_2_mask"
+    },
+    "loader": "endless:cosmic",
+    "cosmic": {
+        "mask": "#mask"
+    }
+}

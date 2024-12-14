@@ -1,0 +1,30 @@
+{
+  "parent": "endless:neutronium_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:endest_pearl"
+    },
+    "title": {
+		"translate": "advancements.endless.endest_pearl.title"
+	},
+    "description": {
+		"translate": "advancements.endless.endest_pearl.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": {
+    "endest_pearl": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items":[
+          {
+            "item": "endless:endest_pearl"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

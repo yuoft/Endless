@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "com.yuo.endless.Mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "endless.refmap.json",
+  "plugin": "com.yuo.endless.Mixin.MixinPlugin",
+  "mixins": [
+    "GiveCommandMixin"
+  ],
+  "client": [
+    "ItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

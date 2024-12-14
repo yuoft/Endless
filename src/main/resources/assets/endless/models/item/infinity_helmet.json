@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/armor/head/layer_0",
+    "mask": "endless:item/armor/head/layer_0_mask"
+  },
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "#mask"
+  }
+}

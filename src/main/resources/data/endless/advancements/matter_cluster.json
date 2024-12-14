@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:matter_cluster"
+    },
+    "title": {
+		"translate": "advancements.endless.matter_cluster.title"
+	},
+    "description": {
+		"translate": "advancements.endless.matter_cluster.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": { 
+    "matter_cluster": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item":"endless:matter_cluster"
+			}
+		]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

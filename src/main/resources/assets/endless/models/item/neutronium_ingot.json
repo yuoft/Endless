@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/neutronium_ingot",
+    "halo": "endless:item/halo_noise"
+  },
+  "loader": "endless:halo",
+  "halo": {
+    "texture": "#halo",
+    "color": -1711276033,
+    "size": 8,
+    "pulse": false
+  }
+}

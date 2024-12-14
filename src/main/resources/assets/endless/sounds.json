@@ -1,0 +1,12 @@
+{
+	"gaping_void": {
+		"category": "hostile",
+		"subtitle": "sound.endless.gaping_void",
+		"sounds": [
+			{
+				"name":"endless:gaping_void",
+				"stream": true
+			}
+		]
+	}
+}

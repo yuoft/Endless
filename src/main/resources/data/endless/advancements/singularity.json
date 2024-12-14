@@ -1,0 +1,32 @@
+{
+  "parent": "endless:neutron_compressor",
+  "display": {
+    "icon": {
+      "item": "endless:singularity",
+      "nbt": "{endless_singularity:{type:\"diamond\",index:158254235,main:112251240}}",
+      "type": "minecraft:item_nbt"
+    },
+    "title": {
+      "translate": "advancements.endless.singularity.title"
+    },
+    "description": {
+      "translate": "advancements.endless.singularity.desc"
+    },
+    "frame": "goal"
+  },
+  "criteria": {
+    "singularity": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "endless:singularity"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

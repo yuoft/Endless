@@ -1,0 +1,40 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "draconicevolution"
+    }
+  ],
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "BBCCCCCBB",
+    "BBBBBBBBB",
+    "CBAAAAABC",
+    "CBACECABC",
+    "CBAEDEABC",
+    "CBACECABC",
+    "CBAAAAABC",
+    "BBBBBBBBB",
+    "BBCCCCCBB"
+  ],
+  "key": {
+    "A": {
+      "item": "endless:infinity_ingot"
+    },
+    "B": {
+      "item": "endless:infinity_block"
+    },
+    "C": {
+      "item": "draconicevolution:reactor_stabilizer"
+    },
+    "E": {
+      "item": "draconicevolution:creative_capacitor"
+    },
+    "D": {
+      "item": "draconicevolution:reactor_core"
+    }
+  },
+  "result": {
+    "item": "draconicevolution:creative_op_capacitor"
+  }
+}

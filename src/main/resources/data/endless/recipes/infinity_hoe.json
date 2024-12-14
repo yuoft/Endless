@@ -1,0 +1,28 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "   N ",
+    " IIII",
+    "IIIII",
+    "I  XI",
+    "   N ",
+    "   N ",
+    "   N ",
+    "   N ",
+    "   N "
+  ],
+  "key": {
+    "I": {
+      "item": "endless:infinity_ingot"
+    },
+    "X": {
+      "item": "endless:crystal_matrix_block"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_hoe"
+  }
+}

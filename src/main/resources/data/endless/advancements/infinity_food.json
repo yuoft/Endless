@@ -1,0 +1,42 @@
+{
+  "parent": "endless:neutronium_pile",
+  "display": { 
+    "icon": { 
+      "item": "endless:ultimate_stew"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_food.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_food.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": {
+    "ultimate_stew": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "endless:ultimate_stew"
+        }
+      }
+    },
+    "cosmic_meatballs": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "endless:cosmic_meatballs"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ultimate_stew",
+      "cosmic_meatballs"
+    ]
+  ],
+  "rewards": {
+    "experience": 30
+  }
+}

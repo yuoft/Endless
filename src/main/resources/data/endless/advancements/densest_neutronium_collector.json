@@ -1,0 +1,30 @@
+{
+  "parent": "endless:neutron_compressor",
+  "display": { 
+    "icon": { 
+      "item": "endless:densest_neutronium_collector"
+    },
+    "title": {
+		"translate": "advancements.endless.densest_neutronium_collector.title"
+	},
+    "description": {
+		"translate": "advancements.endless.densest_neutronium_collector.desc"
+	},
+    "frame": "goal"
+  },
+  "criteria": { 
+    "densest_neutronium_collector": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item":"endless:densest_neutronium_collector"
+			}
+		]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 30
+  }
+}

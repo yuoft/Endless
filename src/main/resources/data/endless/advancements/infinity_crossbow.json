@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_crossbow"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_crossbow.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_crossbow.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": { 
+    "infinity_crossbow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:infinity_crossbow"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 200
+  }
+}

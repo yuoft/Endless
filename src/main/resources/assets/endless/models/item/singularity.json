@@ -1,0 +1,15 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/singularity2",
+    "layer1": "endless:item/singularity",
+    "halo": "endless:item/halo"
+  },
+  "loader": "endless:halo",
+  "halo": {
+    "texture": "#halo",
+    "color": -16777216,
+    "size": 4,
+    "pulse": false
+  }
+}

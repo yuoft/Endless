@@ -1,0 +1,373 @@
+package com.yuo.endless.Items;
+
+import com.yuo.endless.Config;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.*;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+//物质团
+public class MatterCluster extends Item {
+
+    public static String MAIN_NBT = "matterCluster";
+
+    public MatterCluster() {
+        super(new Properties().stacksTo(1));
+    }
+
+    @Override
+    public Component getName(ItemStack pStack) {
+        if (getItemTag(pStack).size() >= Config.SERVER.matterClusterMaxTerm.get())
+            return new TranslatableComponent("item.endless.matter_cluster_full");
+        return super.getName(pStack);
+    }
+
+    /**
+     *将物品map添加到物质团中 并返回物质团列表（数量较多时）
+     * @param map 总物品map
+     */
+    public static List<ItemStack> createMatterCluster(Map<ItemStack, Integer> map){
+        List<ItemStack> list = new ArrayList<>();
+        if (map.size() <= Config.SERVER.matterClusterMaxTerm.get()){
+            if (map.isEmpty()) return list;
+            if (createMatterCluster(map, list)) return list;
+        }else {
+            int num = (int) Math.ceil(map.size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0d));
+            for (int i = 0; i < num; i++){ //物品组数量影响物质团数量 64 -- 1
+                if (map.isEmpty()) return list;
+                Map<ItemStack, Integer> topN = getTopN(map, Config.SERVER.matterClusterMaxTerm.get());
+                removeFirstNEntries(map, Config.SERVER.matterClusterMaxTerm.get());
+                if (createMatterCluster(topN, list)) return list;
+            }
+        }
+        return  list;
+    }
+
+    public static boolean createMatterCluster(Map<ItemStack, Integer> map, List<ItemStack> list) {
+        Map<ItemStack, Integer> spawnMap = spawnMap(map);
+        int mapCount = getMaxCountFromMap(spawnMap);
+        int maxCount = Config.SERVER.matterClusterMaxCount.get();
+        for (int j = 0; j < Math.ceil(mapCount * 1.0d / maxCount); j++){ //数量数量限制 超过则新建物质团
+            if (spawnMap.isEmpty()) return true;
+            Map<ItemStack, Integer> newMap = spawnNewMap(spawnMap, maxCount);
+            ItemStack stack = new ItemStack(EndlessItems.matterCluster.get());
+            setItemTag(stack, newMap);
+            list.add(stack);
+        }
+        return false;
+    }
+
+    //截取前n个
+    public static <K, V> Map<K, V> getTopN(Map<K, V> map, int n) {
+        return map.entrySet().stream()
+                .limit(n)
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        Entry::getValue,
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new));
+    }
+
+    //删除前n个
+    public static void removeFirstNEntries(Map<ItemStack, Integer> map, int n) {
+        Iterator<Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
+        for (int i = 0; i < n && iterator.hasNext(); ) {
+            iterator.next();
+            iterator.remove();
+            i++;
+        }
+    }
+
+    /**
+     * 生成一个不超过单个物品数量限制的map
+     * @param map 不超过64项的map
+     * @param maxCount 限制数量
+     * @return 满足数量限制的map
+     */
+    private static Map<ItemStack, Integer> spawnNewMap(Map<ItemStack, Integer> map, int maxCount){
+        Map<ItemStack, Integer> countMap = new HashMap<>();
+        Iterator<Map.Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<ItemStack, Integer> entry = iterator.next();
+            if (entry.getValue() > maxCount){
+                int count = entry.getValue() - maxCount; //剩余数量
+                countMap.put(entry.getKey(), maxCount);
+                entry.setValue(count);
+            }else {
+                countMap.put(entry.getKey(), entry.getValue());
+                iterator.remove();
+            }
+        }
+        return countMap;
+    }
+
+    /**
+     * 获取map中数量的最大数量值
+     * @param map map
+     * @return 最大值
+     */
+    private static int getMaxCountFromMap(Map<ItemStack, Integer> map){
+        int max = 0;
+        for (Map.Entry<ItemStack, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > max){
+                max = entry.getValue();
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 生成一个满足数量的临时map 并清理掉总map的64项
+     * @param map 总map
+     * @return 临时含64项的map
+     */
+    private static Map<ItemStack, Integer> spawnMap(Map<ItemStack, Integer> map){
+        Map<ItemStack, Integer> map1 = new HashMap<>();
+        int num = 0;
+        Iterator<Map.Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<ItemStack, Integer> next = iterator.next();
+            if (num <= Config.SERVER.matterClusterMaxTerm.get()){
+                map1.put(next.getKey(), next.getValue());
+                iterator.remove();
+                num++;
+            }else break;
+        }
+        return map1;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> components, TooltipFlag pIsAdvanced) {
+        if (!stack.getOrCreateTag().contains("matterCluster")){
+            return ;
+        }
+
+        ListTag matterCluster = (ListTag) stack.getOrCreateTag().get("matterCluster");
+        if (matterCluster != null){
+            //物品种类数量信息
+            if (isMaxSize(stack)){
+                components.add(new TextComponent(matterCluster.size() + "/" + Config.SERVER.matterClusterMaxTerm.get() + new TranslatableComponent("endless.text.itemInfo.matter_cluster2").getString()).withStyle(ChatFormatting.RED));
+            }else components.add(new TextComponent(matterCluster.size() + "/" + Config.SERVER.matterClusterMaxTerm.get() + new TranslatableComponent("endless.text.itemInfo.matter_cluster2").getString()));
+            components.add(new TextComponent(""));
+
+            if (Screen.hasShiftDown()) { //在物品上按下shift键
+                for (Tag inbt : matterCluster) {
+                    CompoundTag nbt = (CompoundTag) inbt;
+                    ItemStack read = ItemStack.of(nbt);
+                    int count = nbt.getInt("count");
+
+                    components.add(new TextComponent(read.getItem().getRarity(read).color + read.getDisplayName().getString() + ChatFormatting.GRAY + " x " + count));
+                }
+            } else {
+                components.add(new TranslatableComponent("endless.text.itemInfo.matter_cluster"));
+                components.add(new TranslatableComponent("endless.text.itemInfo.matter_cluster1"));
+            }
+        }
+    }
+
+    /**
+     * 设置物品tag 清除之前数据后添加
+     * @param stack 物质团
+     * @param map 物品map
+     */
+    public static void setItemTag(ItemStack stack, Map<ItemStack, Integer> map){
+        ListTag listNBT = new ListTag();
+
+        for (ItemStack key : map.keySet()) { //遍历所有键
+            CompoundTag nbt = new CompoundTag();
+            key.deserializeNBT(nbt);
+            nbt.putInt("count", map.get(key));
+            listNBT.add(nbt);
+        }
+        CompoundTag orCreateTag = stack.getOrCreateTag();
+        if (orCreateTag.contains(MAIN_NBT)){
+            orCreateTag.remove(MAIN_NBT);
+        }
+        orCreateTag.put(MAIN_NBT, listNBT);
+    }
+
+    /**
+     * 获取物品tag 获取物质团的所有物品
+     * @param stack 物质团
+     * @return 物品map
+     */
+    public static Map<ItemStack, Integer> getItemTag(ItemStack stack){
+        CompoundTag orCreateTag = stack.getOrCreateTag();
+        Map<ItemStack, Integer> data = new HashMap<>();
+        if (orCreateTag.contains(MAIN_NBT)){
+            ListTag matterCluster = (ListTag) orCreateTag.get(MAIN_NBT);
+            if (matterCluster != null){
+                for (Tag inbt : matterCluster) {
+                    CompoundTag nbt = (CompoundTag) inbt;
+                    data.put(ItemStack.of(nbt), nbt.getInt("count"));
+                }
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!level.isClientSide){
+            //生成物质团类所有物品
+            Map<ItemStack, Integer> map = getItemTag(stack);
+            if (!map.isEmpty()){
+                for (ItemStack key : map.keySet()) {
+                    Integer integer = map.get(key);
+                    int size = key.getMaxStackSize();
+                    int i = integer % size; //不足一组部分
+                    int j = integer / size; //几组
+                    addEntityItem(level, new ItemStack(key.getItem(), i), player);
+                    for (int m = 0; m < j; m++){
+                        addEntityItem(level, new ItemStack(key.getItem(), size), player);
+                    }
+                }
+            }
+
+        }
+        stack.shrink(1);
+        return InteractionResultHolder.success(stack);
+    }
+
+    private static void addEntityItem(Level world, ItemStack stack, Player player){
+        world.addFreshEntity(new ItemEntity(world, player.getX(), player.getY(), player.getZ(), stack));
+    }
+
+    /**
+     * 将物质团2的物品追加到1中
+     * @param stack 物质团1
+     * @param itemStack 物质团2
+     * @return 是否有剩余物品 有剩余表示物质团1无法完全合并2
+     */
+    public static boolean addItem(ItemStack stack, ItemStack itemStack){
+        Map<ItemStack, Integer> map = getItemTag(stack);
+        Map<ItemStack, Integer> map1 = getItemTag(itemStack);
+        Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
+        //合并相同项
+        for (Map.Entry<ItemStack, Integer> entry : map.entrySet()) {
+            Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
+            while (iterator.hasNext()){
+                Map.Entry<ItemStack, Integer> next = iterator.next();
+                if (ItemStack.matches(entry.getKey(),next.getKey())){ //将2中相同物品转移到1
+                    if (entry.getValue() + next.getValue() <= maxCount){
+                        entry.setValue(entry.getValue() + next.getValue());
+                        iterator.remove(); //完全合并时删除2中的项
+                    }else {
+                        int count = next.getValue() + entry.getValue() - maxCount; //2 的余量
+                        entry.setValue(maxCount);
+                        next.setValue(count);
+                    }
+                }
+            }
+        }
+        //添加新项
+        if (!map1.isEmpty()){
+            Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
+            while (iterator.hasNext()){
+                Map.Entry<ItemStack, Integer> entry = iterator.next();
+                if (map.size() < Config.SERVER.matterClusterMaxTerm.get()){ //物质团1未满
+                    ItemStack key = entry.getKey();
+                    if (map.containsKey(key)){
+                        map.put(new ItemStack(key.getItem(), key.getCount() + 1), entry.getValue());
+                    }else map.put(key, entry.getValue());
+                    iterator.remove();
+                }
+            }
+        }
+        //重新添加修改后的数据
+        setItemTag(stack, map);
+        if (map1.isEmpty()){ //2以空，则清除nbt
+            itemStack.getOrCreateTag().remove(MAIN_NBT);
+        }else setItemTag(itemStack, map1);
+        return !map1.isEmpty();
+    }
+
+    /**
+     * 判断一个物质团存储的物品是否以满
+     * @param stack 物质团
+     * @return 满 true
+     */
+    public static boolean isMaxSize(ItemStack stack){
+        Map<ItemStack, Integer> map = getItemTag(stack);
+        if (map.isEmpty()) return false;
+        return map.size() >= Config.SERVER.matterClusterMaxTerm.get();
+    }
+
+    /**
+     * 判断物质团是否为空
+     * @param stack 物质团
+     * @return 空：true
+     */
+    public static boolean isEmpty(ItemStack stack){
+        if (!stack.getOrCreateTag().contains(MAIN_NBT)) return true;
+        Map<ItemStack, Integer> itemTag = getItemTag(stack);
+        return itemTag.isEmpty();
+    }
+
+    /**
+     * 获取玩家身上未满的物资团
+     * @param player 玩家
+     * @return 物质团 无则返回EMPTY
+     */
+    public static ItemStack getMatterCluster(Player player, int slot){
+        Inventory inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++){
+            ItemStack stack = inventory.getItem(i);
+            if (stack.getItem() == EndlessItems.matterCluster.get() && !isMaxSize(stack)){
+                if (slot == i) continue;
+                return stack;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    /**
+     * 合并物质团
+     * @param stack 需要合并的拾取物质团
+     * @param player 玩家
+     * @return 合并后是否有剩余， 无：true
+     */
+    public static boolean mergeMatterCluster(ItemStack stack, Player player){
+        while (true){
+            boolean empty = isEmpty(stack);
+            ItemStack matterCluster = getMatterCluster(player, -1);
+            if (empty || matterCluster.isEmpty()) break; //当拾取物质团已无物品 或 玩家身上无未满物质团时 退出循环
+            if (!addItem(matterCluster, stack)) break; //完全合并时退出循环
+        }
+        return isEmpty(stack);
+    }
+
+    /**
+     * 合并物质团
+     * @param stack 要合并的
+     * @param player 玩家
+     * @param slot 槽位id
+     * @return 是否有剩余
+     */
+    public static boolean mergeMatterCluster(ItemStack stack, Player player, int slot){
+        while (true){
+            boolean empty = isEmpty(stack);
+            ItemStack matterCluster = getMatterCluster(player, slot);
+            if (empty || matterCluster.isEmpty()) break;
+            if (!addItem(matterCluster, stack)) break;
+        }
+        return isEmpty(stack);
+    }
+}

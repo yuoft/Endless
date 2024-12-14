@@ -1,0 +1,24 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "NNNNNNNNN",
+    "NCXXCXXCN",
+    "NXCCXCCXN",
+    "NCXXCXXCN",
+    "NNNNNNNNN"
+  ],
+  "key": {
+    "C": {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    },
+    "X": {
+      "item": "endless:infinity_catalyst"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_ingot"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "endless:block/block_crystal_matrix",
+    "all": "endless:block/block_crystal_matrix"
+  }
+}

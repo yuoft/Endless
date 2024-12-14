@@ -1,0 +1,207 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/' //阿里云仓库
+        }
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.parchmentmc.org' }
+        mavenCentral()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin'
+
+version = '1.18.2-1.0-B'
+group = 'com.github.yuo' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'Endless'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+minecraft {
+//    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'parchment', version: '2022.11.06-1.18.2'
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+        gameTestServer {
+            workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+        data {
+            workingDirectory project.file('run')
+            property 'mixin.env.remapRefMap','true'
+            property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
+            arg "-mixin.config=endless.mixins.json"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    //指定refmap.json文件生成位置
+    add sourceSets.main, "endless.refmap.json"
+}
+
+repositories {
+    maven {
+        name = "CurseMaven"
+        url "https://www.cursemaven.com"
+    }
+    maven {
+        name = "JEI"
+        url = "https://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        name = "Botania and CraftTweaker"
+        url('https://maven.blamejared.com')
+    }
+    maven {
+        name = "CCL"
+        url('https://maven.covers1624.net/')
+    }
+    maven {
+        name = "curios"
+        url "https://maven.theillusivec4.top/"
+    }
+    maven {
+        name = "Modmaven"
+        url "https://modmaven.dev/"
+        // For Gradle 5.1 and above, limit it to just AE2
+        content {
+            includeGroup 'appeng'
+        }
+    }
+    maven {
+        name = 'Draconic-Evolution'
+        url = "https://squiddev.cc/maven/"
+    }
+    maven {
+        name = 'Twilight Forest'
+        url('https://modmaven.dev/')
+    }
+    maven {
+        name = 'Create'
+        url = "https://maven.tterrag.com"
+    }
+    maven {
+        name 'RS maven'
+        url 'https://repo.refinedmods.com'
+    }
+    //声明本地存储库
+    flatDir {
+        dirs('libs')
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
+
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_ver}-common-api:${jei_ver}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_ver}-forge-api:${jei_ver}"))
+    compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_ver}:${crt_ver}")
+    compileOnly("curse.maven:jade-${jade_id}:${jade_ver}")
+    compileOnly("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
+
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_ver}-forge:${jei_ver}"))
+    runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-${torohealth_id}:${torohealth_ver}")
+    runtimeOnly fg.deobf("curse.maven:jade-${jade_id}:${jade_ver}")
+    runtimeOnly fg.deobf("curse.maven:neat-${neat_id}:${neat_ver}") //引入mod
+    runtimeOnly fg.deobf("curse.maven:attributefix-${attributefix_id}:${attributefix_ver}")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "endless",
+                "Specification-Vendor"    : "yuo",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "yuo",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "minecraft:coal"
+    },
+    "y": {
+      "item": "endless:infinity_catalyst"
+    }
+  },
+  "result": {
+    "item": "endless:star_fuel",
+    "count": 8
+  }
+}

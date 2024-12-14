@@ -1,0 +1,11 @@
+{
+    "parent": "item/crossbow",
+    "textures": {
+        "layer0": "endless:item/tool/infinity_crossbow/pull_2",
+        "mask": "endless:item/tool/infinity_crossbow/pull_2_mask"
+    },
+    "loader": "endless:cosmic",
+    "cosmic": {
+        "mask": "#mask"
+    }
+}

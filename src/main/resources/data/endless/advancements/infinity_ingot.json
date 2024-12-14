@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_catalyst",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_ingot"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_ingot.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_ingot.desc"
+	},
+    "frame": "task"
+  },
+  "criteria": { 
+    "infinity_ingot": {
+      "trigger": "minecraft:inventory_changed", 
+      "conditions": { 
+		"items":[
+			{
+				"item": "endless:infinity_ingot"
+			}
+		]
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 10
+  }
+}

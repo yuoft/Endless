@@ -1,0 +1,37 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "storagedrawers"
+    }
+  ],
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "    B    ",
+    " ACCCCCA ",
+    " CACCCAC ",
+    " CCACACC ",
+    "BCCCDCCCB",
+    " CCACACC ",
+    " CACCCAC ",
+    " ACCCCCA ",
+    "    B    "
+  ],
+  "key": {
+    "A": {
+      "item": "endless:neutronium_nugget"
+    },
+    "B": {
+      "item": "minecraft:nether_star"
+    },
+    "C": {
+      "tag": "storagedrawers:drawers"
+    },
+    "D": {
+      "item": "storagedrawers:creative_storage_upgrade"
+    }
+  },
+  "result": {
+    "item": "storagedrawers:creative_vending_upgrade"
+  }
+}
