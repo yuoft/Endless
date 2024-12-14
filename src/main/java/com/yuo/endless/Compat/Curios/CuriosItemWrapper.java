@@ -1,7 +1,7 @@
 package com.yuo.endless.Compat.Curios;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 public class CuriosItemWrapper implements ICurio {
@@ -14,6 +14,11 @@ public class CuriosItemWrapper implements ICurio {
     @Override
     public boolean canRightClickEquip() {
         return true;
+    }
+
+    @Override
+    public ItemStack getStack() {
+        return this.itemStack;
     }
 
     @Override

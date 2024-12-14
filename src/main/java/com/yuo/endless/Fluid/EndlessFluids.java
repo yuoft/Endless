@@ -3,13 +3,13 @@ package com.yuo.endless.Fluid;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class EndlessFluids {
     public static final ResourceLocation STILL_OIL_TEXTURE = new ResourceLocation(Endless.MOD_ID, "block/fluids/fluid");

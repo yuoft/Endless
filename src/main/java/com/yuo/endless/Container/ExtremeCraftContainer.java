@@ -3,42 +3,36 @@ package com.yuo.endless.Container;
 import com.yuo.endless.Config;
 import com.yuo.endless.Recipe.*;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.container.RecipeBookContainer;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.inventory.container.WorkbenchContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.network.play.server.SSetSlotPacket;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.RecipeBookMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class ExtremeCraftContainer extends RecipeBookContainer<CraftingInventory> {
+public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
 
     private final ExtremeCraftInventory inputInventory;
     private final ExtremeCraftInventoryResult outputInventory;
-    private final PlayerEntity player;
-    private final World world;
+    private final Player player;
+    private final Level world;
 
 
-    public ExtremeCraftContainer(int id, PlayerInventory playerInventory){
+    public ExtremeCraftContainer(int id, Inventory playerInventory){
         this(id, playerInventory, new ExtremeCraftTile());
     }
 
-    public ExtremeCraftContainer(int id, PlayerInventory playerInventory, ExtremeCraftTile tile) {
+    public ExtremeCraftContainer(int id, Inventory playerInventory, ExtremeCraftTile tile) {
         super(ContainerTypeRegistry.extremeCraftContainer.get(), id);
         this.inputInventory = new ExtremeCraftInventory(this, tile);
         this.outputInventory = new ExtremeCraftInventoryResult(tile);
         this.player = playerInventory.player;
-        this.world = playerInventory.player.world;
+        this.world = playerInventory.player.level;
         //添加9*9合成栏
         for (int m = 0; m < 9; m++){
             for (int n = 0; n < 9; n++){

@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Endless;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.UUID;
 

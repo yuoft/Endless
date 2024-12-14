@@ -1,34 +1,22 @@
 package com.yuo.endless.Client.Model;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.Model;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
 
-public class InfinityArmorModel extends BipedModel {
+public class InfinityArmorModel extends HumanoidModel {
     String s = "endless:textures/models/";
 
     ResourceLocation eyeTex = new ResourceLocation(this.s + "infinity_armor_eyes.png");
@@ -190,7 +178,7 @@ public class InfinityArmorModel extends BipedModel {
         }
     }
 
-    public void update(LivingEntity e, ItemStack i, EquipmentSlotType a) {
+    public void update(LivingEntity e, ItemStack i, EquipmentSlot a) {
         this.invulnRender = false;
         this.playerFlying = false;
         this.player = false;

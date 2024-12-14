@@ -1,6 +1,8 @@
 package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Items.EndlessItems;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,54 +17,56 @@ public class InfinityDamageSource extends EntityDamageSource {
 
     public InfinityDamageSource(LivingEntity living) {
         super(type, living);
-        setDamageBypassesArmor(); //不受盔甲护甲影响
-        setDamageAllowedInCreativeMode(); //对创造模式造成伤害
-        setDamageIsAbsolute(); //不受附魔，药水效果影响
+        bypassArmor();//不受盔甲护甲影响
+        bypassInvul();//对创造模式造成伤害
+        bypassMagic();//不受附魔，药水效果影响
+        setIsFall();
+        setMagic();
+        setProjectile();
+        setExplosion();
+        setThorns();
+        setNoAggro();
     }
 
     @Override
-    public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
+    public Component getLocalizedDeathMessage(LivingEntity livingEntity) {
         ItemStack itemstack = ItemStack.EMPTY;
-        if (damageSourceEntity instanceof LivingEntity){
-            LivingEntity living = (LivingEntity) damageSourceEntity;
+        if (entity instanceof LivingEntity living){
             itemstack = getInfinityWeapon(living);
         }
         String s = "death.attack.infinity";
         String s0 = "death.attack.infinity_weapon";
-        Random rand = entityLivingBaseIn.getEntityWorld().rand;
-        ITextComponent displayName = entityLivingBaseIn.getDisplayName();
-        if (damageSourceEntity != null){
-            ITextComponent name = damageSourceEntity.getName();
-            if (!itemstack.isEmpty()){//有击杀者和武器
-                if (itemstack.getItem() instanceof InfinitySword){ //剑0-4
-                    return new TranslationTextComponent(s0 + "." + rand.nextInt(5),
-                            displayName, name, itemstack.getDisplayName());
-                } //弓弩1-5
-                else {
-                    int i = rand.nextInt(5) + 1;
-                    return new TranslationTextComponent(s0 + "." + i,
-                            displayName, name, itemstack.getDisplayName());
-                }
+        Random rand = livingEntity.level.random;
+        Component displayName = livingEntity.getDisplayName();
+        Component name = entity.getName();
+        if (!itemstack.isEmpty()){//有击杀者和武器
+            if (itemstack.getItem() instanceof InfinitySword){ //剑0-4
+                return new TranslatableComponent(s0 + "." + rand.nextInt(5),
+                        displayName, name, itemstack.getDisplayName());
+            } //弓弩1-5
+            else {
+                int i = rand.nextInt(5) + 1;
+                return new TranslatableComponent(s0 + "." + i,
+                        displayName, name, itemstack.getDisplayName());
             }
-            else return new TranslationTextComponent(s + "." + rand.nextInt(4), displayName, name);
         }
-        else return new TranslationTextComponent(s, displayName);
+        else return new TranslatableComponent(s + "." + rand.nextInt(4), displayName, name);
     }
 
     //是否根据难度缩放伤害值
     @Override
-    public boolean isDifficultyScaled() {
+    public boolean scalesWithDifficulty() {
         return false;
     }
 
     @Override
     public String toString() {
-        return "InfinityDamageSource (" + this.damageSourceEntity + ")";
+        return "InfinityDamageSource (" + this.entity + ")";
     }
 
     public static boolean isInfinity(DamageSource source){
         if (source instanceof InfinityDamageSource) return true;
-        return source.damageType.equals(type);
+        return source.getMsgId().equals(type);
     }
 
     /**
@@ -71,8 +75,8 @@ public class InfinityDamageSource extends EntityDamageSource {
      * @return 无尽武器/空
      */
     public ItemStack getInfinityWeapon(LivingEntity living){
-        ItemStack mainItem = living.getHeldItem(Hand.MAIN_HAND);
-        ItemStack offItem = living.getHeldItem(Hand.OFF_HAND);
+        ItemStack mainItem = living.getMainHandItem();
+        ItemStack offItem = living.getOffhandItem();
         return isInfinityWeapon(mainItem) ? mainItem : isInfinityWeapon(offItem) ? offItem : ItemStack.EMPTY;
     }
 

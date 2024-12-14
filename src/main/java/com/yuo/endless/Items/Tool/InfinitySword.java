@@ -1,11 +1,13 @@
 package com.yuo.endless.Items.Tool;
 
+import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
+import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
+import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianPartEntity;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Event.EventHandler;
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,7 +25,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -43,7 +44,6 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -84,7 +84,7 @@ public class InfinitySword extends SwordItem {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         if (entity instanceof LivingEntity living){
-            hitEntity(stack, living, player);
+            hurtEnemy(stack, living, player);
 
             //模拟原版剑攻击
             float attackStrength = player.getAttackStrengthScale(1.6f); //攻击强度 0.5F ??
@@ -280,30 +280,27 @@ public class InfinitySword extends SwordItem {
      */
     public static void damageGuardian(Entity entity, Player player){
         if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
-            if (entity instanceof DraconicGuardianEntity){
-                DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) entity;
+            if (entity instanceof DraconicGuardianEntity draconicGuardian){
                 draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
                 draconicGuardian.setHealth(-1);
-                draconicGuardian.onDeath(new InfinityDamageSource(player));
-            }else if (entity instanceof GuardianCrystalEntity){
-                GuardianCrystalEntity crystal = (GuardianCrystalEntity) entity;
-                crystal.onKillCommand();
-            }else if (entity instanceof DraconicGuardianPartEntity) {
-                    DraconicGuardianPartEntity draconicGuardian = (DraconicGuardianPartEntity) entity;
-                    DraconicGuardianEntity dragon = draconicGuardian.dragon;
-                    dragon.attackEntityFrom(DamageSource.causeThornsDamage(player), Float.POSITIVE_INFINITY);
+                draconicGuardian.die(new InfinityDamageSource(player));
+            }else if (entity instanceof GuardianCrystalEntity crystal){
+                crystal.kill();
+            }else if (entity instanceof DraconicGuardianPartEntity draconicGuardian) {
+                DraconicGuardianEntity dragon = draconicGuardian.dragon;
+                    dragon.hurt(DamageSource.thorns(player), Float.POSITIVE_INFINITY);
                     dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
                     GuardianCrystalEntity crystal = dragon.closestGuardianCrystal;
                     if (crystal != null) {
-                        crystal.onKillCommand();
+                        crystal.kill();
                     }
                     if (dragon.isAlive() || dragon.getHealth() > 0) {
                         dragon.setHealth(-1);
-                        if (!player.world.isRemote) {
-                            dragon.onDeath(new InfinityDamageSource(player));
+                        if (!player.level.isClientSide) {
+                            dragon.die(new InfinityDamageSource(player));
                         }
                     }
-                    dragon.onKillCommand();
+                    dragon.kill();
                 }
         }
     }

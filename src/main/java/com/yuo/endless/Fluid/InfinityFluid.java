@@ -1,30 +1,23 @@
 package com.yuo.endless.Fluid;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Rarity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.state.StateContainer;
+import com.yuo.endless.Endless;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
-import java.util.List;
-import java.util.Random;
-
 public class InfinityFluid extends ForgeFlowingFluid {
-    public static final ITag.INamedTag<Fluid> INFINITY = FluidTags.makeWrapperTag("infinity");
+    public static final TagKey<Fluid> INFINITY = FluidTags.create(new ResourceLocation(Endless.MOD_ID, "infinity"));
 
     protected InfinityFluid(Properties properties) {
         super(properties);
@@ -36,39 +29,45 @@ public class InfinityFluid extends ForgeFlowingFluid {
     }
 
     @Override
-    public int getLevel(FluidState state) {
-        return 0;
-    }
-
-    @Override
-    protected boolean canDisplace(FluidState state, IBlockReader world, BlockPos pos, Fluid fluidIn, Direction direction) {
-        return direction == Direction.DOWN && fluidIn.isIn(INFINITY);
+    protected boolean canBeReplacedWith(FluidState state, BlockGetter level, BlockPos pos, Fluid fluidIn, Direction direction) {
+        return direction == Direction.DOWN && fluidIn.is(INFINITY);
     }
 
     //能否流动到此方块
+
     @Override
-    protected boolean canFlow(IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fluidIn) {
-        float hardness = toBlockState.getBlockHardness(worldIn, toPos);
+    protected boolean canSpreadTo(BlockGetter getter, BlockPos frompos, BlockState fromblockstate, Direction direction, BlockPos topos, BlockState toblockstate, FluidState tofluidstate, Fluid fluid) {
+        float hardness = toblockstate.getBlock().defaultDestroyTime();
         if (hardness > 0 && hardness < 50) return true;
-        return super.canFlow(worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn);
+        return super.canSpreadTo(getter, frompos, fromblockstate, direction, topos, toblockstate, tofluidstate, fluid);
     }
 
     //流动到此，设置流体
     @Override
-    protected void flowInto(IWorld worldIn, BlockPos pos, BlockState blockStateIn, Direction direction, FluidState fluidStateIn) {
-        beforeReplacingBlock(worldIn, pos, blockStateIn);
-        worldIn.setBlockState(pos, fluidStateIn.getBlockState(), 3);
+    protected void spreadTo(LevelAccessor worldIn, BlockPos pos, BlockState blockStateIn, Direction direction, FluidState fluidStateIn) {
+        beforeDestroyingBlock(worldIn, pos, blockStateIn);
+        worldIn.setBlock(pos, fluidStateIn.createLegacyBlock(), 3);
     }
 
     //替换方块
     @Override
-    protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
-        float hardness = state.getBlockHardness(worldIn, pos);
+    protected void beforeDestroyingBlock(LevelAccessor worldIn, BlockPos pos, BlockState state) {
+        float hardness = state.getBlock().defaultDestroyTime();
         if (hardness > 0 && hardness < 50){
             worldIn.destroyBlock(pos, false);
-            if (worldIn.isAirBlock(pos))
+            if (state.isAir())
                 worldIn.removeBlock(pos, true);
         }
+    }
+
+    @Override
+    public int getAmount(FluidState fluidState) {
+        return 0;
+    }
+
+    @Override
+    protected FluidAttributes createAttributes() {
+        return setAttr(new ResourceLocation(""), new ResourceLocation(""), 0).build(getSource());
     }
 
     public static FluidAttributes.Builder setAttr(ResourceLocation still, ResourceLocation flowing, int color){
@@ -85,16 +84,16 @@ public class InfinityFluid extends ForgeFlowingFluid {
     public static class Flowing extends InfinityFluid {
         public Flowing(Properties properties) {
             super(properties);
-            setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
+            registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
-        protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
-            super.fillStateContainer(builder);
-            builder.add(LEVEL_1_8);
+        protected void fillStateContainer(StateDefinition.Builder<Fluid, FluidState> builder) {
+            super.createFluidStateDefinition(builder);
+            builder.add(LEVEL);
         }
 
         public int getLevel(FluidState state) {
-            return state.get(LEVEL_1_8);
+            return state.getValue(LEVEL);
         }
 
         public boolean isSource(FluidState state) {

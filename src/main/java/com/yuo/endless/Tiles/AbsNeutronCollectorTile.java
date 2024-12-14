@@ -2,22 +2,15 @@ package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Container.NCIntArray;
 import com.yuo.endless.Items.EndlessItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
@@ -25,7 +18,7 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
 
-public class AbsNeutronCollectorTile extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
+public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements WorldlyContainer {
     private int timer; //计时器
     private NonNullList<ItemStack> output = NonNullList.withSize(1, ItemStack.EMPTY); //输出栏
     public NCIntArray data = new NCIntArray();
@@ -35,31 +28,32 @@ public class AbsNeutronCollectorTile extends LockableTileEntity implements ITick
         super(tileEntityType);
     }
 
-    @Override
-    public void tick() {
-        ItemStack output = this.output.get(0);
+    /**
+     * 服务端tick
+     */
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AbsNeutronCollectorTile tile) {
+        ItemStack output = tile.output.get(0);
         if (!output.isEmpty() && output.getCount() == output.getMaxStackSize()) return; //产物已满，停止计时
-        this.timer++;
-        this.data.set(0, this.timer);
-        if (world == null || world.isRemote) return;
+        tile.timer++;
+        tile.data.set(0, tile.timer);
         int time = getCraftTime(); //生产时间
         ItemStack outItem = getCraftOutputItem(); //产出物品
-        if (this.timer >= time){
-            this.timer = 0;
-            this.data.set(0, this.timer);
+        if (tile.timer >= time){
+            tile.timer = 0;
+            tile.data.set(0, tile.timer);
             //产物为空 设置产物 否则数量加1
-            if(output.isEmpty()) this.output.set(0, outItem);
+            if(output.isEmpty()) tile.output.set(0, outItem);
             else output.grow(1);
-            markDirty();//标记变化
+            setChanged(level, pos, state);//标记变化
         }
     }
 
     //生产时间
-    public int getCraftTime(){
+    public static int getCraftTime(){
         return 3600;
     }
     //产物
-    protected ItemStack getCraftOutputItem(){
+    protected static ItemStack getCraftOutputItem(){
         return new ItemStack(EndlessItems.neutroniumPile.get());
     }
 

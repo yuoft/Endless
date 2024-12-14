@@ -9,37 +9,26 @@ import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.TotemPacket;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.*;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.EffectInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -48,7 +37,7 @@ import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
@@ -325,8 +314,8 @@ public class EventHandler {
      * @param player 玩家
      * @return 是
      */
-    public static boolean isInfinityItem(PlayerEntity player){
-        ItemStack stack = player.getHeldItemMainhand().isEmpty() ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
+    public static boolean isInfinityItem(Player player){
+        ItemStack stack = player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
         return !stack.isEmpty() && (stack.getItem() == EndlessItems.infinitySword.get() || stack.getItem() == EndlessItems.infinityBow.get()
                 || stack.getItem() == EndlessItems.infinityCrossBow.get());
     }
@@ -358,12 +347,12 @@ public class EventHandler {
      * @param player 玩家
      * @return 结果
      */
-    public static boolean isInfinite(PlayerEntity player) {
-        for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-            if (slot.getSlotType() != EquipmentSlotType.Group.ARMOR) {
+    public static boolean isInfinite(Player player) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() != EquipmentSlot.Type.ARMOR) {
                 continue;
             }
-            ItemStack stack = player.getItemStackFromSlot(slot);
+            ItemStack stack = player.getItemBySlot(slot);
             if (stack.isEmpty() || !(stack.getItem() instanceof InfinityArmor)) {
                 return false;
             }

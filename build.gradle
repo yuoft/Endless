@@ -166,6 +166,8 @@ dependencies {
     compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_ver}:${crt_ver}")
     compileOnly("curse.maven:jade-${jade_id}:${jade_ver}")
     compileOnly("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
+    compileOnly("codechicken:CodeChickenLib:${ccl_ver}:universal")
+    compileOnly("com.brandon3055.draconicevolution:Draconic-Evolution:${mc_ver}-${de_ver}:universal")
 
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_ver}-forge:${jei_ver}"))
@@ -173,6 +175,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:jade-${jade_id}:${jade_ver}")
     runtimeOnly fg.deobf("curse.maven:neat-${neat_id}:${neat_ver}") //引入mod
     runtimeOnly fg.deobf("curse.maven:attributefix-${attributefix_id}:${attributefix_ver}")
+    runtimeOnly fg.deobf("curse.maven:brandons-core-${brandons_core_id}:${brandons_core_ver}")
+    runtimeOnly fg.deobf("codechicken:CodeChickenLib:${ccl_ver}:universal")
+    runtimeOnly fg.deobf("com.brandon3055.draconicevolution:Draconic-Evolution:${mc_ver}-${de_ver}:universal")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

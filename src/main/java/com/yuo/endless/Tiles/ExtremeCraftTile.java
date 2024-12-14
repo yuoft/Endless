@@ -1,26 +1,22 @@
 package com.yuo.endless.Tiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.INameable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
 //存储工作台数据
-public class ExtremeCraftTile extends TileEntity implements IInventory, INameable {
+public class ExtremeCraftTile extends BaseContainerBlockEntity {
 
     private NonNullList<ItemStack> items = NonNullList.withSize(81, ItemStack.EMPTY); //存储物品
     private final NonNullList<ItemStack> reslut = NonNullList.withSize(1, ItemStack.EMPTY); //存储合成物品
@@ -43,6 +39,11 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
     }
 
     @Override
+    public int getContainerSize() {
+        return 0;
+    }
+
+    @Override
     public boolean isEmpty() {
         for(ItemStack itemstack : this.items) {
             if (!itemstack.isEmpty()) {
@@ -50,6 +51,31 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
             }
         }
         return this.reslut.get(0).isEmpty();
+    }
+
+    @Override
+    public ItemStack getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItem(int i, int i1) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int i) {
+        return null;
+    }
+
+    @Override
+    public void setItem(int i, ItemStack itemStack) {
+
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return false;
     }
 
     @Override
@@ -160,5 +186,20 @@ public class ExtremeCraftTile extends TileEntity implements IInventory, INameabl
     @Override
     public ITextComponent getName() {
         return new TranslationTextComponent("gui.endless.extreme_crafting_table");
+    }
+
+    @Override
+    protected Component getDefaultName() {
+        return null;
+    }
+
+    @Override
+    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
+        return null;
+    }
+
+    @Override
+    public void clearContent() {
+
     }
 }

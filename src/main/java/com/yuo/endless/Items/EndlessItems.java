@@ -7,18 +7,14 @@ import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Event.ModSpawnEgg;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Items.Armor.CrystalMatrixArmor;
+import com.yuo.endless.Items.Armor.EndlessArmorMaterials;
 import com.yuo.endless.Items.Armor.InfinityArmor;
-import com.yuo.endless.Items.Armor.MyArmorMaterial;
 import com.yuo.endless.Items.Armor.NeutroniumArmor;
 import com.yuo.endless.Items.Tool.*;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -83,18 +79,18 @@ public class EndlessItems {
 
 
 	//盔甲
-	public static RegistryObject<ArmorItem> infinityHead = ITEMS.register("infinity_helmet", () -> new InfinityArmor(EquipmentSlotType.HEAD));
-	public static RegistryObject<ArmorItem> infinityChest = ITEMS.register("infinity_chestplate", () -> new InfinityArmor(EquipmentSlotType.CHEST));
-	public static RegistryObject<ArmorItem> infinityLegs = ITEMS.register("infinity_leggings", () -> new InfinityArmor(EquipmentSlotType.LEGS));
-	public static RegistryObject<ArmorItem> infinityFeet = ITEMS.register("infinity_boots", () -> new InfinityArmor(EquipmentSlotType.FEET));
-	public static RegistryObject<ArmorItem> crystalMatrixHead = ITEMS.register("crystal_matrix_helmet", () -> new CrystalMatrixArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.HEAD));
-	public static RegistryObject<ArmorItem> crystalMatrixChest = ITEMS.register("crystal_matrix_chestplate", () -> new CrystalMatrixArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.CHEST));
-	public static RegistryObject<ArmorItem> crystalMatrixLegs = ITEMS.register("crystal_matrix_leggings", () -> new CrystalMatrixArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.LEGS));
-	public static RegistryObject<ArmorItem> crystalMatrixFeet = ITEMS.register("crystal_matrix_boots", () -> new CrystalMatrixArmor(MyArmorMaterial.CRYSTAL, EquipmentSlotType.FEET));
-	public static RegistryObject<ArmorItem> neutroniumHead = ITEMS.register("neutronium_helmet", () -> new NeutroniumArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.HEAD));
-	public static RegistryObject<ArmorItem> neutroniumChest = ITEMS.register("neutronium_chestplate", () -> new NeutroniumArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.CHEST));
-	public static RegistryObject<ArmorItem> neutroniumLegs = ITEMS.register("neutronium_leggings", () -> new NeutroniumArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.LEGS));
-	public static RegistryObject<ArmorItem> neutroniumFeet = ITEMS.register("neutronium_boots", () -> new NeutroniumArmor(MyArmorMaterial.NEUTRON, EquipmentSlotType.FEET));
+	public static RegistryObject<ArmorItem> infinityHead = ITEMS.register("infinity_helmet", () -> new InfinityArmor(EquipmentSlot.HEAD));
+	public static RegistryObject<ArmorItem> infinityChest = ITEMS.register("infinity_chestplate", () -> new InfinityArmor(EquipmentSlot.CHEST));
+	public static RegistryObject<ArmorItem> infinityLegs = ITEMS.register("infinity_leggings", () -> new InfinityArmor(EquipmentSlot.LEGS));
+	public static RegistryObject<ArmorItem> infinityFeet = ITEMS.register("infinity_boots", () -> new InfinityArmor(EquipmentSlot.FEET));
+	public static RegistryObject<ArmorItem> crystalMatrixHead = ITEMS.register("crystal_matrix_helmet", () -> new CrystalMatrixArmor(EndlessArmorMaterials.CRYSTAL, EquipmentSlot.HEAD));
+	public static RegistryObject<ArmorItem> crystalMatrixChest = ITEMS.register("crystal_matrix_chestplate", () -> new CrystalMatrixArmor(EndlessArmorMaterials.CRYSTAL, EquipmentSlot.CHEST));
+	public static RegistryObject<ArmorItem> crystalMatrixLegs = ITEMS.register("crystal_matrix_leggings", () -> new CrystalMatrixArmor(EndlessArmorMaterials.CRYSTAL, EquipmentSlot.LEGS));
+	public static RegistryObject<ArmorItem> crystalMatrixFeet = ITEMS.register("crystal_matrix_boots", () -> new CrystalMatrixArmor(EndlessArmorMaterials.CRYSTAL, EquipmentSlot.FEET));
+	public static RegistryObject<ArmorItem> neutroniumHead = ITEMS.register("neutronium_helmet", () -> new NeutroniumArmor(EndlessArmorMaterials.NEUTRON, EquipmentSlot.HEAD));
+	public static RegistryObject<ArmorItem> neutroniumChest = ITEMS.register("neutronium_chestplate", () -> new NeutroniumArmor(EndlessArmorMaterials.NEUTRON, EquipmentSlot.CHEST));
+	public static RegistryObject<ArmorItem> neutroniumLegs = ITEMS.register("neutronium_leggings", () -> new NeutroniumArmor(EndlessArmorMaterials.NEUTRON, EquipmentSlot.LEGS));
+	public static RegistryObject<ArmorItem> neutroniumFeet = ITEMS.register("neutronium_boots", () -> new NeutroniumArmor(EndlessArmorMaterials.NEUTRON, EquipmentSlot.FEET));
 
 
 	//注册方块物品
