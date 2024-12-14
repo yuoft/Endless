@@ -21,16 +21,12 @@ public class ExtremeCraftTile extends BaseContainerBlockEntity {
     private NonNullList<ItemStack> items = NonNullList.withSize(81, ItemStack.EMPTY); //存储物品
     private final NonNullList<ItemStack> reslut = NonNullList.withSize(1, ItemStack.EMPTY); //存储合成物品
 
-    public ExtremeCraftTile() {
-        super(EndlessTileTypes.EXTREME_CRAFT_TILE.get());
+    public ExtremeCraftTile(BlockPos pos, BlockState state) {
+        super(EndlessTileTypes.EXTREME_CRAFT_TILE.get(), pos, state);
     }
 
     public NonNullList<ItemStack> getItems() {
         return items;
-    }
-
-    public void dropItem(World world, BlockPos pos){
-        InventoryHelper.dropItems(world, pos, items);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ExtremeCraft extends BaseEntityBlock {
     @org.jetbrains.annotations.Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new ExtremeCraftTile();
+        return new ExtremeCraftTile(blockPos, blockState);
     }
 
     @Override
