@@ -4,18 +4,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.yuo.endless.Items.Singularity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -33,13 +31,13 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         this.count = countIn;
         this.output = outputIn;
     }
-    public static class RecipeType implements IRecipeType<NeutroniumRecipe> {
+    public static class ModRecipeType implements RecipeType<NeutroniumRecipe> {
         @Override
         public String toString() {
             return NeutroniumRecipe.TYPE_ID.toString();
         }
     }
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<NeutroniumRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<NeutroniumRecipe>{
 
         @Override
         public NeutroniumRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
@@ -78,7 +76,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         ItemStack itemStack = inv.getStackInSlot(0);
         for (ItemStack stack : inputs) {
             if (stack.isItemEqual(itemStack)) return true;

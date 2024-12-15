@@ -1,8 +1,8 @@
 package com.yuo.endless.Container;
 
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.inventory.ContainerData;
 
-public class NCIntArray implements IIntArray {
+public class NCIntArray implements ContainerData {
     private int timer; //计时器
     @Override
     public int get(int index) {
@@ -20,7 +20,7 @@ public class NCIntArray implements IIntArray {
     }
 
     @Override
-    public int size() {
+    public int getCount() {
         return 1;
     }
 }

@@ -53,7 +53,6 @@ public abstract class AbsNeutronCollector extends BaseEntityBlock {
     protected abstract void openContainer(Level worldIn, BlockPos pos, Player player);
 
     //被破坏时 里面所有物品掉落
-
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState blockState, boolean isMoving) {
         if (!state.is(blockState.getBlock())) {

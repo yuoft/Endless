@@ -6,27 +6,29 @@ import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
@@ -34,12 +36,12 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolder {
+public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder {
     private int burnTime; //以烧炼时间
     private int burnTimeTotal; //燃料提供的烧炼时间
     private int cookingTime; //烧炼时间
     private static final int cookingTimeTotal = 160; //烧炼总时间
-    private final IIntArray burnData = new IIntArray(){
+    private final ContainerData burnData = new ContainerData(){
         @Override
         public int get(int index) {
             switch (index){
@@ -60,69 +62,67 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 3;
         }
     };
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
 
-    public InfinityBoxTile(){
-        super(EndlessTileTypes.INFINITY_CHEST_TILE.get(), EndlessChestType.INFINITY, () -> EndlessBlocks.infinityBox.get());
+    public InfinityBoxTile(BlockPos pos, BlockState state){
+        super(EndlessTileTypes.INFINITY_CHEST_TILE.get(), EndlessChestType.INFINITY, () -> EndlessBlocks.infinityBox.get(), pos, state);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        boolean flag = this.isBurning();
+    public static void serverTick(Level level, BlockPos pos, BlockState state, InfinityBoxTile tile) {
+        boolean flag = tile.isBurning();
         boolean flag1 = false;
-        if (world == null || world.isRemote) return;
-        if (this.isBurning()) {
-            this.burnTime--;
+        if (tile.level == null) return;
+        if (tile.isBurning()) {
+            tile.burnTime--;
         }
-        ItemStack burnItem = this.stackHandler.getStackInSlot(253);
-        ItemStack burnFuel = this.stackHandler.getStackInSlot(254);
-        if (isBurning() || !burnFuel.isEmpty() && !burnItem.isEmpty()){
-            Optional<FurnaceRecipe> optional = this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(burnItem), world);
+        ItemStack burnItem = tile.stackHandler.getStackInSlot(253);
+        ItemStack burnFuel = tile.stackHandler.getStackInSlot(254);
+        if (tile.isBurning() || !burnFuel.isEmpty() && !burnItem.isEmpty()){
+            Optional<SmeltingRecipe> optional = tile.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(burnItem), level);
             if (optional.isPresent()){
-                FurnaceRecipe recipe = optional.get();
-                if (!isBurning() && canSmelt(recipe)){ //增加燃烧时间
-                    this.burnTime = ForgeHooks.getBurnTime(burnFuel);
-                    this.burnTimeTotal = this.burnTime;
-                    if (this.isBurning()) {
+                SmeltingRecipe recipe = optional.get();
+                if (!tile.isBurning() && tile.canSmelt(recipe)){ //增加燃烧时间
+                    tile.burnTime = ForgeHooks.getBurnTime(burnFuel, RecipeType.SMELTING);
+                    tile.burnTimeTotal = tile.burnTime;
+                    if (tile.isBurning()) {
                         flag1 = true;
                         if (burnFuel.hasContainerItem())
-                            this.stackHandler.setStackInSlot(254, burnFuel.getContainerItem());
+                            tile.stackHandler.setStackInSlot(254, burnFuel.getContainerItem());
                         else
                         if (!burnFuel.isEmpty()) {
                             burnFuel.shrink(1);
                             if (burnFuel.isEmpty()) {
-                                this.stackHandler.setStackInSlot(254, burnFuel.getContainerItem());
+                                tile.stackHandler.setStackInSlot(254, burnFuel.getContainerItem());
                             }
                         }
                     }
                 }
-                if (this.isBurning() && this.canSmelt(recipe)) { //烧炼进度增加
-                    this.cookingTime++;
-                    if (this.cookingTime == cookingTimeTotal) {
-                        this.cookingTime = 0;
-                        this.smelt(recipe, world);
+                if (tile.isBurning() && tile.canSmelt(recipe)) { //烧炼进度增加
+                    tile.cookingTime++;
+                    if (tile.cookingTime == cookingTimeTotal) {
+                        tile.cookingTime = 0;
+                        tile.smelt(recipe, level);
                         flag1 = true;
                     }
                 } else {
-                    this.cookingTime = 0;
+                    tile.cookingTime = 0;
                 }
             }
-        }else if (!this.isBurning() && this.cookingTime > 0) { //燃料进度回退
-            this.cookingTime = MathHelper.clamp(this.cookingTime - 2, 0, cookingTimeTotal);
+        }else if (!tile.isBurning() && tile.cookingTime > 0) { //燃料进度回退
+            tile.cookingTime = Mth.clamp(tile.cookingTime - 2, 0, cookingTimeTotal);
         }
 
-        if (flag != this.isBurning()) {
+        if (flag != tile.isBurning()) {
             flag1 = true;
         }
 
         if (flag1) {
-            this.markDirty();
+            tile.setChanged();
         }
     }
 
@@ -135,19 +135,19 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
      * @param recipeIn 配方
      * @return 是 true
      */
-    private boolean canSmelt(@Nullable FurnaceRecipe recipeIn) {
+    private boolean canSmelt(@Nullable SmeltingRecipe recipeIn) {
         ItemStack burnItem = this.stackHandler.getStackInSlot(253);
         if (!burnItem.isEmpty() && recipeIn != null) {
-            ItemStack itemstack = recipeIn.getCraftingResult(new Inventory());
+            ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
                 return false;
             } else {
                 ItemStack burnResult = this.stackHandler.getStackInSlot(255);
                 if (burnResult.isEmpty()) {
                     return true;
-                } else if (!burnResult.isItemEqual(itemstack)) {
+                } else if (!burnResult.equals(itemstack, false)) {
                     return false;
-                } else if (burnResult.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && burnResult.getCount() + itemstack.getCount() <= burnResult.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+                } else if (burnResult.getCount() + itemstack.getCount() <= this.getMaxStackSize() && burnResult.getCount() + itemstack.getCount() <= burnResult.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
                     return true;
                 } else {
                     return burnResult.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
@@ -162,10 +162,10 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
      * 进行烧炼物品消耗，产物增加
      * @param recipe 配方
      */
-    private void smelt(@Nullable FurnaceRecipe recipe, World world) {
+    private void smelt(@Nullable SmeltingRecipe recipe, Level world) {
         if (recipe != null && this.canSmelt(recipe)) {
             ItemStack burnItem = this.stackHandler.getStackInSlot(253);
-            ItemStack craftingResult = recipe.getCraftingResult(new Inventory(burnItem));
+            ItemStack craftingResult = recipe.getResultItem();
             ItemStack burnResult = this.stackHandler.getStackInSlot(255);
             if (burnResult.isEmpty()) {
                 this.stackHandler.setStackInSlot(255, craftingResult.copy());
@@ -173,7 +173,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
                 burnResult.grow(craftingResult.getCount());
             }
 
-            if (!world.isRemote) { //设置使用配方
+            if (!world.isClientSide) { //设置使用配方
                 this.setRecipeUsed(recipe);
             }
 
@@ -186,35 +186,36 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
         }
     }
 
+
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.endless.infinity_chest");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.endless.infinity_chest");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return new InfinityBoxContainer(id, player, this, burnData);
+    protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
+        return new InfinityBoxContainer(id, inventory, this, burnData);
     }
 
     @Override
-    public void NbtRead(CompoundNBT nbt){
+    public void NbtRead(CompoundTag nbt){
         super.NbtRead(nbt);
         this.burnTime = nbt.getInt("BurnTime");
-        this.burnTimeTotal = ForgeHooks.getBurnTime(this.stackHandler.getStackInSlot(254));
+        this.burnTimeTotal = ForgeHooks.getBurnTime(this.stackHandler.getStackInSlot(254), RecipeType.SMELTING);
         this.cookingTime = nbt.getInt("CookingTime");
-        CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
-        for(String s : compoundnbt.keySet()) {
+        CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
+        for(String s : compoundnbt.getAllKeys()) {
             this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
         }
     }
 
     @Override
-    public CompoundNBT NbtWrite(CompoundNBT compound){
-        CompoundNBT nbt = super.NbtWrite(compound);
+    public CompoundTag NbtWrite(CompoundTag compound){
+        CompoundTag nbt = super.NbtWrite(compound);
         nbt.putInt("BurnTime", this.burnTime);
         nbt.putInt("BurnTimeTotal", this.burnTimeTotal);
         nbt.putInt("CookingTime", this.cookingTime);
-        CompoundNBT compoundnbt = new CompoundNBT();
+        CompoundTag compoundnbt = new CompoundTag();
         this.recipes.forEach((recipeId, craftedAmount) -> {
             compoundnbt.putInt(recipeId.toString(), craftedAmount);
         });
@@ -226,17 +227,17 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
      * 清除使用配方 并生成经验
      * @param player 玩家
      */
-    public void unlockRecipes(PlayerEntity player) {
-        List<IRecipe<?>> list = this.grantStoredRecipeExperience(player.world, player.getPositionVec());
-        player.unlockRecipes(list);
+    public void unlockRecipes(Player player) {
+        List<Recipe<?>> list = this.grantStoredRecipeExperience(player.level, player.getUpVector(0.5f));
+        player.resetRecipes(list);
         this.recipes.clear();
     }
 
-    public List<IRecipe<?>> grantStoredRecipeExperience(World world, Vector3d pos) {
-        List<IRecipe<?>> list = Lists.newArrayList();
+    public List<Recipe<?>> grantStoredRecipeExperience(Level world, Vec3 pos) {
+        List<Recipe<?>> list = Lists.newArrayList();
 
         for(Object2IntMap.Entry<ResourceLocation> entry : this.recipes.object2IntEntrySet()) {
-            world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((recipe) -> {
+            world.getRecipeManager().byKey(entry.getKey()).ifPresent((recipe) -> {
                 list.add(recipe);
                 splitAndSpawnExperience(world, pos, entry.getIntValue(), ((AbstractCookingRecipe)recipe).getExperience());
             });
@@ -245,23 +246,23 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
         return list;
     }
 
-    private static void splitAndSpawnExperience(World world, Vector3d pos, int craftedAmount, float experience) {
-        int i = MathHelper.floor((float)craftedAmount * experience);
-        float f = MathHelper.frac((float)craftedAmount * experience);
+    private static void splitAndSpawnExperience(Level world, Vec3 pos, int craftedAmount, float experience) {
+        int i = Mth.floor((float)craftedAmount * experience);
+        float f = Mth.frac((float)craftedAmount * experience);
         if (f != 0.0F && Math.random() < (double)f) {
             ++i;
         }
 
         while(i > 0) {
-            int j = ExperienceOrbEntity.getXPSplit(i);
+            int j = ExperienceOrb.getExperienceValue(i);
             i -= j;
-            world.addEntity(new ExperienceOrbEntity(world, pos.x, pos.y, pos.z, j));
+            world.addFreshEntity(new ExperienceOrb(world, pos.x, pos.y, pos.z, j));
         }
 
     }
 
     @Override
-    public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
+    public void setRecipeUsed(@org.jetbrains.annotations.Nullable Recipe<?> recipe) {
         if (recipe != null) {
             ResourceLocation resourcelocation = recipe.getId();
             this.recipes.addTo(resourcelocation, 1);
@@ -270,7 +271,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
 
     @Nullable
     @Override
-    public IRecipe<?> getRecipeUsed() {
+    public Recipe<?> getRecipeUsed() {
         return null;
     }
 }

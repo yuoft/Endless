@@ -1,21 +1,21 @@
 package com.yuo.endless.Container;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class NCOutputSlot extends Slot {
-    public NCOutputSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
-        super(inventoryIn, index, xPosition, yPosition);
+    public NCOutputSlot(Container container, int index, int xPosition, int yPosition) {
+        super(container, index, xPosition, yPosition);
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
+    public boolean mayPlace(ItemStack pStack) {
         return false;
     }
 
     @Override
-    public int getItemStackLimit(ItemStack stack) {
+    public int getMaxStackSize(ItemStack pStack) {
         return 64;
     }
 }

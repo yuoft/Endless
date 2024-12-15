@@ -1,9 +1,9 @@
 package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Endless;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nullable;
 
@@ -43,14 +43,11 @@ public enum EndlessChestType {
     }
 
     public static Block get(EndlessChestType type) {
-        switch (type) {
-            case COMPRESSOR:
-                return EndlessBlocks.compressedChest.get();
-            case INFINITY:
-                return EndlessBlocks.infinityBox.get();
-            default:
-                return Blocks.CHEST;
-        }
+        return switch (type) {
+            case COMPRESSOR -> EndlessBlocks.compressedChest.get();
+            case INFINITY -> EndlessBlocks.infinityBox.get();
+            default -> Blocks.CHEST;
+        };
     }
 
 }

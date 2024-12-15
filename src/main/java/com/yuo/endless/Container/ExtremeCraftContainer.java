@@ -3,12 +3,17 @@ package com.yuo.endless.Container;
 import com.yuo.endless.Config;
 import com.yuo.endless.Recipe.*;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.RecipeBookMenu;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
@@ -24,11 +29,11 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
 
 
     public ExtremeCraftContainer(int id, Inventory playerInventory){
-        this(id, playerInventory, new ExtremeCraftTile());
+        this(id, playerInventory, new ExtremeCraftTile(null, null));
     }
 
     public ExtremeCraftContainer(int id, Inventory playerInventory, ExtremeCraftTile tile) {
-        super(ContainerTypeRegistry.extremeCraftContainer.get(), id);
+        super(EndlessMenuTypes.extremeCraftContainer.get(), id);
         this.inputInventory = new ExtremeCraftInventory(this, tile);
         this.outputInventory = new ExtremeCraftInventoryResult(tile);
         this.player = playerInventory.player;
@@ -51,51 +56,51 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 39 + k * 18, 232));
         }
-        onCraftMatrixChanged(inputInventory);
+        slotsChanged(inputInventory);
     }
 
     //输入改变时设置输出
     @Override
-    public void onCraftMatrixChanged(IInventory matrix) {
-        if (world.isRemote) return;
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+    public void slotsChanged(Container matrix) {
+        if (world.isClientSide) return;
+        ServerPlayer serverPlayer = (ServerPlayer)player;
         ItemStack itemStack = ItemStack.EMPTY;
         //获取配方 先检查无尽配方
-        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
-        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipe(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, inputInventory, world);
+        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
+        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, inputInventory, world);
         ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(inputInventory, world);
         if (recipeOptional.isPresent()){ //json配方 有序
             ExtremeCraftRecipe recipe = recipeOptional.get();
-            if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
-                itemStack = recipe.getCraftingResult(inputInventory);
+            if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
+                itemStack = recipe.getRecipeOutput();
             }
         }else if (recipeOptionalIn.isPresent()){ //无序配方
             ExtremeCraftShapeRecipe recipe = recipeOptionalIn.get();
-            if (outputInventory.canUseRecipe(world, serverPlayer, recipe)){
-                itemStack = recipe.getCraftingResult(inputInventory);
+            if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
+                itemStack = recipe.getRecipeOutput();
             }
         }else if (shapeRecipe != null){ //硬编码配方
-            if (outputInventory.canUseRecipe(world, serverPlayer, shapeRecipe)){
-                itemStack = shapeRecipe.getCraftingResult(inputInventory);
+            if (outputInventory.setRecipeUsed(world, serverPlayer, shapeRecipe)){
+                itemStack = shapeRecipe.getRecipeOutput();
             }
         }else {
             ItemStack recipeOutPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
             ItemStack recipeOutPut1 = ExtremeCraftShpaelessManager.getInstance().getRecipeOutPut(inputInventory, world);
             if (Config.SERVER.isCraftTable.get()){
-                CraftingInventory craftingInv = getCraftingInv();
-                Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+                CraftingContainer craftingInv = getCraftingInv();
+                Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, world);
                 if (optional.isPresent() && isCraft()) {
-                    ICraftingRecipe recipe = optional.get();
-                    if (outputInventory.canUseRecipe(world, serverPlayer, recipe)) {
-                        itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
+                    CraftingRecipe recipe = optional.get();
+                    if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)) {
+                        itemStack = recipe.getResultItem(); //获取配方输出
                     }
                 }else {
                     itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;
                 }
             }else itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;
         }
-        outputInventory.setInventorySlotContents(81, itemStack);
-        serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 81, itemStack));
+        outputInventory.setItem(81, itemStack);
+        serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.getStateId(), 81, itemStack));
     }
 
     /**
@@ -104,8 +109,8 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
      */
     private boolean isCraft() {
         List<Integer> list = Arrays.asList(0, 1, 2, 9, 10, 11, 18, 19, 20);
-        for (int i = 0; i < inputInventory.getSizeInventory(); i++){
-            ItemStack stack = inputInventory.getStackInSlot(i);
+        for (int i = 0; i < inputInventory.getContainerSize(); i++){
+            ItemStack stack = inputInventory.getItem(i);
             if (list.contains(i)) continue;
             if (!stack.isEmpty()) return false;
         }
@@ -116,46 +121,51 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
      * 创建一个工作台容器
      * @return 容器
      */
-    private CraftingInventory getCraftingInv(){
-        CraftingInventory inventory = new CraftingInventory(new WorkbenchContainer(windowId, player.inventory), 3,3);
-        inventory.setInventorySlotContents(0, inputInventory.getStackInSlot(0));
-        inventory.setInventorySlotContents(1, inputInventory.getStackInSlot(1));
-        inventory.setInventorySlotContents(2, inputInventory.getStackInSlot(2));
-        inventory.setInventorySlotContents(3, inputInventory.getStackInSlot(9));
-        inventory.setInventorySlotContents(4, inputInventory.getStackInSlot(10));
-        inventory.setInventorySlotContents(5, inputInventory.getStackInSlot(11));
-        inventory.setInventorySlotContents(6, inputInventory.getStackInSlot(18));
-        inventory.setInventorySlotContents(7, inputInventory.getStackInSlot(19));
-        inventory.setInventorySlotContents(8, inputInventory.getStackInSlot(20));
+    private CraftingContainer getCraftingInv(){
+        CraftingContainer inventory = new CraftingContainer(new AbstractContainerMenu(MenuType.CRAFTING, containerId) {
+            @Override
+            public boolean stillValid(Player pPlayer) {
+                return true;
+            }
+        }, 3, 3);
+        inventory.setItem(0, inputInventory.getItem(0));
+        inventory.setItem(1, inputInventory.getItem(1));
+        inventory.setItem(2, inputInventory.getItem(2));
+        inventory.setItem(3, inputInventory.getItem(9));
+        inventory.setItem(4, inputInventory.getItem(10));
+        inventory.setItem(5, inputInventory.getItem(11));
+        inventory.setItem(6, inputInventory.getItem(18));
+        inventory.setItem(7, inputInventory.getItem(19));
+        inventory.setItem(8, inputInventory.getItem(20));
         return inventory;
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.inputInventory.isUsableByPlayer(playerIn);
+    public boolean stillValid(Player player) {
+        return this.inputInventory.stillValid(player);
     }
 
     //玩家shift行为
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemStack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot.hasItem()) {
+            ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
             if (index == 81){
-                if (!this.mergeItemStack(itemStack1, 82, 118, true)) return ItemStack.EMPTY;
-                slot.onSlotChange(itemStack1, itemstack);
+                if (!this.moveItemStackTo(itemStack1, 82, 118, true)) return ItemStack.EMPTY;
+                slot.onQuickCraft(itemStack1, itemstack);
             } else if (index >= 82){
                 if (index < 109){//从物品栏到工作台
-                    if (!this.mergeItemStack(itemStack1, 0, 81, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 0, 81, false)) return ItemStack.EMPTY;
                 } else if (index < 118) {  //快捷栏到物品栏
-                    if (!this.mergeItemStack(itemStack1, 82, 109, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 82, 109, false)) return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemStack1, 82, 118, false)) return ItemStack.EMPTY; //从合成台取出来
+            } else if (!this.moveItemStackTo(itemStack1, 82, 118, false)) return ItemStack.EMPTY; //从合成台取出来
 
-            if (itemStack1.isEmpty()) slot.putStack(ItemStack.EMPTY);
-            else slot.onSlotChanged();
+            if (itemStack1.isEmpty()) slot.set(ItemStack.EMPTY);
+            else slot.setChanged();
 
             if (itemStack1.getCount() == itemstack.getCount()) return ItemStack.EMPTY;
             slot.onTake(playerIn, itemStack1);
@@ -165,35 +175,35 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
     }
 
     @Override
-    public void fillStackedContents(RecipeItemHelper itemHelperIn) {
+    public void fillCraftSlotsStackedContents(StackedContents stackedContents) {
         if (this.inputInventory != null) {
-            ((IRecipeHelperPopulator)this.inputInventory).fillStackedContents(itemHelperIn);
+           this.inputInventory.fillStackedContents(stackedContents);
         }
     }
 
     @Override
-    public void clear() {
-        this.inputInventory.clear();
-        this.outputInventory.clear();
+    public void clearCraftingContent() {
+        this.inputInventory.clearContent();
+        this.outputInventory.clearContent();
     }
 
     @Override
-    public boolean matches(IRecipe<? super CraftingInventory> recipeIn) {
-        return recipeIn.matches(this.inputInventory, this.player.world);
+    public boolean recipeMatches(Recipe<? super CraftingContainer> recipe) {
+        return recipe.matches(this.inputInventory, this.player.level);
     }
 
     @Override
-    public int getOutputSlot() {
+    public int getResultSlotIndex() {
         return 81;
     }
 
     @Override
-    public int getWidth() {
+    public int getGridWidth() {
         return 9;
     }
 
     @Override
-    public int getHeight() {
+    public int getGridHeight() {
         return 9;
     }
 
@@ -203,7 +213,12 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
     }
 
     @Override
-    public RecipeBookCategory func_241850_m() {
+    public RecipeBookType getRecipeBookType() {
         return null;
+    }
+
+    @Override
+    public boolean shouldMoveToInventory(int i) {
+        return false;
     }
 }

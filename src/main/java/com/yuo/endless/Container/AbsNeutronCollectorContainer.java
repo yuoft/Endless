@@ -1,23 +1,26 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Tiles.AbsNeutronCollectorTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class AbsNeutronCollectorContainer extends Container {
+public class AbsNeutronCollectorContainer extends AbstractContainerMenu {
 
     private final AbsNeutronCollectorTile collectorTile;
     private final NCIntArray data;
 
-    public AbsNeutronCollectorContainer(int id, PlayerInventory playerInventory, ContainerType<?> containerType, AbsNeutronCollectorTile inventory) {
+    public AbsNeutronCollectorContainer(int id, Inventory playerInventory, MenuType<?> containerType, AbsNeutronCollectorTile tile){
+        this(id, playerInventory, containerType, tile, new NCIntArray());
+    }
+
+    public AbsNeutronCollectorContainer(int id, Inventory playerInventory, MenuType<?> containerType, AbsNeutronCollectorTile tile, NCIntArray containerData) {
         super(containerType, id);
-        this.collectorTile = inventory;
-        this.data = inventory.data;
-        trackIntArray(data);
+        this.collectorTile = tile;
+        this.data = containerData;
         //中子素生成槽
         this.addSlot(new NCOutputSlot(collectorTile, 0, 80,35));
         //添加玩家物品栏
@@ -30,31 +33,28 @@ public class AbsNeutronCollectorContainer extends Container {
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
-    }
 
-    @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.collectorTile.isUsableByPlayer(playerIn);
+        this.addDataSlots(data);
     }
 
     //玩家shift行为
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemStack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot.hasItem()) {
+            ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
             if (index != 0){
                if (index < 28) { //从物品栏到快捷栏
-                    if (!this.mergeItemStack(itemStack1, 28, 37, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 28, 37, false)) return ItemStack.EMPTY;
                 } else if (index < 37) {
-                    if (!this.mergeItemStack(itemStack1, 1, 28, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 1, 28, false)) return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemStack1, 1, 37, false)) return ItemStack.EMPTY; //取出来
+            } else if (!this.moveItemStackTo(itemStack1, 1, 37, false)) return ItemStack.EMPTY; //取出来
 
-            if (itemStack1.isEmpty()) slot.putStack(ItemStack.EMPTY);
-            else slot.onSlotChanged();
+            if (itemStack1.isEmpty()) slot.set(ItemStack.EMPTY);
+            else slot.setChanged();
 
             if (itemStack1.getCount() == itemstack.getCount()) return ItemStack.EMPTY;
             slot.onTake(playerIn, itemStack1);
@@ -68,4 +68,8 @@ public class AbsNeutronCollectorContainer extends Container {
         return (int) Math.ceil(this.data.get(0) / 3600.0 * 24);
     }
 
+    @Override
+    public boolean stillValid(Player player) {
+        return this.collectorTile.stillValid(player);
+    }
 }

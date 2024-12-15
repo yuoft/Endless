@@ -1,8 +1,8 @@
 package com.yuo.endless.Container;
 
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.inventory.ContainerData;
 
-public class NiumCIntArray implements IIntArray {
+public class NiumCIntArray implements ContainerData {
     private int number; //物品数量
     private int numberTotal; //配方物品总数
     private int posX;
@@ -48,7 +48,7 @@ public class NiumCIntArray implements IIntArray {
     }
 
     @Override
-    public int size() {
+    public int getCount() {
         return 5;
     }
 }

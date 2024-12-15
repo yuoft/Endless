@@ -4,76 +4,107 @@ import com.yuo.endless.Blocks.AbsEndlessChest;
 import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Container.Chest.CompressorChestContainer;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ChestContainer;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.*;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.CompoundContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-@OnlyIn(value = Dist.CLIENT, _interface = IChestLid.class)
-public class AbsEndlessChestTile extends LockableLootTileEntity implements IChestLid, ITickableTileEntity {
+public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEntity implements LidBlockEntity {
     protected float lidAngle;
     protected float prevLidAngle;
-    protected int numPlayersUsing;
     private int ticksSinceSync;
     private final Supplier<Block> blockSupplier;
     private final EndlessChestType type;
     protected final InfinityStackHandler stackHandler;
+    private final ContainerOpenersCounter openersCounter;
+    private final ChestLidController chestLidController;
     private net.minecraftforge.common.util.LazyOptional<IItemHandlerModifiable> chestHandler;
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String NBT_COUNT = "infinity_count";
 
-    public AbsEndlessChestTile(TileEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier) {
-        super(typeIn);
+    public AbsEndlessChestTile(BlockEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier){
+        this(typeIn, chestType, supplier, null, null);
+    }
+
+    public AbsEndlessChestTile(BlockEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier, BlockPos pos, BlockState state) {
+        super(typeIn, pos, state);
         this.type = chestType;
         this.stackHandler = new InfinityStackHandler(chestType.size);
         this.blockSupplier = supplier;
+        this.openersCounter = new ContainerOpenersCounter() {
+            protected void onOpen(Level level, BlockPos pos1, BlockState state1) {
+                AbsEndlessChestTile.playSound(level, pos1, state1, SoundEvents.CHEST_OPEN);
+            }
+
+            protected void onClose(Level level, BlockPos pos1, BlockState state1) {
+                AbsEndlessChestTile.playSound(level, pos1, state1, SoundEvents.CHEST_CLOSE);
+            }
+
+            protected void openerCountChanged(Level level, BlockPos pos1, BlockState state1, int i, int i1) {
+                AbsEndlessChestTile.this.signalOpenCount(level, pos1, state1, i, i1);
+            }
+
+            protected boolean isOwnContainer(Player player) {
+                if (!(player.containerMenu instanceof AbstractContainerMenu)) {
+                    return false;
+                } else {
+                    Container container = ((ChestMenu)player.containerMenu).getContainer();
+                    return container == AbsEndlessChestTile.this || container instanceof CompoundContainer && ((CompoundContainer)container).contains(AbsEndlessChestTile.this);
+                }
+            }
+        };
+        this.chestLidController = new ChestLidController();
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        this.fillWithLoot(null);
-        if (stack.getCount() > getInventoryStackLimit()) {
-            stack.setCount(getInventoryStackLimit());
+    public void setItem(int index, ItemStack stack) {
+        this.unpackLootTable(null);
+        if (stack.getCount() > getMaxStackSize()) {
+            stack.setCount(getMaxStackSize());
         }
 
         this.stackHandler.getStacks().set(index, stack);
-        this.markDirty();
+        this.setChanged();
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        return super.decrStackSize(index, count);
+    public ItemStack removeItem(int index, int count) {
+        return super.removeItem(index, count);
     }
 
     @Override
-    public int getInventoryStackLimit() {
+    public int getMaxStackSize() {
         return this.type.stackLimit;
     }
 
@@ -82,7 +113,7 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.getItems().size();
     }
 
@@ -97,27 +128,26 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         NbtRead(nbt);
     }
 
-    public void NbtRead(CompoundNBT nbt) {
-        this.stackHandler.setStacks(NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY));
-        if (!this.checkLootAndRead(nbt)) {
+    public void NbtRead(CompoundTag nbt) {
+        this.stackHandler.setStacks(NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY));
+        if (!this.tryLoadLootTable(nbt)) {
             loadAllItems(nbt, this.stackHandler.getStacks());
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public void saveAdditional(CompoundTag compound) {
         NbtWrite(compound);
-        return compound;
+        super.saveAdditional(compound);
     }
 
-    public CompoundNBT NbtWrite(CompoundNBT compound) {
-        if (!this.checkLootAndWrite(compound)) {
+    public CompoundTag NbtWrite(CompoundTag compound) {
+        if (!this.trySaveLootTable(compound)) {
             saveAllItems(compound, this.stackHandler.getStacks());
         }
         return compound;
@@ -129,15 +159,15 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
      * @param stacks 物品列表
      * @return new nbt
      */
-    public static CompoundNBT saveAllItems(CompoundNBT nbt, NonNullList<ItemStack> stacks) {
-        ListNBT listNBT = new ListNBT();
+    public static CompoundTag saveAllItems(CompoundTag nbt, NonNullList<ItemStack> stacks) {
+        ListTag listNBT = new ListTag();
 
         for(int i = 0; i < stacks.size(); ++i) {
             ItemStack stack = stacks.get(i);
             if (!stack.isEmpty()) {
-                CompoundNBT tag = new CompoundNBT();
+                CompoundTag tag = new CompoundTag();
                 tag.putByte("Slot", (byte)i);
-                stack.write(tag);
+                stack.deserializeNBT(tag);
                 tag.putInt(NBT_COUNT, stack.getCount());
                 listNBT.add(tag);
             }
@@ -155,14 +185,14 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
      * @param nbt nbt
      * @param stacks 物品列表
      */
-    public static void loadAllItems(CompoundNBT nbt, NonNullList<ItemStack> stacks) {
-        ListNBT listNBT = nbt.getList("Items", 10);
+    public static void loadAllItems(CompoundTag nbt, NonNullList<ItemStack> stacks) {
+        ListTag listNBT = nbt.getList("Items", 10);
 
         for(int i = 0; i < listNBT.size(); ++i) {
-            CompoundNBT tag = listNBT.getCompound(i);
+            CompoundTag tag = listNBT.getCompound(i);
             int slot = tag.getByte("Slot") & 255;
             if (slot < stacks.size()) {
-                ItemStack stack = ItemStack.read(tag);
+                ItemStack stack = ItemStack.of(tag);
                 int count = tag.getInt(NBT_COUNT);
                 stack.setCount(count);
                 stacks.set(slot, stack);
@@ -171,90 +201,94 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.endless." + type.getName() + "_chest");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.endless." + type.getName() + "_chest");
     }
+
+//    @Nullable
+//    @Override
+//    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player pPlayer) {
+//        return ChestMenu.threeRows(id, inventory, this);
+//    }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return ChestContainer.createGeneric9X3(id, player, this);
+    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
+        return null;
     }
-
-    public void tick() {
-        int i = this.pos.getX();
-        int j = this.pos.getY();
-        int k = this.pos.getZ();
-        ++this.ticksSinceSync;
-        this.numPlayersUsing = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, i, j, k, this.numPlayersUsing);
-        this.prevLidAngle = this.lidAngle;
+/*
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AbsEndlessChestTile tile) {
+        int i = tile.pos.getX();
+        int j = tile.pos.getY();
+        int k = tile.pos.getZ();
+        ++tile.ticksSinceSync;
+        tile.numPlayersUsing = calculatePlayersUsingSync(tile.world, tile, tile.ticksSinceSync, i, j, k, tile.numPlayersUsing);
+        tile.prevLidAngle = tile.lidAngle;
         float f = 0.1F;
-        if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F) {
-            this.playSound(SoundEvents.BLOCK_CHEST_OPEN);
+        if (tile.numPlayersUsing > 0 && tile.lidAngle == 0.0F) {
+            tile.playSound(SoundEvents.BLOCK_CHEST_OPEN);
         }
 
-        if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) {
-            float f1 = this.lidAngle;
-            if (this.numPlayersUsing > 0) {
-                this.lidAngle += f;
-            } else this.lidAngle -= f;
+        if (tile.numPlayersUsing == 0 && tile.lidAngle > 0.0F || tile.numPlayersUsing > 0 && tile.lidAngle < 1.0F) {
+            float f1 = tile.lidAngle;
+            if (tile.numPlayersUsing > 0) {
+                tile.lidAngle += f;
+            } else tile.lidAngle -= f;
 
-            if (this.lidAngle > 1.0F) {
-                this.lidAngle = 1.0F;
+            if (tile.lidAngle > 1.0F) {
+                tile.lidAngle = 1.0F;
             }
 
             float f2 = 0.5F;
-            if (this.lidAngle < f2 && f1 >= f2) {
-                this.playSound(SoundEvents.BLOCK_CHEST_CLOSE);
+            if (tile.lidAngle < f2 && f1 >= f2) {
+                tile.playSound(SoundEvents.CHEST_CLOSE);
             }
 
-            if (this.lidAngle < 0.0F) {
-                this.lidAngle = 0.0F;
+            if (tile.lidAngle < 0.0F) {
+                tile.lidAngle = 0.0F;
             }
         }
 
     }
-
-    @Nullable
+*/
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        if (world != null) {
-            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        NbtWrite(tag);
+        return tag;
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if (level != null) {
+            handleUpdateTag(pkt.getTag());
         }
     }
 
-    @Nonnull
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT compound = super.getUpdateTag();
-        NbtWrite(compound);
-        return compound;
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(CompoundTag tag) {
         NbtRead(tag);
     }
 
-    public static int calculatePlayersUsingSync(World world, LockableTileEntity lockableTile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
-        if (world != null && !world.isRemote && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
+    public static int calculatePlayersUsingSync(Level world, BaseEntityBlock lockableTile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
+        if (world != null && !world.isClientSide && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
             numPlayersUsing = calculatePlayersUsing(world, lockableTile, x, y, z);
         }
 
         return numPlayersUsing;
     }
 
-    public static int calculatePlayersUsing(World world, LockableTileEntity lockableTile, int x, int y, int z) {
+    public static int calculatePlayersUsing(Level world, BaseEntityBlock lockableTile, int x, int y, int z) {
         int i = 0;
         float f = 5.0f;
 
-        for (PlayerEntity playerentity : world.getEntitiesWithinAABB(PlayerEntity.class,
-                new AxisAlignedBB((float) x - f, (float) y - f, (float) z - f, (float) (x + 1) + f, (float) (y + 1) + f, (float) (z + 1) + f))) {
-            Container openContainer = playerentity.openContainer;
+        for (Player playerentity : world.getEntitiesOfClass(Player.class,
+                new AABB((float) x - f, (float) y - f, (float) z - f, (float) (x + 1) + f, (float) (y + 1) + f, (float) (z + 1) + f))) {
+            AbstractContainerMenu openContainer = playerentity.containerMenu;
             if (openContainer instanceof CompressorChestContainer || openContainer instanceof InfinityBoxContainer) {
                 ++i;
             }
@@ -263,71 +297,49 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         return i;
     }
 
-    private void playSound(SoundEvent soundIn) {
-        double d0 = (double) this.pos.getX() + 0.5D;
-        double d1 = (double) this.pos.getY() + 0.5D;
-        double d2 = (double) this.pos.getZ() + 0.5D;
-        if (world != null)
-            this.world.playSound(null, d0, d1, d2, soundIn, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+    private static void playSound(Level level, BlockPos pos, BlockState pState, SoundEvent soundIn) {
+        double d0 = (double) pos.getX() + 0.5D;
+        double d1 = (double) pos.getY() + 0.5D;
+        double d2 = (double) pos.getZ() + 0.5D;
+        if (level != null)
+            level.playSound(null, d0, d1, d2, soundIn, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
     }
 
     @Override
-    public boolean receiveClientEvent(int id, int type) {
+    public boolean triggerEvent(int id, int type) {
         if (id == 1) {
-            this.numPlayersUsing = type;
+//            this.numPlayersUsing = type;
+            this.chestLidController.shouldBeOpen(type > 0);
             return true;
         } else {
-            return super.receiveClientEvent(id, type);
+            return super.triggerEvent(id, type);
         }
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
-        if (!player.isSpectator()) {
-            if (this.numPlayersUsing < 0) {
-                this.numPlayersUsing = 0;
-            }
-
-            ++this.numPlayersUsing;
-            this.onOpenOrClose();
+    public void startOpen(Player player) {
+        if (!this.remove && !player.isSpectator()) {
+            this.openersCounter.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
     }
 
     @Override
-    public void closeInventory(PlayerEntity player) {
-        if (!player.isSpectator()) {
-            --this.numPlayersUsing;
-            this.onOpenOrClose();
+    public void stopOpen(Player player) {
+        if (!this.remove && !player.isSpectator()) {
+            this.openersCounter.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
     }
 
-    protected void onOpenOrClose() {
-        if (world != null) {
-            Block block = this.getBlockState().getBlock();
-            if (block instanceof AbsEndlessChest) {
-                this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
-                this.world.notifyNeighborsOfStateChange(this.pos, block);
-            }
-        }
+    @Override
+    public float getOpenNess(float v) {
+        return this.chestLidController.getOpenness(v);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public float getLidAngle(float partialTicks) {
-        return MathHelper.lerp(partialTicks, this.prevLidAngle, this.lidAngle);
-    }
-
-    public static int getPlayersUsing(IBlockReader reader, BlockPos posIn) {
-        BlockState blockstate = reader.getBlockState(posIn);
-        if (blockstate.hasTileEntity()) {
-            TileEntity tileentity = reader.getTileEntity(posIn);
-            if (tileentity instanceof AbsEndlessChestTile) {
-                return ((AbsEndlessChestTile) tileentity).numPlayersUsing;
-            }
-        }
-
-        return 0;
+    protected void signalOpenCount(Level pLevel, BlockPos pPos, BlockState pState, int pEventId, int pEventParam) {
+        Block block = pState.getBlock();
+        pLevel.blockEvent(pPos, block, 1, pEventParam);
     }
 
     @Override
@@ -340,21 +352,21 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         this.stackHandler.setStacks(itemsIn);
     }
 
-    //    @Override
-    public void updateContainingBlockInfo() {
-        super.updateContainingBlockInfo();
+    @Override
+    public void setBlockState(BlockState state) {
+        super.setBlockState(state);
         if (this.chestHandler != null) {
-            net.minecraftforge.common.util.LazyOptional<?> oldHandler = this.chestHandler;
+            LazyOptional<?> oldHandler = this.chestHandler;
             this.chestHandler = null;
             oldHandler.invalidate();
         }
     }
 
     @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> cap, Direction side) {
-        if (!this.removed && cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+        if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (this.chestHandler == null)
-                this.chestHandler = net.minecraftforge.common.util.LazyOptional.of(this::createHandler);
+                this.chestHandler = LazyOptional.of(this::createHandler);
             return this.chestHandler.cast();
         }
         return super.getCapability(cap, side);
@@ -366,14 +378,16 @@ public class AbsEndlessChestTile extends LockableLootTileEntity implements IChes
         if (!(state.getBlock() instanceof AbsEndlessChest)) {
             return new InvWrapper(this);
         }
-        IInventory inv = AbsEndlessChest.getChestInventory((AbsEndlessChest) state.getBlock(), state, getWorld(), getPos(), true);
+        Container inv = AbsEndlessChest.getContainer((AbsEndlessChest) state.getBlock(), state, level, worldPosition, true);
         return new InvWrapper(inv == null ? this : inv);
     }
 
     @Override
-    protected void invalidateCaps() {
+    public void invalidateCaps() {
         super.invalidateCaps();
-        if (chestHandler != null)
+        if (chestHandler != null){
             chestHandler.invalidate();
+            chestHandler = null;
+        }
     }
 }

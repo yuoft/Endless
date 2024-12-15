@@ -1,39 +1,40 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Tiles.ExtremeCraftTile;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
 
-public class ExtremeCraftInventory extends CraftingInventory {
+public class ExtremeCraftInventory extends CraftingContainer {
     private final ExtremeCraftTile craftTile;
-    private final Container container;
+    private final AbstractContainerMenu container;
 
-    public ExtremeCraftInventory(Container containerIn, ExtremeCraftTile tile) {
+    public ExtremeCraftInventory(AbstractContainerMenu containerIn, ExtremeCraftTile tile) {
         super(containerIn, 9, 9);
         this.craftTile = tile;
         this.container = containerIn;
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return index >= this.getSizeInventory() ? ItemStack.EMPTY : craftTile.getStackInSlot(index);
+    public ItemStack getItem(int index) {
+        return index >= this.getContainerSize() ? ItemStack.EMPTY : craftTile.getStackInSlot(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        ItemStack stack = ItemStackHelper.getAndSplit(craftTile.getItems(), index, count);
+    public ItemStack removeItem(int index, int count) {
+        ItemStack stack = ContainerHelper.removeItem(craftTile.getItems(), index, count);
         if (!stack.isEmpty()) {
-            container.onCraftMatrixChanged(this);
+            container.slotsChanged(this);
         }
         return stack;
     }
 
+
     @Override
-    public void setInventorySlotContents(int slot, ItemStack itemstack) {
-        craftTile.setInventorySlotContents(slot, itemstack);
-        container.onCraftMatrixChanged(this);
+    public void setItem(int slot, ItemStack stack) {
+        craftTile.setItem(slot, stack);
+        container.slotsChanged(this);
     }
+
 }

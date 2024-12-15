@@ -1,10 +1,10 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Container.ExtremeCraftInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,7 +89,7 @@ public class ExtremeCraftShpaelessManager {
      * @param world 世界
      * @return 输出
      */
-    public ItemStack getRecipeOutPut(ExtremeCraftInventory inventory, World world){
+    public ItemStack getRecipeOutPut(ExtremeCraftInventory inventory, Level world){
         for (ExtremeCraftShapeRecipe recipe : this.recipes) {
             if (recipe.matches(inventory, world)){
                 return recipe.getRecipeOutput();

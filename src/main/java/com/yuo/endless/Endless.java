@@ -3,7 +3,7 @@ package com.yuo.endless;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Compat.Curios.CuriosCompat;
-import com.yuo.endless.Container.ContainerTypeRegistry;
+import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Items.EndlessItems;
@@ -144,7 +144,7 @@ public class Endless {
         EntityRegistry.ENTITY_TYPES.register(modEventBus);
         EndlessFluids.FLUIDS.register(modEventBus);
         EndlessTileTypes.TILE_ENTITIES.register(modEventBus);
-        ContainerTypeRegistry.CONTAINERS.register(modEventBus);
+        EndlessMenuTypes.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
         ModStructures.STRUCTURES.register(modEventBus);

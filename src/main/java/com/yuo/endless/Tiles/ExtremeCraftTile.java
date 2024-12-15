@@ -30,13 +30,8 @@ public class ExtremeCraftTile extends BaseContainerBlockEntity {
     }
 
     @Override
-    public int getSizeInventory() {
-        return 82;
-    }
-
-    @Override
     public int getContainerSize() {
-        return 0;
+        return 82;
     }
 
     @Override

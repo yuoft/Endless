@@ -1,93 +1,95 @@
 package com.yuo.endless.Blocks;
 
+import com.yuo.endless.Tiles.EndlessTileTypes;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class NeutroniumCompressor extends Block {
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+public class NeutroniumCompressor extends BaseEntityBlock {
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
     public NeutroniumCompressor() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(10, 50).harvestLevel(1)
-                .harvestTool(ToolType.PICKAXE).setRequiresTool());
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+        super(Properties.of(Material.METAL).strength(10, 50).requiresCorrectToolForDrops());
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     //设置放下时的状态
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new NeutroniumCompressorTile(blockPos, blockState);
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new NeutroniumCompressorTile();
-    }
-
-    @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!worldIn.isRemote) {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
+        if (!level.isClientSide) {
+            BlockEntity tileEntity = level.getBlockEntity(pos);
             if (tileEntity instanceof NeutroniumCompressorTile){ //打开gui
-                player.openContainer((INamedContainerProvider) tileEntity);
-                player.addStat(Stats.INTERACT_WITH_FURNACE);
+                player.openMenu((MenuProvider) tileEntity);
+                player.awardStat(Stats.INTERACT_WITH_FURNACE);
             }
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    //被破坏时 里面所有物品掉落
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.matchesBlock(newState.getBlock())) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState blockState, boolean pIsMoving) {
+        if (!state.is(blockState.getBlock())) {
+            BlockEntity tileentity = level.getBlockEntity(pos);
             if (tileentity instanceof NeutroniumCompressorTile) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, ((NeutroniumCompressorTile) tileentity).getInventory());
-                worldIn.updateComparatorOutputLevel(pos, this);
+                Containers.dropContents(level, pos, (NeutroniumCompressorTile)tileentity);
+                level.updateNeighbourForOutputSignal(pos, this);
             }
 
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
-        }
-        if (!isMoving) {
-            for(Direction direction : Direction.values()) {
-                worldIn.notifyNeighborsOfStateChange(pos.offset(direction), this);
-            }
+            super.onRemove(state, level, pos, blockState, pIsMoving);
         }
     }
 
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    @Override
+    protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return createTicker(pLevel, pBlockEntityType, EndlessTileTypes.NEUTRONIUM_COMPRESSOR_TILE.get());
+    }
+
+    @Nullable
+    protected static <T extends BlockEntity> BlockEntityTicker<T> createTicker(Level level, BlockEntityType<T> serverType, BlockEntityType<? extends NeutroniumCompressorTile> entityType) {
+        return level.isClientSide ? null : createTickerHelper(serverType, entityType, NeutroniumCompressorTile::serverTick);
+    }
 }

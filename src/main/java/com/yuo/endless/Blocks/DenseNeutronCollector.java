@@ -1,16 +1,18 @@
 package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Tiles.DenseNeutronCollectorTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import com.yuo.endless.Tiles.EndlessTileTypes;
+import com.yuo.endless.Tiles.NeutronCollectorTile;
+import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class DenseNeutronCollector extends AbsNeutronCollector{
 
@@ -18,19 +20,24 @@ public class DenseNeutronCollector extends AbsNeutronCollector{
         super();
     }
 
-    @Nullable
+    @org.jetbrains.annotations.Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new DenseNeutronCollectorTile();
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new DenseNeutronCollectorTile(blockPos, blockState);
     }
 
     @Override
-    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        if (tileentity instanceof DenseNeutronCollectorTile) {
-            player.openContainer((INamedContainerProvider)tileentity);
-            player.addStat(Stats.INTERACT_WITH_FURNACE);
+    protected void openContainer(Level worldIn, BlockPos pos, Player player) {
+        BlockEntity tile = worldIn.getBlockEntity(pos);
+        if (tile instanceof DenseNeutronCollectorTile) {
+            player.openMenu((MenuProvider)tile);
+            player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
+        return createTicker(level, entityType, EndlessTileTypes.DENSE_NEUTRON_COLLECTOR_TILE.get());
+    }
 }

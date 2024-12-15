@@ -7,7 +7,7 @@ import com.yuo.endless.Client.Model.HaloItemModelLoader;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Client.Render.*;
 import com.yuo.endless.Config;
-import com.yuo.endless.Container.ContainerTypeRegistry;
+import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Fluid.EndlessFluids;
@@ -66,14 +66,14 @@ public class ClientProxy implements IProxy {
         });
         //绑定Container和ContainerScreen
         event.enqueueWork(() -> {
-            ScreenManager.registerFactory(ContainerTypeRegistry.extremeCraftContainer.get(), ExtremeCraftScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.neutronCollectorContainer.get(), NeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.denseNeutronCollectorContainer.get(), DenseNeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.doubleNeutronCollectorContainer.get(), DoubleNeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.tripleNeutronCollectorContainer.get(), TripleNeutronCollectorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.neutroniumCompressorContainer.get(), NeutroniumCompressorScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.CompressorChestContainer.get(), CompressorChestScreen::new);
-            ScreenManager.registerFactory(ContainerTypeRegistry.infinityBoxContainer.get(), InfinityBoxScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.extremeCraftContainer.get(), ExtremeCraftScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.neutronCollectorContainer.get(), NeutronCollectorScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.denseNeutronCollectorContainer.get(), DenseNeutronCollectorScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.doubleNeutronCollectorContainer.get(), DoubleNeutronCollectorScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.tripleNeutronCollectorContainer.get(), TripleNeutronCollectorScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.neutroniumCompressorContainer.get(), NeutroniumCompressorScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.CompressorChestContainer.get(), CompressorChestScreen::new);
+            ScreenManager.registerFactory(EndlessMenuTypes.infinityBoxContainer.get(), InfinityBoxScreen::new);
 
         });
         registerEntityRender();

@@ -34,7 +34,7 @@ public class NeutronCollector extends AbsNeutronCollector{
         }
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
         return createTicker(level, entityType, EndlessTileTypes.NEUTRON_COLLECTOR_TILE.get());

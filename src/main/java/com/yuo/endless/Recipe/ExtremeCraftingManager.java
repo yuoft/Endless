@@ -2,15 +2,13 @@ package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Container.ExtremeCraftInventory;
 import com.yuo.endless.Items.EndlessItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.*;
 
@@ -257,7 +255,7 @@ public class ExtremeCraftingManager {
      * @param world 世界
      * @return 输出
      */
-    public ItemStack getRecipeOutPut(ExtremeCraftInventory inventory, World world){
+    public ItemStack getRecipeOutPut(ExtremeCraftInventory inventory, Level world){
         for (ExtremeCraftRecipe recipe : this.recipes) {
             if (recipe.checkRecipe(inventory, world)){
                 return recipe.getRecipeOutput();

@@ -7,34 +7,36 @@ import com.yuo.endless.NetWork.NmCPacket;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class NeutroniumCompressorTile extends LockableTileEntity implements ITickableTileEntity, ISidedInventory {
+public class NeutroniumCompressorTile extends BaseContainerBlockEntity implements WorldlyContainer {
     //用于自动输入输出
     LazyOptional<? extends IItemHandler>[] handlerTop = SidedInvWrapper.create(this, Direction.UP, Direction.NORTH, Direction.EAST,
             Direction.SOUTH, Direction.WEST);
@@ -43,125 +45,122 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     // 0：输入，1：输出，2：正在参与合成的物品
     public NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY); //物品栏
     public NiumCIntArray data = new NiumCIntArray();
-    private final IRecipeType<NeutroniumRecipe> recipeType = RecipeTypeRegistry.NEUTRONIUM_RECIPE;
+    private final RecipeType<NeutroniumRecipe> recipeType = RecipeTypeRegistry.NEUTRONIUM_RECIPE;
     private final int[] SLOT_IN = new int[]{0};
     private final int[] SLOT_OUT = new int[]{1};
 
-    public NeutroniumCompressorTile() {
-        super(EndlessTileTypes.NEUTRONIUM_COMPRESSOR_TILE.get());
+    public NeutroniumCompressorTile(BlockPos pos, BlockState state) {
+        super(EndlessTileTypes.NEUTRONIUM_COMPRESSOR_TILE.get(), pos, state);
     }
 
-    @Override
-    public void tick() {
-        if (world == null || world.isRemote) return;
+    public static void serverTick(Level level, BlockPos pos, BlockState state, NeutroniumCompressorTile tile) {
         //保存坐标
-        this.data.set(2, pos.getX());
-        this.data.set(3, pos.getY());
-        this.data.set(4, pos.getZ());
+        tile.data.set(2, pos.getX());
+        tile.data.set(3, pos.getY());
+        tile.data.set(4, pos.getZ());
 
-        ItemStack input = this.items.get(0);
-        ItemStack stack1 = this.items.get(1); //已有输出
+        ItemStack input = tile.items.get(0);
+        ItemStack stack1 = tile.items.get(1); //已有输出
         if (input.isEmpty()) return; //没有输入时 停止
         ItemStack stack;
-        Optional<NeutroniumRecipe> optional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new Inventory(input), world);
+        Optional<NeutroniumRecipe> optional = level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new SimpleContainer(input), level);
         if (optional.isPresent()){
             stack = optional.get().getRecipeOutput();
         }else stack = CompressorManager.getOutput(input); //获取此输入的输出
         //判断输出 输出和已有输出不同 输出为空
         if ((!stack1.isEmpty() && !(stack1.getItem() == stack.getItem())) || stack.isEmpty()) return;
         //机器内有残留时
-        if (stack1.isEmpty() && this.data.get(0) > 0){ //输入与缓存输入不同 或无法替换
-            if (!optional.map(recipe -> input.isItemEqual(items.get(2))).orElseGet(() -> CompressorManager.isInput(input, items.get(2))))
+        if (stack1.isEmpty() && tile.data.get(0) > 0){ //输入与缓存输入不同 或无法替换
+            if (!optional.map(recipe -> input.equals(tile.items.get(2), false)).orElseGet(() -> CompressorManager.isInput(input, tile.items.get(2))))
                 return;
         }
 
         int count = optional.map(NeutroniumRecipe::getRecipeCount).orElseGet(() -> CompressorManager.getCost(input));
-        this.data.set(1,count );
-        if (count > 0 && this.data.get(0) < count){
-            this.items.set(2, new ItemStack(input.getItem()));  //缓存参与合成物品
+        tile.data.set(1,count );
+        if (count > 0 && tile.data.get(0) < count){
+            tile.items.set(2, new ItemStack(input.getItem()));  //缓存参与合成物品
             int num = optional.isPresent() ? 1 : CompressorManager.getInputCost(input);
-            this.data.set(0, this.data.get(0) + num);
+            tile.data.set(0, tile.data.get(0) + num);
             if (input.getCount() >= 1)
                 input.shrink(1);
-            markDirty();
+            setChanged(level, pos, state);
         }
 
-        if (this.data.get(0) >= this.data.get(1)){ //物品已满，设置输出
+        if (tile.data.get(0) >= tile.data.get(1)){ //物品已满，设置输出
             if (stack1.isEmpty()){
-                this.items.set(1, stack);
+                tile.items.set(1, stack);
             }else stack1.grow(1);
-            this.data.set(0, 0);
-            this.data.set(1, 0);
-            markDirty();
+            tile.data.set(0, 0);
+            tile.data.set(1, 0);
+            setChanged(level, pos, state);
         }
 
-        if (!items.get(2).isEmpty()){
-            NetWorkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new NmCPacket(pos, items.get(2)));
+        if (!tile.items.get(2).isEmpty()){
+            NetWorkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new NmCPacket(pos, tile.items.get(2)));
         }
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         NbtRead(nbt);
     }
 
-    private void NbtRead(CompoundNBT nbt){
-        this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbt, this.items);
+    private void NbtRead(CompoundTag nbt){
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(nbt, this.items);
         this.data.set(0, nbt.getInt("Number"));
         this.data.set(1, nbt.getInt("NumberTotal"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
         NbtWrite(compound);
-        return super.write(compound);
+        super.saveAdditional(compound);
     }
 
-    private void NbtWrite(CompoundNBT compound){
+    private void NbtWrite(CompoundTag compound){
         compound.putInt("Number", this.data.get(0));
         compound.putInt("NumberTotal", this.data.get(1));
-        ItemStackHelper.saveAllItems(compound, this.items);
-    }
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        ContainerHelper.saveAllItems(compound, this.items);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        if (world != null) {
-            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        NbtWrite(tag);
+        return tag;
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if (level != null) {
+            handleUpdateTag(pkt.getTag());
         }
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT compound = super.getUpdateTag();
-        NbtWrite(compound);
-        return compound;
+    public void handleUpdateTag(CompoundTag tag) {
+        NbtRead(tag);
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-       NbtRead(tag);
+    protected Component getDefaultName() {
+        return new TranslatableComponent("gui.endless.neutron_compressor");
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.endless.neutron_compressor");
+    protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
+        return new NeutroniumCompressorContainer(id, inventory, this);
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return new NeutroniumCompressorContainer(id, player, this);
-    }
-
-    @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.items.size();
     }
 
@@ -171,46 +170,41 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return this.items.get(index);
+    public ItemStack getItem(int i) {
+        return this.items.get(i);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        return ItemStackHelper.getAndSplit(this.items, index, count);
+    public ItemStack removeItem(int i, int i1) {
+        return ContainerHelper.removeItem(this.items, i, i1);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return ItemStackHelper.getAndRemove(this.items, index);
+    public ItemStack removeItemNoUpdate(int i) {
+        return ContainerHelper.takeItem(this.items, i);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.items.get(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
+        boolean flag = !stack.isEmpty() && stack.equals(itemstack, false) && ItemStack.isSame(stack, itemstack);
         this.items.set(index, stack);
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
 
         if (!flag) {
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        if (this.world.getTileEntity(this.pos) != this) {
+    public boolean stillValid(Player player) {
+        if (this.level != null && this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
-            return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+            return player.distanceToSqr((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) <= 64.0D;
         }
-    }
-
-    @Override
-    public void clear() {
-        this.items.clear();
     }
 
     @Override
@@ -219,23 +213,23 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack stack, @org.jetbrains.annotations.Nullable Direction direction) {
         if (index == 0 && direction != Direction.DOWN){
-            if (this.items.get(2).isEmpty() || this.items.get(2).isItemEqual(itemStackIn))
-                return !CompressorManager.getOutput(itemStackIn).isEmpty();
+            if (this.items.get(2).isEmpty() || this.items.get(2).equals(stack, false))
+                return !CompressorManager.getOutput(stack).isEmpty();
         }
         return false;
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack itemStack, Direction direction) {
         return direction == Direction.DOWN && index == 1;
     }
 
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-        if (!this.removed && side != null && cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && side != null && cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (side != Direction.DOWN)
                 return handlerTop[0].cast();
             else
@@ -244,8 +238,12 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
         return super.getCapability(cap, side);
     }
 
-    public Inventory getInventory(){
-        return new Inventory(this.items.get(0), this.items.get(1));
+    public Container getInventory(){
+        return new SimpleContainer(this.items.get(0), this.items.get(1));
     }
 
+    @Override
+    public void clearContent() {
+        this.items.clear();
+    }
 }

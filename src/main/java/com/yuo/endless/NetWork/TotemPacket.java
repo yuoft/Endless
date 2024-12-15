@@ -1,27 +1,27 @@
 package com.yuo.endless.NetWork;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 import java.util.function.Supplier;
 
 public class TotemPacket {
     private final ItemStack stack;
     private final Entity entity;
-    public TotemPacket(PacketBuffer buffer) {
+    public TotemPacket(FriendlyByteBuf buffer) {
         Minecraft instance = Minecraft.getInstance();
-        stack = buffer.readItemStack();
-        if (instance.world != null) {
-            entity = instance.world.getEntityByID(buffer.readInt());
+        stack = buffer.readItem();
+        if (instance.level != null) {
+            entity = instance.level.getEntity(buffer.readInt());
         }else entity = null;
     }
 
@@ -30,12 +30,12 @@ public class TotemPacket {
         this.entity = entity;
     }
 
-    public void toBytes(PacketBuffer buf) {
-        buf.writeItemStack(stack);
-        buf.writeInt(entity.getEntityId());
+    public void toBytes(FriendlyByteBuf buf) {
+        buf.writeItem(stack);
+        buf.writeInt(entity.getId());
     }
 
-    public static void handler(TotemPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handler(TotemPacket msg, Supplier<Context> ctx) {
         ctx.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> playTotem(msg.stack, msg.entity)); //处理服务端发送给客户端的消息
         });
@@ -46,10 +46,10 @@ public class TotemPacket {
     @OnlyIn(Dist.CLIENT)
     public static void playTotem(ItemStack stack, Entity entity) {
         Minecraft instance = Minecraft.getInstance();
-        ClientWorld world = instance.world;
+        ClientLevel world = instance.level;
         if (world != null){
-            instance.particles.emitParticleAtEntity(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
-            world.playSound(entity.getPosX(), entity.getPosY(), entity.getPosZ(), SoundEvents.ITEM_TOTEM_USE, entity.getSoundCategory(), 1.0F, 1.0F, false);
+            instance.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
+            world.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
             instance.gameRenderer.displayItemActivation(stack);
         }
     }

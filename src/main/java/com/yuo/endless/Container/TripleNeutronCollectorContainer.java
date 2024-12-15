@@ -1,15 +1,16 @@
 package com.yuo.endless.Container;
 
+import com.yuo.endless.Tiles.EndlessTileTypes;
 import com.yuo.endless.Tiles.TripleNeutronCollectorTile;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
 
 public class TripleNeutronCollectorContainer extends AbsNeutronCollectorContainer{
 
-    public TripleNeutronCollectorContainer(int id, PlayerInventory playerInventory){
-        this(id, playerInventory, new TripleNeutronCollectorTile());
+    public TripleNeutronCollectorContainer(int id, Inventory playerInventory){
+        this(id, playerInventory, new TripleNeutronCollectorTile(EndlessTileTypes.TRIPLE_NEUTRON_COLLECTOR_TILE.get()));
     }
-    public TripleNeutronCollectorContainer(int id, PlayerInventory playerInventory, TripleNeutronCollectorTile tile) {
-        super(id, playerInventory, ContainerTypeRegistry.tripleNeutronCollectorContainer.get(), tile);
+    public TripleNeutronCollectorContainer(int id, Inventory playerInventory, TripleNeutronCollectorTile tile) {
+        super(id, playerInventory, EndlessMenuTypes.tripleNeutronCollectorContainer.get(), tile);
     }
 
 }

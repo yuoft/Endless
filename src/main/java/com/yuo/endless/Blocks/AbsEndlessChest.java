@@ -2,66 +2,71 @@ package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Tiles.AbsEndlessChestTile;
 import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.DoubleSidedInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.*;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.*;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
-public class AbsEndlessChest extends Block implements IWaterLoggable {
+public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final ResourceLocation CONTENTS = new ResourceLocation("contents");
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
-    private final Supplier<TileEntityType<? extends AbsEndlessChestTile>> tileSupplier;
+    protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+    private final Supplier<BlockEntityType<? extends AbsEndlessChestTile>> tileSupplier;
     private final EndlessChestType type;
 
-    public AbsEndlessChest(Supplier<TileEntityType<? extends AbsEndlessChestTile>> supplier, EndlessChestType chestType, Properties properties) {
+    public AbsEndlessChest(Supplier<BlockEntityType<? extends AbsEndlessChestTile>> supplier, EndlessChestType chestType, Properties properties) {
         super(properties);
         this.type = chestType;
         this.tileSupplier = supplier;
-        this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH).with(WATERLOGGED, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, Boolean.FALSE));
     }
 
     public static EndlessChestType getTypeFromBlock(Block block) {
@@ -73,71 +78,71 @@ public class AbsEndlessChest extends Block implements IWaterLoggable {
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.ENTITYBLOCK_ANIMATED;
+    public RenderShape getRenderShape(BlockState pState) {
+        return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        if (stateIn.get(WATERLOGGED)) {
-            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+    public BlockState updateShape(BlockState state, Direction direction, BlockState blockState, LevelAccessor accessor, BlockPos currentPos, BlockPos pNeighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            accessor.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(accessor));
         }
-        return stateIn;
+        return state;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        Direction direction = context.getPlacementHorizontalFacing().getOpposite();
-        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        Direction direction = context.getHorizontalDirection().getOpposite();
+        FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
 
-        return this.getDefaultState().with(FACING, direction).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+        return this.defaultBlockState().setValue(FACING, direction).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        if (tileentity instanceof AbsEndlessChestTile) {
-            AbsEndlessChestTile chestTile = (AbsEndlessChestTile)tileentity;
-            if (!worldIn.isRemote && player.isCreative() && !chestTile.isEmpty()) {
-                ItemStack itemstack = new ItemStack(getBlock());
-                CompoundNBT compoundnbt = chestTile.NbtWrite(new CompoundNBT());
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        BlockEntity tileentity = level.getBlockEntity(pos);
+        if (tileentity instanceof AbsEndlessChestTile chestTile) {
+            if (!level.isClientSide && player.isCreative() && !chestTile.isEmpty()) {
+                ItemStack itemstack = new ItemStack(this);
+                CompoundTag compoundnbt = chestTile.NbtWrite(new CompoundTag());
                 if (!compoundnbt.isEmpty()) {
-                    itemstack.setTagInfo("BlockEntityTag", compoundnbt);
+                    itemstack.addTagElement("BlockEntityTag", compoundnbt);
                 }
 
                 if (chestTile.hasCustomName()) {
-                    itemstack.setDisplayName(chestTile.getCustomName());
+                    itemstack.setHoverName(chestTile.getCustomName());
                 }
 
-                ItemEntity itementity = new ItemEntity(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, itemstack);
-                itementity.setDefaultPickupDelay();
-                worldIn.addEntity(itementity);
+                ItemEntity itementity = new ItemEntity(level, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, itemstack);
+                itementity.setDefaultPickUpDelay();
+                level.addFreshEntity(itementity);
             } else {
-                chestTile.fillWithLoot(player);
+                chestTile.unpackLootTable(player);
             }
         }
 
-        super.onBlockHarvested(worldIn, pos, state, player);
+        super.playerWillDestroy(level, pos, state, player);
     }
+
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        TileEntity tileentity = builder.get(LootParameters.BLOCK_ENTITY);
+        BlockEntity tileentity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (tileentity instanceof AbsEndlessChestTile) {
             AbsEndlessChestTile chestTile = (AbsEndlessChestTile)tileentity;
             builder = builder.withDynamicDrop(CONTENTS, (context, stackConsumer) -> {
-                for(int i = 0; i < chestTile.getSizeInventory(); ++i) {
-                    stackConsumer.accept(chestTile.getStackInSlot(i));
+                for(int i = 0; i < chestTile.getContainerSize(); ++i) {
+                    stackConsumer.accept(chestTile.getItem(i));
                 }
 
             });
@@ -147,34 +152,35 @@ public class AbsEndlessChest extends Block implements IWaterLoggable {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        if (stack.hasDisplayName()) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof ChestTileEntity) {
-                ((ChestTileEntity)tileentity).setCustomName(stack.getDisplayName());
-            }
-        }
-    }
-
-    @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.matchesBlock(newState.getBlock())) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+    public void setPlacedBy(Level level, BlockPos pos, BlockState pState, @org.jetbrains.annotations.Nullable LivingEntity pPlacer, ItemStack stack) {
+        if (stack.hasCustomHoverName()) {
+            BlockEntity tileentity = level.getBlockEntity(pos);
             if (tileentity instanceof AbsEndlessChestTile) {
-                worldIn.updateComparatorOutputLevel(pos, this);
+                ((AbsEndlessChestTile)tileentity).setCustomName(stack.getDisplayName());
             }
-
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        CompoundNBT compoundnbt = stack.getChildTag("BlockEntityTag");
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (!pState.is(pNewState.getBlock())) {
+            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+            if (blockentity instanceof AbsEndlessChestTile) {
+                Containers.dropContents(pLevel, pPos, (AbsEndlessChestTile)blockentity);
+                pLevel.updateNeighbourForOutputSignal(pPos, this);
+            }
+
+            super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter level, List<Component> components, TooltipFlag pFlag) {
+        super.appendHoverText(stack, level, components, pFlag);
+        CompoundTag compoundnbt = stack.getTagElement("BlockEntityTag");
         if (compoundnbt != null) {
             if (compoundnbt.contains("LootTable", 8)) {
-                tooltip.add(new StringTextComponent("???????"));
+                components.add(new TextComponent("???????"));
             }
 
             if (compoundnbt.contains("Items", 9)) {
@@ -188,92 +194,92 @@ public class AbsEndlessChest extends Block implements IWaterLoggable {
                         ++j;
                         if (i <= 4) {
                             ++i;
-                            IFormattableTextComponent iformattabletextcomponent = itemstack.getDisplayName().deepCopy();
-                            iformattabletextcomponent.appendString(" x").appendString(String.valueOf(itemstack.getCount()));
-                            tooltip.add(iformattabletextcomponent);
+                            MutableComponent iformattabletextcomponent = itemstack.getDisplayName().copy();
+                            iformattabletextcomponent.append(" x").append(String.valueOf(itemstack.getCount()));
+                            components.add(iformattabletextcomponent);
                         }
                     }
                 }
 
                 if (j - i > 0) {
-                    tooltip.add((new TranslationTextComponent("container.shulkerBox.more", j - i)).mergeStyle(TextFormatting.ITALIC));
+                    components.add((new TranslatableComponent("container.shulkerBox.more", j - i)).withStyle(ChatFormatting.ITALIC));
                 }
             }
         }
-
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!worldIn.isRemote) {
-            INamedContainerProvider inamedcontainerprovider = this.getContainer(state, worldIn, pos);
-            if (inamedcontainerprovider != null) {
-                player.openContainer(inamedcontainerprovider);
-                player.addStat(Stats.OPEN_CHEST);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
+        if (!level.isClientSide) {
+            MenuProvider menuProvider = getMenuProvider(state, level, pos);
+            if (menuProvider != null) {
+                player.openMenu(menuProvider);
+                player.awardStat(Stats.OPEN_CHEST);
+                PiglinAi.angerNearbyPiglins(player, true);
             }
 
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
+    @org.jetbrains.annotations.Nullable
     @Override
-    @Nullable
-    public INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos) {
-        TileEntity tileentity = world.getTileEntity(pos);
-        return tileentity instanceof INamedContainerProvider ? (INamedContainerProvider) tileentity : null;
+    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        BlockEntity tileentity = level.getBlockEntity(pos);
+        return tileentity instanceof MenuProvider ? (MenuProvider) tileentity : null;
     }
 
-    private static final TileEntityMerger.ICallback<AbsEndlessChestTile, Optional<IInventory>> INVENTORY_MERGER = new TileEntityMerger.ICallback<AbsEndlessChestTile, Optional<IInventory>>() {
-        public Optional<IInventory> func_225539_a_(AbsEndlessChestTile tile, AbsEndlessChestTile chestTile) {
+    private static final DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Optional<Container>> INVENTORY_MERGER = new DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Optional<Container>>() {
+        public Optional<Container> acceptDouble(AbsEndlessChestTile tile, AbsEndlessChestTile chestTile) {
             return Optional.of(tile);
         }
 
-        public Optional<IInventory> func_225538_a_(AbsEndlessChestTile tile) {
+        public Optional<Container> acceptSingle(AbsEndlessChestTile tile) {
             return Optional.of(tile);
         }
 
-        public Optional<IInventory> func_225537_b_() {
+        public Optional<Container> acceptNone() {
             return Optional.empty();
         }
     };
 
     @Nullable
-    public static IInventory getChestInventory(AbsEndlessChest chest, BlockState state, World world, BlockPos pos, boolean override) {
-        return chest.combine(state, world, pos, override).apply(INVENTORY_MERGER).orElse(null);
+    public static Container getContainer(AbsEndlessChest chest, BlockState state, Level level, BlockPos pos, boolean override) {
+        return chest.combine(state, level, pos, override).apply(INVENTORY_MERGER).orElse(null);
     }
 
-    public TileEntityMerger.ICallbackWrapper<? extends AbsEndlessChestTile> combine(BlockState state, World world, BlockPos pos, boolean override) {
-        BiPredicate<IWorld, BlockPos> bipredicate;
+    public DoubleBlockCombiner.NeighborCombineResult<? extends AbsEndlessChestTile> combine(BlockState state, Level world, BlockPos pos, boolean override) {
+        BiPredicate<LevelAccessor, BlockPos> bipredicate;
         if (override) {
             bipredicate = (worldIn, posIn) -> false;
         } else {
             bipredicate = AbsEndlessChest::isBlocked;
         }
 
-        return TileEntityMerger.func_226924_a_(this.tileSupplier.get(), AbsEndlessChest::getMergerType, AbsEndlessChest::getDirectionToAttached, FACING, state, world, pos, bipredicate);
+        return DoubleBlockCombiner.combineWithNeigbour(this.tileSupplier.get(), AbsEndlessChest::getMergerType, AbsEndlessChest::getDirectionToAttached, FACING, state, world, pos, bipredicate);
     }
 
     @Override
-    public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) {
-        super.eventReceived(state, worldIn, pos, id, param);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity != null && tileentity.receiveClientEvent(id, param);
+    public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+        super.triggerEvent(state, level, pos, id, param);
+        BlockEntity tileentity = level.getBlockEntity(pos);
+        return tileentity != null && tileentity.triggerEvent(id, param);
     }
 
-    private static boolean isBlocked(IWorld iWorld, BlockPos blockPos) {
+    private static boolean isBlocked(LevelAccessor iWorld, BlockPos blockPos) {
         return isBelowSolidBlock(iWorld, blockPos) || isCatSittingOn(iWorld, blockPos);
     }
 
-    private static boolean isBelowSolidBlock(IBlockReader iBlockReader, BlockPos worldIn) {
-        BlockPos blockpos = worldIn.up();
-        return iBlockReader.getBlockState(blockpos).isNormalCube(iBlockReader, blockpos);
+    private static boolean isBelowSolidBlock(BlockGetter iBlockReader, BlockPos worldIn) {
+        BlockPos blockpos = worldIn.above();
+        return iBlockReader.getBlockState(blockpos).isRedstoneConductor(iBlockReader, blockpos);
     }
 
-    private static boolean isCatSittingOn(IWorld iWorld, BlockPos blockPos) {
-        List<CatEntity> list = iWorld.getEntitiesWithinAABB(CatEntity.class, new AxisAlignedBB(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ(), blockPos.getX() + 1, blockPos.getY() + 2, blockPos.getZ() + 1));
+    private static boolean isCatSittingOn(LevelAccessor iWorld, BlockPos blockPos) {
+        List<Cat> list = iWorld.getEntitiesOfClass(Cat.class, new AABB(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ(), blockPos.getX() + 1, blockPos.getY() + 2, blockPos.getZ() + 1));
         if (!list.isEmpty()) {
-            for (CatEntity catentity : list) {
-                if (catentity.isSleeping()) {
+            for (Cat catentity : list) {
+                if (catentity.isInSittingPose()) {
                     return true;
                 }
             }
@@ -283,69 +289,66 @@ public class AbsEndlessChest extends Block implements IWaterLoggable {
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state) {
+    public boolean hasAnalogOutputSignal(BlockState pState) {
         return true;
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState blockState, World worldIn, BlockPos pos) {
-        return Container.calcRedstoneFromInventory((IInventory) worldIn.getTileEntity(pos));
+    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
+        return AbstractContainerMenu.getRedstoneSignalFromContainer(getContainer(this, pBlockState, pLevel, pPos, false));
     }
 
     @Override
-    public boolean allowsMovement(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {
+    public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
         return false;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static TileEntityMerger.ICallback<AbsEndlessChestTile, Float2FloatFunction> getLidRotationCallback(final IChestLid lid) {
-        return new TileEntityMerger.ICallback<AbsEndlessChestTile, Float2FloatFunction>() {
-            public Float2FloatFunction func_225539_a_(AbsEndlessChestTile chestTile, AbsEndlessChestTile chestTileEntity) {
-                return (angle) -> Math.max(chestTile.getLidAngle(angle), chestTileEntity.getLidAngle(angle));
+    public static DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Float2FloatFunction> getLidRotationCallback(final LidBlockEntity lid) {
+        return new DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Float2FloatFunction>() {
+            public Float2FloatFunction acceptDouble(AbsEndlessChestTile chestTile, AbsEndlessChestTile chestTileEntity) {
+                return (angle) -> Math.max(chestTile.getOpenNess(angle), chestTileEntity.getOpenNess(angle));
             }
 
-            public Float2FloatFunction func_225538_a_(AbsEndlessChestTile chestTile) {
-                return chestTile::getLidAngle;
+            public Float2FloatFunction acceptSingle(AbsEndlessChestTile chestTile) {
+                Objects.requireNonNull(chestTile);
+                return chestTile::getOpenNess;
             }
 
-            public Float2FloatFunction func_225537_b_() {
-                return lid::getLidAngle;
+            public Float2FloatFunction acceptNone() {
+                Objects.requireNonNull(lid);
+                return lid::getOpenNess;
             }
         };
     }
 
-    public static TileEntityMerger.Type getMergerType(BlockState blockState) {
-        return TileEntityMerger.Type.SINGLE;
+    public static DoubleBlockCombiner.BlockType getMergerType(BlockState blockState) {
+        return DoubleBlockCombiner.BlockType.SINGLE;
     }
 
     public static Direction getDirectionToAttached(BlockState state) {
-        Direction direction = state.get(FACING);
-        return direction.rotateYCCW();
+        Direction direction = state.getValue(FACING);
+        return direction.getCounterClockWise();
     }
 
     @Override
     public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate(state.get(FACING)));
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
         builder.add(FACING, WATERLOGGED);
     }
 
+    @org.jetbrains.annotations.Nullable
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return null;
     }
 

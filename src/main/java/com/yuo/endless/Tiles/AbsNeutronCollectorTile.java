@@ -5,10 +5,17 @@ import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +32,11 @@ public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements
     public NCIntArray data = new NCIntArray();
     LazyOptional<? extends IItemHandler>[] handlerOutPut = SidedInvWrapper.create(this, Direction.DOWN);
 
+    public AbsNeutronCollectorTile(BlockEntityType<?> tileEntityType){
+        super(tileEntityType, null, null);
+
+    }
+
     public AbsNeutronCollectorTile(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state) {
         super(tileEntityType, pos, state);
     }
@@ -37,8 +49,8 @@ public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements
         if (!output.isEmpty() && output.getCount() == output.getMaxStackSize()) return; //产物已满，停止计时
         tile.timer++;
         tile.data.set(0, tile.timer);
-        int time = getCraftTime(); //生产时间
-        ItemStack outItem = getCraftOutputItem(); //产出物品
+        int time = tile.getCraftTime(); //生产时间
+        ItemStack outItem = tile.getCraftOutputItem(); //产出物品
         if (tile.timer >= time){
             tile.timer = 0;
             tile.data.set(0, tile.timer);
@@ -50,74 +62,73 @@ public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements
     }
 
     //生产时间
-    public static int getCraftTime(){
+    public int getCraftTime(){
         return 3600;
     }
     //产物
-    protected static ItemStack getCraftOutputItem(){
+    protected ItemStack getCraftOutputItem(){
         return new ItemStack(EndlessItems.neutroniumPile.get());
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         NbtRead(nbt);
     }
 
-    private void NbtRead(CompoundNBT nbt){
-        this.output = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbt, this.output);
+    private void NbtRead(CompoundTag nbt){
+        this.output = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(nbt, this.output);
         this.timer = nbt.getInt("Timer");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
         NbtWrite(compound);
-        return super.write(compound);
+        super.saveAdditional(compound);
     }
 
-    private void NbtWrite(CompoundNBT compound){
+    private void NbtWrite(CompoundTag compound){
         compound.putInt("Timer", this.timer);
-        ItemStackHelper.saveAllItems(compound, this.output);
-    }
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+        ContainerHelper.saveAllItems(compound, this.output);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        if (world != null) {
-            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag tag = super.getUpdateTag();
+        NbtWrite(tag);
+        return tag;
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if (level != null) {
+            handleUpdateTag(pkt.getTag());
         }
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT compound = super.getUpdateTag();
-        NbtWrite(compound);
-        return compound;
-    }
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+    public void handleUpdateTag(CompoundTag tag) {
         NbtRead(tag);
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
+    protected Component getDefaultName() {
         return null;
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
         return null;
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 1;
     }
 
@@ -127,50 +138,52 @@ public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int i) {
         return this.output.get(0);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
-        return ItemStackHelper.getAndSplit(this.output, index, count);
+    public ItemStack removeItem(int i, int count) {
+        return ContainerHelper.removeItem(this.output, i, count);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return ItemStackHelper.getAndRemove(this.output, index);
+    public ItemStack removeItemNoUpdate(int i) {
+        return ContainerHelper.takeItem(this.output, i);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        ItemStack itemstack = this.output.get(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack);
-        this.output.set(index, stack);
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+    public void setItem(int i, ItemStack stack) {
+        ItemStack itemstack = this.output.get(i);
+        boolean flag = !stack.isEmpty() && stack.equals(itemstack, false) && ItemStack.isSame(stack, itemstack);
+        this.output.set(i, stack);
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
 
         if (!flag) {
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        if (this.world != null && this.world.getTileEntity(this.pos) != this) {
-            return false;
-        } else {
-            return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
-        }
-    }
-
-    @Override
-    public void clear() {
+    public void clearContent() {
         this.output.clear();
     }
 
+    //是否可以使用tile
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean stillValid(Player player) {
+        if (this.level != null && this.level.getBlockEntity(this.worldPosition) != this) {
+            return false;
+        } else {
+            return player.distanceToSqr((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) <= 64.0D;
+        }
+    }
+
+    //能否放入物品
+    @Override
+    public boolean canPlaceItem(int pIndex, ItemStack pStack) {
         return false;
     }
 
@@ -182,23 +195,30 @@ public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements
 
     //自动输入
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int i, ItemStack itemStack, @org.jetbrains.annotations.Nullable Direction direction) {
         return false;
     }
 
     //自动输出
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return direction == Direction.DOWN && index == 0;
+    public boolean canTakeItemThroughFace(int i, ItemStack itemStack, Direction direction) {
+        return direction == Direction.DOWN && i == 0;
     }
 
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-        if (!this.removed && side != null && cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (!this.remove && side != null && cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (side == Direction.DOWN)
                 return handlerOutPut[0].cast();
         }
         return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        for (LazyOptional<? extends IItemHandler> handler : handlerOutPut)
+            handler.invalidate(); //移除能力
     }
 }

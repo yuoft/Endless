@@ -12,23 +12,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 
-public class NeutroniumCompressorContainer extends Container {
+public class NeutroniumCompressorContainer extends AbstractContainerMenu {
 
     private final NeutroniumCompressorTile tile;
     private final NiumCIntArray data;
-    private final World world;
+    private final Level world;
 
-    public NeutroniumCompressorContainer(int id, PlayerInventory playerInventory){
+    public NeutroniumCompressorContainer(int id, Inventory playerInventory){
         this(id,playerInventory , new NeutroniumCompressorTile());
     }
 
-    public NeutroniumCompressorContainer(int id, PlayerInventory playerInventory, NeutroniumCompressorTile inventory) {
-        super(ContainerTypeRegistry.neutroniumCompressorContainer.get(), id);
+    public NeutroniumCompressorContainer(int id, Inventory playerInventory, NeutroniumCompressorTile inventory) {
+        super(EndlessMenuTypes.neutroniumCompressorContainer.get(), id);
         this.tile = inventory;
         this.data = inventory.data;
-        this.world = playerInventory.player.world;
-        trackIntArray(data);
+        this.world = playerInventory.player.level;
         //矿物输入槽
         this.addSlot(new NiumCSlot(tile, world, 0, 39,35));
         //奇点槽
@@ -43,11 +46,13 @@ public class NeutroniumCompressorContainer extends Container {
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
+
+        this.addDataSlots(data);
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return this.tile.isUsableByPlayer(playerIn);
+    public boolean stillValid(Player player) {
+        return this.tile.isUsableByPlayer(player);
     }
 
     //玩家shift行为

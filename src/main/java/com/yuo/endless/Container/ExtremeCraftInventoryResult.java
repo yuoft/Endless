@@ -1,10 +1,10 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Tiles.ExtremeCraftTile;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.item.ItemStack;
 
-public class ExtremeCraftInventoryResult extends CraftResultInventory {
+public class ExtremeCraftInventoryResult extends ResultContainer {
 
     private final ExtremeCraftTile craftTile;
 
@@ -13,12 +13,12 @@ public class ExtremeCraftInventoryResult extends CraftResultInventory {
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return craftTile.getStackInSlot(81);
+    public ItemStack getItem(int pIndex) {
+        return craftTile.getItem(81);
     }
 
     @Override
-    public ItemStack decrStackSize(int par1, int par2) {
+    public ItemStack removeItem(int pIndex, int pCount) {
         ItemStack stack = craftTile.getStackInSlot(81);
         if (!stack.isEmpty()) {
             craftTile.setInventorySlotContents(81, ItemStack.EMPTY);
@@ -29,7 +29,8 @@ public class ExtremeCraftInventoryResult extends CraftResultInventory {
     }
 
     @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
-        craftTile.setInventorySlotContents(81, par2ItemStack);
+    public void setItem(int pIndex, ItemStack pStack) {
+        craftTile.setInventorySlotContents(81, pStack);
     }
+
 }

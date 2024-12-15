@@ -3,18 +3,20 @@ package com.yuo.endless.Tiles;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Container.Chest.CompressorChestContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class CompressorChestTile extends AbsEndlessChestTile {
 
-    public CompressorChestTile() {
-        super(EndlessTileTypes.COMPRESS_CHEST_TILE.get(), EndlessChestType.COMPRESSOR, () -> EndlessBlocks.compressedChest.get());
+    public CompressorChestTile(BlockPos pos, BlockState state) {
+        super(EndlessTileTypes.COMPRESS_CHEST_TILE.get(), EndlessChestType.COMPRESSOR, () -> EndlessBlocks.compressedChest.get(), pos, state);
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return new CompressorChestContainer(id, player, this);
+    protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
+        return new CompressorChestContainer(id, inventory, this);
     }
 
 }

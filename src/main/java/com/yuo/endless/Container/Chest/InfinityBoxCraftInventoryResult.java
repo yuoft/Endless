@@ -1,10 +1,10 @@
 package com.yuo.endless.Container.Chest;
 
 import com.yuo.endless.Tiles.InfinityBoxTile;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.item.ItemStack;
 
-public class InfinityBoxCraftInventoryResult extends CraftResultInventory {
+public class InfinityBoxCraftInventoryResult extends ResultContainer {
 
     private final InfinityBoxTile craftTile;
 
@@ -13,15 +13,15 @@ public class InfinityBoxCraftInventoryResult extends CraftResultInventory {
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return craftTile.getStackInSlot(252);
+    public ItemStack getItem(int index) {
+        return craftTile.getItem(252);
     }
 
     @Override
-    public ItemStack decrStackSize(int par1, int par2) {
-        ItemStack stack = craftTile.getStackInSlot(252);
+    public ItemStack removeItem(int par1, int par2) {
+        ItemStack stack = craftTile.getItem(252);
         if (!stack.isEmpty()) {
-            craftTile.setInventorySlotContents(252, ItemStack.EMPTY);
+            craftTile.setItem(252, ItemStack.EMPTY);
             return stack;
         } else {
             return ItemStack.EMPTY;
@@ -29,7 +29,7 @@ public class InfinityBoxCraftInventoryResult extends CraftResultInventory {
     }
 
     @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
-        craftTile.setInventorySlotContents(252, par2ItemStack);
+    public void setItem(int pIndex, ItemStack stack) {
+        craftTile.setItem(252, stack);
     }
 }

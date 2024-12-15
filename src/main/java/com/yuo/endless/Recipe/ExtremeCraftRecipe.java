@@ -8,17 +8,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Items.Singularity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -47,7 +44,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         this.result = result;
     }
 
-    public static class RecipeType implements IRecipeType<ExtremeCraftRecipe> {
+    public static class ModRecipeType implements RecipeType<ExtremeCraftRecipe> {
         @Override
         public String toString() {
             return ExtremeCraftRecipe.TYPE_ID.toString();
@@ -55,7 +52,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
     }
 
     //配方序列器
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExtremeCraftRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ExtremeCraftRecipe>{
         @Override
         public ExtremeCraftRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
             Map<String, Ingredient> map = deserializeKey(JSONUtils.getJsonObject(json, "key"));
@@ -104,7 +101,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
 
     //检查配方是否与合成台物品栏吻合
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         for(int i = 0; i <= 9 - this.Width; ++i) {
             for(int j = 0; j <= 9 - this.Height; ++j) {
                 if (this.checkMatch(inv, i, j, true)) {

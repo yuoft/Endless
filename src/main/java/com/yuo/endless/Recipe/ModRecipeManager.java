@@ -32,7 +32,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.Container;
 import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.tslat.aoa3.common.registration.AoABlocks;
 import net.tslat.aoa3.common.registration.AoAItems;
 import slimeknights.tconstruct.shared.TinkerMaterials;
@@ -60,7 +62,7 @@ public class ModRecipeManager {
      * @param world 世界
      * @return 匹配上的配方
      */
-    public static ExtremeCraftShapeRecipe matchesRecipe(IInventory input, World world){
+    public static ExtremeCraftShapeRecipe matchesRecipe(Container input, Level world){
         ExtremeCraftShapeRecipe[] recipes = new ExtremeCraftShapeRecipe[]{
                 infinityCatalyst, eternalSingularity, meatBalls, stew
         };

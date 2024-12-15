@@ -2,21 +2,28 @@ package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Container.DenseNeutronCollectorContainer;
 import com.yuo.endless.Items.EndlessItems;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DenseNeutronCollectorTile extends AbsNeutronCollectorTile{
 
-    public DenseNeutronCollectorTile(){
-        super(EndlessTileTypes.DENSE_NEUTRON_COLLECTOR_TILE.get());
+    public DenseNeutronCollectorTile(BlockPos pos, BlockState state){
+        super(EndlessTileTypes.DENSE_NEUTRON_COLLECTOR_TILE.get(), pos, state);
+    }
+
+    public DenseNeutronCollectorTile(BlockEntityType<DenseNeutronCollectorTile> type) {
+        super(type);
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
-        return new DenseNeutronCollectorContainer(id, player, this);
+    protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
+        return new DenseNeutronCollectorContainer(id, inventory, this);
     }
 
     @Override
@@ -25,7 +32,7 @@ public class DenseNeutronCollectorTile extends AbsNeutronCollectorTile{
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("gui.endless.dense_neutronium_collector");
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.endless.dense_neutronium_collector");
     }
 }

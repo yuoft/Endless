@@ -1,29 +1,29 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Endless;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 
-public interface IExtremeCraftRecipe extends IRecipe<IInventory> {
+public interface IExtremeCraftRecipe extends Recipe<Container> {
     ResourceLocation TYPE_ID = new ResourceLocation(Endless.MOD_ID, "extreme_craft");
     ResourceLocation TYPE_SHAPE_ID = new ResourceLocation(Endless.MOD_ID, "extreme_craft_shape");
 
     @Override
-    default IRecipeType<?> getType(){
+    default RecipeType<?> getType(){
         return Registry.RECIPE_TYPE.getOptional(TYPE_ID).get();
     }
 
     @Override
-    default boolean canFit(int width, int height) {
+    default boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     //不出现在配方手册中
     @Override
-    default boolean isDynamic() {
+    default boolean isSpecial() {
         return true;
     }
 }

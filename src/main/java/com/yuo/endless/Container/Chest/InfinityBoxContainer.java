@@ -1,55 +1,45 @@
 package com.yuo.endless.Container.Chest;
 
-import com.yuo.endless.Container.ContainerTypeRegistry;
+import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Tiles.InfinityBoxTile;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.inventory.container.WorkbenchContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.play.server.SSetSlotPacket;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 
-import java.util.Iterator;
 import java.util.Optional;
 
 public class InfinityBoxContainer extends InfinityChestContainer {
     private final InfinityBoxCraftInventory craftInputInv;
     private final InfinityBoxCraftInventoryResult craftOutputInv;
-    private final IIntArray burnData;
-    private final PlayerEntity player;
-    private final World world;
+    private final ContainerData burnData;
+    private final Player player;
+    private final Level world;
 
-    public InfinityBoxContainer(int id, PlayerInventory playerInventory){
-        this(id, playerInventory, new InfinityBoxTile(), new IntArray(4));
+    public InfinityBoxContainer(int id, Inventory playerInventory){
+        this(id, playerInventory, new InfinityBoxTile(null, null), new SimpleContainerData(4));
     }
 
-    public InfinityBoxContainer(int id, PlayerInventory playerInventory, InfinityBoxTile tile, IIntArray intArray) {
-        super(ContainerTypeRegistry.infinityBoxContainer.get(), id);
+    public InfinityBoxContainer(int id, Inventory playerInventory, InfinityBoxTile tile, ContainerData intArray) {
+        super(EndlessMenuTypes.infinityBoxContainer.get(), id);
         this.chestTile = tile;
         this.craftInputInv = new InfinityBoxCraftInventory(this, (InfinityBoxTile) chestTile);
         this.craftOutputInv = new InfinityBoxCraftInventoryResult((InfinityBoxTile) chestTile);
         this.burnData = intArray;
-        trackIntArray(this.burnData);
+        this.addDataSlots(this.burnData);
         this.player = playerInventory.player;
-        this.world = player.world;
-        chestTile.openInventory(this.player);
+        this.world = player.level;
+        chestTile.startOpen(this.player);
 
         for(int j = 0; j < 9; ++j) {
             for(int k = 0; k < 27; ++k) {
@@ -79,53 +69,53 @@ public class InfinityBoxContainer extends InfinityChestContainer {
         for(int i1 = 0; i1 < 9; ++i1) {
             this.addSlot(new Slot(playerInventory, i1, 170 + i1 * 18, 252));
         }
-        onCraftMatrixChanged(craftInputInv);
+        slotsChanged(craftInputInv);
     }
 
     @Override
-    public void onCraftMatrixChanged(IInventory inventoryIn) {
-        if (world.isRemote) return;
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+    public void slotsChanged(Container pContainer) {
+        if (world.isClientSide) return;
+        ServerPlayer serverPlayer = (ServerPlayer)player;
         ItemStack itemStack = ItemStack.EMPTY;
-        CraftingInventory craftingInv = getCraftingInv();
-        Optional<ICraftingRecipe> optional = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftingInv, world);
+        CraftingContainer craftingInv = getCraftingInv();
+        Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, world);
         if (optional.isPresent()) {
-            ICraftingRecipe recipe = optional.get();
-            if (craftOutputInv.canUseRecipe(world, serverPlayer, recipe)) {
-                itemStack = recipe.getCraftingResult(craftingInv); //获取配方输出
+            CraftingRecipe recipe = optional.get();
+            if (craftOutputInv.setRecipeUsed(world, serverPlayer, recipe)) {
+                itemStack = recipe.getResultItem(); //获取配方输出
             }
         }
-        craftOutputInv.setInventorySlotContents(252, itemStack);
-        serverPlayer.connection.sendPacket(new SSetSlotPacket(windowId, 252, itemStack));
+        craftOutputInv.setItem(252, itemStack);
+        serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.getStateId(), 252, itemStack));
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemStack1 = slot.getStack();
+        if (slot.hasItem()) {
+            ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
 
             if (index < 243) { //取出
-                if (!super.mergeItemStack(itemStack1, 253, this.inventorySlots.size(), true)) {
+                if (!super.moveItemStackTo(itemStack1, 253, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }//放入
             } else if (index == 252){
-                if (!super.mergeItemStack(itemStack1, 253, this.inventorySlots.size(), true)) {
+                if (!super.moveItemStackTo(itemStack1, 253, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onSlotChange(itemStack1, itemstack);
-            } else if (!this.mergeItemStack(itemStack1, 0, 243, false)) {
+                slot.onQuickCraft(itemStack1, itemstack);
+            } else if (!this.moveItemStackTo(itemStack1, 0, 243, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemStack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             }
             else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
             slot.onTake(player, itemStack1);
         }
@@ -134,9 +124,9 @@ public class InfinityBoxContainer extends InfinityChestContainer {
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
-        super.onContainerClosed(playerIn);
-        this.chestTile.closeInventory(playerIn);
+    public void removed(Player pPlayer) {
+        super.removed(pPlayer);
+        this.chestTile.clearContent();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -161,28 +151,33 @@ public class InfinityBoxContainer extends InfinityChestContainer {
     }
 
     public boolean hasRecipe(ItemStack stack) {
-        return this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, new Inventory(stack), this.world).isPresent();
+        return this.world.getRecipeManager().getRecipesFor(RecipeType.SMELTING, new SimpleContainer(stack), this.world).isEmpty();
     }
 
     public boolean isFuel(ItemStack stack) {
-        return net.minecraftforge.common.ForgeHooks.getBurnTime(stack) > 0;
+        return ForgeHooks.getBurnTime(stack, null) > 0;
     }
 
     /**
      * 创建一个工作台容器
      * @return 容器
      */
-    public CraftingInventory getCraftingInv(){
-        CraftingInventory inventory = new CraftingInventory(new WorkbenchContainer(windowId, player.inventory), 3,3);
-        inventory.setInventorySlotContents(0, craftInputInv.getStackInSlot(243));
-        inventory.setInventorySlotContents(1, craftInputInv.getStackInSlot(244));
-        inventory.setInventorySlotContents(2, craftInputInv.getStackInSlot(245));
-        inventory.setInventorySlotContents(3, craftInputInv.getStackInSlot(246));
-        inventory.setInventorySlotContents(4, craftInputInv.getStackInSlot(247));
-        inventory.setInventorySlotContents(5, craftInputInv.getStackInSlot(248));
-        inventory.setInventorySlotContents(6, craftInputInv.getStackInSlot(249));
-        inventory.setInventorySlotContents(7, craftInputInv.getStackInSlot(250));
-        inventory.setInventorySlotContents(8, craftInputInv.getStackInSlot(251));
+    public CraftingContainer getCraftingInv(){
+        CraftingContainer inventory = new CraftingContainer(new AbstractContainerMenu(MenuType.CRAFTING, this.containerId) {
+            @Override
+            public boolean stillValid(Player player) {
+                return true;
+            }
+        }, 3, 3);
+        inventory.setItem(0, craftInputInv.getItem(243));
+        inventory.setItem(1, craftInputInv.getItem(244));
+        inventory.setItem(2, craftInputInv.getItem(245));
+        inventory.setItem(3, craftInputInv.getItem(246));
+        inventory.setItem(4, craftInputInv.getItem(247));
+        inventory.setItem(5, craftInputInv.getItem(248));
+        inventory.setItem(6, craftInputInv.getItem(249));
+        inventory.setItem(7, craftInputInv.getItem(250));
+        inventory.setItem(8, craftInputInv.getItem(251));
         return inventory;
     }
 
