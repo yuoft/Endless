@@ -1,12 +1,12 @@
 package com.yuo.endless.Client.Gui;
 
 import com.yuo.endless.Container.AbsNeutronCollectorContainer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 public class DenseNeutronCollectorScreen extends AbsNeutronCollectorScreen{
 
-    public DenseNeutronCollectorScreen(AbsNeutronCollectorContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public DenseNeutronCollectorScreen(AbsNeutronCollectorContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn, 44);
     }
 }

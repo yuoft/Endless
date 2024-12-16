@@ -1,16 +1,15 @@
 package com.yuo.endless.Mixin;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.ItemInput;
-import net.minecraft.command.impl.GiveCommand;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.item.ItemInput;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.commands.GiveCommand;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -24,43 +23,43 @@ public class GiveCommandMixin {
      * @reason 修复give指令获取无尽物品时得到2份
      */
     @Overwrite
-    private static int giveItem(CommandSource source, ItemInput itemIn, Collection<ServerPlayerEntity> targets, int count) throws CommandSyntaxException {
-        for(ServerPlayerEntity serverplayerentity : targets) {
+    private static int giveItem(CommandSourceStack source, ItemInput itemIn, Collection<ServerPlayer> targets, int count) throws CommandSyntaxException {
+        for(ServerPlayer serverPlayer : targets) {
             int i = count;
 
             while(i > 0) {
                 int j = Math.min(itemIn.getItem().getMaxStackSize(), i);
                 i -= j;
-                ItemStack itemstack = itemIn.createStack(j, false);
-                boolean flag = serverplayerentity.inventory.addItemStackToInventory(itemstack);
+                ItemStack itemstack = itemIn.createItemStack(j, false);
+                boolean flag = serverPlayer.getInventory().add(itemstack);
                 if (flag && itemstack.isEmpty()) {
                     itemstack.setCount(1);
                     if (itemstack.getItem().hasCustomEntity(itemstack) && itemstack.getItem().getRegistryName() != null
                             && "endless".equals(itemstack.getItem().getRegistryName().getNamespace())){
                         System.out.println("Fix give endless item, but get two bug.");
                     }else {
-                        ItemEntity itementity1 = serverplayerentity.dropItem(itemstack, false);
+                        ItemEntity itementity1 = serverPlayer.drop(itemstack, false);
                         if (itementity1 != null) {
                             itementity1.makeFakeItem();
                         }
                     }
 
-                    serverplayerentity.world.playSound(null, serverplayerentity.getPosX(), serverplayerentity.getPosY(), serverplayerentity.getPosZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((serverplayerentity.getRNG().nextFloat() - serverplayerentity.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    serverplayerentity.container.detectAndSendChanges();
+                    serverPlayer.level.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((serverPlayer.getRandom().nextFloat() - serverPlayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    serverPlayer.containerMenu.broadcastChanges();
                 } else {
-                    ItemEntity itementity = serverplayerentity.dropItem(itemstack, false);
+                    ItemEntity itementity = serverPlayer.drop(itemstack, false);
                     if (itementity != null) {
-                        itementity.setNoPickupDelay();
-                        itementity.setOwnerId(serverplayerentity.getUniqueID());
+                        itementity.setDefaultPickUpDelay();
+                        itementity.setOwner(serverPlayer.getUUID());
                     }
                 }
             }
         }
 
         if (targets.size() == 1) {
-            source.sendFeedback(new TranslationTextComponent("commands.give.success.single", count, itemIn.createStack(count, false).getTextComponent(), targets.iterator().next().getDisplayName()), true);
+            source.sendSuccess(new TranslatableComponent("commands.give.success.single", count, itemIn.createItemStack(count, false).getDisplayName(), targets.iterator().next().getDisplayName()), true);
         } else {
-            source.sendFeedback(new TranslationTextComponent("commands.give.success.single", count, itemIn.createStack(count, false).getTextComponent(), targets.size()), true);
+            source.sendSuccess(new TranslatableComponent("commands.give.success.single", count, itemIn.createItemStack(count, false).getDisplayName(), targets.size()), true);
         }
 
         return targets.size();

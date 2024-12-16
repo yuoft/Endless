@@ -3,18 +3,12 @@ package com.yuo.endless.Container;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class NeutroniumCompressorContainer extends AbstractContainerMenu {
@@ -52,12 +46,12 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return this.tile.isUsableByPlayer(player);
+        return this.tile.stillValid(player);
     }
 
     //玩家shift行为
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack transferStackInSlot(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {

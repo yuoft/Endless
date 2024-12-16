@@ -4,17 +4,13 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.yuo.endless.Client.Lib.SpriteRegistryHelper;
 import com.yuo.endless.Endless;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.shader.IShaderManager;
-import net.minecraft.client.shader.ShaderLinkHelper;
-import net.minecraft.client.shader.ShaderLoader;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
 
@@ -22,6 +18,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -105,17 +102,17 @@ public class AvaritiaShaders {
         if (event.phase == TickEvent.Phase.START) {
             cosmicUVs = BufferUtils.createFloatBuffer(4 * COSMIC_SPRITES.length);
             for (TextureAtlasSprite cosmicIcon : COSMIC_SPRITES) {
-                cosmicUVs.put(cosmicIcon.getMinU());
-                cosmicUVs.put(cosmicIcon.getMinV());
-                cosmicUVs.put(cosmicIcon.getMaxU());
-                cosmicUVs.put(cosmicIcon.getMaxV());
+                cosmicUVs.put(cosmicIcon.getU0());
+                cosmicUVs.put(cosmicIcon.getV0());
+                cosmicUVs.put(cosmicIcon.getU1());
+                cosmicUVs.put(cosmicIcon.getV1());
             }
             cosmicUVs.flip();
         }
     }
 
     static void clientTick(TickEvent.ClientTickEvent event) {
-        if (!Minecraft.getInstance().isGamePaused() && event.phase == TickEvent.Phase.END)
+        if (!Minecraft.getInstance().isPaused() && event.phase == TickEvent.Phase.END)
             if (renderTime < 65535) {
                 renderTime++;
             } else {
@@ -157,10 +154,10 @@ public class AvaritiaShaders {
      * 注册着色器
      */
     public static void initShaders() {
-        IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-        ISelectiveResourceReloadListener shaderReloadListener; //防止报错  ？？？
-        if (resourceManager instanceof IReloadableResourceManager) //暮色森林
-            ((IReloadableResourceManager) resourceManager).addReloadListener(shaderReloadListener = (manager, predicate) ->{
+        ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+        ResourceProvider shaderReloadListener; //防止报错  ？？？
+        if (resourceManager instanceof ResourceProvider) //暮色森林
+            ((ReloadableResourceManager) resourceManager).registerReloadListener(shaderReloadListener = (manager, predicate) ->{
                 PROGRAMS.values().forEach(ShaderLinkHelper::deleteShader);
                 PROGRAMS.clear();
                 for (AvaritiaShader shader : AvaritiaShader.values()) {
@@ -176,7 +173,7 @@ public class AvaritiaShaders {
             });
     }
 
-    static ShaderLoader createShader(IResourceManager manager, String filename, ShaderLoader.ShaderType shaderType) throws IOException {
+    static ShaderLoader createShader(ResourceManager manager, String filename, ShaderLoader.ShaderType shaderType) throws IOException {
         ResourceLocation l = new ResourceLocation(Endless.MOD_ID, "shaders/" + filename);
         return ShaderLoader.func_216534_a(shaderType, l.toString(), new BufferedInputStream(manager.getResource(l).getInputStream()), shaderType.name().toLowerCase(Locale.ROOT));
     }
@@ -187,9 +184,9 @@ public class AvaritiaShaders {
             return;
         int id = prog.getProgram();
         ARBShaderObjects.glUseProgramObjectARB(id);
-        GlStateManager.disableDepthTest();
+        GlStateManager._disableDepthTest();
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.player.world != null)
+        if (mc.player != null && mc.player.level != null)
             ARBShaderObjects.glUniform1iARB(ARBShaderObjects.glGetUniformLocationARB(id, "time"), renderTime);
         if (c != null)
             c.c(id);
