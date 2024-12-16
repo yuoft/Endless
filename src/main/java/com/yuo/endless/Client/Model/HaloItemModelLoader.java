@@ -10,13 +10,16 @@ import com.yuo.endless.Client.Lib.Quad;
 import com.yuo.endless.Client.Model.HaloItemModelLoader.HaloItemModelGeometry;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -26,7 +29,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> {
-    public void onResourceManagerReload(IResourceManager r) {}
+    public void onResourceManagerReload(ResourceManager r) {}
 
     public HaloItemModelGeometry read(JsonDeserializationContext json, JsonObject object) {
         JsonObject halo = object.getAsJsonObject("halo");
@@ -39,10 +42,10 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
                 intArrayList.add(jsonElement.getAsInt());
             }
         }
-        String texture = JSONUtils.getString(halo, "texture");
-        int color = JSONUtils.getInt(halo, "color");
-        int size = JSONUtils.getInt(halo, "size");
-        boolean pulse = JSONUtils.getBoolean(halo, "pulse");
+        String texture = GsonHelper.getAsString(halo, "texture");
+        int color = GsonHelper.getAsInt(halo, "color");
+        int size = GsonHelper.getAsInt(halo, "size");
+        boolean pulse = GsonHelper.getAsBoolean(halo, "pulse");
         JsonObject clean = object.getAsJsonObject();
         clean.remove("halo");
         clean.remove("loader");
@@ -63,7 +66,7 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
 
         boolean pulse;
 
-        RenderMaterial haloMaterial;
+        Material haloMaterial;
 
         public HaloItemModelGeometry(BlockModel baseModel, IntList layerColors, String texture, int color, int size, boolean pulse) {
             this.baseModel = baseModel;
@@ -74,22 +77,22 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
             this.pulse = pulse;
         }
 
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> sprite, IModelTransform model, ItemOverrideList overrides, ResourceLocation id) {
-            IBakedModel bakedBaseModel = this.baseModel.bakeModel(bakery, this.baseModel, sprite, model, id, false);
+        public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> sprite, ModelState model, ItemOverrides overrides, ResourceLocation id) {
+            BakedModel bakedBaseModel = this.baseModel.bake(bakery, this.baseModel, sprite, model, id, false);
             return new HaloBakedModel(tintLayers(bakedBaseModel, this.layerColors), sprite.apply(this.haloMaterial), this.color, this.size, this.pulse);
         }
 
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> model, Set<Pair<String, String>> string) {
-            Set<RenderMaterial> materials = new HashSet<>();
+        public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> model, Set<Pair<String, String>> string) {
+            Set<Material> materials = new HashSet<>();
             this.haloMaterial = owner.resolveTexture(this.texture);
-            if (Objects.equals(this.haloMaterial.getTextureLocation(), MissingTextureSprite.getDynamicTexture()))
+            if (Objects.equals(this.haloMaterial.atlasLocation(), MissingTextureAtlasSprite.getLocation()))
                 string.add(Pair.of(this.texture, owner.getModelName()));
             materials.add(this.haloMaterial);
-            materials.addAll(this.baseModel.getTextures(model, string));
+            materials.addAll(this.baseModel.getMaterials(model, string));
             return materials;
         }
 
-        static IBakedModel tintLayers(IBakedModel model, IntList layerColors) {
+        static BakedModel tintLayers(BakedModel model, IntList layerColors) {
             if (layerColors.isEmpty())
                 return model;
             Map<Direction, List<BakedQuad>> faceQuads = new HashMap<>();
@@ -98,7 +101,7 @@ public class HaloItemModelLoader implements IModelLoader<HaloItemModelGeometry> 
                 faceQuads.put(face, transformQuads(model.getQuads(null, face, new Random(), EmptyModelData.INSTANCE), layerColors));
             }
             List<BakedQuad> unculled = transformQuads(model.getQuads(null, null, new Random(), EmptyModelData.INSTANCE), layerColors);
-            return new SimpleBakedModel(unculled, faceQuads, model.isGui3d(), model.isBuiltInRenderer(), model.isAmbientOcclusion(), model.getParticleTexture(), model.getItemCameraTransforms(), ItemOverrideList.EMPTY);
+            return new SimpleBakedModel(unculled, faceQuads, model.isGui3d(), model.isCustomRenderer(), model.useAmbientOcclusion(), model.getParticleIcon(), model.getTransforms(), ItemOverrides.EMPTY);
         }
 
         static List<BakedQuad> transformQuads(List<BakedQuad> quads, IntList layerColors) {

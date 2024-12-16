@@ -1,34 +1,32 @@
 package com.yuo.endless.Client.Model;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Client.Lib.CachedFormat;
 import com.yuo.endless.Client.Lib.ColourARGB;
 import com.yuo.endless.Client.Lib.Quad;
 import com.yuo.endless.Client.Lib.WrappedItemModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Collections;
 
 public class HaloBakedModel extends WrappedItemModel implements IItemRenderer {
-    public HaloBakedModel(IBakedModel wrapped, TextureAtlasSprite sprite, int color, int size, boolean pulse) {
+    public HaloBakedModel(BakedModel wrapped, TextureAtlasSprite sprite, int color, int size, boolean pulse) {
         super(wrapped);
         this.haloQuad = generateHaloQuad(sprite, size, color);
         this.pulse = pulse;
     }
 
-    public void renderItem(ItemStack stack, ItemCameraTransforms.TransformType transformType, MatrixStack mStack, IRenderTypeBuffer source, int light, int overlay) {
-        if (transformType == ItemCameraTransforms.TransformType.GUI) {
-            Minecraft.getInstance().getItemRenderer().renderQuads(mStack, source.getBuffer(RenderType.makeType("item", DefaultVertexFormats.ENTITY, 7, 256, true, true,
+    public void renderItem(ItemStack stack, TransformType transformType, PoseStack mStack, MultiBufferSource source, int light, int overlay) {
+        if (transformType == TransformType.GUI) {
+            Minecraft.getInstance().getItemRenderer().render(mStack, source.getBuffer(RenderType.create("item", DefaultVertexFormat.NEW_ENTITY, 7, 256, true, true,
                     RenderType.State.getBuilder().texture(new RenderState.TextureState(PlayerContainer.LOCATION_BLOCKS_TEXTURE, false, false)).transparency(RenderType.TRANSLUCENT_TRANSPARENCY).writeMask(RenderType.COLOR_WRITE).build(true))), Collections.singletonList(this.haloQuad), stack, light, overlay);
             if (this.pulse) {
                 double scale = this.RANDOM.nextDouble() * 0.15D + 0.95D;
@@ -45,10 +43,10 @@ public class HaloBakedModel extends WrappedItemModel implements IItemRenderer {
         double spread = size / 16.0D;
         double min = 0.0D - spread;
         double max = 1.0D + spread;
-        float minU = sprite.getMinU();
-        float maxU = sprite.getMaxU();
-        float minV = sprite.getMinV();
-        float maxV = sprite.getMaxV();
+        float minU = sprite.getU0();
+        float maxU = sprite.getU1();
+        float minV = sprite.getV0();
+        float maxV = sprite.getV1();
         Quad quad = new Quad();
         quad.reset(CachedFormat.BLOCK);
         quad.setTexture(sprite);

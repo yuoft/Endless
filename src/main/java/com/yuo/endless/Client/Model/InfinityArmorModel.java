@@ -1,17 +1,23 @@
 package com.yuo.endless.Client.Model;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
@@ -39,7 +45,7 @@ public class InfinityArmorModel extends HumanoidModel {
 
     Random randy = new Random();
 
-    BipedModel invuln;
+    HumanoidModel invuln;
 
     float expand;
 
@@ -48,19 +54,19 @@ public class InfinityArmorModel extends HumanoidModel {
     ModelRenderer bipedRightWing;
 
     RenderType glow(ResourceLocation t) {
-        return (RenderType)RenderType.makeType("", DefaultVertexFormats.ENTITY, 7, 256, true,
+        return (RenderType)RenderType.create("", DefaultVertexFormat.NEW_ENTITY, 7, 256, true,
                 true, RenderType.State.getBuilder().cull(RenderType.CULL_DISABLED).texture(new RenderState.TextureState(t, false, false)).transparency(RenderType.LIGHTNING_TRANSPARENCY)
                 .alpha(RenderType.DEFAULT_ALPHA).overlay(RenderType.OVERLAY_ENABLED).layer(RenderType.VIEW_OFFSET_Z_LAYERING).build(true));
     }
 
     static RenderType mask(ResourceLocation t) {
-        return (RenderType)RenderType.makeType("", DefaultVertexFormats.BLOCK, 7, 256, true,
+        return (RenderType)RenderType.create("", DefaultVertexFormat.BLOCK, 7, 256, true,
                 true, RenderType.State.getBuilder().cull(RenderType.CULL_DISABLED).texture(new RenderState.TextureState(t, false, false)).transparency(RenderType.TRANSLUCENT_TRANSPARENCY)
                 .writeMask(RenderType.COLOR_WRITE).overlay(RenderType.OVERLAY_ENABLED).layer(RenderType.VIEW_OFFSET_Z_LAYERING).build(true));
     }
 
     static RenderType mask2(ResourceLocation t) {
-        return (RenderType)RenderType.makeType("", DefaultVertexFormats.ENTITY, 7, 256, true,
+        return (RenderType)RenderType.create("", DefaultVertexFormat.NEW_ENTITY, 7, 256, true,
                 true, RenderType.State.getBuilder().cull(RenderType.CULL_DISABLED).texture(new RenderState.TextureState(t, false, false)).transparency(RenderType.TRANSLUCENT_TRANSPARENCY)
                 .writeMask(RenderType.COLOR_WRITE).overlay(RenderType.OVERLAY_ENABLED).build(true));
     }
@@ -91,15 +97,15 @@ public class InfinityArmorModel extends HumanoidModel {
         return this;
     }
 
-    public void render(MatrixStack mStack, IVertexBuilder vertexBuilder, int i1, int i2, float i3, float i4, float i5, float i6) {
+    public void render(PoseStack mStack, MultiBufferSource vertexBuilder, int i1, int i2, float i3, float i4, float i5, float i6) {
         float f, f1, f2;
         copyBipedAngles(this, this.invuln);
         super.render(mStack, vertexBuilder, i1, i2, i3, i4, i5, i6);
         AvaritiaShaders.shading(this.buf);
         long time = 0;
-        ClientPlayerEntity player1 = this.mc.player;
+        LocalPlayer player1 = this.mc.player;
         if (player1 != null) {
-            time = player1.world.getGameTime();
+            time = player1.level.getGameTime();
         }
         double pulse = Math.sin(time / 10.0D) * 0.5D + 0.5D;
         double pulse_mag_sqr = Math.pow(pulse, 6.0D);
@@ -119,42 +125,42 @@ public class InfinityArmorModel extends HumanoidModel {
         } else {
             AvaritiaShaders.scale = 1.0F;
             if (player1 != null) {
-                AvaritiaShaders.yaw = (float)((player1.rotationYaw * 2.0F) * Math.PI / 360.0D);
-                AvaritiaShaders.pitch = -((float)((player1.rotationPitch * 2.0F) * Math.PI / 360.0D));
+                AvaritiaShaders.yaw = (float)((player1.yRotO * 2.0F) * Math.PI / 360.0D);
+                AvaritiaShaders.pitch = -((float)((player1.yHeadRot * 2.0F) * Math.PI / 360.0D));
             }
         }
         if (this.invulnRender) {
-            mStack.push();
+            mStack.pushPose();
             AvaritiaShaders.useShader2();
             if (!this.player)
                 this.invuln.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, i3, i4, i5, i6);
             AvaritiaShaders.releaseShader(this.buf);
-            mStack.pop();
+            mStack.popPose();
         }
         AvaritiaShaders.useShader();
-        mStack.push();
+        mStack.pushPose();
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.childHeadOffsetY / 16.0F * f2), -0.029999999329447746D);
         this.bipedHeadwear.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask2), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F);
-        mStack.pop();
-        mStack.push();
+        mStack.popPose();
+        mStack.pushPose();
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.childHeadOffsetY / 16.0F * f2), (this.childHeadOffsetZ / 16.0F * f2));
         this.bipedHead.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F);
-        mStack.pop();
-        mStack.push();
+        mStack.popPose();
+        mStack.pushPose();
         mStack.scale(f1, f1, f1);
         mStack.translate(0.0D, (this.childBodyOffsetY / 16.0F * f2), 0.0D);
         func_225600_b_().forEach(t -> t.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, 1.0F, 1.0F, 1.0F, 1.0F));
-        mStack.pop();
+        mStack.popPose();
         AvaritiaShaders.releaseShader(this.buf);
-        mStack.push();
+        mStack.pushPose();
         mStack.scale(f1, f1, f1);
         mStack.translate(0.0D, (this.childBodyOffsetY / 16.0F * f2), 0.0D);
         func_225600_b_().forEach(t -> t.render(mStack, ver(glow(this.eyeTex)), i1, i2, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5D)));
-        mStack.pop();
+        mStack.popPose();
         if (this.invulnRender) {
-            mStack.push();
+            mStack.pushPose();
             this.randy.setSeed(time / 3L * 1723609L);
             float[] col = HSVtoRGB(this.randy.nextFloat() * 6.0F, 1.0F, 1.0F);
             mStack.scale(f, f, f);
@@ -162,10 +168,10 @@ public class InfinityArmorModel extends HumanoidModel {
             this.bipedHeadwear.render(mStack, ver((RenderType)RenderType.makeType("", DefaultVertexFormats.ENTITY, 7, 0,
                     RenderType.State.getBuilder().texture(new RenderState.TextureState(this.eyeTex, false, false))
                     .alpha(RenderType.DEFAULT_ALPHA).overlay(RenderType.OVERLAY_ENABLED).cull(RenderType.CULL_DISABLED).build(true))), i1, i2, col[0], col[1], col[2], 1.0F);
-            mStack.pop();
+            mStack.popPose();
         }
         if (this.playerFlying && !AvaritiaShaders.inventoryRender) {
-            mStack.push();
+            mStack.pushPose();
             mStack.scale(f1, f1, f1);
             mStack.translate(0.0D, (this.childBodyOffsetY / 16.0F * f2), 0.0D);
             renderToBufferWing(mStack, ver(RenderType.getArmorCutoutNoCull(this.wingTex)), i1, i2, i3, i4, i5, i6);
@@ -174,7 +180,7 @@ public class InfinityArmorModel extends HumanoidModel {
             renderToBufferWing(mStack, mat(AvaritiaShaders.WING_SPRITES[0]).getBuffer(this.buf, InfinityArmorModel::mask), i1, i2, i3, i4, i5, i6);
             AvaritiaShaders.releaseShader(this.buf);
             renderToBufferWing(mStack, ver(glow(this.wingGlowTex)), i1, i2, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5D));
-            mStack.pop();
+            mStack.popPose();
         }
     }
 
@@ -182,31 +188,31 @@ public class InfinityArmorModel extends HumanoidModel {
         this.invulnRender = false;
         this.playerFlying = false;
         this.player = false;
-        ItemStack hats = e.getItemStackFromSlot(EquipmentSlotType.HEAD);
-        ItemStack chest = e.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        ItemStack leg = e.getItemStackFromSlot(EquipmentSlotType.LEGS);
-        ItemStack foot = e.getItemStackFromSlot(EquipmentSlotType.FEET);
+        ItemStack hats = e.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack chest = e.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack leg = e.getItemBySlot(EquipmentSlot.LEGS);
+        ItemStack foot = e.getItemBySlot(EquipmentSlot.FEET);
         boolean hasHat = hats.getItem() == EndlessItems.infinityHead.get();
         boolean hasChest = chest.getItem() == EndlessItems.infinityChest.get();
         boolean hasLeg = leg.getItem() == EndlessItems.infinityLegs.get();
         boolean hasFoot = foot.getItem() == EndlessItems.infinityFeet.get();
         if (hasHat && hasChest && hasLeg && hasFoot)
             this.invulnRender = true;
-        if (e instanceof PlayerEntity) {
+        if (e instanceof Player) {
             this.player = true;
-            if (hasChest && ((PlayerEntity)e).abilities.isFlying)
+            if (hasChest && ((Player)e).getAbilities().flying)
                 this.playerFlying = true;
         }
-        this.isSneak = e.isCrouching();
+        this.crouching = e.isCrouching();
         this.isChild = e.isChild();
         this.isSitting = e.isPassenger();
-        this.invuln.isSneak = this.isSneak;
+        this.invuln.crouching = this.crouching;
         this.invuln.isSitting = this.isSitting;
         this.invuln.isChild = this.isChild;
-        this.invuln.swimAnimation = this.swimAnimation;
+        this.invuln.swimAmount = this.swimAmount;
     }
 
-    void renderToBufferWing(MatrixStack m, IVertexBuilder v, int i1, int i2, float i3, float i4, float i5, float i6) {
+    void renderToBufferWing(PoseStack m, MultiBufferSource v, int i1, int i2, float i3, float i4, float i5, float i6) {
         this.bipedLeftWing = new ModelRenderer(this, 0, 0);
         this.bipedLeftWing.mirror = true;
         this.bipedLeftWing.addBox(0.0F, -11.6F, 0.0F, 0.0F, 32.0F, 32.0F);
@@ -224,8 +230,8 @@ public class InfinityArmorModel extends HumanoidModel {
         return this.buf.getBuffer(t);
     }
 
-    public static RenderMaterial mat(TextureAtlasSprite t) {
-        return new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, t.getName());
+    public static Material mat(TextureAtlasSprite t) {
+        return new Material(PlayerContainer.LOCATION_BLOCKS_TEXTURE, t.getName());
     }
 
     public Iterable<ModelRenderer> func_225600_b_() {

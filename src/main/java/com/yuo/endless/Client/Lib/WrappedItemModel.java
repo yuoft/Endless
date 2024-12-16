@@ -7,7 +7,9 @@ import com.mojang.math.Vector3f;
 import com.yuo.endless.Endless;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -134,11 +136,11 @@ public abstract class WrappedItemModel implements BakedModel {
         return bakeItem(TransformationMatrix.identity(), sprites);
     }
 
-    public void renderWrapped(ItemStack s, PoseStack p, IRenderTypeBuffer c, int light, int packed, boolean fabulous) {
+    public void renderWrapped(ItemStack s, PoseStack p, MultiBufferSource c, int light, int packed, boolean fabulous) {
         renderWrapped(s, p, c, light, packed, fabulous, Function.identity());
     }
 
-    public void renderWrapped(ItemStack s, PoseStack p, IRenderTypeBuffer c, int light, int packed, boolean fabulous, Function<IVertexBuilder, IVertexBuilder> cons) {
+    public void renderWrapped(ItemStack s, PoseStack p, MultiBufferSource c, int light, int packed, boolean fabulous, Function<IVertexBuilder, IVertexBuilder> cons) {
         Minecraft.getInstance().getItemRenderer().renderModelLists(Objects.requireNonNull(this.wrapped.getOverrides().resolve(this, s, world, entity, 0)), s, light, packed, p, cons.apply(ItemRenderer.getFoilBuffer(c, RenderTypeLookup.func_239219_a_(s, fabulous), true, s.hasFoil())));
     }
 
@@ -152,11 +154,11 @@ public abstract class WrappedItemModel implements BakedModel {
         return create(i.translation, i.rotation, i.scale);
     }
 
-    static ItemTransforms stateFromItemTransforms(ItemCameraTransforms i) {
-        if (i == ItemCameraTransforms.DEFAULT)
+    static ItemTransforms stateFromItemTransforms(TransformType i) {
+        if (i == TransformType.NONE)
             return new SimpleModelTransform(ImmutableMap.of());
-        ImmutableMap.Builder<ItemCameraTransforms.TransformType, TransformationMatrix> map = ImmutableMap.builder();
-        for (ItemCameraTransforms.TransformType value : ItemCameraTransforms.TransformType.values())
+        ImmutableMap.Builder<TransformType, TransformationMatrix> map = ImmutableMap.builder();
+        for (TransformType value : TransformType.values())
             map.put(value, create(i.getTransform(value)));
         return new SimpleModelTransform(map.build());
     }

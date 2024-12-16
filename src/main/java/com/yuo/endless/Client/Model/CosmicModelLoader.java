@@ -4,12 +4,14 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.Client.Model.CosmicModelLoader.CosmicModelGeometry;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
@@ -21,14 +23,14 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class CosmicModelLoader implements IModelLoader<CosmicModelGeometry> {
-    public void onResourceManagerReload(IResourceManager resourceManager) {}
+    public void onResourceManagerReload(ResourceManager resourceManager) {}
 
     public CosmicModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
         JsonObject cosmicObj = modelContents.getAsJsonObject("cosmic");
         if (cosmicObj == null)
             throw new IllegalStateException();
         else {
-            String maskTexture = JSONUtils.getString(cosmicObj, "mask");
+            String maskTexture = GsonHelper.getAsString(cosmicObj, "mask");
             JsonObject clean = modelContents.getAsJsonObject();
             clean.remove("cosmic");
             clean.remove("loader");
@@ -42,25 +44,25 @@ public class CosmicModelLoader implements IModelLoader<CosmicModelGeometry> {
 
         String maskTexture;
 
-        RenderMaterial maskMaterial;
+        Material maskMaterial;
 
         public CosmicModelGeometry(BlockModel baseModel, String maskTexture) {
             this.baseModel = baseModel;
             this.maskTexture = maskTexture;
         }
 
-        public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
-            IBakedModel baseBakedModel = this.baseModel.bakeModel(bakery, this.baseModel, spriteGetter, modelTransform, modelLocation, true);
+        public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+            BakedModel baseBakedModel = this.baseModel.bake(bakery, this.baseModel, spriteGetter, modelTransform, modelLocation, true);
             return new CosmicBakedModel(baseBakedModel, spriteGetter.apply(this.maskMaterial));
         }
 
-        public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-            Set<RenderMaterial> materials = new HashSet<>();
+        public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+            Set<Material> materials = new HashSet<>();
             this.maskMaterial = owner.resolveTexture(this.maskTexture);
-            if (Objects.equals(this.maskMaterial.getTextureLocation(), MissingTextureSprite.getDynamicTexture()))
+            if (Objects.equals(this.maskMaterial.atlasLocation(), MissingTextureAtlasSprite.getLocation()))
                 missingTextureErrors.add(Pair.of(this.maskTexture, owner.getModelName()));
             materials.add(this.maskMaterial);
-            materials.addAll(this.baseModel.getTextures(modelGetter, missingTextureErrors));
+            materials.addAll(this.baseModel.getMaterials(modelGetter, missingTextureErrors));
             return materials;
         }
     }
