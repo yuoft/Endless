@@ -1,10 +1,10 @@
 package com.yuo.endless.Client.Lib;
 
-import net.minecraft.client.renderer.model.BakedQuad;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import net.minecraftforge.client.model.pipeline.IVertexProducer;
 import net.minecraftforge.client.model.pipeline.LightUtil;
@@ -108,7 +108,7 @@ public class Quad implements IVertexProducer, ISmartVertexConsumer {
                 vertex.normal[2] = (float)normal.z;
                 vertex.normal[3] = 0.0F;
             }
-        this.orientation = Direction.getFacingFromVector(normal.x, normal.y, normal.z);
+        this.orientation = Direction.getNearest(normal.x, normal.y, normal.z);
     }
 
     public Quad copy() {
@@ -155,7 +155,7 @@ public class Quad implements IVertexProducer, ISmartVertexConsumer {
     }
 
     public BakedQuad bake() {
-        int[] packedData = new int[this.format.format.getSize()];
+        int[] packedData = new int[this.format.format.getIntegerSize()];
         for (int v = 0; v < 4; v++) {
             for (int e = 0; e < this.format.elementCount; e++)
                 LightUtil.pack((this.vertices[v]).raw[e], packedData, this.format.format, v, e);
@@ -164,7 +164,7 @@ public class Quad implements IVertexProducer, ISmartVertexConsumer {
     }
 
     BakedQuad makeQuad(int[] packedData) {
-        if (this.format.format != DefaultVertexFormats.BLOCK)
+        if (this.format.format != DefaultVertexFormat.BLOCK)
             throw new IllegalStateException();
         return new BakedQuad(packedData, this.tintIndex, this.orientation, this.sprite, this.diffuseLighting);
     }

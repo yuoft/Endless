@@ -1,8 +1,8 @@
 package com.yuo.endless.Client.Lib;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.IResource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class OBJParser {
     }
 
     public static Map<String, CCModel> parseModels(ResourceLocation res, int vertexMode, Transformation coordSystem) {
-        try (IResource resource = Minecraft.getInstance().getResourceManager().getResource(res)) {
+        try (Resource resource = Minecraft.getInstance().getResourceManager().getResource(res)) {
             return parseModels(resource.getInputStream(), vertexMode, coordSystem);
         } catch (Exception e) {
             throw new RuntimeException();

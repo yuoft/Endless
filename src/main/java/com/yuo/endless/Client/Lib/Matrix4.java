@@ -1,7 +1,7 @@
 package com.yuo.endless.Client.Lib;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.math.vector.Matrix4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -205,8 +205,8 @@ public class Matrix4 extends Transformation implements Copyable<Matrix4> {
         return this;
     }
 
-    public Matrix4 set(MatrixStack m) {
-        return set(m.getLast().getMatrix());
+    public Matrix4 set(PoseStack m) {
+        return set(m.last().pose());
     }
 
     public Matrix4 set(Matrix4f m) {
@@ -245,7 +245,7 @@ public class Matrix4 extends Transformation implements Copyable<Matrix4> {
         return scale(m, m, m);
     }
 
-    public Matrix4(MatrixStack m) {
+    public Matrix4(PoseStack m) {
         set(m);
     }
 

@@ -1,8 +1,8 @@
 package com.yuo.endless.Client.Lib;
 
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 
 public class MathHelper {
     public static <T> T unsafeCast(Object b) {
@@ -37,7 +37,7 @@ public class MathHelper {
         return (min <= value && value <= max);
     }
 
-    public static BlockPos max(Vector3i pos1, Vector3i pos2) {
+    public static BlockPos max(Vec3i pos1, Vec3i pos2) {
         return new BlockPos(Math.max(pos1.getX(), pos2.getX()), Math.max(pos1.getY(), pos2.getY()), Math.max(pos1.getZ(), pos2.getZ()));
     }
 }

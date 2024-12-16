@@ -1,14 +1,12 @@
 package com.yuo.endless.Client.Lib;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 
 public class CCRenderState {
     static ThreadLocal<CCRenderState> instances = ThreadLocal.withInitial(CCRenderState::new);
@@ -71,8 +69,8 @@ public class CCRenderState {
         this.cFmt = CachedFormat.lookup(format);
     }
 
-    public void bind(RenderType renderType, IRenderTypeBuffer getter, MatrixStack mStack) {
-        bind(new TransformingVertexBuilder(getter.getBuffer(renderType), mStack), renderType.getVertexFormat());
+    public void bind(RenderType renderType, IRenderTypeBuffer getter, PoseStack mStack) {
+        bind(new TransformingVertexBuilder(getter.getBuffer(renderType), mStack), renderType.format());
     }
 
     public void reset() {

@@ -1,7 +1,6 @@
 package com.yuo.endless.Client.Lib;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class TransformingVertexBuilder implements ISpriteAwareVertexBuilder {
@@ -11,7 +10,7 @@ public class TransformingVertexBuilder implements ISpriteAwareVertexBuilder {
 
     Vector3 storage = new Vector3();
 
-    public TransformingVertexBuilder(IVertexBuilder delegate, MatrixStack stack) {
+    public TransformingVertexBuilder(IVertexBuilder delegate, PoseStack stack) {
         this(delegate, new Matrix4(stack));
     }
 

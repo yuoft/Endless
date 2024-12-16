@@ -1,32 +1,30 @@
 package com.yuo.endless.Client.Lib;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import com.yuo.endless.Endless;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.TransformationMatrix;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.client.model.SimpleModelTransform;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SimpleFoiledItem;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.IModelData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class WrappedItemModel implements IBakedModel {
+public abstract class WrappedItemModel implements BakedModel {
     protected List<BakedQuad> maskQuad;
 
     protected BakedQuad haloQuad;
@@ -39,23 +37,23 @@ public abstract class WrappedItemModel implements IBakedModel {
 
     static FaceBakery FACE_BAKERY = new FaceBakery();
 
-    IBakedModel wrapped;
+    BakedModel wrapped;
 
     LivingEntity entity;
 
-    ClientWorld world;
+    ClientLevel world;
 
-    IModelTransform parentState;
+    ItemTransforms parentState;
 
-    ItemOverrideList overrideList;
+    ItemOverrides overrideList;
 
-    public WrappedItemModel(IBakedModel wrapped) {
-        this.overrideList = new ItemOverrideList() {
-            public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, ClientWorld world, LivingEntity entity) {
+    public WrappedItemModel(BakedModel wrapped) {
+        this.overrideList = new ItemOverrides() {
+            public BakedModel getOverrideModel(BakedModel originalModel, ItemStack stack, ClientLevel world, LivingEntity entity) {
                 WrappedItemModel.this.entity = entity;
-                WrappedItemModel.this.world = (world == null) ? ((entity == null) ? null : (ClientWorld)entity.world) : null;
+                WrappedItemModel.this.world = (world == null) ? ((entity == null) ? null : (ClientLevel)entity.level) : null;
                 if (WrappedItemModel.this.isCosmic())
-                    return WrappedItemModel.this.wrapped.getOverrides().getOverrideModel(originalModel, stack, world, entity);
+                    return WrappedItemModel.this.wrapped.getOverrides().resolve(originalModel, stack, world, entity, 0);
                 return originalModel;
             }
         };
@@ -93,23 +91,23 @@ public abstract class WrappedItemModel implements IBakedModel {
         return false;
     }
 
-    public IModelTransform getModelTransform() {
+    public ItemTransforms getTransforms() {
         return this.parentState;
     }
 
-    public boolean isAmbientOcclusion() {
-        return this.wrapped.isAmbientOcclusion();
+    public boolean useAmbientOcclusion() {
+        return this.wrapped.useAmbientOcclusion();
     }
 
     public boolean isGui3d() {
         return this.wrapped.isGui3d();
     }
 
-    public boolean isSideLit() {
-        return this.wrapped.isSideLit();
+    public boolean usesBlockLight() {
+        return this.wrapped.isLayered();
     }
 
-    public ItemOverrideList getOverrides() {
+    public ItemOverrides getOverrides() {
         return this.overrideList;
     }
 
@@ -117,12 +115,14 @@ public abstract class WrappedItemModel implements IBakedModel {
         return Collections.emptyList();
     }
 
-    public TextureAtlasSprite getParticleTexture() {
-        return this.wrapped.getParticleTexture();
+    @Override
+    public TextureAtlasSprite getParticleIcon() {
+        return this.wrapped.getParticleIcon();
     }
 
-    public TextureAtlasSprite getParticleTexture(IModelData d) {
-        return this.wrapped.getParticleTexture();
+    @Override
+    public TextureAtlasSprite getParticleIcon(@NotNull IModelData data) {
+        return this.wrapped.getParticleIcon(data);
     }
 
     public static <E> void checkArgument(E argument, Predicate<E> predicate) {
@@ -134,16 +134,16 @@ public abstract class WrappedItemModel implements IBakedModel {
         return bakeItem(TransformationMatrix.identity(), sprites);
     }
 
-    public void renderWrapped(ItemStack s, MatrixStack p, IRenderTypeBuffer c, int light, int packed, boolean fabulous) {
+    public void renderWrapped(ItemStack s, PoseStack p, IRenderTypeBuffer c, int light, int packed, boolean fabulous) {
         renderWrapped(s, p, c, light, packed, fabulous, Function.identity());
     }
 
-    public void renderWrapped(ItemStack s, MatrixStack p, IRenderTypeBuffer c, int light, int packed, boolean fabulous, Function<IVertexBuilder, IVertexBuilder> cons) {
-        Minecraft.getInstance().getItemRenderer().renderModel(Objects.requireNonNull(this.wrapped.getOverrides().getOverrideModel(this.wrapped, s, this.world, this.entity)), s, light, packed, p, cons.apply(ItemRenderer.getBuffer(c, RenderTypeLookup.func_239219_a_(s, fabulous), true, s.hasEffect())));
+    public void renderWrapped(ItemStack s, PoseStack p, IRenderTypeBuffer c, int light, int packed, boolean fabulous, Function<IVertexBuilder, IVertexBuilder> cons) {
+        Minecraft.getInstance().getItemRenderer().renderModelLists(Objects.requireNonNull(this.wrapped.getOverrides().resolve(this, s, world, entity, 0)), s, light, packed, p, cons.apply(ItemRenderer.getFoilBuffer(c, RenderTypeLookup.func_239219_a_(s, fabulous), true, s.hasFoil())));
     }
 
     static TransformationMatrix create(Vector3f transform, Vector3f rotation, Vector3f scale) {
-        return new TransformationMatrix(transform, new Quaternion(rotation.getX(), rotation.getY(), rotation.getZ(), true), scale, null);
+        return new TransformationMatrix(transform, new Quaternion(rotation.x(), rotation.y(), rotation.z(), true), scale, null);
     }
 
     static TransformationMatrix create(ItemTransformVec3f i) {
@@ -152,7 +152,7 @@ public abstract class WrappedItemModel implements IBakedModel {
         return create(i.translation, i.rotation, i.scale);
     }
 
-    static IModelTransform stateFromItemTransforms(ItemCameraTransforms i) {
+    static ItemTransforms stateFromItemTransforms(ItemCameraTransforms i) {
         if (i == ItemCameraTransforms.DEFAULT)
             return new SimpleModelTransform(ImmutableMap.of());
         ImmutableMap.Builder<ItemCameraTransforms.TransformType, TransformationMatrix> map = ImmutableMap.builder();

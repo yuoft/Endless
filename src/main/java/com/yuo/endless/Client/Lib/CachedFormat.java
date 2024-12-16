@@ -2,9 +2,9 @@ package com.yuo.endless.Client.Lib;
 
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CachedFormat {
     public static Map<VertexFormat, CachedFormat> formatCache = new ConcurrentHashMap<>();
 
-    public static CachedFormat BLOCK = new CachedFormat(DefaultVertexFormats.BLOCK);
+    public static CachedFormat BLOCK = new CachedFormat(DefaultVertexFormat.BLOCK);
 
     public VertexFormat format;
 
@@ -29,7 +29,7 @@ public class CachedFormat {
     public boolean hasLightMap;
 
     public static CachedFormat lookup(VertexFormat f) {
-        if (f == DefaultVertexFormats.BLOCK)
+        if (f == DefaultVertexFormat.BLOCK)
             return BLOCK;
         return formatCache.computeIfAbsent(f, CachedFormat::new);
     }

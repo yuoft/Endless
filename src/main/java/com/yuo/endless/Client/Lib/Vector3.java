@@ -1,9 +1,10 @@
 package com.yuo.endless.Client.Lib;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
+import com.mojang.math.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class Vector3 implements Copyable<Vector3> {
     public static final Vector3 ZERO = new Vector3(0.0D, 0.0D, 0.0D);
@@ -36,14 +37,14 @@ public class Vector3 implements Copyable<Vector3> {
         this(fa[0], fa[1], fa[2]);
     }
 
-    public Vector3(Vector3d vec) {
+    public Vector3(Vec3 vec) {
         this.x = vec.x;
         this.y = vec.y;
         this.z = vec.z;
     }
 
-    public static Vector3 fromEntity(Entity e) {
-        return new Vector3(e.getPositionVec());
+    public static Vec3 fromEntity(Entity e) {
+        return e.getViewVector(0.5f);
     }
 
     public Vector3d vec3() {
@@ -69,7 +70,7 @@ public class Vector3 implements Copyable<Vector3> {
         return set(vec.x, vec.y, vec.z);
     }
 
-    public Vector3 set(Vector3i vec) {
+    public Vector3 set(Vec3i vec) {
         return set(vec.getX(), vec.getY(), vec.getZ());
     }
 
@@ -97,7 +98,7 @@ public class Vector3 implements Copyable<Vector3> {
     }
 
     public Vector3 add(Vector3d vec) {
-        return add(vec.getX(), vec.getY(), vec.getZ());
+        return add(vec.x, vec.y, vec.z);
     }
 
     public Vector3 add(BlockPos pos) {
