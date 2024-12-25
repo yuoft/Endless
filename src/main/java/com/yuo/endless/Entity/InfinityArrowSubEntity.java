@@ -138,7 +138,7 @@ public class InfinityArrowSubEntity extends AbstractArrowEntity {
             setDead();
         }else if (ticksExisted > 100) setDead();
 
-        if (ticksExisted % 4 == 0 && !this.world.isRemote){
+        if (ticksExisted % 2 == 0 && !this.world.isRemote){
             BlockPos pos = this.getPosition();
             int distance = 32; //水平追踪距离
             int height = 16; //垂直

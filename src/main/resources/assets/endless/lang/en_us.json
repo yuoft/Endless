@@ -140,6 +140,7 @@
   "endless.text.itemInfo.bucket_fluid":"Fluid:",
   "endless.text.itemInfo.bucket_num":"Fluid Number: %s",
   "endless.text.itemInfo.custom_singularity":"§7Player Custom",
+  "endless.text.itemInfo.infinity_bow":"§cDestruction mode activated!!!",
   "minecraft:null":"Unknown",
   "minecraft:water":"Water",
   "minecraft:lava":"Lava",

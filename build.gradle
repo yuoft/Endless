@@ -139,6 +139,21 @@ repositories {
         name 'RS maven'
         url 'https://repo.refinedmods.com'
     }
+    maven {
+        // Shedaniel's maven (Architectury API)
+        url "https://maven.shedaniel.me/"
+        content {
+            includeGroup "me.shedaniel"
+        }
+    }
+    maven {
+        // saps.dev Maven (KubeJS and Rhino)
+        url = "https://maven.saps.dev/minecraft"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.ftb.mods"
+        }
+    }
     //声明本地存储库
     flatDir {
         dirs('libs')
@@ -176,6 +191,8 @@ dependencies {
     compileOnly("slimeknights.tconstruct:TConstruct:${mc_ver}-${tconstruct_ver}")
     compileOnly("curse.maven:jade-324717:3910873")
     compileOnly("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
+//    compileOnly("dev.latvian.mods:kubejs-forge:${kubejs_ver}")
+//    compileOnly("dev.latvian.mods:rhino-forge:${rhino_ver}")
 
 //    runtimeOnly fg.deobf("com.teamcofh:cofh_core:1.16.5-1.5.0.+")
 //    runtimeOnly fg.deobf("com.teamcofh:thermal_foundation:1.16.5-1.5.0.+")
@@ -197,7 +214,10 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-245733:3144151")
 //    runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${mc_ver}:${crt_ver}")
     runtimeOnly fg.deobf("curse.maven:jade-324717:3910873")
-    runtimeOnly fg.deobf("curse.maven:mob-grinding-utils-254241:4368330")
+//    runtimeOnly fg.deobf("curse.maven:mob-grinding-utils-254241:4368330")
+    implementation fg.deobf("me.shedaniel:architectury-forge:${architectury_ver}")
+    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_ver}")
+    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_ver}")
 //    runtimeOnly fg.deobf("curse.maven:apotheosis-313970:3936649")
 //    runtimeOnly fg.deobf("curse.maven:placebo-283644:4501015")
 //    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-1.6.158")

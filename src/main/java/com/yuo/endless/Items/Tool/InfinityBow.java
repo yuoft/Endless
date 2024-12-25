@@ -2,11 +2,9 @@ package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.EndlessTab;
-import com.yuo.endless.Entity.EndlessItemEntity;
-import com.yuo.endless.Entity.EntityRegistry;
-import com.yuo.endless.Entity.InfinityArrowEntity;
-import com.yuo.endless.Entity.InfinityArrowSubEntity;
+import com.yuo.endless.Entity.*;
 import com.yuo.endless.Items.EndlessItems;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -15,12 +13,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.*;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -29,6 +33,15 @@ public class InfinityBow extends BowItem {
 
     public InfinityBow() {
         super(new Properties().group(EndlessTab.endless).maxStackSize(1).maxDamage(9999).isImmuneToFire());
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> components, ITooltipFlag flag) {
+        CompoundNBT nbt = stack.getOrCreateTag();
+        boolean bow = nbt.getBoolean("InfinityBow");
+        if (bow){
+            components.add(new TranslationTextComponent("endless.text.itemInfo.infinity_bow"));
+        }
     }
 
     //使用时间
@@ -51,18 +64,102 @@ public class InfinityBow extends BowItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
+        if (playerIn.isSneaking()) {
+            CompoundNBT nbt = itemstack.getOrCreateTag();
+            nbt.putBoolean("InfinityBow", !nbt.getBoolean("InfinityBow"));
+            itemstack.setTag(nbt);
+            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+        }
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, worldIn, playerIn, handIn, true);
         if (ret != null) return ret;
-
         playerIn.setActiveHand(handIn);
         return ActionResult.resultConsume(itemstack);
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void onUsingTick(ItemStack bow, LivingEntity player, int count) {
+        World world = player.world;
+        CompoundNBT nbt = bow.getOrCreateTag();
+        boolean flag = nbt.getBoolean("InfinityBow");
+        if (flag && player instanceof PlayerEntity) {
+            int useTime = getUseTime(count);
+            int circleNum = getCircleNumFormBowUseTime(useTime);
+
+            for (int i = 1; i <= circleNum; i++) {
+                double radius = i / 3.0d + Math.min(i / 2.0d, useTime / 20.0d);
+                int particleNum = 36 + 36 * (i - 1) + 36 * Math.max(0, i - 2) + 36 * Math.max(0, i - 3);
+                double dis = 4 * i;
+                spawnCircleParticle((PlayerEntity) player, world, radius, particleNum, dis, i);
+            }
+
+            if (!world.isRemote) {
+                if (useTime == 1)
+                    world.playSound(null, player.getPosition(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE, SoundCategory.PLAYERS, 3.0f, 1.0f);
+                if (useTime >= 200 && useTime % 20 == 0)
+                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 3.0f);
+            }
+
+        }
+    }
+
+    //使用时间
+    public int getUseTime(int count){
+        return getUseDuration(new ItemStack(this)) - count;
+    }
+
+    /**
+     * 根据使用时间获取粒子圆数量 max 4
+     * @param time 使用时间
+     * @return 数量
+     */
+    public int getCircleNumFormBowUseTime(int time){
+        if (time > 0 && time<= 50) return 1;
+        else if (time > 50 && time <= 100) return 2;
+        else if (time > 100 && time <= 150) return 3;
+        else return 4;
+    }
+
+    /**
+     * 生成垂直于玩家视线的粒子圆
+     * @param player 玩家
+     * @param world 世界
+     * @param radius 粒子圆半径
+     * @param num 粒子生成数量
+     * @param dis 粒子生成与玩家距离
+     */
+    public void spawnCircleParticle(PlayerEntity player, World world, double radius, int num, double dis, int j){
+        Vector3d lookDirection = player.getLook(1.0F).normalize();
+
+        // 计算垂直于视线方向的向量
+        Vector3d up = new Vector3d(0, 1, 0);
+        Vector3d right = lookDirection.crossProduct(up).normalize();
+        Vector3d upPerpendicular = lookDirection.crossProduct(right).normalize();
+
+        // 生成圆形粒子效果
+        for (int i = 0; i < num; i++) {
+            double angle = 2 * Math.PI / num * i; //角度
+            double xOffset = Math.cos(angle) * radius;
+            double zOffset = Math.sin(angle) * radius;
+
+            Vector3d particlePosition = player.getEyePosition(1.0f).add(lookDirection.scale(dis)).add(right.scale(xOffset)).add(upPerpendicular.scale(zOffset));
+
+            // 添加粒子
+            if (j == 1)
+                world.addParticle(ParticleTypes.FLAME, particlePosition.x, particlePosition.y, particlePosition.z, 0, 0, 0);
+            else if (j == 2)
+                world.addParticle(ParticleTypes.DRAGON_BREATH, particlePosition.x, particlePosition.y, particlePosition.z, 0, 0, 0);
+            else if (j == 3)
+                world.addParticle(ParticleTypes.HAPPY_VILLAGER, particlePosition.x, particlePosition.y, particlePosition.z, 0, 0, 0);
+            else if (j == 4)
+                world.addParticle(ParticleTypes.CRIT, particlePosition.x, particlePosition.y, particlePosition.z, 0, 0, 0);
+        }
+    }
+
+    @Override
+    public void onPlayerStoppedUsing(ItemStack bow, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entityLiving;
-            int max = getUseDuration(stack); //总使用时间
+            int max = getUseDuration(bow); //总使用时间
             float velocity = BowItem.getArrowVelocity(max - timeLeft); //速度
             velocity = Math.max(velocity, 1.0f);
             ItemStack itemStack = findArrow(player);
@@ -70,8 +167,14 @@ public class InfinityBow extends BowItem {
                 AbstractArrowEntity arrow;
                 if (!itemStack.isEmpty()) {
                     if (itemStack.getItem() == EndlessItems.infinityArrow.get()) { //无尽箭矢
-                        arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, true);
-                        arrow.setPierceLevel((byte) 3);
+                        CompoundNBT nbt = bow.getOrCreateTag();
+                        boolean flag = nbt.getBoolean("InfinityBow");
+                        if (flag && getUseTime(timeLeft) >= 200){
+                            arrow = new InfinitySuperArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, getUseTime(timeLeft));
+                        }else {
+                            arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, true);
+                            arrow.setPierceLevel((byte) 3);
+                        }
                     } else {
                         arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, worldIn, itemStack); //普通箭矢
                         arrow.setPierceLevel((byte) 1);
@@ -79,11 +182,11 @@ public class InfinityBow extends BowItem {
                 } else { //无箭矢
                     ItemStack arrowStack = new ItemStack(Items.ARROW);
                     ArrowItem arrowitem = (ArrowItem)(arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
-                    arrow = arrowitem.createArrow(worldIn, stack, entityLiving);
+                    arrow = arrowitem.createArrow(worldIn, bow, entityLiving);
                     arrow.setDamage(Config.SERVER.noArrowDamage.get());
                 }
                 arrow.setDirectionAndMovement(player, player.rotationPitch, player.rotationYaw, 0, velocity * 3.0F, 1.0F);
-                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
+                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bow) > 0) {
                     arrow.setFire(100);
                 }
                 arrow.setIsCritical(true); //暴击粒子
