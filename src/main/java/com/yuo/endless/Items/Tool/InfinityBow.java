@@ -1,5 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
+import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Config;
 import com.yuo.endless.EndlessTab;
 import com.yuo.endless.Entity.*;
@@ -93,10 +94,10 @@ public class InfinityBow extends BowItem {
             }
 
             if (!world.isRemote) {
-                if (useTime == 1)
-                    world.playSound(null, player.getPosition(), SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE, SoundCategory.PLAYERS, 3.0f, 1.0f);
-                if (useTime >= 200 && useTime % 20 == 0)
-                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 3.0f);
+                if (useTime == 20) //蓄力
+                    world.playSound(null, player.getPosition(), ModSounds.INFINITY_BOW_STAR.get(), SoundCategory.NEUTRAL, 6.0f, 1.0f);
+                if (useTime == 200) //蓄力完成
+                    world.playSound(null, player.getPosition(), ModSounds.INFINITY_BOW_END.get(), SoundCategory.NEUTRAL, 1.0f, 1.0f);
             }
 
         }
@@ -163,14 +164,17 @@ public class InfinityBow extends BowItem {
             float velocity = BowItem.getArrowVelocity(max - timeLeft); //速度
             velocity = Math.max(velocity, 1.0f);
             ItemStack itemStack = findArrow(player);
+
+            CompoundNBT nbt = bow.getOrCreateTag();
+            boolean flag = nbt.getBoolean("InfinityBow");
+            int useTime = getUseTime(timeLeft);
+
             if (!worldIn.isRemote) {
                 AbstractArrowEntity arrow;
                 if (!itemStack.isEmpty()) {
                     if (itemStack.getItem() == EndlessItems.infinityArrow.get()) { //无尽箭矢
-                        CompoundNBT nbt = bow.getOrCreateTag();
-                        boolean flag = nbt.getBoolean("InfinityBow");
-                        if (flag && getUseTime(timeLeft) >= 200){
-                            arrow = new InfinitySuperArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, getUseTime(timeLeft));
+                        if (flag && useTime >= 200){
+                            arrow = new InfinitySuperArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, useTime);
                         }else {
                             arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, worldIn, true);
                             arrow.setPierceLevel((byte) 3);
@@ -195,7 +199,10 @@ public class InfinityBow extends BowItem {
                 arrow.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                 worldIn.addEntity(arrow);
             }
-            worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (worldIn.rand.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
+
+            if (flag && useTime >= 200)
+                worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), ModSounds.INFINITY_BOW_SHOOT.get(), SoundCategory.NEUTRAL, 2.0F, 3.0F + (float) Math.ceil((useTime - 200) / 100.0f)  * 0.5F);
+            else worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (worldIn.rand.nextFloat() * 0.4F + 1.2F) + velocity * 0.5F);
             if (!player.isCreative() && itemStack.getItem() instanceof ArrowItem){
                 itemStack.shrink(1);
             }
