@@ -127,8 +127,8 @@ public class InfinitySuperArrowEntity extends AbstractArrowEntity {
             Vector3d vector3d2 = this.getPositionVec();
             vector3d3 = vector3d2.add(vector3d);
             RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(vector3d2, vector3d3, BlockMode.COLLIDER, FluidMode.NONE, this));
-            if (((RayTraceResult)raytraceresult).getType() != Type.MISS) {
-                vector3d3 = ((RayTraceResult)raytraceresult).getHitVec();
+            if (raytraceresult.getType() != Type.MISS) {
+                vector3d3 = raytraceresult.getHitVec();
             }
 
             while(!this.removed) {
@@ -137,7 +137,7 @@ public class InfinitySuperArrowEntity extends AbstractArrowEntity {
                     raytraceresult = entityraytraceresult;
                 }
 
-                if (raytraceresult != null && ((RayTraceResult)raytraceresult).getType() == Type.ENTITY) {
+                if (raytraceresult != null && raytraceresult.getType() == Type.ENTITY) {
                     Entity entity = ((EntityRayTraceResult)raytraceresult).getEntity();
                     Entity entity1 = this.getShooter();
                     if (entity instanceof PlayerEntity && entity1 instanceof PlayerEntity && !((PlayerEntity)entity1).canAttackPlayer((PlayerEntity)entity)) {
@@ -182,10 +182,8 @@ public class InfinitySuperArrowEntity extends AbstractArrowEntity {
             this.rotationPitch = func_234614_e_(this.prevRotationPitch, this.rotationPitch);
             this.rotationYaw = func_234614_e_(this.prevRotationYaw, this.rotationYaw);
             float f2 = 0.99F;
-            float f3 = 0.05F;
             if (this.isInWater()) {
                 for(int j = 0; j < 4; ++j) {
-                    float f4 = 0.25F;
                     this.world.addParticle(ParticleTypes.BUBBLE, d5 - d3 * 0.25, d1 - d4 * 0.25, d2 - d0 * 0.25, d3, d4, d0);
                 }
 
