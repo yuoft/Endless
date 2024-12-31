@@ -66,7 +66,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
         Optional<NeutroniumRecipe> optional = world.getRecipeManager().getRecipe(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new Inventory(input), world);
         if (optional.isPresent()){
             stack = optional.get().getRecipeOutput();
-        }else stack = CompressorManager.getOutput(input); //获取此输入的输出
+        }else stack = CompressorManager.getOutput(input, world); //获取此输入的输出
         //判断输出 输出和已有输出不同 输出为空
         if ((!stack1.isEmpty() && !(stack1.getItem() == stack.getItem())) || stack.isEmpty()) return;
         //机器内有残留时
@@ -222,7 +222,7 @@ public class NeutroniumCompressorTile extends LockableTileEntity implements ITic
     public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
         if (index == 0 && direction != Direction.DOWN){
             if (this.items.get(2).isEmpty() || this.items.get(2).isItemEqual(itemStackIn))
-                return !CompressorManager.getOutput(itemStackIn).isEmpty();
+                return !CompressorManager.getOutput(itemStackIn, world).isEmpty();
         }
         return false;
     }

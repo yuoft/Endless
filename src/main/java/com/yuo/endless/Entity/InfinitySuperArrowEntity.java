@@ -122,7 +122,8 @@ public class InfinitySuperArrowEntity extends AbstractArrowEntity {
             }
 
             ++this.timeInGround;
-        } else {
+        }
+        else {
             this.timeInGround = 0;
             Vector3d vector3d2 = this.getPositionVec();
             vector3d3 = vector3d2.add(vector3d);

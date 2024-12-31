@@ -1,8 +1,10 @@
 package com.yuo.endless.Recipe;
 
+import com.yuo.endless.Endless;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,7 +83,25 @@ public class CompressorManager {
     }
 
     //获取输出
-    public static ItemStack getOutput(ItemStack input) {
+    public static ItemStack getOutput(ItemStack input, World world) {
+        ItemStack jsonRecipe = JsonRecipe(input, world);
+        ItemStack modRecipe = ModRecipe(input);
+        if (Endless.isKubeJs && !jsonRecipe.isEmpty()) return jsonRecipe;
+        else return modRecipe;
+    }
+
+    //json 配方
+    private static ItemStack JsonRecipe(ItemStack input, World world){
+        for (NeutroniumRecipe recipe : world.getRecipeManager().getRecipesForType(RecipeTypeRegistry.NEUTRONIUM_RECIPE)) {
+            if (recipe.isInput(input))
+                return recipe.getRecipeOutput();
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    //硬编码配方
+    private static ItemStack ModRecipe(ItemStack input){
         for (NeutroniumRecipe recipe : recipes) {
             if (recipe.isInput(input)) //输入相同
                 return recipe.getRecipeOutput();

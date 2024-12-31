@@ -17,6 +17,6 @@ public class NiumCSlot extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return !CompressorManager.getOutput(stack).isEmpty() || this.world.getRecipeManager().getRecipe(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new Inventory(stack), this.world).isPresent();
+        return !CompressorManager.getOutput(stack, world).isEmpty() || this.world.getRecipeManager().getRecipe(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new Inventory(stack), this.world).isPresent();
     }
 }

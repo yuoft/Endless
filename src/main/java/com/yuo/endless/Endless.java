@@ -104,6 +104,7 @@ public class Endless {
     public static boolean isIronFurnaces = false; //更多熔炉
     public static boolean isCA = false; //混沌觉醒
     public static boolean isCurios = false; //饰品栏
+    public static boolean isKubeJs = false; //kuj
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 	public Endless() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SERVER_CONFIG); //配置文件
@@ -252,6 +253,7 @@ public class Endless {
         isIronFurnaces = checkMod("ironfurnaces");
         isCA = checkMod("chaosawakens");
         isCurios = checkMod("curios");
+        isKubeJs = checkMod("kubejs");
     }
 
     /**

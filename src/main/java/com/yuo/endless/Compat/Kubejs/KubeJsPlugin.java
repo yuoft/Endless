@@ -22,4 +22,5 @@ public class KubeJsPlugin extends KubeJSPlugin {
         event.register(ExtremeCraftShapeRecipe.TYPE_ID, ExtremeShapeCraftJs::new);
         event.register(NeutroniumRecipe.TYPE_ID, CompressorJs::new);
     }
+
 }
