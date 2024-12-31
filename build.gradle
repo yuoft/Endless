@@ -232,7 +232,7 @@ jar {
         attributes([
             "Specification-Title": "endless",
             "Specification-Vendor": "yuoft",
-            "Specification-Version": "1.5.6", // We are version 1 of ourselves
+            "Specification-Version": "1.5.8", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"yuoft",
