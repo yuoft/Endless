@@ -6,7 +6,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -169,7 +171,7 @@ public class MatterCluster extends Item {
             if (Screen.hasShiftDown()) { //在物品上按下shift键
                 for (Tag inbt : matterCluster) {
                     CompoundTag nbt = (CompoundTag) inbt;
-                    ItemStack read = ItemStack.of(nbt);
+                    ItemStack read = ItemStack.of(nbt.getCompound("item"));
                     int count = nbt.getInt("count");
 
                     components.add(new TextComponent(read.getItem().getRarity(read).color + read.getDisplayName().getString() + ChatFormatting.GRAY + " x " + count));
@@ -191,7 +193,7 @@ public class MatterCluster extends Item {
 
         for (ItemStack key : map.keySet()) { //遍历所有键
             CompoundTag nbt = new CompoundTag();
-            key.deserializeNBT(nbt);
+            nbt.put("item", key.serializeNBT());
             nbt.putInt("count", map.get(key));
             listNBT.add(nbt);
         }
@@ -215,7 +217,7 @@ public class MatterCluster extends Item {
             if (matterCluster != null){
                 for (Tag inbt : matterCluster) {
                     CompoundTag nbt = (CompoundTag) inbt;
-                    data.put(ItemStack.of(nbt), nbt.getInt("count"));
+                    data.put(ItemStack.of(nbt.getCompound("item")), nbt.getInt("count"));
                 }
             }
         }

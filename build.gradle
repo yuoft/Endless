@@ -209,9 +209,11 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:applied-energistics-2-${ae2_id}:${ae2_ver}")
     runtimeOnly fg.deobf("curse.maven:cofh-core-${cofh_id}:${cofh_ver}")
     runtimeOnly fg.deobf("curse.maven:thermal-foundation-${thermal_id}:${thermal_ver}")
+
 //    runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:${registrate_ver}")
 //    runtimeOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_ver}:${flywheel_ver}")
 //    runtimeOnly fg.deobf("com.simibubi.create:create-${mc_ver}:${create_ver}:slim")
+
     runtimeOnly fg.deobf("curse.maven:slashblade-${sb_id}:${sb_ver}")
     runtimeOnly fg.deobf("curse.maven:cucumber-${cucumber_id}:${cucumber_ver}")
     runtimeOnly fg.deobf("curse.maven:mystical-agriculture-${ma_id}:${ma_ver}")

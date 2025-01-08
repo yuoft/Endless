@@ -12,12 +12,12 @@ public class EndlessItemEntity extends ItemEntity {
     public EndlessItemEntity(Level world, Entity entity, ItemStack stack){
         this(world, entity.getX(), entity.getY(), entity.getZ(), stack);
         this.setDeltaMovement(entity.getDeltaMovement()); // 设置方向
-        this.setOwner(entity.getUUID()); // 丢弃者
+//        this.setOwner(entity.getUUID()); // 丢弃者
     }
 
     public EndlessItemEntity(Level worldIn, double x, double y, double z, ItemStack stack) {
         super(worldIn, x, y, z, stack);
-//        this.setPickUpDelay(1);
+        this.setPickUpDelay(5);
         this.lifespan = 3600; //物品消失时间减少2分钟
     }
 

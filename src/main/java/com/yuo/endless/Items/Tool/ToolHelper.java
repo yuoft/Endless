@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
@@ -124,12 +125,16 @@ public class ToolHelper {
         BlockPos pos = new BlockPos(x, y, z);
         BlockState state = world.getBlockState(pos);
         if (stack.getItem() == EndlessItems.infinityAxe.get() && Config.SERVER.isAxeChangeGrassBlock.get() && state.getBlock() instanceof GrassBlock){ //将草方块转变为泥土
-            world.setBlock(pos, Blocks.DIRT.defaultBlockState(),2);
+            world.setBlockAndUpdate(pos, Blocks.DIRT.defaultBlockState());
         }
         //排除空气方块和不能用镐挖掘方块 挖掘等级不够
-        if (state.isAir() || stack.isCorrectToolForDrops(state)){
+        if (state.isAir()){
             return;
         }
+
+        if (!stack.isCorrectToolForDrops(state)  //采集树叶
+                && !(stack.getItem() == EndlessItems.infinityAxe.get() && state.getBlock() instanceof LeavesBlock)) return;
+
         if (stack.getItem() == EndlessItems.infinityPickaxe.get() && !MATERIAL_PICKAXE.contains(state.getMaterial())) return;
         if (stack.getItem() == EndlessItems.infinityShovel.get() && !MATERIAL_SHOVEL.contains(state.getMaterial())) return;
         if (stack.getItem() == EndlessItems.infinityAxe.get() && !MATERIAL_AXE.contains(state.getMaterial())) return;
