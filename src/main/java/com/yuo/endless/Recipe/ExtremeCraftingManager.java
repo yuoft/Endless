@@ -4,10 +4,12 @@ import com.yuo.endless.Container.ExtremeCraftInventory;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.*;
@@ -31,7 +33,7 @@ public class ExtremeCraftingManager {
         Iterator<ExtremeCraftRecipe> iterator = this.recipes.iterator();
         while (iterator.hasNext()){
             ExtremeCraftRecipe next = iterator.next();
-            if (next.hasOutput(recipe.getRecipeOutput()) && next.getIngredients().containsAll(recipe.getIngredients())){
+            if (next.hasOutput(recipe.getResultItem()) && next.getIngredients().containsAll(recipe.getIngredients())){
                 iterator.remove();
                 return;
             }
@@ -61,7 +63,7 @@ public class ExtremeCraftingManager {
         while (iterator.hasNext()){
             ExtremeCraftRecipe recipe = iterator.next();
             for (ExtremeCraftRecipe craftRecipe : recipeList) {
-                if (recipe.hasOutput(craftRecipe.getRecipeOutput())){
+                if (recipe.hasOutput(craftRecipe.getResultItem())){
                     iterator.remove();
                 }
             }
@@ -130,15 +132,15 @@ public class ExtremeCraftingManager {
             Ingredient ingredient;
 
             if (recipe[i + 1] instanceof Item) {
-                ingredient = Ingredient.fromStacks(new ItemStack((Item) recipe[i + 1]));
+                ingredient = Ingredient.of(new ItemStack((Item) recipe[i + 1]));
             } else if (recipe[i + 1] instanceof Block) {
-                ingredient = Ingredient.fromStacks(new ItemStack((Block) recipe[i + 1]));
+                ingredient = Ingredient.of(new ItemStack((Block) recipe[i + 1]));
             } else if (recipe[i + 1] instanceof ItemStack) {
-                ingredient = Ingredient.fromStacks((ItemStack) recipe[i + 1]);
+                ingredient = Ingredient.of((ItemStack) recipe[i + 1]);
             } else if (result.getItem() == EndlessItems.infinityBow.get()){
-                ingredient = Ingredient.fromStacks(getStackList(0).stream());
+                ingredient = Ingredient.of(getStackList(0).stream());
             } else if (result.getItem() == EndlessItems.skullfireSword.get()){
-                ingredient = Ingredient.fromStacks(getStackList(1).stream());
+                ingredient = Ingredient.of(getStackList(1).stream());
             } else ingredient = Ingredient.EMPTY;
 
             hashmap.put(character, ingredient);
@@ -236,7 +238,7 @@ public class ExtremeCraftingManager {
     private NonNullList<Ingredient> getList(List<ItemStack> arrayList){
         NonNullList<Ingredient> ingredients = NonNullList.create();
         for (ItemStack stack : arrayList) {
-            ingredients.add(Ingredient.fromStacks(stack));
+            ingredients.add(Ingredient.of(stack));
         }
         return ingredients;
     }
@@ -258,7 +260,7 @@ public class ExtremeCraftingManager {
     public ItemStack getRecipeOutPut(ExtremeCraftInventory inventory, Level world){
         for (ExtremeCraftRecipe recipe : this.recipes) {
             if (recipe.checkRecipe(inventory, world)){
-                return recipe.getRecipeOutput();
+                return recipe.getResultItem();
             }
         }
 
@@ -271,14 +273,14 @@ public class ExtremeCraftingManager {
      * @param world 世界
      * @return 物品列表
      */
-    public NonNullList<ItemStack> getRecipeShirkItem(ExtremeCraftInventory inventory, World world){
+    public NonNullList<ItemStack> getRecipeShirkItem(ExtremeCraftInventory inventory, Level world){
         for (ExtremeCraftRecipe recipe : this.recipes) {
             if (recipe.checkRecipe(inventory, world)){
                 return recipe.getRemainingItems(inventory);
             }
         }
 
-        return NonNullList.withSize(inventory.getSizeInventory(), ItemStack.EMPTY);
+        return NonNullList.withSize(inventory.getContainerSize(), ItemStack.EMPTY);
     }
 
     /**

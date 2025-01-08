@@ -6,13 +6,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -30,7 +36,7 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return Registry.RECIPE_TYPE.getOptional(TYPE_SHAPE_ID).get();
     }
 
@@ -46,51 +52,50 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
         }
     }
     //配方序列器
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExtremeCraftShapeRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ExtremeCraftShapeRecipe>{
+
         @Override
-        public ExtremeCraftShapeRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
-            String s = JSONUtils.getString(json, "type", "");
+        public ExtremeCraftShapeRecipe fromJson(ResourceLocation resourceLocation, JsonObject json) {
+            String s = GsonHelper.getAsString(json, "type", "");
             if (!"endless:extreme_craft_shape".equals(s))
                 throw new JsonParseException("Type error!");
-            NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+            NonNullList<Ingredient> nonnulllist = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
             } else if (nonnulllist.size() > 81) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is 81");
             } else {
-                ItemStack result = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
-                return new ExtremeCraftShapeRecipe(recipeId, nonnulllist, result);
+                ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+                return new ExtremeCraftShapeRecipe(resourceLocation, nonnulllist, result);
             }
         }
 
-        @Nullable
+        @org.jetbrains.annotations.Nullable
         @Override
-        public ExtremeCraftShapeRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public ExtremeCraftShapeRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(buffer.readInt(), Ingredient.EMPTY);
 
-            for(int k = 0; k < nonnulllist.size(); ++k) {
-                nonnulllist.set(k, Ingredient.read(buffer));
-            }
+            nonnulllist.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
-            ItemStack result = buffer.readItemStack();
-            return new ExtremeCraftShapeRecipe(recipeId, nonnulllist, result);
+            ItemStack result = buffer.readItem();
+            return new ExtremeCraftShapeRecipe(resourceLocation, nonnulllist, result);
         }
 
         @Override
-        public void write(PacketBuffer buffer, ExtremeCraftShapeRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, ExtremeCraftShapeRecipe recipe) {
             buffer.writeInt(recipe.items.size());
             for(Ingredient ingredient : recipe.items) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
-            buffer.writeItemStack(recipe.result);
+            buffer.writeItemStack(recipe.result, true);
         }
     }
 
     @Override
-    public boolean matches(IInventory iInventory, World world) {
+    public boolean matches(Container iInventory, Level world) {
         ArrayList<ItemStack> stacks = new ArrayList<>(); //输入的物品
-        for (int slot = 0; slot < iInventory.getSizeInventory(); slot++) {
-            ItemStack stack = iInventory.getStackInSlot(slot);
+        for (int slot = 0; slot < iInventory.getContainerSize(); slot++) {
+            ItemStack stack = iInventory.getItem(slot);
             if (!stack.isEmpty()) { stacks.add(stack); }
         }
 
@@ -119,13 +124,13 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory iInventory) {
+    public ItemStack getResultItem() {
         return this.result.copy();
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
-        return this.result;
+    public ItemStack assemble(Container container) {
+        return this.getResultItem().copy();
     }
 
     @Override
@@ -134,12 +139,12 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
-        return this.getSerializer();
+    public RecipeSerializer<?> getSerializer() {
+        return RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_SERIALIZER.get();
     }
 
     public boolean hasOutput(ItemStack stack){
-        return result.isItemEqual(stack);
+        return result.equals(stack, false);
     }
 
     //追加输入
@@ -155,10 +160,10 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
             String asString = ((JsonObject) element).get("item").getAsString();
             if ("endless:singularity".equals(asString)){ //获取奇点
                 ItemStack stack = CraftingHelper.getItemStack((JsonObject) element, true);
-                nonnulllist.add(Ingredient.fromStacks(stack));
+                nonnulllist.add(Ingredient.of(stack));
             }else {
                 Ingredient ingredient = CraftingHelper.getIngredient(element);
-                if (!ingredient.hasNoMatchingItems()) {
+                if (!ingredient.isEmpty()) {
                     nonnulllist.add(ingredient);
                 }
             }

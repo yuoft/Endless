@@ -1,18 +1,18 @@
 package com.yuo.endless.Compat.Crt;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftShpaelessManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.openzen.zencode.java.ZenCodeType;
 
 @ZenCodeType.Name("mods.endless.ExtremeCraftShapeRecipe")
@@ -54,14 +54,14 @@ public class ExtremeCraftShapeCrt {
     }
 
     public static void addStack(NonNullList<Ingredient> ingredients, Ingredient ingredient) {
-        ItemStack[] matchingStacks = ingredient.getMatchingStacks();
+        ItemStack[] matchingStacks = ingredient.getItems();
         for (int i = 0; i < matchingStacks.length; i++) {
             ItemStack stack = matchingStacks[i];
             if (stack.getItem() instanceof Singularity) {
                 matchingStacks[i] = Singularity.getSingularity(stack.getOrCreateTag().getString(Singularity.NBT_TYPE));
             }
         }
-        ingredients.add(Ingredient.fromStacks(matchingStacks));
+        ingredients.add(Ingredient.of(matchingStacks));
     }
 
     @ZenCodeType.Method

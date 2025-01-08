@@ -23,7 +23,7 @@ public class CrystalMatrixArmor extends ArmorItem {
 
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = stack.getItem().getAttributeModifiers(slot, stack);
+        Multimap<Attribute, AttributeModifier> multimap = getDefaultAttributeModifiers(slot);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         Item item = stack.getItem();

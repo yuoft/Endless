@@ -32,7 +32,7 @@ public class SoundEvent {
             if (then != null) {
                 long ms = (now.getTime()-then.getTime());
                 if (ms < 10) {
-                    event.setResultSound(null);
+                    event.setSound(null);
                 }
             }
         }

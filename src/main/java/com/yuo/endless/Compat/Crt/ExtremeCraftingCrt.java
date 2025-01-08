@@ -1,17 +1,17 @@
 package com.yuo.endless.Compat.Crt;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.openzen.zencode.java.ZenCodeType;
 
 @ZenCodeType.Name("mods.endless.ExtremeCraftRecipe")
@@ -79,11 +79,11 @@ public class ExtremeCraftingCrt {
         if (stack == null) {
             return false;
         } else {
-            ingredient.determineMatchingStacks();
-            if (ingredient.getMatchingStacks().length == 0) {
+            ingredient.checkInvalidation();
+            if (ingredient.getItems().length == 0) {
                 return stack.isEmpty();
             } else {
-                for(ItemStack itemstack : ingredient.getMatchingStacks()) {
+                for(ItemStack itemstack : ingredient.getItems()) {
                     if (itemstack.getItem() == stack.getItem()) {
                         return true;
                     }

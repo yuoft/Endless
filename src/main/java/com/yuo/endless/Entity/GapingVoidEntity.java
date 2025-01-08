@@ -1,50 +1,50 @@
 package com.yuo.endless.Entity;
 
-import com.google.common.base.Predicate;
 import com.mojang.authlib.GameProfile;
 import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Config;
 import com.yuo.endless.Event.EventHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion.BlockInteraction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 //黑洞实体
 public class GapingVoidEntity extends Entity {
     private final GameProfile FAKE = new GameProfile(UUID.fromString("32283731-bbef-487c-bb69-c7e32f84ed27"), "[Endless]");
 
-    public static final DataParameter<Integer> AGE_PARAMETER = EntityDataManager.createKey(GapingVoidEntity.class, DataSerializers.VARINT);
+    public static final EntityDataAccessor<Integer> AGE_PARAMETER = SynchedEntityData.defineId(GapingVoidEntity.class, EntityDataSerializers.INT);
     public static final int maxLifetime = 186; //存在时间
     public static double collapse = 0.95; //坍塌系数 膨胀速度
     public static double suckRange = Config.SERVER.endestPearlSuckRange.get(); //引力范围
@@ -52,29 +52,30 @@ public class GapingVoidEntity extends Entity {
     private static final int oneDamage = Config.SERVER.endestPearlOneDamage.get(); //单次吸引伤害
     private FakePlayer fakePlayer; //模拟玩家
     private LivingEntity useEntity;
-    public GapingVoidEntity(EntityType<?> entityTypeIn, World worldIn) {
+    public GapingVoidEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
-        this.isImmuneToFire();
-        ignoreFrustumCheck = true;
-        if (world instanceof ServerWorld) {
-            fakePlayer = FakePlayerFactory.get((ServerWorld) world, FAKE);
+        this.fireImmune();
+//        ignoreFrustumCheck = true;
+        noCulling = true;
+        if (worldIn instanceof ServerLevel) {
+            fakePlayer = FakePlayerFactory.get((ServerLevel) worldIn, FAKE);
         }
     }
-    public GapingVoidEntity(EntityType<?> entityTypeIn,LivingEntity living ,World worldIn) {
+    public GapingVoidEntity(EntityType<?> entityTypeIn,LivingEntity living ,Level worldIn) {
         super(entityTypeIn, worldIn);
-        this.isImmuneToFire();
-        ignoreFrustumCheck = true;
-        if (world instanceof ServerWorld) {
-            fakePlayer = FakePlayerFactory.get((ServerWorld) world, FAKE);
+        this.fireImmune();
+//        ignoreFrustumCheck = true;
+        noCulling = true;
+        if (worldIn instanceof ServerLevel) {
+            fakePlayer = FakePlayerFactory.get((ServerLevel) worldIn, FAKE);
         }
         this.useEntity = living;
     }
 
     //玩家是未飞行的创造模式
     public static final Predicate<Entity> SUCK_PREDICATE = input -> {
-        if (input instanceof PlayerEntity) {
-            PlayerEntity p = (PlayerEntity) input;
-            return !p.abilities.isCreativeMode || !p.abilities.isFlying;
+        if (input instanceof Player p) {
+            return !p.isCreative() || !p.getAbilities().flying;
         }
         return true;
     };
@@ -85,74 +86,70 @@ public class GapingVoidEntity extends Entity {
             return false;
         }
 
-        if (input instanceof PlayerEntity) {
-            PlayerEntity p = (PlayerEntity) input;
-            return !p.abilities.isCreativeMode;
+        if (input instanceof Player p) {
+            return !p.isCreative();
         }
         return true;
     };
 
-    @Override
-    protected void registerData() {
-        dataManager.register(AGE_PARAMETER, 0); //注册实体年龄数据
+    protected void defineSynchedData() {
+        this.entityData.define(AGE_PARAMETER, 0);//注册实体年龄数据
     }
 
     @Override
-    protected void readAdditional(CompoundNBT compound) {
+    protected void readAdditionalSaveData(CompoundTag compound) {
         setAge(compound.getInt("age"));
-        if (world instanceof ServerWorld) {
-            fakePlayer = FakePlayerFactory.get((ServerWorld) world, FAKE);
+        if (level instanceof ServerLevel) {
+            fakePlayer = FakePlayerFactory.get((ServerLevel) level, FAKE);
         }
     }
 
     @Override
-    protected void writeAdditional(CompoundNBT compound) {
+    protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("age", getAge());
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     private void setAge(int age) {
-        dataManager.set(AGE_PARAMETER, age);
+        entityData.set(AGE_PARAMETER, age);
     }
 
     public int getAge() {
-        return dataManager.get(AGE_PARAMETER);
+        return entityData.get(AGE_PARAMETER);
     }
 
     @Override
     public void tick() {
-        double posX = this.getPosX();
-        double posY = this.getPosY();
-        double posZ = this.getPosZ();
-        BlockPos position = this.getPosition();
+        double posX = this.getX();
+        double posY = this.getY();
+        double posZ = this.getZ();
+        BlockPos position = this.getOnPos();
         int age = getAge();
 
-        if (age >= maxLifetime && !world.isRemote) { //死亡时发生爆炸
-            world.createExplosion(this, posX, posY, posZ, 6.0f, true, Explosion.Mode.BREAK);
+        if (age >= maxLifetime && !level.isClientSide) { //死亡时发生爆炸
+            level.explode(this, posX, posY, posZ, 6.0f, true, BlockInteraction.BREAK);
             double range = 4;
-            AxisAlignedBB axisAlignedBB = new AxisAlignedBB(position.add(-range, -range, -range), position.add(range,range,range));
-            List<Entity> nommed = world.getEntitiesWithinAABB(LivingEntity.class, axisAlignedBB, OMNOM_PREDICATE);
+            AABB axisAlignedBB = new AABB(position.offset(-range, -range, -range), position.offset(range,range,range));
+            List<LivingEntity> nommed = level.getEntitiesOfClass(LivingEntity.class, axisAlignedBB, OMNOM_PREDICATE);
             //最后给予生物高额伤害
             for (Entity nommee : nommed) {
                 if (nommee != this) {
-                    if (nommee instanceof EnderDragonEntity){
-                        EnderDragonEntity dragon = (EnderDragonEntity) nommee;
-                        dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.causeExplosionDamage(useEntity), endDamage);
-                    }else if (nommee instanceof WitherEntity){
-                        WitherEntity wither = (WitherEntity) nommee;
-                        wither.setInvulTime(0);
-                        wither.attackEntityFrom(DamageSource.causeExplosionDamage(useEntity), endDamage);
-                    } else nommee.attackEntityFrom(DamageSource.causeExplosionDamage(useEntity), endDamage);
+                    if (nommee instanceof EnderDragon dragon){
+                        dragon.hurt(dragon.head, DamageSource.explosion(useEntity), endDamage);
+                    }else if (nommee instanceof WitherBoss wither){
+                        wither.setInvulnerableTicks(0);
+                        wither.hurt(DamageSource.explosion(useEntity), endDamage);
+                    } else nommee.hurt(DamageSource.explosion(useEntity), endDamage);
                 }
             }
-            setDead();
+            discard();
         } else {
             if (age == 0) { //生成实体时播放音效
-                world.playSound( null, position, ModSounds.GAPING_VOID.get(), SoundCategory.HOSTILE, 8.0F, 1.0F);
+                level.playSound( null, position, ModSounds.GAPING_VOID.get(), SoundSource.HOSTILE, 8.0F, 1.0F);
             }
             setAge(age + 1); //年龄增加
         }
@@ -160,26 +157,26 @@ public class GapingVoidEntity extends Entity {
         if (age < maxLifetime - 20 && age % 5 == 0){
             //生成粒子
             for (int i = 0; i < 50; i++){
-                world.addParticle(ParticleTypes.PORTAL, position.getX(), position.getY(), position.getZ(), rand.nextGaussian() * 3,
-                        rand.nextGaussian() * 3, rand.nextGaussian() * 3);
+                level.addParticle(ParticleTypes.PORTAL, position.getX(), position.getY(), position.getZ(), random.nextGaussian() * 3,
+                        random.nextGaussian() * 3, random.nextGaussian() * 3);
             }
         }
 
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
         if (fakePlayer == null) {
-            setDead();
+            discard();
             return;
         }
 
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(position.add(-suckRange, -suckRange, -suckRange), position.add(suckRange,suckRange,suckRange));
-        List<Entity> sucked = world.getEntitiesWithinAABB(Entity.class, axisAlignedBB, SUCK_PREDICATE); //获取引力范围内所以实体
+        AABB axisAlignedBB = new AABB(position.offset(-suckRange, -suckRange, -suckRange), position.offset(suckRange,suckRange,suckRange));
+        List<Entity> sucked = level.getEntitiesOfClass(Entity.class, axisAlignedBB, SUCK_PREDICATE); //获取引力范围内所以实体
 
         double radius = getVoidScale(age) * 0.5; //引力系数
         for (Entity suckee : sucked) { //将所以实体吸引到此实体处
             if (suckee != this) {
-                double dist = getDist(suckee.getPosition(), position); //距离
+                double dist = getDist(suckee.getOnPos(), position); //距离
                 if (dist <= suckRange)
                     setEntityMotionFromVector(suckee, position, radius * 0.075d);
             }
@@ -187,21 +184,19 @@ public class GapingVoidEntity extends Entity {
 
         double nomRange = radius * 0.95;
         if (age % 5 == 0){ //每5tick攻击一次 一秒4次
-            AxisAlignedBB alignedBB = new AxisAlignedBB(position.add(-nomRange, -nomRange, -nomRange), position.add(nomRange,nomRange,nomRange));
-            List<LivingEntity> livings = world.getEntitiesWithinAABB(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
+            AABB alignedBB = new AABB(position.offset(-nomRange, -nomRange, -nomRange), position.offset(nomRange,nomRange,nomRange));
+            List<LivingEntity> livings = level.getEntitiesOfClass(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
             //给所以被吸引到近处的实体掉出世界伤害
             for (LivingEntity living : livings) {
-                double len = getDist(living.getPosition(), position); //与黑洞中心距离
+                double len = getDist(living.getOnPos(), position); //与黑洞中心距离
                 if (len <= nomRange) {
-                    if (living instanceof EnderDragonEntity){
-                        EnderDragonEntity dragon = (EnderDragonEntity) living;
-                        dragon.attackEntityPartFrom(dragon.dragonPartHead, DamageSource.OUT_OF_WORLD, oneDamage);
+                    if (living instanceof EnderDragon dragon){
+                        dragon.hurt(dragon.head, DamageSource.OUT_OF_WORLD, oneDamage);
                     }
-                    else living.attackEntityFrom(DamageSource.OUT_OF_WORLD, oneDamage);
+                    else living.hurt(DamageSource.OUT_OF_WORLD, oneDamage);
 
-                    if (age % 40 == 0 && living instanceof PlayerEntity){
-                        PlayerEntity player = (PlayerEntity) living;
-                        player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 40, 9));
+                    if (age % 40 == 0 && living instanceof Player player){
+                        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 9));
                     }
                 }
             }
@@ -209,32 +204,32 @@ public class GapingVoidEntity extends Entity {
 
         //给予内部玩家失明buff
         if (age % 20 == 0){
-            AxisAlignedBB alignedBB = new AxisAlignedBB(position.add(-nomRange, -nomRange, -nomRange), position.add(nomRange,nomRange,nomRange));
-            List<LivingEntity> livings = world.getEntitiesWithinAABB(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
+            AABB alignedBB = new AABB(position.offset(-nomRange, -nomRange, -nomRange), position.offset(nomRange,nomRange,nomRange));
+            List<LivingEntity> livings = level.getEntitiesOfClass(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
 
         }
 
         // 每半秒破坏一次方块
         if (age % 10 == 0) {
             int blockRange = Math.round(getVoidScale(age)); //破坏半径
-            Iterable<BlockPos> boxMutable = BlockPos.getAllInBoxMutable(position.add(-blockRange, -blockRange, -blockRange), position.add(blockRange, blockRange, blockRange));
+            Iterable<BlockPos> boxMutable = BlockPos.betweenClosed(position.offset(-blockRange, -blockRange, -blockRange), position.offset(blockRange, blockRange, blockRange));
             for (BlockPos pos : boxMutable) {
                 if (pos.getY() < 0 || pos.getY() > 255) { //0层以下或255以上，不破坏
                     continue;
                 }
                 double dist = getDist(pos, position);
-                if (dist <= blockRange && !world.isAirBlock(pos)) {
-                    BlockState state = world.getBlockState(pos);
-                    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fakePlayer);
+                if (dist <= blockRange && !level.getBlockState(pos).isAir()) {
+                    BlockState state = level.getBlockState(pos);
+                    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(level, pos, state, fakePlayer);
                     MinecraftForge.EVENT_BUS.post(event);
                     if (!event.isCanceled()) {
-                        float hardness = state.getBlockHardness(world, pos);
+                        float hardness = state.getDestroySpeed(level, pos);
                         if (state.getMaterial().isLiquid()){ //流体删除
-                            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                             continue;
                         }
                         if (hardness <= 50.0 && hardness > 0) { //破坏硬度低于10点的方块
-                            world.destroyBlock(pos, false, useEntity );
+                            level.destroyBlock(pos, false, useEntity );
                         }
                     }
                 }
@@ -249,21 +244,20 @@ public class GapingVoidEntity extends Entity {
      * @param modifier 移动距离 负数为排斥
      */
     public static void setEntityMotionFromVector(Entity entity, BlockPos pos, double modifier) {
-        Vector3d originalPosVector = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
-        Vector3d finalVector = originalPosVector.subtract(entity.getPositionVec());
+        Vec3 originalPosVector = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+        Vec3 finalVector = originalPosVector.subtract(entity.position());
         if (finalVector.length() > 1) { //向量长度超过1
             finalVector.normalize(); //化为标准1单位
         }
         double motionX = finalVector.x * modifier;
         double motionY = finalVector.y * modifier;
         double motionZ = finalVector.z * modifier;
-        if (entity instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) entity;
-            if (player.isCreative() || EventHandler.isInfinite(player) || player.abilities.isFlying) return; //创造或全套无尽 不会被吸引
-            Vector3d vector3d = new Vector3d(motionX, motionY, motionZ).normalize();
-            player.addVelocity(vector3d.x, vector3d.y, vector3d.z);
+        if (entity instanceof Player player){
+            if (player.isCreative() || EventHandler.isInfinite(player) || player.getAbilities().flying) return; //创造或全套无尽 不会被吸引
+            Vec3 vector3d = new Vec3(motionX, motionY, motionZ).normalize();
+            player.push(vector3d.x, vector3d.y, vector3d.z);
         }
-        entity.setMotion(motionX, motionY, motionZ);
+        entity.setDeltaMovement(motionX, motionY, motionZ);
     }
 
     /**
@@ -273,7 +267,7 @@ public class GapingVoidEntity extends Entity {
      * @return 距离
      */
     public static double getDist(BlockPos pos, BlockPos blockPos){
-        return Math.sqrt(pos.distanceSq(blockPos.getX(), blockPos.getY(), blockPos.getZ(), true));
+        return Math.sqrt(pos.distToCenterSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
     }
 
     //通过年龄获取缩放大小（膨胀程度）
@@ -301,8 +295,7 @@ public class GapingVoidEntity extends Entity {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean isInRangeToRenderDist(double distance) { //在范围内才渲染
-        return true; //一直渲染
+    public boolean shouldRenderAtSqrDistance(double pDistance) {//在范围内才渲染
+        return true;//一直渲染
     }
-
 }

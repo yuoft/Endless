@@ -1,15 +1,17 @@
 package com.yuo.endless.Entity;
 
-import com.mojang.math.Vector3d;
 import com.yuo.endless.Config;
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -19,20 +21,21 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 //箭实体
 public class InfinityArrowSubEntity extends AbstractArrow {
     private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(InfinityArrowSubEntity.class, EntityDataSerializers.INT);
     private Potion potion = Potions.EMPTY;
-    private final Collection<MobEffectInstance> customPotionEffects = Collections.emptyList();
+    private Collection<MobEffectInstance> customPotionEffects;
     private boolean fixedColor;
     private boolean isLighting; //是否是光灵箭
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
@@ -69,8 +72,8 @@ public class InfinityArrowSubEntity extends AbstractArrow {
     }
 
     @Override
-    public void writeAdditional(@Nonnull CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
         compound.putDouble("damage", Config.SERVER.subArrowDamage.get());
         if (this.potion != Potions.EMPTY && this.potion != null) {
             compound.putString("Potion", Registry.POTION.getKey(this.potion).toString());
@@ -81,10 +84,10 @@ public class InfinityArrowSubEntity extends AbstractArrow {
         }
 
         if (!this.customPotionEffects.isEmpty()) {
-            ListNBT listnbt = new ListNBT();
+            ListTag listnbt = new ListTag();
 
-            for(EffectInstance effectinstance : this.customPotionEffects) {
-                listnbt.add(effectinstance.write(new CompoundNBT()));
+            for(MobEffectInstance instance : this.customPotionEffects) {
+                listnbt.add(instance.save(new CompoundTag()));
             }
 
             compound.put("CustomPotionEffects", listnbt);
@@ -92,15 +95,15 @@ public class InfinityArrowSubEntity extends AbstractArrow {
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
-        this.setDamage(compound.getDouble("damage"));
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setBaseDamage(compound.getDouble("damage"));
         if (compound.contains("Potion", 8)) {
-            this.potion = PotionUtils.getPotionTypeFromNBT(compound);
+            this.potion = PotionUtils.getPotion(compound);
         }
 
-        for(EffectInstance effectinstance : PotionUtils.getFullEffectsFromTag(compound)) {
-            this.addEffect(effectinstance);
+        for(MobEffectInstance instance : PotionUtils.getAllEffects(compound)) {
+            this.addEffect(instance);
         }
 
         if (compound.contains("Color", 99)) {
@@ -111,89 +114,89 @@ public class InfinityArrowSubEntity extends AbstractArrow {
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isRemote) {
+        if (this.level.isClientSide) {
             if (this.inGround) {
-                if (this.timeInGround % 5 == 0) {
+                if (this.inGroundTime % 5 == 0) {
                     this.spawnPotionParticles(1);
                 }
             } else {
                 this.spawnPotionParticles(2);
             }
-        } else if (this.inGround && this.timeInGround != 0 && !this.customPotionEffects.isEmpty() && this.timeInGround >= 600) {
-            this.world.setEntityState(this, (byte)0);
+        } else if (this.inGround && this.inGroundTime != 0 && !this.customPotionEffects.isEmpty() && this.inGroundTime >= 600) {
+            this.level.broadcastEntityEvent(this, (byte)0);
             this.potion = Potions.EMPTY;
             this.customPotionEffects.clear();
-            this.dataManager.set(COLOR, -1);
+            this.entityData.set(COLOR, -1);
         }
-        if (inGround && timeInGround >= 100){
-            setDead();
-        }else if (ticksExisted > 100) setDead();
+        if (inGround && inGroundTime >= 100){
+            discard();
+        }else if (tickCount > 100) discard();
 
-        if (ticksExisted % 4 == 0 && !this.world.isRemote){
-            BlockPos pos = this.getPosition();
+        if (tickCount % 4 == 0 && !this.level.isClientSide){
+            BlockPos pos = this.getOnPos();
             int distance = 32; //水平追踪距离
             int height = 16; //垂直
-            AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-distance, -height, -distance), pos.add(distance, height, distance));
-            List<LivingEntity> entityList = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb);
+            AABB aabb = new AABB(pos.offset(-distance, -height, -distance), pos.offset(distance, height, distance));
+            List<LivingEntity> entityList = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
             double dis = 1000;
             LivingEntity living = null;
             for (LivingEntity livingentity : entityList) {
-                if (getShooter() != null && livingentity == getShooter()) continue;
-                double sq = livingentity.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
+                if (getOwner() != null && livingentity == getOwner()) continue;
+                double sq = livingentity.distanceToSqr(pos.getX(), pos.getY(), pos.getZ());
                 if (sq < dis) {
                     dis = sq;
                     living = livingentity; //选定最近目标
                 }
             }
             if (living != null && living.isAlive()) {
-                Vector3d originalPosVector = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
-                Vector3d finalVector = originalPosVector.subtract(living.getPositionVec());
+                Vec3 originalPosVector = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+                Vec3 finalVector = originalPosVector.subtract(living.position());
                 if (finalVector.length() > 1) {
                     finalVector.normalize();
                 }
                 double motionX = finalVector.x * -2;
                 double motionY = finalVector.y * -2;
                 double motionZ = finalVector.z * -2;
-                this.setMotion(motionX, motionY, motionZ); //向目标飞行
+                this.setDeltaMovement(motionX, motionY, motionZ); //向目标飞行
             }
         }
     }
 
     @Override
-    protected void arrowHit(LivingEntity living) {
-        super.arrowHit(living);
-        for(EffectInstance effectinstance : this.potion.getEffects()) {
-            living.addPotionEffect(new EffectInstance(effectinstance.getPotion(), Math.max(effectinstance.getDuration() / 8, 1), effectinstance.getAmplifier(), effectinstance.isAmbient(), effectinstance.doesShowParticles()));
+    protected void doPostHurtEffects(LivingEntity living) {
+        super.doPostHurtEffects(living);
+        for(MobEffectInstance instance : this.potion.getEffects()) {
+            living.addEffect(new MobEffectInstance(instance.getEffect(), Math.max(instance.getDuration() / 8, 1), instance.getAmplifier(), instance.isAmbient(), instance.isVisible()));
         }
 
         if (!this.customPotionEffects.isEmpty()) {
-            for(EffectInstance effectInstance : this.customPotionEffects) {
-                living.addPotionEffect(effectInstance);
+            for(MobEffectInstance effectInstance : this.customPotionEffects) {
+                living.addEffect(effectInstance);
             }
         }
         if (isLighting)
-            living.addPotionEffect(new EffectInstance(Effects.GLOWING, 20 * 10, 0)); //10秒发光
+            living.addEffect(new MobEffectInstance(MobEffects.GLOWING, 20 * 10, 0)); //10秒发光
     }
 
     @Override
-    protected float getWaterDrag() {
+    protected float getWaterInertia() {
         return 0.99f;
     }
 
     public void setPotionEffect(ItemStack stack) {
         if (stack.getItem() == Items.TIPPED_ARROW) {
-            this.potion = PotionUtils.getPotionFromItem(stack);
-            Collection<EffectInstance> collection = PotionUtils.getFullEffectsFromItem(stack);
+            this.potion = PotionUtils.getPotion(stack);
+            List<MobEffectInstance> collection = PotionUtils.getCustomEffects(stack);
             if (!collection.isEmpty()) {
-                for(EffectInstance effectinstance : collection) {
-                    this.customPotionEffects.add(new EffectInstance(effectinstance));
+                for(MobEffectInstance instance : collection) {
+                    this.customPotionEffects.add(new MobEffectInstance(instance));
                 }
             }
 
@@ -206,34 +209,35 @@ public class InfinityArrowSubEntity extends AbstractArrow {
         } else if (stack.getItem() == Items.ARROW) {
             this.potion = Potions.EMPTY;
             this.customPotionEffects.clear();
-            this.dataManager.set(COLOR, -1);
+            this.entityData.set(COLOR, -1);
         }
 
     }
 
-    public static int getCustomColor(ItemStack p_191508_0_) {
-        CompoundNBT compoundnbt = p_191508_0_.getTag();
-        return compoundnbt != null && compoundnbt.contains("CustomPotionColor", 99) ? compoundnbt.getInt("CustomPotionColor") : -1;
+    public static int getCustomColor(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        return tag != null && tag.contains("CustomPotionColor", 99) ? tag.getInt("CustomPotionColor") : -1;
     }
 
     private void refreshColor() {
         this.fixedColor = false;
         if (this.potion == Potions.EMPTY && this.customPotionEffects.isEmpty()) {
-            this.dataManager.set(COLOR, -1);
+            this.entityData.set(COLOR, -1);
         } else {
-            this.dataManager.set(COLOR, PotionUtils.getPotionColorFromEffectList(PotionUtils.mergeEffects(this.potion, this.customPotionEffects)));
+            this.entityData.set(COLOR, PotionUtils.getColor(this.customPotionEffects));
         }
 
     }
 
-    public void addEffect(EffectInstance effect) {
+    public void addEffect(MobEffectInstance effect) {
         this.customPotionEffects.add(effect);
-        this.getDataManager().set(COLOR, PotionUtils.getPotionColorFromEffectList(PotionUtils.mergeEffects(this.potion, this.customPotionEffects)));
+        this.entityData.set(COLOR, PotionUtils.getColor(this.customPotionEffects));
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(COLOR, -1);
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(COLOR, -1);
     }
 
     private void spawnPotionParticles(int particleCount) {
@@ -244,23 +248,24 @@ public class InfinityArrowSubEntity extends AbstractArrow {
             double d2 = (double)(i & 255) / 255.0D;
 
             for(int j = 0; j < particleCount; ++j) {
-                this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getPosXRandom(0.5D), this.getPosYRandom(), this.getPosZRandom(0.5D), d0, d1, d2);
+                this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), d0, d1, d2);
             }
 
         }
     }
 
     public int getColor() {
-        return this.dataManager.get(COLOR);
+        return this.entityData.get(COLOR);
     }
 
-    private void setFixedColor(int p_191507_1_) {
+    private void setFixedColor(int i) {
         this.fixedColor = true;
-        this.dataManager.set(COLOR, p_191507_1_);
+        this.entityData.set(COLOR, i);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void handleStatusUpdate(byte id) {
+    @Override
+    public void handleEntityEvent(byte id) {
         if (id == 0) {
             int i = this.getColor();
             if (i != -1) {
@@ -269,11 +274,11 @@ public class InfinityArrowSubEntity extends AbstractArrow {
                 double d2 = (double)(i & 255) / 255.0D;
 
                 for(int j = 0; j < 20; ++j) {
-                    this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getPosXRandom(0.5D), this.getPosYRandom(), this.getPosZRandom(0.5D), d0, d1, d2);
+                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), d0, d1, d2);
                 }
             }
         } else {
-            super.handleStatusUpdate(id);
+            super.handleEntityEvent(id);
         }
 
     }

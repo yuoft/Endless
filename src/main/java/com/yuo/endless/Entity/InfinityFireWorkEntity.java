@@ -1,12 +1,22 @@
 package com.yuo.endless.Entity;
 
-import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ClipContext.Block;
+import net.minecraft.world.level.ClipContext.Fluid;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 
 public class InfinityFireWorkEntity extends FireworkRocketEntity {
     private final float damage;
@@ -22,70 +32,70 @@ public class InfinityFireWorkEntity extends FireworkRocketEntity {
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
-        super.onEntityHit(result);
-        if (!this.world.isRemote) {
-            this.world.setEntityState(this, (byte)17);
+    protected void onHitEntity(EntityHitResult result) {
+        super.onHitEntity(result);
+        if (!this.level.isClientSide) {
+            this.level.broadcastEntityEvent(this, (byte)17);
             this.dealExplosionDamage();
-            this.remove();
+            this.discard();
         }
     }
 
     @Override
-    protected void func_230299_a_(BlockRayTraceResult result) {
-        BlockPos blockpos = new BlockPos(result.getPos());
-        this.world.getBlockState(blockpos).onEntityCollision(this.world, blockpos, this);
-        if (!this.world.isRemote() && this.hasNbt()) {
-            this.world.setEntityState(this, (byte)17);
+    protected void onHitBlock(BlockHitResult result) {
+        BlockPos blockpos = new BlockPos(result.getBlockPos());
+        this.level.getBlockState(blockpos).entityInside(this.level, blockpos, this);
+        if (!this.level.isClientSide() && this.hasNbt()) {
+            this.level.broadcastEntityEvent(this, (byte)17);
             this.dealExplosionDamage();
-            this.remove();
+            this.discard();
         }
 
-        super.func_230299_a_(result);
+        super.onHitBlock(result);
     }
 
     //有无爆炸数据
     private boolean hasNbt() {
-        ItemStack itemstack = this.dataManager.get(FIREWORK_ITEM);
-        CompoundNBT compoundnbt = itemstack.isEmpty() ? null : itemstack.getChildTag("Fireworks");
-        ListNBT listnbt = compoundnbt != null ? compoundnbt.getList("Explosions", 10) : null;
-        return listnbt != null && !listnbt.isEmpty();
+        ItemStack itemstack = this.entityData.get(DATA_ID_FIREWORKS_ITEM);
+        CompoundTag tag = itemstack.isEmpty() ? null : itemstack.getTagElement("Fireworks");
+        ListTag tags = tag != null ? tag.getList("Explosions", 10) : null;
+        return tags != null && !tags.isEmpty();
     }
 
     //爆炸后攻击范围内生物
     private void dealExplosionDamage() {
         float f = 0.0F;
-        ItemStack itemstack = this.dataManager.get(FIREWORK_ITEM);
-        CompoundNBT compoundnbt = itemstack.isEmpty() ? null : itemstack.getChildTag("Fireworks");
-        ListNBT listnbt = compoundnbt != null ? compoundnbt.getList("Explosions", 10) : null;
+        ItemStack itemstack = this.entityData.get(DATA_ID_FIREWORKS_ITEM);
+        CompoundTag compoundnbt = itemstack.isEmpty() ? null : itemstack.getTagElement("Fireworks");
+        ListTag listnbt = compoundnbt != null ? compoundnbt.getList("Explosions", 10) : null;
         if (listnbt != null && !listnbt.isEmpty()) {
             f = 5.0F + (float)(listnbt.size() * 2);
         }
 
         if (f > 0.0F) {
-            if (this.boostedEntity != null) {
-                this.boostedEntity.attackEntityFrom(DamageSource.causeFireworkDamage(this, this.getShooter()), this.damage + (float)(listnbt.size() * 2));
+            if (this.attachedToEntity != null) {
+                this.attachedToEntity.hurt(DamageSource.fireworks(this, this.getOwner()), this.damage + (float)(listnbt.size() * 2));
             }
 
             double d0 = 5.0D; //对5格范围内生物造成伤害
-            Vector3d vector3d = this.getPositionVec();
+            Vec3 vec3 = this.position();
 
-            for(LivingEntity livingentity : this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(d0))) {
-                if (livingentity != this.boostedEntity && !(this.getDistanceSq(livingentity) > 25.0D)) {
+            for(LivingEntity livingentity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().deflate(d0))) {
+                if (livingentity != this.attachedToEntity && !(this.distanceToSqr(livingentity) > 25.0D)) {
                     boolean flag = false;
 
                     for(int i = 0; i < 2; ++i) { //是否被方块阻挡 阻挡无伤害
-                        Vector3d vector3d1 = new Vector3d(livingentity.getPosX(), livingentity.getPosYHeight(0.5D * (double)i), livingentity.getPosZ());
-                        RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
-                        if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
+                        Vec3 vec31 = new Vec3(livingentity.getX(), livingentity.getY(0.5 * (double)i), livingentity.getZ());
+                        HitResult hitresult = this.level.clip(new ClipContext(vec3, vec31, Block.COLLIDER, Fluid.NONE, this));
+                        if (hitresult.getType() == Type.MISS) {
                             flag = true;
                             break;
                         }
                     }
 
                     if (flag) { //伤害衰减
-                        float f1 = f * (float)Math.sqrt((this.damage - (double)this.getDistance(livingentity)) / 2.5D);
-                        livingentity.attackEntityFrom(DamageSource.causeFireworkDamage(this, this.getShooter()), f1);
+                        float f1 = f * (float)Math.sqrt((this.damage - (double)this.distanceTo(livingentity)) / 2.5D);
+                        livingentity.hurt(DamageSource.fireworks(this, this.getOwner()), f1);
                     }
                 }
             }

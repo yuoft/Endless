@@ -14,7 +14,6 @@ import com.yuo.endless.Proxy.IProxy;
 import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.EndlessTileTypes;
-import com.yuo.endless.World.Structure.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -38,11 +37,7 @@ import org.jetbrains.annotations.NotNull;
 @Mod("endless")
 public class Endless {
 	public static final String MOD_ID = "endless";
-    public static boolean isSpaceArms = false; //强力装备
-    public static boolean isOreCrop = false; //矿石作物
     public static boolean isEnchants = false; //更多附魔
-    public static boolean isMoreCoals = false; //更多煤炭
-    public static boolean isPaimeng = false; //应急食品
     public static boolean isPE = false; //等价交换
     public static boolean isBOT = false; //植物魔法
     public static boolean isIAF = false; //冰与火之歌
@@ -50,7 +45,6 @@ public class Endless {
     public static boolean isCreate = false; //机械动力
     public static boolean isSophisticatedBackpacks = false; //精妙背包
     public static boolean isOreExcavation = false; //矿石挖掘
-    public static boolean isAOA3 = false; //虚无世界3
     public static boolean isTC3 = false; //匠魂3
     public static boolean isCrT = false; //CRT
     public static boolean isStorageDrawers = false; //储物抽屉
@@ -61,7 +55,6 @@ public class Endless {
     public static boolean isWaystones = false; //传送石碑
     public static boolean isAlexsMobs = false; //Alex 的生物
     public static boolean isTTF = false; //暮色森林
-    public static boolean isAS = false; //星辉魔法
     public static boolean isSlashBlade2 = false; //拔刀剑2
     public static boolean isThermal = false; //热力基本
     public static boolean isTimeBottle = false; //时间之瓶
@@ -112,9 +105,6 @@ public class Endless {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         checkMods();
-        if (isSpaceArms){
-            EndlessItems.registerSpaceArmsItem(); //在模组存在的前提下 注册物品
-        }
         if (isIAF){
             EndlessItems.registerIafItem();
         }
@@ -147,7 +137,7 @@ public class Endless {
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
-        ModStructures.STRUCTURES.register(modEventBus);
+//        ModStructures.STRUCTURES.register(modEventBus);
         proxy.registerHandlers();
     }
 
@@ -187,15 +177,11 @@ public class Endless {
             }
         };
         DispenserBlock.registerBehavior(EndlessItems.infinityFluidBucket.get(), itemBehavior);
-        event.enqueueWork(ModStructures::setupStructures);
+//        event.enqueueWork(ModStructures::setupStructures);
     }
 
     private void checkMods(){
-        isSpaceArms = checkMod("spacearms");
-        isOreCrop = checkMod("orecrop");
         isEnchants = checkMod("yuoenchants");
-        isMoreCoals = checkMod("morecoal");
-        isPaimeng = checkMod("paimeng");
         isPE = checkMod("projecte");
         isBOT = checkMod("botania");
         isIAF = checkMod("iceandfire");
@@ -203,7 +189,6 @@ public class Endless {
         isCreate = checkMod("create");
         isSophisticatedBackpacks = checkMod("sophisticatedbackpacks");
         isOreExcavation = checkMod("oreexcavation");
-        isAOA3 = checkMod("aoa3");
         isTC3 = checkMod("tconstruct");
         isCrT = checkMod("crafttweaker");
         isStorageDrawers = checkMod("storagedrawers");
@@ -214,7 +199,6 @@ public class Endless {
         isWaystones = checkMod("waystones");
         isAlexsMobs = checkMod("alexsmobs");
         isTTF = checkMod("twilightforest");
-        isAS = checkMod("astralsorcery");
         isSlashBlade2 = checkMod("slashblade");
         isThermal = checkMod("thermal");
         isTimeBottle = checkMod("tiab");

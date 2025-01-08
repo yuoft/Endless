@@ -36,19 +36,19 @@ public class InfinityBoxCraftResultSlot extends ResultSlot {
         }
         ForgeHooks.setCraftingPlayer(null);
         for(int i = 243; i < nonnulllist.size() + 243; ++i) {
-            ItemStack itemstack = this.craftMatrix.getStackInSlot(i);
+            ItemStack itemstack = this.craftMatrix.getItem(i);
             ItemStack itemstack1 = nonnulllist.get(i - 243);
             if (!itemstack.isEmpty()) {
-                this.craftMatrix.decrStackSize(i, 1);
-                itemstack = this.craftMatrix.getStackInSlot(i);
+                this.craftMatrix.removeItem(i, 1);
+                itemstack = this.craftMatrix.getItem(i);
             }
 
             if (!itemstack1.isEmpty()) {
                 if (itemstack.isEmpty()) {
-                    this.craftMatrix.setInventorySlotContents(i, itemstack1);
+                    this.craftMatrix.setItem(i, itemstack1);
                 } else if (ItemStack.isSame(itemstack, itemstack1) && ItemStack.isSameItemSameTags(itemstack, itemstack1)) {
                     itemstack1.grow(itemstack.getCount());
-                    this.craftMatrix.setInventorySlotContents(i, itemstack1);
+                    this.craftMatrix.setItem(i, itemstack1);
                 } else if (!this.player.getInventory().add(itemstack1)) {
                     this.player.drop(itemstack1, false);
                 }

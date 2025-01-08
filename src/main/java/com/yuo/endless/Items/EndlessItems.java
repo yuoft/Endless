@@ -121,15 +121,6 @@ public class EndlessItems {
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_chest",
 			() -> new BlockItem(EndlessBlocks.infinityBox.get(), BLOCK_TAB.stacksTo(1).fireResistant()));
 
-	//强力装备
-	public static void registerSpaceArmsItem(){
-		Singularity.addSingularity(new Singularity.SingularityData("ruby", 0xe02e35,0xe25e63));//红宝石
-		Singularity.addSingularity(new Singularity.SingularityData("dragon", 0x550a56,0xe04fe2));//龙晶
-		Singularity.addSingularity(new Singularity.SingularityData("space", 0x000000,0xffffff));//空间
-		Singularity.addSingularity(new Singularity.SingularityData("xray", 0x3affff,0xe4ffff));//X光
-		Singularity.addSingularity(new Singularity.SingularityData("ultra", 0x7f6a00,0x4cff00));//极限
-	}
-
 	//冰与火
 	public static void registerIafItem(){
 		Singularity.addSingularity(new Singularity.SingularityData("silver", 0xf3faff,0xe5ecf7));//银

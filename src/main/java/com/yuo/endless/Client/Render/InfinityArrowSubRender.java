@@ -1,30 +1,30 @@
 package com.yuo.endless.Client.Render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.InfinityArrowSubEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
 public class InfinityArrowSubRender extends ArrowRenderer<InfinityArrowSubEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/infinity_arrow_sub.png");
 
     private EntityModel<InfinityArrowSubEntity> arrowSub;
 
-    public InfinityArrowSubRender(EntityRendererManager renderManagerIn) {
+    public InfinityArrowSubRender(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(InfinityArrowSubEntity entity) {
+    public ResourceLocation getTextureLocation(InfinityArrowSubEntity infinityArrowSubEntity) {
         return TEXTURE;
     }
 
     @Override
-    public void render(InfinityArrowSubEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(InfinityArrowSubEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         /*
         matrixStackIn.push();

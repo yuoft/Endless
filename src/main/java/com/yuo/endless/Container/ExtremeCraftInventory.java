@@ -18,7 +18,7 @@ public class ExtremeCraftInventory extends CraftingContainer {
 
     @Override
     public ItemStack getItem(int index) {
-        return index >= this.getContainerSize() ? ItemStack.EMPTY : craftTile.getStackInSlot(index);
+        return index >= this.getContainerSize() ? ItemStack.EMPTY : craftTile.getItem(index);
     }
 
     @Override

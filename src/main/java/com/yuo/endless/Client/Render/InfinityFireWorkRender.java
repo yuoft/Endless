@@ -1,17 +1,17 @@
 package com.yuo.endless.Client.Render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.yuo.endless.Entity.InfinityFireWorkEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,29 +19,29 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class InfinityFireWorkRender extends EntityRenderer<InfinityFireWorkEntity> {
     private final ItemRenderer itemRenderer;
 
-    public InfinityFireWorkRender(EntityRendererManager renderManagerIn) {
+    public InfinityFireWorkRender(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
         this.itemRenderer = Minecraft.getInstance().getItemRenderer();
     }
 
     @Override
-    public void render(InfinityFireWorkEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        matrixStackIn.push();
-        matrixStackIn.rotate(this.renderManager.getCameraOrientation());
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
-        if (entityIn.func_213889_i()) {
-            matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(180.0F));
-            matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
-            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90.0F));
-        }
-
-        this.itemRenderer.renderItem(entityIn.getItem(), ItemCameraTransforms.TransformType.GROUND, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
-        matrixStackIn.pop();
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+    public ResourceLocation getTextureLocation(InfinityFireWorkEntity infinityFireWorkEntity) {
+        return TextureAtlas.LOCATION_BLOCKS;
     }
 
     @Override
-    public ResourceLocation getEntityTexture(InfinityFireWorkEntity entity) {
-        return PlayerContainer.LOCATION_BLOCKS_TEXTURE;
+    public void render(InfinityFireWorkEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+        matrixStackIn.pushPose();
+        matrixStackIn.mulPose(this.entityRenderDispatcher.cameraOrientation());
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+        if (entityIn.isShotAtAngle()) {
+            matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90.0F));
+        }
+
+        this.itemRenderer.renderStatic(entityIn.getItem(), TransformType.GROUND, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, entityIn.getId());
+        matrixStackIn.popPose();
+        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 }

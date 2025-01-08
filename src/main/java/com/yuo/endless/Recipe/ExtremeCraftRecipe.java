@@ -9,7 +9,10 @@ import com.google.gson.JsonSyntaxException;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Items.Singularity;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -19,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -53,41 +55,42 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
 
     //配方序列器
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ExtremeCraftRecipe>{
+
         @Override
-        public ExtremeCraftRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
-            Map<String, Ingredient> map = deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] astring = shrink(patternFromJson(JSONUtils.getJsonArray(json, "pattern")));
+        public ExtremeCraftRecipe fromJson(ResourceLocation resourceLocation, JsonObject json) {
+            Map<String, Ingredient> map = deserializeKey(GsonHelper.getAsJsonObject(json, "key"));
+            String[] astring = shrink(patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = deserializeIngredients(astring, map, i, j);
-            ItemStack result = deserializeItem(JSONUtils.getJsonObject(json, "result"));
-            return new ExtremeCraftRecipe(recipeId, i, j, nonnulllist, result);
+            ItemStack result = deserializeItem(GsonHelper.getAsJsonObject(json, "result"));
+            return new ExtremeCraftRecipe(resourceLocation, i, j, nonnulllist, result);
         }
 
-        @Nullable
+        @org.jetbrains.annotations.Nullable
         @Override
-        public ExtremeCraftRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public ExtremeCraftRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
 //            String s = buffer.readString(32767); 联机错误2
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i * j, Ingredient.EMPTY);
 
-            nonnulllist.replaceAll(ignored -> Ingredient.read(buffer));
+            nonnulllist.replaceAll(ignored -> Ingredient.fromNetwork(buffer));
 
-            ItemStack result = buffer.readItemStack();
-            return new ExtremeCraftRecipe(recipeId, i, j, nonnulllist, result);
+            ItemStack result = buffer.readItem();
+            return new ExtremeCraftRecipe(resourceLocation, i, j, nonnulllist, result);
         }
 
         @Override
-        public void write(PacketBuffer buffer, ExtremeCraftRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, ExtremeCraftRecipe recipe) {
             buffer.writeVarInt(recipe.Width);
             buffer.writeVarInt(recipe.Height);
 
             for(Ingredient ingredient : recipe.items) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItemStack(recipe.result);
+            buffer.writeItemStack(recipe.result, true);
         }
     }
 
@@ -117,15 +120,20 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         return false;
     }
 
+    @Override
+    public ItemStack assemble(Container container) {
+        return this.getResultItem().copy();
+    }
+
     //无尽配方检测
-    public boolean checkRecipe(IInventory inv, World worldIn){
+    public boolean checkRecipe(Container inv, Level worldIn){
         for (int i = 0; i < items.size(); i++){
-            if (!items.get(i).test(inv.getStackInSlot(i))) return false;
+            if (!items.get(i).test(inv.getItem(i))) return false;
         }
         return true;
     }
 
-    private boolean checkMatch(IInventory inv, int width, int height, boolean mirrored) {
+    private boolean checkMatch(Container inv, int width, int height, boolean mirrored) {
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
                 int k = i - width;
@@ -139,7 +147,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
                     }
                 }
 
-                if (!ingredient.test(inv.getStackInSlot(i + j * 9))) {
+                if (!ingredient.test(inv.getItem(i + j * 9))) {
                     return false;
                 }
             }
@@ -161,20 +169,16 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
     }
 
     //获取合成结果
+
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack getResultItem() {
         return this.result.copy();
     }
 
     //检查给定配方是否适用给定宽高的网格
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width >= this.Width && height >= this.Height;
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
-        return this.result.copy();
     }
 
     @Override
@@ -184,17 +188,17 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
 
     //判断输出是否相同
     public boolean hasOutput(ItemStack stack){
-        return result.isItemEqual(stack);
+        return result.equals(stack, false);
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return RecipeTypeRegistry.EXTREME_CRAFT_SERIALIZER.get();
     }
 
     //合成方块图标
     @Override
-    public ItemStack getIcon() {
+    public ItemStack getToastSymbol() {
         return new ItemStack(EndlessBlocks.extremeCraftingTable.get());
     }
 
@@ -268,8 +272,8 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
                     throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
                 } else if ("endless:singularity".equals(asString)){ //获取奇点
                     ItemStack stack = CraftingHelper.getItemStack((JsonObject) entry.getValue(), true);
-                    CompoundNBT nbt = stack.getOrCreateTag();
-                    map.put(key, Ingredient.fromStacks(Singularity.getSingularity(nbt.getString(Singularity.NBT_TYPE))));
+                    CompoundTag nbt = stack.getOrCreateTag();
+                    map.put(key, Ingredient.of(Singularity.getSingularity(nbt.getString(Singularity.NBT_TYPE))));
                 }else map.put(key, CraftingHelper.getIngredient(entry.getValue()));
             }
         }
@@ -286,7 +290,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
             for(int i = 0; i < astring.length; ++i) {
-                String s = JSONUtils.getString(jsonArr.get(i), "pattern[" + i + "]");
+                String s = GsonHelper.convertToString(jsonArr.get(i), "pattern[" + i + "]");
                 if (s.length() > 9) {
                     throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
                 }

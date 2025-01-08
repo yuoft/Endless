@@ -20,7 +20,7 @@ public class OrdinarySword extends SwordItem {
 
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = stack.getItem().getAttributeModifiers(slot, stack);
+        Multimap<Attribute, AttributeModifier> multimap = getDefaultAttributeModifiers(slot);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.putAll(multimap);
         if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND){

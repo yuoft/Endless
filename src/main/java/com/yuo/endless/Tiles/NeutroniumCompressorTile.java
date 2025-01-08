@@ -65,7 +65,7 @@ public class NeutroniumCompressorTile extends BaseContainerBlockEntity implement
         ItemStack stack;
         Optional<NeutroniumRecipe> optional = level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new SimpleContainer(input), level);
         if (optional.isPresent()){
-            stack = optional.get().getRecipeOutput();
+            stack = optional.get().getResultItem();
         }else stack = CompressorManager.getOutput(input); //获取此输入的输出
         //判断输出 输出和已有输出不同 输出为空
         if ((!stack1.isEmpty() && !(stack1.getItem() == stack.getItem())) || stack.isEmpty()) return;

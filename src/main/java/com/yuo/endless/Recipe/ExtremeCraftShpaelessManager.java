@@ -38,7 +38,7 @@ public class ExtremeCraftShpaelessManager {
         Iterator<ExtremeCraftShapeRecipe> iterator = this.recipes.iterator();
         while (iterator.hasNext()){
             ExtremeCraftShapeRecipe next = iterator.next();
-            if (next.hasOutput(recipe.getRecipeOutput()) && next.getIngredients().containsAll(recipe.getIngredients())){
+            if (next.hasOutput(recipe.getResultItem()) && next.getIngredients().containsAll(recipe.getIngredients())){
                 iterator.remove(); //添加无序合成配方管理，crt修改，降部分配方该为无序配方
                 return;
             }
@@ -77,7 +77,7 @@ public class ExtremeCraftShpaelessManager {
     private NonNullList<Ingredient>  getIngredients(ItemStack... stacks){
         NonNullList<Ingredient> ingredients = NonNullList.create();
         for (ItemStack stack : stacks){
-            Ingredient ingredient = Ingredient.fromStacks(stack);
+            Ingredient ingredient = Ingredient.of(stack);
             ingredients.add(ingredient);
         }
         return ingredients;
@@ -92,7 +92,7 @@ public class ExtremeCraftShpaelessManager {
     public ItemStack getRecipeOutPut(ExtremeCraftInventory inventory, Level world){
         for (ExtremeCraftShapeRecipe recipe : this.recipes) {
             if (recipe.matches(inventory, world)){
-                return recipe.getRecipeOutput();
+                return recipe.getResultItem();
             }
         }
 
@@ -111,7 +111,7 @@ public class ExtremeCraftShpaelessManager {
         if (list.isEmpty()) return;
         if (recipe.getIngredients().size() + list.size() > 81) throw new RuntimeException("recipe size not pass to 81!");
         for (ExtremeCraftShapeRecipe craftRecipe : recipes) {
-            if (craftRecipe.hasOutput(recipe.getRecipeOutput())){
+            if (craftRecipe.hasOutput(recipe.getResultItem())){
                 craftRecipe.addInputs(getIngredients(stacks));
             }
         }
@@ -130,7 +130,7 @@ public class ExtremeCraftShpaelessManager {
         if (list.isEmpty()) return;
         if (recipe.getIngredients().size() + list.size() > 81) throw new RuntimeException("recipe size not pass to 81!");
         for (ExtremeCraftShapeRecipe craftRecipe : recipes) {
-            if (craftRecipe.hasOutput(recipe.getRecipeOutput())){
+            if (craftRecipe.hasOutput(recipe.getResultItem())){
                 craftRecipe.addInputs(list);
             }
         }

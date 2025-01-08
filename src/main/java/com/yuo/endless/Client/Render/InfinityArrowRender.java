@@ -1,20 +1,20 @@
 package com.yuo.endless.Client.Render;
 
 import com.yuo.endless.Endless;
+import com.yuo.endless.Entity.InfinityArrowEntity;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
-public class InfinityArrowRender extends ArrowRenderer {
+public class InfinityArrowRender extends ArrowRenderer<InfinityArrowEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/entity/infinity_arrow.png");
 
-    public InfinityArrowRender(EntityRendererManager renderManagerIn) {
+    public InfinityArrowRender(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(Entity entity) {
+    public ResourceLocation getTextureLocation(InfinityArrowEntity entity) {
         return TEXTURE;
     }
 }

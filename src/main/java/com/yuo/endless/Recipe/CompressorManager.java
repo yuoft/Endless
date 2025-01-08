@@ -18,7 +18,7 @@ public class CompressorManager {
      */
     public static void addRecipe(NeutroniumRecipe recipe){
         for (NeutroniumRecipe next : recipes) {
-            if (next.hasOutput(recipe.getRecipeOutput())) {
+            if (next.hasOutput(recipe.getResultItem())) {
                 next.addInput(getInputs(next.getRecipeInput(), recipe.getRecipeInput()));
                 return;
             }
@@ -50,7 +50,7 @@ public class CompressorManager {
      */
     static NonNullList<ItemStack> getInputs(NonNullList<ItemStack> list, NonNullList<ItemStack> nullList){
         for (ItemStack stack : list) {
-            nullList.removeIf(next -> next.isItemEqual(stack));
+            nullList.removeIf(next -> next.equals(stack, false));
         }
         list.addAll(nullList);
         return list;
@@ -84,7 +84,7 @@ public class CompressorManager {
     public static ItemStack getOutput(ItemStack input) {
         for (NeutroniumRecipe recipe : recipes) {
             if (recipe.isInput(input)) //输入相同
-                return recipe.getRecipeOutput();
+                return recipe.getResultItem();
         }
         return ItemStack.EMPTY;
     }
@@ -118,6 +118,7 @@ public class CompressorManager {
      * @param difficulty 难度
      * @deprecated
      */
+    @Deprecated
     public static void changeAllCount(Difficulty difficulty){
         ModRecipeManager.addCompressorCraft(); //重置配方
         if (difficulty == Difficulty.EASY || difficulty == Difficulty.PEACEFUL){
@@ -154,7 +155,7 @@ public class CompressorManager {
             if (recipe.isInput(input)) {
                 NonNullList<ItemStack> map = recipe.getRecipeInput();
                 for (ItemStack stack : map) {
-                    if (stack.isItemEqual(input)) return stack.getCount();
+                    if (stack.equals(input, false)) return stack.getCount();
                 }
             }
         }

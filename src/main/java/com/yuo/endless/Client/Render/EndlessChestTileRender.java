@@ -1,97 +1,90 @@
 package com.yuo.endless.Client.Render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import com.yuo.endless.Blocks.AbsEndlessChest;
-import com.yuo.endless.Blocks.EndlessChestType;
-import com.yuo.endless.Event.ClientEventHandler;
+import com.yuo.endless.Blocks.EndlessBlocks;
+import com.yuo.endless.Endless;
 import com.yuo.endless.Tiles.AbsEndlessChestTile;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.Atlases;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.tileentity.DualBrightnessCallback;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.IChestLid;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMerger;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class EndlessChestTileRender<T extends TileEntity & IChestLid> extends TileEntityRenderer<T> {
-    private final ModelRenderer singleLid;
-    private final ModelRenderer singleBottom;
-    private final ModelRenderer singleLatch;
+public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChestTile> {
+    private final ModelPart lid;
+    private final ModelPart bottom;
+    private final ModelPart lock;
 
-    public EndlessChestTileRender(TileEntityRendererDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-        this.singleBottom = new ModelRenderer(64, 64, 0, 19);
-        this.singleBottom.addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F, 0.0F);
-        this.singleLid = new ModelRenderer(64, 64, 0, 0);
-        this.singleLid.addBox(1.0F, 0.0F, 0.0F, 14.0F, 5.0F, 14.0F, 0.0F);
-        this.singleLid.rotationPointY = 9.0F;
-        this.singleLid.rotationPointZ = 1.0F;
-        this.singleLatch = new ModelRenderer(64, 64, 0, 0);
-        this.singleLatch.addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F, 0.0F);
-        this.singleLatch.rotationPointY = 8.0F;
+    public EndlessChestTileRender(BlockEntityRendererProvider.Context pContext) {
+        ModelPart modelpart = pContext.bakeLayer(ModelLayers.CHEST);
+        this.bottom = modelpart.getChild("bottom");
+        this.lid = modelpart.getChild("lid");
+        this.lock = modelpart.getChild("lock");
     }
 
-    public void render(T tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        AbsEndlessChestTile chestTile = (AbsEndlessChestTile) tileEntityIn;
-        World world = tileEntityIn.getWorld();
-        boolean flag = world != null;
-        BlockState blockstate = flag ? tileEntityIn.getBlockState() : chestTile.getBlock().getDefaultState().with(AbsEndlessChest.FACING, Direction.SOUTH);
+    public static LayerDefinition createSingleBodyLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        partdefinition.addOrReplaceChild("bottom", CubeListBuilder.create().texOffs(0, 19).addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F), PartPose.ZERO);
+        partdefinition.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0).addBox(1.0F, 0.0F, 0.0F, 14.0F, 5.0F, 14.0F), PartPose.offset(0.0F, 9.0F, 1.0F));
+        partdefinition.addOrReplaceChild("lock", CubeListBuilder.create().texOffs(0, 0).addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F), PartPose.offset(0.0F, 8.0F, 0.0F));
+        return LayerDefinition.create(meshdefinition, 64, 64);
+    }
+
+    @Override
+    public void render(AbsEndlessChestTile chest, float pPartialTick, PoseStack pPoseStack, MultiBufferSource
+    pBufferSource, int pPackedLight, int pPackedOverlay) {
+        Level level = chest.getLevel();
+        boolean flag = level != null;
+        BlockState blockstate = flag ? chest.getBlockState() : EndlessBlocks.infinityBox.get().defaultBlockState().setValue(AbsEndlessChest.FACING, Direction.SOUTH);
         Block block = blockstate.getBlock();
-
-        EndlessChestType chestType = EndlessChestType.NORMAL;
-        EndlessChestType actualType = AbsEndlessChest.getTypeFromBlock(block);
-
-        if (actualType != null) {
-            chestType = actualType;
-        }
-
         if (block instanceof AbsEndlessChest) {
-            AbsEndlessChest endlessChest = (AbsEndlessChest) block;
-            matrixStackIn.push();
-            float f = blockstate.get(AbsEndlessChest.FACING).getHorizontalAngle();
-            matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-            matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-f));
-            matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
+            pPoseStack.pushPose();
+            float f = blockstate.getValue(AbsEndlessChest.FACING).toYRot();
+            pPoseStack.translate(0.5, 0.5, 0.5);
+            pPoseStack.mulPose(Vector3f.YP.rotationDegrees(-f));
+            pPoseStack.translate(-0.5, -0.5, -0.5);
 
-            TileEntityMerger.ICallbackWrapper<? extends AbsEndlessChestTile> icallbackwrapper;
-            if (flag) {
-                icallbackwrapper = endlessChest.combine(blockstate, world, tileEntityIn.getPos(), true);
-            } else {
-                icallbackwrapper = TileEntityMerger.ICallback::func_225537_b_;
-            }
+            float openNess = 1.0f - chest.getOpenNess(pPartialTick);
+            openNess = 1.0f - openNess * openNess * openNess;
+            Material material = this.getMaterial(chest);
+            VertexConsumer vertexconsumer = material.buffer(pBufferSource, RenderType::entityCutout);
+            this.render(pPoseStack, vertexconsumer, this.lid, this.lock, this.bottom, openNess, pPackedLight, pPackedOverlay);
 
-            float f1 = icallbackwrapper.apply(AbsEndlessChest.getLidRotationCallback(chestTile)).get(partialTicks);
-            f1 = 1.0F - f1;
-            f1 = 1.0F - f1 * f1 * f1;
-            int i = icallbackwrapper.apply(new DualBrightnessCallback<>()).applyAsInt(combinedLightIn);
-
-            RenderMaterial renderMaterial = new RenderMaterial(Atlases.CHEST_ATLAS, ClientEventHandler.chooseChestTexture(chestType));
-            IVertexBuilder buffer = renderMaterial.getBuffer(bufferIn, RenderType::getEntityCutout);
-            this.renderModels(matrixStackIn, buffer, this.singleLid, this.singleLatch, this.singleBottom, f1, i, combinedOverlayIn);
-
-            matrixStackIn.pop();
+            pPoseStack.popPose();
         }
+
     }
 
-    private void renderModels(MatrixStack matrixStackIn, IVertexBuilder bufferIn, ModelRenderer chestLid, ModelRenderer chestLatch, ModelRenderer chestBottom, float lidAngle, int combinedLightIn, int combinedOverlayIn) {
-        chestLid.rotateAngleX = -(lidAngle * ((float)Math.PI / 2F));
-        chestLatch.rotateAngleX = chestLid.rotateAngleX;
-        chestLid.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-        chestLatch.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-        chestBottom.render(matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+    private void render(com.mojang.blaze3d.vertex.PoseStack pPoseStack, VertexConsumer pConsumer, ModelPart pLidPart, ModelPart pLockPart, ModelPart pBottomPart, float pLidAngle, int pPackedLight, int pPackedOverlay) {
+        pLidPart.xRot = -(pLidAngle * 1.5707964F);
+        pLockPart.xRot = pLidPart.xRot;
+        pLidPart.render(pPoseStack, pConsumer, pPackedLight, pPackedOverlay);
+        pLockPart.render(pPoseStack, pConsumer, pPackedLight, pPackedOverlay);
+        pBottomPart.render(pPoseStack, pConsumer, pPackedLight, pPackedOverlay);
+    }
+
+    protected Material getMaterial(AbsEndlessChestTile blockEntity) {
+        return new Material(Sheets.CHEST_SHEET, new ResourceLocation(Endless.MOD_ID, "entity/" + "infinity_chest"));
     }
 
 }

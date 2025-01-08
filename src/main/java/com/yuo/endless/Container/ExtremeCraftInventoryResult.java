@@ -19,9 +19,9 @@ public class ExtremeCraftInventoryResult extends ResultContainer {
 
     @Override
     public ItemStack removeItem(int pIndex, int pCount) {
-        ItemStack stack = craftTile.getStackInSlot(81);
+        ItemStack stack = craftTile.getItem(81);
         if (!stack.isEmpty()) {
-            craftTile.setInventorySlotContents(81, ItemStack.EMPTY);
+            craftTile.setItem(81, ItemStack.EMPTY);
             return stack;
         } else {
             return ItemStack.EMPTY;
@@ -30,7 +30,7 @@ public class ExtremeCraftInventoryResult extends ResultContainer {
 
     @Override
     public void setItem(int pIndex, ItemStack pStack) {
-        craftTile.setInventorySlotContents(81, pStack);
+        craftTile.setItem(81, pStack);
     }
 
 }

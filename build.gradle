@@ -47,7 +47,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${project.projectDir}/build/createSrgToMcp/output.srg"
             arg "-mixin.config=endless.mixins.json"
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
             property 'forge.enabledGameTestNamespaces', 'examplemod'
             mods {
                 examplemod {
@@ -147,6 +147,10 @@ repositories {
     maven {
         name = 'Create'
         url = "https://maven.tterrag.com"
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("com.jozufozu.flywheel")
+        }
     }
     maven {
         name 'RS maven'
@@ -161,16 +165,32 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
 
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_ver}-common-api:${jei_ver}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${mc_ver}-forge-api:${jei_ver}"))
+    compileOnly("mezz.jei:jei-${mc_ver}-common-api:${jei_ver}")
+    compileOnly("mezz.jei:jei-${mc_ver}-forge-api:${jei_ver}")
     compileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_ver}:${crt_ver}")
     compileOnly("curse.maven:jade-${jade_id}:${jade_ver}")
     compileOnly("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
     compileOnly("codechicken:CodeChickenLib:${ccl_ver}:universal")
     compileOnly("com.brandon3055.draconicevolution:Draconic-Evolution:${mc_ver}-${de_ver}:universal")
+    compileOnly("vazkii.botania:Botania:${mc_ver}-${bot_ver}")
+    compileOnly("curse.maven:projecte-${pe_id}:${pe_ver}")
+    compileOnly("teamtwilight:twilightforest:${tf_ver}:universal")
+    compileOnly("curse.maven:yuoenchants-${ye_id}:${ye_ver}")
+    compileOnly("curse.maven:ice-and-fire-dragons-${iaf_id}:${iaf_ver}")
+    compileOnly("curse.maven:applied-energistics-2-${ae2_id}:${ae2_ver}")
+    compileOnly("curse.maven:yuoenchants-${ye_id}:${ye_ver}")
+    compileOnly("curse.maven:cofh-core-${cofh_id}:${cofh_ver}")
+    compileOnly("curse.maven:thermal-foundation-${thermal_id}:${thermal_ver}")
+    compileOnly("com.tterrag.registrate:Registrate:${registrate_ver}")
+    compileOnly("com.jozufozu.flywheel:flywheel-forge-${mc_ver}:${flywheel_ver}")
+    compileOnly("com.simibubi.create:create-${mc_ver}:${create_ver}:slim")
+    compileOnly("curse.maven:slashblade-${sb_id}:${sb_ver}")
+    compileOnly("curse.maven:mystical-agriculture-${ma_id}:${ma_ver}")
+    compileOnly("slimeknights.mantle:Mantle:${mc_ver}-${mantle_ver}")
+    compileOnly("slimeknights.tconstruct:TConstruct:${mc_ver}-${tc3_ver}")
+    compileOnly("curse.maven:refined-storage-${rs_id}:${rs_ver}")
 
-    // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_ver}-forge:${jei_ver}"))
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_ver}-forge:${jei_ver}")
     runtimeOnly fg.deobf("curse.maven:torohealth-damage-indicators-${torohealth_id}:${torohealth_ver}")
     runtimeOnly fg.deobf("curse.maven:jade-${jade_id}:${jade_ver}")
     runtimeOnly fg.deobf("curse.maven:neat-${neat_id}:${neat_ver}") //引入mod
@@ -178,6 +198,26 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:brandons-core-${brandons_core_id}:${brandons_core_ver}")
     runtimeOnly fg.deobf("codechicken:CodeChickenLib:${ccl_ver}:universal")
     runtimeOnly fg.deobf("com.brandon3055.draconicevolution:Draconic-Evolution:${mc_ver}-${de_ver}:universal")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
+    runtimeOnly fg.deobf("curse.maven:patchouli-${patchouli_id}:${patchouli_ver}")
+    runtimeOnly fg.deobf("vazkii.botania:Botania:${mc_ver}-${bot_ver}")
+    runtimeOnly fg.deobf("curse.maven:projecte-${pe_id}:${pe_ver}")
+    runtimeOnly fg.deobf("teamtwilight:twilightforest:${tf_ver}:universal")
+    runtimeOnly fg.deobf("curse.maven:yuoenchants-${ye_id}:${ye_ver}")
+    runtimeOnly fg.deobf("curse.maven:citadel-${citadel_id}:${citadel_ver}")
+    runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-${iaf_id}:${iaf_ver}")
+    runtimeOnly fg.deobf("curse.maven:applied-energistics-2-${ae2_id}:${ae2_ver}")
+    runtimeOnly fg.deobf("curse.maven:cofh-core-${cofh_id}:${cofh_ver}")
+    runtimeOnly fg.deobf("curse.maven:thermal-foundation-${thermal_id}:${thermal_ver}")
+//    runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:${registrate_ver}")
+//    runtimeOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_ver}:${flywheel_ver}")
+//    runtimeOnly fg.deobf("com.simibubi.create:create-${mc_ver}:${create_ver}:slim")
+    runtimeOnly fg.deobf("curse.maven:slashblade-${sb_id}:${sb_ver}")
+    runtimeOnly fg.deobf("curse.maven:cucumber-${cucumber_id}:${cucumber_ver}")
+    runtimeOnly fg.deobf("curse.maven:mystical-agriculture-${ma_id}:${ma_ver}")
+    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-${mantle_ver}")
+    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tc3_ver}")
+    runtimeOnly fg.deobf("curse.maven:refined-storage-${rs_id}:${rs_ver}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

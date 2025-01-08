@@ -1,39 +1,43 @@
 package com.yuo.endless.Compat.Jade;
 
 import com.yuo.endless.Tiles.AbsNeutronCollectorTile;
+import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IDataAccessor;
-import mcp.mobius.waila.api.IPluginConfig;
 import mcp.mobius.waila.api.IServerDataProvider;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import mcp.mobius.waila.api.ITooltip;
+import mcp.mobius.waila.api.config.IPluginConfig;
+import mcp.mobius.waila.api.ui.IElement;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 public class CollectorComponentProvider implements IComponentProvider, IServerDataProvider {
 
     @Override
-    public void appendBody(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config) {
-        World world = accessor.getWorld();
-        TileEntity tile = world.getTileEntity(accessor.getPosition());
-        if (tile instanceof AbsNeutronCollectorTile){
-            AbsNeutronCollectorTile ncTile = (AbsNeutronCollectorTile) tile;
-            String progress = getProgress(accessor.getServerData().getInt("Timer"), ncTile.getCraftTime());
-            tooltip.add(new TranslationTextComponent("jade.endless.neutron_collector_progress", progress));
+    public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
+        Level world = blockAccessor.getLevel();
+        BlockEntity tile = world.getBlockEntity(blockAccessor.getPosition());
+        if (tile instanceof AbsNeutronCollectorTile ncTile){
+            String progress = getProgress(blockAccessor.getServerData().getInt("Timer"), ncTile.getCraftTime());
+            iTooltip.add(new TranslatableComponent("jade.endless.neutron_collector_progress", progress));
         }
     }
 
     @Override
-    public void appendServerData(CompoundNBT compoundNBT, ServerPlayerEntity serverPlayerEntity, World world, Object o) {
-        if (o instanceof AbsNeutronCollectorTile){
-            AbsNeutronCollectorTile ncTile = (AbsNeutronCollectorTile) o;
-            compoundNBT.putInt("Timer", ncTile.data.get(0));
+    public void appendServerData(CompoundTag compoundTag, ServerPlayer serverPlayer, Level level, Object o, boolean b) {
+        if (o instanceof AbsNeutronCollectorTile ncTile){
+            compoundTag.putInt("Timer", ncTile.data.get(0));
         }
+    }
+
+    @Override
+    public @Nullable IElement getIcon(BlockAccessor accessor, IPluginConfig config, IElement currentIcon) {
+        return IComponentProvider.super.getIcon(accessor, config, currentIcon);
     }
 
     /**
@@ -44,5 +48,4 @@ public class CollectorComponentProvider implements IComponentProvider, IServerDa
         DecimalFormat df = new DecimalFormat("#.##");
         return df.format((time / (maxTime * 1.0d)) * 100);
     }
-
 }

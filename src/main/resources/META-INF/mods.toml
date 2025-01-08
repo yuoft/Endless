@@ -1,18 +1,18 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[40,)"
 license="All rights reserved"
 [[mods]] #mandatory
 modId="endless"
-version="1.16.5-1.5.7"
+version="1.18.2-0.0.1-b"
 displayName="Endless"
 authors="yuo"
 description='''
-无尽贪婪。1.16.5
+无尽贪婪。1.18.2
 '''
 # Here's another dependency 依赖指定
 [[dependencies.endless]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"

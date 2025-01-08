@@ -1,6 +1,8 @@
 package com.yuo.endless.Fluid;
 
 import com.yuo.endless.Items.Tool.InfinityBucket;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -52,14 +54,14 @@ public class EndlessFluidBucketWrapper extends FluidBucketWrapper {
 
     protected void setFluid(@Nonnull FluidStack fluidStack) {
         if (fluidStack.isEmpty()) {
-            CompoundNBT nbt = this.container.getOrCreateTag();
+            CompoundTag nbt = this.container.getOrCreateTag();
             nbt.putString(FLUID_NAME, "empty");
             nbt.putInt(FLUID_NUMBER, 0);
             this.container.setTag(nbt);
         } else {
             //添加流体数据
             ResourceLocation registryName = fluidStack.getFluid().getRegistryName();
-            CompoundNBT tag = this.container.getOrCreateTag();
+            CompoundTag tag = this.container.getOrCreateTag();
             if (registryName != null){
                 tag.putString(FLUID_NAME, registryName.toString());
             }else tag.putString(FLUID_NAME, "minecraft:null");

@@ -4,12 +4,14 @@ import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class NeutroniumCompressorContainer extends AbstractContainerMenu {
 
@@ -18,7 +20,7 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
     private final Level world;
 
     public NeutroniumCompressorContainer(int id, Inventory playerInventory){
-        this(id,playerInventory , new NeutroniumCompressorTile());
+        this(id,playerInventory , new NeutroniumCompressorTile(null, null));
     }
 
     public NeutroniumCompressorContainer(int id, Inventory playerInventory, NeutroniumCompressorTile inventory) {
@@ -51,25 +53,25 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
 
     //玩家shift行为
     @Override
-    public ItemStack transferStackInSlot(Player playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemStack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
             if (index >= 2){
                 if (!CompressorManager.getOutput(itemStack1).isEmpty() || hasRecipe(itemStack1)){
-                    if (!this.mergeItemStack(itemStack1, 0, 1, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 0, 1, false)) return ItemStack.EMPTY;
                 }
                 if (index < 29) { //从物品栏到快捷栏
-                    if (!this.mergeItemStack(itemStack1, 30, 38, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 30, 38, false)) return ItemStack.EMPTY;
                 } else if (index < 38) {
-                    if (!this.mergeItemStack(itemStack1, 2, 29, false)) return ItemStack.EMPTY;
+                    if (!this.moveItemStackTo(itemStack1, 2, 29, false)) return ItemStack.EMPTY;
                 }
-            }else if (!this.mergeItemStack(itemStack1, 2, 38, false)) return ItemStack.EMPTY; //取出来
+            }else if (!this.moveItemStackTo(itemStack1, 2, 38, false)) return ItemStack.EMPTY; //取出来
 
-            if (itemStack1.isEmpty()) slot.putStack(ItemStack.EMPTY);
-            else slot.onSlotChanged();
+            if (itemStack1.isEmpty()) slot.set(ItemStack.EMPTY);
+            else slot.setChanged();
 
             if (itemStack1.getCount() == itemstack.getCount()) return ItemStack.EMPTY;
             slot.onTake(playerIn, itemStack1);
@@ -78,7 +80,7 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
     }
 
     protected boolean hasRecipe(ItemStack stack) {
-        return this.world.getRecipeManager().getRecipe(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new Inventory(stack), this.world).isPresent();
+        return this.world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new SimpleContainer(stack), this.world).isPresent();
     }
 
     /**
@@ -87,11 +89,11 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
      */
     public ItemStack getItem(){
         BlockPos pos = new BlockPos(data.get(2), data.get(3), data.get(4));
-        TileEntity tileEntity = world.getTileEntity(pos);
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof NeutroniumCompressorTile){
-            return ((NeutroniumCompressorTile) tileEntity).getStackInSlot(2);
+            return ((NeutroniumCompressorTile) tileEntity).getItem(2);
         }
-        return this.tile.getStackInSlot(2);
+        return this.tile.getItem(2);
     }
 
     //获取物品数量

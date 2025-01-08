@@ -72,16 +72,16 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
         if (recipeOptional.isPresent()){ //json配方 有序
             ExtremeCraftRecipe recipe = recipeOptional.get();
             if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
-                itemStack = recipe.getRecipeOutput();
+                itemStack = recipe.getResultItem();
             }
         }else if (recipeOptionalIn.isPresent()){ //无序配方
             ExtremeCraftShapeRecipe recipe = recipeOptionalIn.get();
             if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
-                itemStack = recipe.getRecipeOutput();
+                itemStack = recipe.getResultItem();
             }
         }else if (shapeRecipe != null){ //硬编码配方
             if (outputInventory.setRecipeUsed(world, serverPlayer, shapeRecipe)){
-                itemStack = shapeRecipe.getRecipeOutput();
+                itemStack = shapeRecipe.getResultItem();
             }
         }else {
             ItemStack recipeOutPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);

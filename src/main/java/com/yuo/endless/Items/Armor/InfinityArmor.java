@@ -1,6 +1,5 @@
 package com.yuo.endless.Items.Armor;
 
-import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
@@ -182,9 +181,9 @@ public class InfinityArmor extends ArmorItem {
             @NotNull
             @Override
             public HumanoidModel<?> getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-                InfinityArmorModel model = (armorSlot == EquipmentSlot.LEGS) ? (new InfinityArmorModel(0.5F)).setLegs(true) : new InfinityArmorModel(1.0F);
-                model.update(entityLiving, itemStack, armorSlot);
-                return model;
+//                InfinityArmorModel model = (armorSlot == EquipmentSlot.LEGS) ? (new InfinityArmorModel(0.5F)).setLegs(true) : new InfinityArmorModel(1.0F);
+//                model.update(entityLiving, itemStack, armorSlot);
+                return _default;
             }
         });
     }

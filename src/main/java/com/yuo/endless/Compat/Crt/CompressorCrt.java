@@ -1,15 +1,15 @@
 package com.yuo.endless.Compat.Crt;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.actions.IRuntimeAction;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
+import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.openzen.zencode.java.ZenCodeType;
 
 @ZenCodeType.Name("mods.endless.CompressorRecipe")

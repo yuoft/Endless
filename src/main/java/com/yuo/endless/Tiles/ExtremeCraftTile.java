@@ -2,15 +2,17 @@ package com.yuo.endless.Tiles;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Container;
-import net.minecraft.world.Nameable;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -46,137 +48,105 @@ public class ExtremeCraftTile extends BaseContainerBlockEntity {
 
     @Override
     public ItemStack getItem(int i) {
-        return null;
+        if (i == 81) return reslut.get(0);
+        else return this.items.get(i);
     }
 
     @Override
-    public ItemStack removeItem(int i, int i1) {
-        return null;
+    public ItemStack removeItem(int index, int count) {
+        if (index == 81) return ContainerHelper.removeItem(reslut, index, count);
+        else return ContainerHelper.removeItem(this.items, index, count);
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int i) {
-        return null;
+    public ItemStack removeItemNoUpdate(int index) {
+        if (index == 81) return ContainerHelper.takeItem(reslut, index);
+        return ContainerHelper.takeItem(this.items, index);
     }
 
     @Override
-    public void setItem(int i, ItemStack itemStack) {
+    public void setItem(int index, ItemStack stack) {
+        if (index == 81) reslut.set(0, stack);
+        else {
+            ItemStack itemstack = this.items.get(index);
+            boolean flag = !stack.isEmpty() && stack.equals(itemstack, false) && ItemStack.isSame(stack, itemstack); //相同物品
+            this.items.set(index, stack);
+            if (stack.getCount() > this.getMaxStackSize()) {
+                stack.setCount(this.getMaxStackSize());
+            }
 
+            if (!flag) {
+                this.setChanged();
+            }
+        }
     }
 
     @Override
     public boolean stillValid(Player player) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int index) {
-        if (index == 81) return reslut.get(0);
-        else return this.items.get(index);
-    }
-
-    @Override
-    public ItemStack decrStackSize(int index, int count) {
-        if (index == 81) return ItemStackHelper.getAndSplit(reslut, index, count);
-        else return ItemStackHelper.getAndSplit(this.items, index, count);
-    }
-
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (index == 81) return ItemStackHelper.getAndRemove(reslut, index);
-        return ItemStackHelper.getAndRemove(this.items, index);
-    }
-
-    //将给定项目设置为容器中的制定槽位
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        if (index == 81) reslut.set(0, stack);
-        else {
-            ItemStack itemstack = this.items.get(index);
-            boolean flag = !stack.isEmpty() && stack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(stack, itemstack); //相同物品
-            this.items.set(index, stack);
-            if (stack.getCount() > this.getInventoryStackLimit()) {
-                stack.setCount(this.getInventoryStackLimit());
-            }
-
-            if (!flag) {
-                this.markDirty();
-            }
-        }
-    }
-
-    //可由玩家使用吗
-    @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        if (this.world != null && this.world.getTileEntity(this.pos) != this) {
+        if (this.level != null && this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
-            return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+            return player.distanceToSqr((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) <= 64.0D;
         }
     }
 
     @Override
-    public void clear() {
-        this.items.clear();
-        this.reslut.clear();
-    }
-
-    @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         NbtRead(nbt);
     }
 
-    private void NbtRead(CompoundNBT nbt){
-        this.items = NonNullList.withSize(this.getSizeInventory() - 1, ItemStack.EMPTY);
-        ItemStackHelper.loadAllItems(nbt, this.items);
-        CompoundNBT resultNbt = (CompoundNBT) nbt.get("Result");
+    private void NbtRead(CompoundTag nbt){
+        this.items = NonNullList.withSize(this.getContainerSize() - 1, ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(nbt, this.items);
+        CompoundTag resultNbt = (CompoundTag) nbt.get("Result");
         if (resultNbt != null) {
-            this.reslut.set(0, ItemStack.read(resultNbt));
+            this.reslut.set(0, ItemStack.of(resultNbt));
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
+    public void saveAdditional(CompoundTag compound) {
         NbtWrite(compound);
-        return super.write(compound);
+        super.saveAdditional(compound);
     }
 
-    private void NbtWrite(CompoundNBT compound){
-        ItemStackHelper.saveAllItems(compound, this.items);
-        CompoundNBT nbt = new CompoundNBT();
-        this.reslut.get(0).write(nbt);
+    private void NbtWrite(CompoundTag compound){
+        ContainerHelper.saveAllItems(compound, this.items);
+        CompoundTag nbt = new CompoundTag();
+        this.reslut.get(0).setTag(nbt);
         compound.put("Result", nbt);
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        if (world != null) {
-            handleUpdateTag(world.getBlockState(pkt.getPos()), pkt.getNbtCompound());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        if (level != null) {
+            handleUpdateTag(pkt.getTag());
         }
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT compound = super.getUpdateTag();
+    public void handleUpdateTag(CompoundTag tag) {
+        NbtRead(tag);
+    }
+
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag compound = super.getUpdateTag();
         NbtWrite(compound);
         return compound;
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        NbtRead(tag);
-    }
-
-    @Override
-    public ITextComponent getName() {
-        return new TranslationTextComponent("gui.endless.extreme_crafting_table");
+    public Component getName() {
+        return new TranslatableComponent("gui.endless.extreme_crafting_table");
     }
 
     @Override
@@ -191,6 +161,7 @@ public class ExtremeCraftTile extends BaseContainerBlockEntity {
 
     @Override
     public void clearContent() {
-
+        this.items.clear();
+        this.reslut.clear();
     }
 }

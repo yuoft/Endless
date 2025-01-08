@@ -48,7 +48,6 @@ public class ToolHelper {
      * @param pos 坐标
      * @param player 玩家
      * @param lv 范围挖掘等级 1:3*3*3；2:5*5*5
-     * @param type 工具类型
      */
 	public void onBlockStartBreak(ItemStack stack, Level world, BlockPos pos, Player player, Integer lv) {
         Vec3 vec = player.getLookAngle();

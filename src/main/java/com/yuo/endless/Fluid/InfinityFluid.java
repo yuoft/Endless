@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.fluids.ForgeFlowingFluid.Flowing;
 
-public class InfinityFluid extends ForgeFlowingFluid {
+public class InfinityFluid extends Flowing {
     public static final TagKey<Fluid> INFINITY = FluidTags.create(new ResourceLocation(Endless.MOD_ID, "infinity"));
 
     protected InfinityFluid(Properties properties) {

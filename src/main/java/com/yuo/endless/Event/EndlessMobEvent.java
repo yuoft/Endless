@@ -15,7 +15,7 @@ public class EndlessMobEvent {
     //注册刷怪蛋
     @SubscribeEvent
     public static void onRegisterEntities(RegistryEvent.Register<EntityType<?>> event) {
-        ModSpawnEgg.initSpawnEggs();
+//        ModSpawnEgg.initSpawnEggs();
     }
 
     //实体属性
