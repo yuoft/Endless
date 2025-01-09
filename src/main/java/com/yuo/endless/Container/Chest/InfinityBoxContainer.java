@@ -1,7 +1,6 @@
 package com.yuo.endless.Container.Chest;
 
 import com.yuo.endless.Container.EndlessMenuTypes;
-import com.yuo.endless.Tiles.AbsEndlessChestTile;
 import com.yuo.endless.Tiles.InfinityBoxTile;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -29,15 +28,15 @@ public class InfinityBoxContainer extends InfinityChestContainer {
     private final Level world;
 
     public InfinityBoxContainer(int id, Inventory playerInventory, FriendlyByteBuf buf){
-        this(id, playerInventory, (Container) playerInventory.player.level.getBlockEntity(buf.readBlockPos()), new SimpleContainerData(4));
+        this(id, playerInventory, (Container) playerInventory.player.level.getBlockEntity(buf.readBlockPos()));
     }
 
-    public InfinityBoxContainer(int id, Inventory playerInventory, Container tile, ContainerData intArray) {
+    public InfinityBoxContainer(int id, Inventory playerInventory, Container tile) {
         super(EndlessMenuTypes.infinityBoxContainer.get(), id);
-        this.chestTile = (AbsEndlessChestTile) tile;
+        this.chestTile = (InfinityBoxTile) tile;
         this.craftInputInv = new InfinityBoxCraftInventory(this, (InfinityBoxTile) chestTile);
         this.craftOutputInv = new InfinityBoxCraftInventoryResult((InfinityBoxTile) chestTile);
-        this.burnData = intArray;
+        this.burnData = ((InfinityBoxTile) chestTile).burnData;
         this.addDataSlots(this.burnData);
         this.player = playerInventory.player;
         this.world = player.level;
@@ -129,6 +128,7 @@ public class InfinityBoxContainer extends InfinityChestContainer {
     public void removed(Player pPlayer) {
         super.removed(pPlayer);
         this.chestTile.clearContent();
+        this.chestTile.stopOpen(pPlayer);
     }
 
     @OnlyIn(Dist.CLIENT)

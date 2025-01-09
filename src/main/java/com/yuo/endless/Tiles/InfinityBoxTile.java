@@ -41,7 +41,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
     private int burnTimeTotal; //燃料提供的烧炼时间
     private int cookingTime; //烧炼时间
     private static final int cookingTimeTotal = 160; //烧炼总时间
-    private final ContainerData burnData = new ContainerData(){
+    public final ContainerData burnData = new ContainerData(){
         @Override
         public int get(int index) {
             switch (index){
@@ -74,14 +74,15 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, InfinityBoxTile tile) {
+        tile.chestLidController.tickLid();
         boolean flag = tile.isBurning();
         boolean flag1 = false;
         if (tile.level == null) return;
         if (tile.isBurning()) {
             tile.burnTime--;
         }
-        ItemStack burnItem = tile.stackHandler.getStackInSlot(253);
-        ItemStack burnFuel = tile.stackHandler.getStackInSlot(254);
+        ItemStack burnItem = tile.items.get(253);
+        ItemStack burnFuel = tile.items.get(254);
         if (tile.isBurning() || !burnFuel.isEmpty() && !burnItem.isEmpty()){
             Optional<SmeltingRecipe> optional = tile.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(burnItem), level);
             if (optional.isPresent()){
@@ -92,12 +93,12 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
                     if (tile.isBurning()) {
                         flag1 = true;
                         if (burnFuel.hasContainerItem())
-                            tile.stackHandler.setStackInSlot(254, burnFuel.getContainerItem());
+                            tile.items.set(254, burnFuel.getContainerItem());
                         else
                         if (!burnFuel.isEmpty()) {
                             burnFuel.shrink(1);
                             if (burnFuel.isEmpty()) {
-                                tile.stackHandler.setStackInSlot(254, burnFuel.getContainerItem());
+                                tile.items.set(254, burnFuel.getContainerItem());
                             }
                         }
                     }
@@ -136,13 +137,13 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
      * @return 是 true
      */
     private boolean canSmelt(@Nullable SmeltingRecipe recipeIn) {
-        ItemStack burnItem = this.stackHandler.getStackInSlot(253);
+        ItemStack burnItem = this.items.get(253);
         if (!burnItem.isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
                 return false;
             } else {
-                ItemStack burnResult = this.stackHandler.getStackInSlot(255);
+                ItemStack burnResult = this.items.get(255);
                 if (burnResult.isEmpty()) {
                     return true;
                 } else if (!burnResult.equals(itemstack, false)) {
@@ -164,11 +165,11 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
      */
     private void smelt(@Nullable SmeltingRecipe recipe, Level world) {
         if (recipe != null && this.canSmelt(recipe)) {
-            ItemStack burnItem = this.stackHandler.getStackInSlot(253);
+            ItemStack burnItem = this.items.get(253);
             ItemStack craftingResult = recipe.getResultItem();
-            ItemStack burnResult = this.stackHandler.getStackInSlot(255);
+            ItemStack burnResult = this.items.get(255);
             if (burnResult.isEmpty()) {
-                this.stackHandler.setStackInSlot(255, craftingResult.copy());
+                this.items.set(255, craftingResult.copy());
             } else if (burnResult.getItem() == craftingResult.getItem()) {
                 burnResult.grow(craftingResult.getCount());
             }
@@ -177,9 +178,9 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
                 this.setRecipeUsed(recipe);
             }
 
-            ItemStack burnFuel = this.stackHandler.getStackInSlot(254); //湿海绵烧炼
+            ItemStack burnFuel = this.items.get(254); //湿海绵烧炼
             if (burnItem.getItem() == Blocks.WET_SPONGE.asItem() && !burnFuel.isEmpty() && burnFuel.getItem() == Items.BUCKET) {
-                this.stackHandler.setStackInSlot(254, new ItemStack(Items.WATER_BUCKET));
+                this.items.set(254, new ItemStack(Items.WATER_BUCKET));
             }
 
             burnItem.shrink(1);
@@ -194,14 +195,14 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
 
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
-        return new InfinityBoxContainer(id, inventory, this, burnData);
+        return new InfinityBoxContainer(id, inventory, this);
     }
 
     @Override
     public void NbtRead(CompoundTag nbt){
         super.NbtRead(nbt);
         this.burnTime = nbt.getInt("BurnTime");
-        this.burnTimeTotal = ForgeHooks.getBurnTime(this.stackHandler.getStackInSlot(254), RecipeType.SMELTING);
+        this.burnTimeTotal = ForgeHooks.getBurnTime(this.items.get(254), RecipeType.SMELTING);
         this.cookingTime = nbt.getInt("CookingTime");
         CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
         for(String s : compoundnbt.getAllKeys()) {
@@ -210,8 +211,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
     }
 
     @Override
-    public CompoundTag NbtWrite(CompoundTag compound){
-        CompoundTag nbt = super.NbtWrite(compound);
+    public void NbtWrite(CompoundTag nbt){
         nbt.putInt("BurnTime", this.burnTime);
         nbt.putInt("BurnTimeTotal", this.burnTimeTotal);
         nbt.putInt("CookingTime", this.cookingTime);
@@ -220,7 +220,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
             compoundnbt.putInt(recipeId.toString(), craftedAmount);
         });
         nbt.put("RecipesUsed", compoundnbt);
-        return nbt;
+        super.NbtWrite(nbt);
     }
 
     /**

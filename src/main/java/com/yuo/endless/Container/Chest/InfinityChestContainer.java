@@ -5,6 +5,7 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.core.Registry;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -20,6 +21,7 @@ public class InfinityChestContainer extends AbstractContainerMenu {
         super(type, id);
         chestTile = null;
     }
+
 
     @Override
     public boolean stillValid(Player player) {
@@ -390,5 +392,9 @@ public class InfinityChestContainer extends AbstractContainerMenu {
             }
         }
 
+    }
+
+    public Container getContainer() {
+        return this.chestTile;
     }
 }

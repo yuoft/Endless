@@ -75,7 +75,7 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
 
     }
 
-    private void render(com.mojang.blaze3d.vertex.PoseStack pPoseStack, VertexConsumer pConsumer, ModelPart pLidPart, ModelPart pLockPart, ModelPart pBottomPart, float pLidAngle, int pPackedLight, int pPackedOverlay) {
+    private void render(PoseStack pPoseStack, VertexConsumer pConsumer, ModelPart pLidPart, ModelPart pLockPart, ModelPart pBottomPart, float pLidAngle, int pPackedLight, int pPackedOverlay) {
         pLidPart.xRot = -(pLidAngle * 1.5707964F);
         pLockPart.xRot = pLidPart.xRot;
         pLidPart.render(pPoseStack, pConsumer, pPackedLight, pPackedOverlay);

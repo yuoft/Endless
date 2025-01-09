@@ -23,15 +23,11 @@ public class InfinityBox extends AbsEndlessChest {
         return new InfinityBoxTile(blockPos, blockState);
     }
 
-    @org.jetbrains.annotations.Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> entityType) {
-        return createTicker(level, entityType, EndlessTileTypes.INFINITY_CHEST_TILE.get());
-    }
-
     //创建服务端tick
     @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> createTicker(Level level, BlockEntityType<T> serverType, BlockEntityType<? extends InfinityBoxTile> entityType) {
-        return level.isClientSide ? null : createTickerHelper(serverType, entityType, InfinityBoxTile::serverTick);
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return pLevel.isClientSide ? createTickerHelper(pBlockEntityType, EndlessTileTypes.INFINITY_CHEST_TILE.get(), InfinityBoxTile::lidAnimateTick) :
+                createTickerHelper(pBlockEntityType, EndlessTileTypes.INFINITY_CHEST_TILE.get(), InfinityBoxTile::serverTick);
     }
 }

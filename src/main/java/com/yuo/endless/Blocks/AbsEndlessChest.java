@@ -1,7 +1,6 @@
 package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Tiles.AbsEndlessChestTile;
-import it.unimi.dsi.fastutil.floats.Float2FloatFunction;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,6 +11,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +30,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -44,13 +44,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -110,13 +109,13 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
 
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        BlockEntity tileentity = level.getBlockEntity(pos);
-        if (tileentity instanceof AbsEndlessChestTile chestTile) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof AbsEndlessChestTile chestTile) {
             if (!level.isClientSide && player.isCreative() && !chestTile.isEmpty()) {
                 ItemStack itemstack = new ItemStack(this);
-                CompoundTag compoundnbt = chestTile.NbtWrite(new CompoundTag());
-                if (!compoundnbt.isEmpty()) {
-                    itemstack.addTagElement("BlockEntityTag", compoundnbt);
+                CompoundTag tag = new CompoundTag();
+                if (!tag.isEmpty()) {
+                    itemstack.addTagElement("BlockEntityTag", tag);
                 }
 
                 if (chestTile.hasCustomName()) {
@@ -137,9 +136,8 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        BlockEntity tileentity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (tileentity instanceof AbsEndlessChestTile) {
-            AbsEndlessChestTile chestTile = (AbsEndlessChestTile)tileentity;
+        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (blockEntity instanceof AbsEndlessChestTile chestTile) {
             builder = builder.withDynamicDrop(CONTENTS, (context, stackConsumer) -> {
                 for(int i = 0; i < chestTile.getContainerSize(); ++i) {
                     stackConsumer.accept(chestTile.getItem(i));
@@ -154,9 +152,9 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState pState, @org.jetbrains.annotations.Nullable LivingEntity pPlacer, ItemStack stack) {
         if (stack.hasCustomHoverName()) {
-            BlockEntity tileentity = level.getBlockEntity(pos);
-            if (tileentity instanceof AbsEndlessChestTile) {
-                ((AbsEndlessChestTile)tileentity).setCustomName(stack.getDisplayName());
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof AbsEndlessChestTile) {
+                ((AbsEndlessChestTile)blockEntity).setCustomName(stack.getDisplayName());
             }
         }
     }
@@ -211,22 +209,14 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
         if (!level.isClientSide) {
-            MenuProvider menuProvider = getMenuProvider(state, level, pos);
-            if (menuProvider != null) {
-                player.openMenu(menuProvider);
+            if (level.getBlockEntity(pos) instanceof AbsEndlessChestTile endlessChestTile) {
+                NetworkHooks.openGui((ServerPlayer)player, endlessChestTile, pos);
                 player.awardStat(Stats.OPEN_CHEST);
                 PiglinAi.angerNearbyPiglins(player, true);
             }
-
+            return InteractionResult.CONSUME;
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @org.jetbrains.annotations.Nullable
-    @Override
-    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        BlockEntity tileentity = level.getBlockEntity(pos);
-        return tileentity instanceof MenuProvider ? (MenuProvider) tileentity : null;
     }
 
     private static final DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Optional<Container>> INVENTORY_MERGER = new DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Optional<Container>>() {
@@ -248,6 +238,15 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
         return chest.combine(state, level, pos, override).apply(INVENTORY_MERGER).orElse(null);
     }
 
+    @Override
+    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+        if (blockEntity instanceof AbsEndlessChestTile) {
+            ((AbsEndlessChestTile)blockEntity).recheckOpen();
+        }
+
+    }
+
     public DoubleBlockCombiner.NeighborCombineResult<? extends AbsEndlessChestTile> combine(BlockState state, Level world, BlockPos pos, boolean override) {
         BiPredicate<LevelAccessor, BlockPos> bipredicate;
         if (override) {
@@ -262,8 +261,8 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
         super.triggerEvent(state, level, pos, id, param);
-        BlockEntity tileentity = level.getBlockEntity(pos);
-        return tileentity != null && tileentity.triggerEvent(id, param);
+        BlockEntity tile = level.getBlockEntity(pos);
+        return tile != null && tile.triggerEvent(id, param);
     }
 
     private static boolean isBlocked(LevelAccessor iWorld, BlockPos blockPos) {
@@ -301,25 +300,6 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
         return false;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Float2FloatFunction> getLidRotationCallback(final LidBlockEntity lid) {
-        return new DoubleBlockCombiner.Combiner<AbsEndlessChestTile, Float2FloatFunction>() {
-            public Float2FloatFunction acceptDouble(AbsEndlessChestTile chestTile, AbsEndlessChestTile chestTileEntity) {
-                return (angle) -> Math.max(chestTile.getOpenNess(angle), chestTileEntity.getOpenNess(angle));
-            }
-
-            public Float2FloatFunction acceptSingle(AbsEndlessChestTile chestTile) {
-                Objects.requireNonNull(chestTile);
-                return chestTile::getOpenNess;
-            }
-
-            public Float2FloatFunction acceptNone() {
-                Objects.requireNonNull(lid);
-                return lid::getOpenNess;
-            }
-        };
     }
 
     public static DoubleBlockCombiner.BlockType getMergerType(BlockState blockState) {

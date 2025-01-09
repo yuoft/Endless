@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Container.NeutroniumCompressorContainer;
 import com.yuo.endless.Endless;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -42,7 +43,7 @@ public class NeutroniumCompressorScreen extends AbstractContainerScreen<Neutroni
             if (this.minecraft != null) {
                 this.minecraft.getItemRenderer().renderGuiItem(item, i + 15, j + 35);
             }
-            this.font.draw(matrixStack, item.getItem().getDescriptionId(), i + 15, j + 25, 0x696969);
+            this.font.draw(matrixStack, I18n.get(item.getItem().getDescriptionId()), i + 15, j + 25, 0x696969);
         }
     }
 

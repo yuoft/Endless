@@ -26,7 +26,7 @@ public class ExtremeCraftResultSlot extends ResultSlot {
 
     @Override
     public void onTake(Player thePlayer, ItemStack stack) {
-        this.onTake(player, stack);
+        this.checkTakeAchievements(stack);
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);
         NonNullList<ItemStack> nonnulllist; //优先匹配工作台配方，没有则配方无尽配方
         Level world = thePlayer.level;

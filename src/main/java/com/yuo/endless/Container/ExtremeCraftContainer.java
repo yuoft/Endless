@@ -92,7 +92,7 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
                 if (optional.isPresent() && isCraft()) {
                     CraftingRecipe recipe = optional.get();
                     if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)) {
-                        itemStack = recipe.getResultItem(); //获取配方输出
+                        itemStack = recipe.assemble(craftingInv); //获取配方输出
                     }
                 }else {
                     itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;

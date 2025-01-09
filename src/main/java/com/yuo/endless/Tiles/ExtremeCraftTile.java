@@ -1,5 +1,6 @@
 package com.yuo.endless.Tiles;
 
+import com.yuo.endless.Container.ExtremeCraftContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -156,7 +157,7 @@ public class ExtremeCraftTile extends BaseContainerBlockEntity {
 
     @Override
     protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
-        return null;
+        return new ExtremeCraftContainer(i, inventory, this);
     }
 
     @Override

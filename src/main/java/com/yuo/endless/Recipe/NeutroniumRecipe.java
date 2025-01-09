@@ -80,7 +80,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
     public boolean matches(Container inv, Level worldIn) {
         ItemStack itemStack = inv.getItem(0);
         for (ItemStack stack : inputs) {
-            if (stack.equals(itemStack, false)) return true;
+            if (ItemStack.isSame(stack, itemStack)) return true;
         }
 
         return false;
@@ -89,7 +89,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
     //输入相同
     public boolean isInput(ItemStack stack){
         for (ItemStack itemStack : inputs) {
-            if (ItemStack.isSame(itemStack, stack)) return true;
+            if (ItemStack.isSame(stack, itemStack)) return true;
         }
 
         return false;

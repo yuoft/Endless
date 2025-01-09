@@ -18,5 +18,4 @@ public class CompressorChestTile extends AbsEndlessChestTile {
     protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
         return new CompressorChestContainer(id, inventory, this);
     }
-
 }

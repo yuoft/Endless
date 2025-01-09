@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 public class InfinityStackHandler extends ItemStackHandler {
     public InfinityStackHandler() {
+        this(1);
     }
 
     public InfinityStackHandler(int size) {

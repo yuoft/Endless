@@ -2,8 +2,7 @@ package com.yuo.endless.Tiles;
 
 import com.yuo.endless.Blocks.AbsEndlessChest;
 import com.yuo.endless.Blocks.EndlessChestType;
-import com.yuo.endless.Container.Chest.CompressorChestContainer;
-import com.yuo.endless.Container.Chest.InfinityBoxContainer;
+import com.yuo.endless.Container.Chest.InfinityChestContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -18,45 +17,37 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEntity implements LidBlockEntity {
-    protected float lidAngle;
-    protected float prevLidAngle;
-    private int ticksSinceSync;
     private final Supplier<Block> blockSupplier;
     private final EndlessChestType type;
-    protected final InfinityStackHandler stackHandler;
+    protected NonNullList<ItemStack> items;
     private final ContainerOpenersCounter openersCounter;
-    private final ChestLidController chestLidController;
-    private net.minecraftforge.common.util.LazyOptional<IItemHandlerModifiable> chestHandler;
-    private static final Logger LOGGER = LogManager.getLogger();
+    protected final ChestLidController chestLidController;
+    private LazyOptional<IItemHandlerModifiable> chestHandler;
     private static final String NBT_COUNT = "infinity_count";
 
     public AbsEndlessChestTile(BlockEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         this.type = chestType;
-        this.stackHandler = new InfinityStackHandler(chestType.size);
+        this.items = NonNullList.withSize(chestType.getSize(), ItemStack.EMPTY);
         this.blockSupplier = supplier;
         this.openersCounter = new ContainerOpenersCounter() {
             protected void onOpen(Level level, BlockPos pos1, BlockState state1) {
@@ -72,15 +63,21 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             }
 
             protected boolean isOwnContainer(Player player) {
-                if (!(player.containerMenu instanceof AbstractContainerMenu)) {
+                if (!(player.containerMenu instanceof InfinityChestContainer)) {
                     return false;
                 } else {
-                    Container container = ((ChestMenu)player.containerMenu).getContainer();
+                    Container container = ((InfinityChestContainer)player.containerMenu).getContainer();
                     return container == AbsEndlessChestTile.this || container instanceof CompoundContainer && ((CompoundContainer)container).contains(AbsEndlessChestTile.this);
                 }
             }
         };
         this.chestLidController = new ChestLidController();
+    }
+
+    @Override
+    public void clearContent() {
+        super.clearContent();
+        this.items.clear();
     }
 
     @Override
@@ -90,13 +87,23 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             stack.setCount(getMaxStackSize());
         }
 
-        this.stackHandler.getStacks().set(index, stack);
+        this.items.set(index, stack);
         this.setChanged();
     }
 
     @Override
+    public ItemStack getItem(int pIndex) {
+        return this.items.get(pIndex);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int pIndex) {
+        return ContainerHelper.takeItem(this.items, pIndex);
+    }
+
+    @Override
     public ItemStack removeItem(int index, int count) {
-        return super.removeItem(index, count);
+        return ContainerHelper.removeItem(this.items, index, count);
     }
 
     @Override
@@ -115,7 +122,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     @Override
     public boolean isEmpty() {
-        for (ItemStack itemstack : this.stackHandler.getStacks()) {
+        for (ItemStack itemstack : this.items) {
             if (!itemstack.isEmpty()) {
                 return false;
             }
@@ -130,32 +137,31 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
     }
 
     public void NbtRead(CompoundTag nbt) {
-        this.stackHandler.setStacks(NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY));
         if (!this.tryLoadLootTable(nbt)) {
-            loadAllItems(nbt, this.stackHandler.getStacks());
+            ContainerHelper.loadAllItems(nbt, this.items);
+//            loadAllItems(nbt, this.items);
         }
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
-        NbtWrite(compound);
-        super.saveAdditional(compound);
+    public void saveAdditional(CompoundTag tag) {
+        NbtWrite(tag);
+        super.saveAdditional(tag);
     }
 
-    public CompoundTag NbtWrite(CompoundTag compound) {
+    public void NbtWrite(CompoundTag compound) {
         if (!this.trySaveLootTable(compound)) {
-            saveAllItems(compound, this.stackHandler.getStacks());
+            ContainerHelper.saveAllItems(compound, this.items);
+//            saveAllItems(compound, this.items);
         }
-        return compound;
     }
 
     /**
      * 将所有物品保存到nbt中
      * @param nbt nbt
      * @param stacks 物品列表
-     * @return new nbt
      */
-    public static CompoundTag saveAllItems(CompoundTag nbt, NonNullList<ItemStack> stacks) {
+    public static void saveAllItems(CompoundTag nbt, NonNullList<ItemStack> stacks) {
         ListTag listNBT = new ListTag();
 
         for(int i = 0; i < stacks.size(); ++i) {
@@ -163,7 +169,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             if (!stack.isEmpty()) {
                 CompoundTag tag = new CompoundTag();
                 tag.putByte("Slot", (byte)i);
-                stack.deserializeNBT(tag);
+                tag.put("Item", stack.serializeNBT());
                 tag.putInt(NBT_COUNT, stack.getCount());
                 listNBT.add(tag);
             }
@@ -172,8 +178,6 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
         if (!listNBT.isEmpty()) {
             nbt.put("Items", listNBT);
         }
-
-        return nbt;
     }
 
     /**
@@ -188,7 +192,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             CompoundTag tag = listNBT.getCompound(i);
             int slot = tag.getByte("Slot") & 255;
             if (slot < stacks.size()) {
-                ItemStack stack = ItemStack.of(tag);
+                ItemStack stack = ItemStack.of(tag.getCompound("Item"));
                 int count = tag.getInt(NBT_COUNT);
                 stack.setCount(count);
                 stacks.set(slot, stack);
@@ -201,51 +205,11 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
         return new TranslatableComponent("gui.endless." + type.getName() + "_chest");
     }
 
-//    @Nullable
-//    @Override
-//    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player pPlayer) {
-//        return ChestMenu.threeRows(id, inventory, this);
-//    }
-
     @Override
     protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
         return null;
     }
-/*
-    public static void serverTick(Level level, BlockPos pos, BlockState state, AbsEndlessChestTile tile) {
-        int i = tile.pos.getX();
-        int j = tile.pos.getY();
-        int k = tile.pos.getZ();
-        ++tile.ticksSinceSync;
-        tile.numPlayersUsing = calculatePlayersUsingSync(tile.world, tile, tile.ticksSinceSync, i, j, k, tile.numPlayersUsing);
-        tile.prevLidAngle = tile.lidAngle;
-        float f = 0.1F;
-        if (tile.numPlayersUsing > 0 && tile.lidAngle == 0.0F) {
-            tile.playSound(SoundEvents.BLOCK_CHEST_OPEN);
-        }
 
-        if (tile.numPlayersUsing == 0 && tile.lidAngle > 0.0F || tile.numPlayersUsing > 0 && tile.lidAngle < 1.0F) {
-            float f1 = tile.lidAngle;
-            if (tile.numPlayersUsing > 0) {
-                tile.lidAngle += f;
-            } else tile.lidAngle -= f;
-
-            if (tile.lidAngle > 1.0F) {
-                tile.lidAngle = 1.0F;
-            }
-
-            float f2 = 0.5F;
-            if (tile.lidAngle < f2 && f1 >= f2) {
-                tile.playSound(SoundEvents.CHEST_CLOSE);
-            }
-
-            if (tile.lidAngle < 0.0F) {
-                tile.lidAngle = 0.0F;
-            }
-        }
-
-    }
-*/
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
@@ -267,30 +231,17 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     @Override
     public void handleUpdateTag(CompoundTag tag) {
+        super.handleUpdateTag(tag);
         NbtRead(tag);
     }
 
-    public static int calculatePlayersUsingSync(Level world, BaseEntityBlock lockableTile, int ticksSinceSync, int x, int y, int z, int numPlayersUsing) {
-        if (world != null && !world.isClientSide && numPlayersUsing != 0 && (ticksSinceSync + x + y + z) % 200 == 0) {
-            numPlayersUsing = calculatePlayersUsing(world, lockableTile, x, y, z);
+    @Override
+    public boolean stillValid(Player player) {
+        if (this.level != null && this.level.getBlockEntity(this.worldPosition) != this) {
+            return false;
+        } else {
+            return player.distanceToSqr((double)this.worldPosition.getX() + 0.5D, (double)this.worldPosition.getY() + 0.5D, (double)this.worldPosition.getZ() + 0.5D) <= 64.0D;
         }
-
-        return numPlayersUsing;
-    }
-
-    public static int calculatePlayersUsing(Level world, BaseEntityBlock lockableTile, int x, int y, int z) {
-        int i = 0;
-        float f = 5.0f;
-
-        for (Player playerentity : world.getEntitiesOfClass(Player.class,
-                new AABB((float) x - f, (float) y - f, (float) z - f, (float) (x + 1) + f, (float) (y + 1) + f, (float) (z + 1) + f))) {
-            AbstractContainerMenu openContainer = playerentity.containerMenu;
-            if (openContainer instanceof CompressorChestContainer || openContainer instanceof InfinityBoxContainer) {
-                ++i;
-            }
-        }
-
-        return i;
     }
 
     private static void playSound(Level level, BlockPos pos, BlockState pState, SoundEvent soundIn) {
@@ -299,6 +250,17 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
         double d2 = (double) pos.getZ() + 0.5D;
         if (level != null)
             level.playSound(null, d0, d1, d2, soundIn, SoundSource.BLOCKS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
+    }
+
+    public void recheckOpen() {
+        if (!this.remove) {
+            this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
+        }
+
+    }
+
+    public static void lidAnimateTick(Level pLevel, BlockPos pPos, BlockState pState, AbsEndlessChestTile pBlockEntity) {
+        pBlockEntity.chestLidController.tickLid();
     }
 
     @Override
@@ -315,6 +277,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
     @Override
     public void startOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
+            triggerEvent(1, 1);
             this.openersCounter.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
@@ -323,6 +286,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
     @Override
     public void stopOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
+            triggerEvent(1, 0);
             this.openersCounter.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
 
@@ -340,15 +304,21 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     @Override
     public NonNullList<ItemStack> getItems() {
-        return this.stackHandler.getStacks();
+        return this.items;
     }
 
     @Override
     protected void setItems(NonNullList<ItemStack> itemsIn) {
-        this.stackHandler.setStacks(itemsIn);
+        this.items = itemsIn;
     }
 
-    @Override
+//    @Override
+//    public void setRemoved() {
+//        super.setRemoved();
+//        for (LazyOptional<? extends IItemHandler> handler : chestHandler)
+//            handler.invalidate();
+//    }
+
     public void setBlockState(BlockState state) {
         super.setBlockState(state);
         if (this.chestHandler != null) {
@@ -356,16 +326,20 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             this.chestHandler = null;
             oldHandler.invalidate();
         }
+
     }
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
         if (!this.remove && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (this.chestHandler == null)
+            if (this.chestHandler == null) {
                 this.chestHandler = LazyOptional.of(this::createHandler);
+            }
+
             return this.chestHandler.cast();
+        } else {
+            return super.getCapability(cap, side);
         }
-        return super.getCapability(cap, side);
     }
 
     @Nonnull
@@ -378,12 +352,12 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
         return new InvWrapper(inv == null ? this : inv);
     }
 
-    @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        if (chestHandler != null){
-            chestHandler.invalidate();
-            chestHandler = null;
+        if (this.chestHandler != null) {
+            this.chestHandler.invalidate();
+            this.chestHandler = null;
         }
+
     }
 }
