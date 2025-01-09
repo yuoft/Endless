@@ -9,6 +9,9 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -24,6 +27,11 @@ public class ExtremeCraft extends BaseEntityBlock {
 
     public ExtremeCraft() {
         super(Properties.of(Material.WOOD).strength(10, 50).requiresCorrectToolForDrops().sound(SoundType.GLASS));
+    }
+
+    @Override
+    public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {
+        return player.getUseItem().getItem() instanceof PickaxeItem pickaxeItem && pickaxeItem.getTier().getLevel() >= Tiers.IRON.getLevel();
     }
 
     @org.jetbrains.annotations.Nullable

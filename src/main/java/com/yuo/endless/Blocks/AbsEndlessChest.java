@@ -14,7 +14,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.*;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -164,7 +167,7 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
             if (blockentity instanceof AbsEndlessChestTile) {
-                Containers.dropContents(pLevel, pPos, (AbsEndlessChestTile)blockentity);
+//                Containers.dropContents(pLevel, pPos, (AbsEndlessChestTile)blockentity);
                 pLevel.updateNeighbourForOutputSignal(pPos, this);
             }
 
