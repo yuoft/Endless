@@ -4,11 +4,11 @@ import com.yuo.endless.Tiles.EndlessTileTypes;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -57,7 +58,7 @@ public class NeutroniumCompressor extends BaseEntityBlock {
         if (!level.isClientSide) {
             BlockEntity tileEntity = level.getBlockEntity(pos);
             if (tileEntity instanceof NeutroniumCompressorTile){ //打开gui
-                player.openMenu((MenuProvider) tileEntity);
+                NetworkHooks.openGui((ServerPlayer) player, (NeutroniumCompressorTile) tileEntity, pos);
                 player.awardStat(Stats.INTERACT_WITH_FURNACE);
             }
         }

@@ -1,6 +1,7 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Tiles.ExtremeCraftTile;
+import net.minecraft.world.Container;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;
 
@@ -8,8 +9,8 @@ public class ExtremeCraftInventoryResult extends ResultContainer {
 
     private final ExtremeCraftTile craftTile;
 
-    public ExtremeCraftInventoryResult(ExtremeCraftTile tile){
-        this.craftTile = tile;
+    public ExtremeCraftInventoryResult(Container tile){
+        this.craftTile = (ExtremeCraftTile) tile;
     }
 
     @Override

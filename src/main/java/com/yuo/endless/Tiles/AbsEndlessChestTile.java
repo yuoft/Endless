@@ -53,10 +53,6 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String NBT_COUNT = "infinity_count";
 
-    public AbsEndlessChestTile(BlockEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier){
-        this(typeIn, chestType, supplier, null, null);
-    }
-
     public AbsEndlessChestTile(BlockEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         this.type = chestType;

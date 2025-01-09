@@ -1,7 +1,9 @@
 package com.yuo.endless.Container.Chest;
 
 import com.yuo.endless.Container.EndlessMenuTypes;
-import com.yuo.endless.Tiles.CompressorChestTile;
+import com.yuo.endless.Tiles.AbsEndlessChestTile;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -9,13 +11,13 @@ import net.minecraft.world.item.ItemStack;
 
 public class CompressorChestContainer extends InfinityChestContainer {
 
-    public CompressorChestContainer(int id, Inventory playerInventory){
-        this(id, playerInventory, new CompressorChestTile(null, null));
+    public CompressorChestContainer(int id, Inventory playerInventory, FriendlyByteBuf buf){
+        this(id, playerInventory, (Container) playerInventory.player.level.getBlockEntity(buf.readBlockPos()));
     }
 
-    public CompressorChestContainer(int id, Inventory playerInventory, CompressorChestTile tile) {
+    public CompressorChestContainer(int id, Inventory playerInventory, Container tile) {
         super(EndlessMenuTypes.CompressorChestContainer.get(), id);
-        this.chestTile = tile;
+        this.chestTile = (AbsEndlessChestTile) tile;
         chestTile.startOpen(playerInventory.player);
 
         for(int j = 0; j < 9; ++j) {

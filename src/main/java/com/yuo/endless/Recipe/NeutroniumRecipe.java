@@ -89,7 +89,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
     //输入相同
     public boolean isInput(ItemStack stack){
         for (ItemStack itemStack : inputs) {
-            if (itemStack.equals(stack, false)) return true;
+            if (ItemStack.isSame(itemStack, stack)) return true;
         }
 
         return false;

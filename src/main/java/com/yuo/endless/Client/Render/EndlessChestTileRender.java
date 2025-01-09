@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import com.yuo.endless.Blocks.AbsEndlessChest;
 import com.yuo.endless.Blocks.EndlessBlocks;
+import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Tiles.AbsEndlessChestTile;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -51,13 +52,12 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
     }
 
     @Override
-    public void render(AbsEndlessChestTile chest, float pPartialTick, PoseStack pPoseStack, MultiBufferSource
-    pBufferSource, int pPackedLight, int pPackedOverlay) {
+    public void render(AbsEndlessChestTile chest, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         Level level = chest.getLevel();
         boolean flag = level != null;
         BlockState blockstate = flag ? chest.getBlockState() : EndlessBlocks.infinityBox.get().defaultBlockState().setValue(AbsEndlessChest.FACING, Direction.SOUTH);
         Block block = blockstate.getBlock();
-        if (block instanceof AbsEndlessChest) {
+        if (block instanceof AbsEndlessChest absEndlessChest) {
             pPoseStack.pushPose();
             float f = blockstate.getValue(AbsEndlessChest.FACING).toYRot();
             pPoseStack.translate(0.5, 0.5, 0.5);
@@ -66,7 +66,7 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
 
             float openNess = 1.0f - chest.getOpenNess(pPartialTick);
             openNess = 1.0f - openNess * openNess * openNess;
-            Material material = this.getMaterial(chest);
+            Material material = this.getMaterial(absEndlessChest);
             VertexConsumer vertexconsumer = material.buffer(pBufferSource, RenderType::entityCutout);
             this.render(pPoseStack, vertexconsumer, this.lid, this.lock, this.bottom, openNess, pPackedLight, pPackedOverlay);
 
@@ -83,8 +83,9 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
         pBottomPart.render(pPoseStack, pConsumer, pPackedLight, pPackedOverlay);
     }
 
-    protected Material getMaterial(AbsEndlessChestTile blockEntity) {
-        return new Material(Sheets.CHEST_SHEET, new ResourceLocation(Endless.MOD_ID, "entity/" + "infinity_chest"));
+    protected Material getMaterial(AbsEndlessChest chest) {
+        String chestName = chest.getType() == EndlessChestType.INFINITY ? "infinity_chest" : chest.getType() == EndlessChestType.COMPRESSOR ? "compressor_chest" : "chest";
+        return new Material(Sheets.CHEST_SHEET, new ResourceLocation(Endless.MOD_ID, "entity/" + chestName));
     }
 
 }

@@ -14,11 +14,11 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TripleNeutronCollectorTile extends AbsNeutronCollectorTile{
 
     public TripleNeutronCollectorTile(BlockPos pos, BlockState state){
-        super(EndlessTileTypes.TRIPLE_NEUTRON_COLLECTOR_TILE.get(), pos, state);
+        this(EndlessTileTypes.TRIPLE_NEUTRON_COLLECTOR_TILE.get(), pos, state);
     }
 
-    public TripleNeutronCollectorTile(BlockEntityType<TripleNeutronCollectorTile> type) {
-        super(type);
+    public TripleNeutronCollectorTile(BlockEntityType<TripleNeutronCollectorTile> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Override

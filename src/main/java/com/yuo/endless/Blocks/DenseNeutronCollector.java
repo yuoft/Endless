@@ -2,16 +2,16 @@ package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Tiles.DenseNeutronCollectorTile;
 import com.yuo.endless.Tiles.EndlessTileTypes;
-import com.yuo.endless.Tiles.NeutronCollectorTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public class DenseNeutronCollector extends AbsNeutronCollector{
@@ -30,7 +30,7 @@ public class DenseNeutronCollector extends AbsNeutronCollector{
     protected void openContainer(Level worldIn, BlockPos pos, Player player) {
         BlockEntity tile = worldIn.getBlockEntity(pos);
         if (tile instanceof DenseNeutronCollectorTile) {
-            player.openMenu((MenuProvider)tile);
+            NetworkHooks.openGui((ServerPlayer) player, (DenseNeutronCollectorTile) tile, pos);
             player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }

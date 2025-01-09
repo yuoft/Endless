@@ -1,26 +1,25 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Tiles.AbsNeutronCollectorTile;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class AbsNeutronCollectorContainer extends AbstractContainerMenu {
 
     private final AbsNeutronCollectorTile collectorTile;
     private final NCIntArray data;
 
-    public AbsNeutronCollectorContainer(int id, Inventory playerInventory, MenuType<?> containerType, AbsNeutronCollectorTile tile){
-        this(id, playerInventory, containerType, tile, new NCIntArray());
-    }
-
-    public AbsNeutronCollectorContainer(int id, Inventory playerInventory, MenuType<?> containerType, AbsNeutronCollectorTile tile, NCIntArray containerData) {
+    public AbsNeutronCollectorContainer(int id, Inventory playerInventory, MenuType<?> containerType, Container tile) {
         super(containerType, id);
-        this.collectorTile = tile;
-        this.data = containerData;
+        this.collectorTile = (AbsNeutronCollectorTile) tile;
+        this.data = collectorTile.data;
         //中子素生成槽
         this.addSlot(new NCOutputSlot(collectorTile, 0, 80,35));
         //添加玩家物品栏
@@ -64,6 +63,7 @@ public class AbsNeutronCollectorContainer extends AbstractContainerMenu {
     }
 
     //获取运行时间
+    @OnlyIn(Dist.CLIENT)
     public int getTimer(){
         return (int) Math.ceil(this.data.get(0) / 3600.0 * 24);
     }

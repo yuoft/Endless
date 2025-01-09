@@ -1,6 +1,7 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Tiles.ExtremeCraftTile;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -10,9 +11,9 @@ public class ExtremeCraftInventory extends CraftingContainer {
     private final ExtremeCraftTile craftTile;
     private final AbstractContainerMenu container;
 
-    public ExtremeCraftInventory(AbstractContainerMenu containerIn, ExtremeCraftTile tile) {
+    public ExtremeCraftInventory(AbstractContainerMenu containerIn, Container tile) {
         super(containerIn, 9, 9);
-        this.craftTile = tile;
+        this.craftTile = (ExtremeCraftTile) tile;
         this.container = containerIn;
     }
 

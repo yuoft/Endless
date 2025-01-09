@@ -32,11 +32,6 @@ public class AbsNeutronCollectorTile extends BaseContainerBlockEntity implements
     public NCIntArray data = new NCIntArray();
     LazyOptional<? extends IItemHandler>[] handlerOutPut = SidedInvWrapper.create(this, Direction.DOWN);
 
-    public AbsNeutronCollectorTile(BlockEntityType<?> tileEntityType){
-        super(tileEntityType, null, null);
-
-    }
-
     public AbsNeutronCollectorTile(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state) {
         super(tileEntityType, pos, state);
     }

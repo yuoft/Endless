@@ -2,7 +2,7 @@ package com.yuo.endless.Container;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.Recipe.*;
-import com.yuo.endless.Tiles.ExtremeCraftTile;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -28,11 +28,11 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
     private final Level world;
 
 
-    public ExtremeCraftContainer(int id, Inventory playerInventory){
-        this(id, playerInventory, new ExtremeCraftTile(null, null));
+    public ExtremeCraftContainer(int id, Inventory playerInventory, FriendlyByteBuf buf){
+        this(id, playerInventory, (Container) playerInventory.player.level.getBlockEntity(buf.readBlockPos()));
     }
 
-    public ExtremeCraftContainer(int id, Inventory playerInventory, ExtremeCraftTile tile) {
+    public ExtremeCraftContainer(int id, Inventory playerInventory, Container tile) {
         super(EndlessMenuTypes.extremeCraftContainer.get(), id);
         this.inputInventory = new ExtremeCraftInventory(this, tile);
         this.outputInventory = new ExtremeCraftInventoryResult(tile);

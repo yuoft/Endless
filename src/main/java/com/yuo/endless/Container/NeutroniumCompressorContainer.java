@@ -4,6 +4,8 @@ import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,14 +21,14 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
     private final NiumCIntArray data;
     private final Level world;
 
-    public NeutroniumCompressorContainer(int id, Inventory playerInventory){
-        this(id,playerInventory , new NeutroniumCompressorTile(null, null));
+    public NeutroniumCompressorContainer(int id, Inventory playerInventory, FriendlyByteBuf buf){
+        this(id,playerInventory , (Container) playerInventory.player.level.getBlockEntity(buf.readBlockPos()));
     }
 
-    public NeutroniumCompressorContainer(int id, Inventory playerInventory, NeutroniumCompressorTile inventory) {
+    public NeutroniumCompressorContainer(int id, Inventory playerInventory, Container inventory) {
         super(EndlessMenuTypes.neutroniumCompressorContainer.get(), id);
-        this.tile = inventory;
-        this.data = inventory.data;
+        this.tile = (NeutroniumCompressorTile) inventory;
+        this.data = tile.data;
         this.world = playerInventory.player.level;
         //矿物输入槽
         this.addSlot(new NiumCSlot(tile, world, 0, 39,35));

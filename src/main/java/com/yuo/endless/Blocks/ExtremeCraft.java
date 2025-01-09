@@ -23,11 +23,6 @@ public class ExtremeCraft extends BaseEntityBlock {
         super(Properties.of(Material.WOOD).strength(10, 50).requiresCorrectToolForDrops().sound(SoundType.GLASS));
     }
 
-//    @Override
-//    public boolean hasTileEntity(BlockState state) {
-//        return true;
-//    }
-
     @org.jetbrains.annotations.Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {

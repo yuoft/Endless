@@ -15,11 +15,11 @@ import org.jetbrains.annotations.Nullable;
 public class NeutronCollectorTile extends AbsNeutronCollectorTile{
 
     public NeutronCollectorTile(BlockPos pos, BlockState state){
-        super(EndlessTileTypes.NEUTRON_COLLECTOR_TILE.get(), pos, state);
+        this(EndlessTileTypes.NEUTRON_COLLECTOR_TILE.get(), pos, state);
     }
 
-    public NeutronCollectorTile(BlockEntityType<NeutronCollectorTile> type) {
-        super(type);
+    public NeutronCollectorTile(BlockEntityType<NeutronCollectorTile> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     @Nullable
