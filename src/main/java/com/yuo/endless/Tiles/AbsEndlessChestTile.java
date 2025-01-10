@@ -139,8 +139,8 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     public void NbtRead(CompoundTag nbt) {
         if (!this.tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, this.items);
-//            loadAllItems(nbt, this.items);
+//            ContainerHelper.loadAllItems(nbt, this.items);
+            loadAllItems(nbt, this.items);
         }
     }
 
@@ -152,8 +152,8 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     public void NbtWrite(CompoundTag compound) {
         if (!this.trySaveLootTable(compound)) {
-            ContainerHelper.saveAllItems(compound, this.items);
-//            saveAllItems(compound, this.items);
+//            ContainerHelper.saveAllItems(compound, this.items);
+            saveAllItems(compound, this.items);
         }
     }
 

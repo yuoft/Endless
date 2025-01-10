@@ -83,7 +83,7 @@ public class InfinityBoxContainer extends InfinityChestContainer {
         if (optional.isPresent()) {
             CraftingRecipe recipe = optional.get();
             if (craftOutputInv.setRecipeUsed(world, serverPlayer, recipe)) {
-                itemStack = recipe.getResultItem(); //获取配方输出
+                itemStack = recipe.assemble(craftingInv); //获取配方输出
             }
         }
         craftOutputInv.setItem(252, itemStack);
@@ -127,7 +127,7 @@ public class InfinityBoxContainer extends InfinityChestContainer {
     @Override
     public void removed(Player pPlayer) {
         super.removed(pPlayer);
-        this.chestTile.clearContent();
+//        this.chestTile.clearContent();
         this.chestTile.stopOpen(pPlayer);
     }
 

@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +23,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -116,11 +116,11 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
         if (blockEntity instanceof AbsEndlessChestTile chestTile) {
             if (!level.isClientSide && player.isCreative() && !chestTile.isEmpty()) {
                 ItemStack itemstack = new ItemStack(this);
-                CompoundTag tag = new CompoundTag();
-                if (!tag.isEmpty()) {
-                    itemstack.addTagElement("BlockEntityTag", tag);
-                }
-
+//                CompoundTag tag = new CompoundTag();
+//                if (tag.isEmpty()) {
+//                    itemstack.addTagElement("BlockEntityTag", tag.put("ChestTile", chestTile.serializeNBT()));
+//                }
+                chestTile.saveToItem(itemstack);
                 if (chestTile.hasCustomName()) {
                     itemstack.setHoverName(chestTile.getCustomName());
                 }
@@ -178,15 +178,15 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
     @Override
     public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable BlockGetter level, List<Component> components, TooltipFlag pFlag) {
         super.appendHoverText(stack, level, components, pFlag);
-        CompoundTag compoundnbt = stack.getTagElement("BlockEntityTag");
-        if (compoundnbt != null) {
-            if (compoundnbt.contains("LootTable", 8)) {
+        CompoundTag tag = BlockItem.getBlockEntityData(stack);//stack.getTagElement("BlockEntityTag");
+        if (tag != null) {
+            if (tag.contains("LootTable", 8)) {
                 components.add(new TextComponent("???????"));
             }
 
-            if (compoundnbt.contains("Items", 9)) {
+            if (tag.contains("Items", 9)) {
                 NonNullList<ItemStack> nonnulllist = NonNullList.withSize(type.getSize(), ItemStack.EMPTY);
-                AbsEndlessChestTile.loadAllItems(compoundnbt, nonnulllist);
+                AbsEndlessChestTile.loadAllItems(tag, nonnulllist);
                 int i = 0;
                 int j = 0;
 

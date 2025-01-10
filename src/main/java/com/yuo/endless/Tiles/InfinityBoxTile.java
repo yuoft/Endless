@@ -139,7 +139,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
     private boolean canSmelt(@Nullable SmeltingRecipe recipeIn) {
         ItemStack burnItem = this.items.get(253);
         if (!burnItem.isEmpty() && recipeIn != null) {
-            ItemStack itemstack = recipeIn.getResultItem();
+            ItemStack itemstack = recipeIn.assemble(new SimpleContainer(burnItem));
             if (itemstack.isEmpty()) {
                 return false;
             } else {
@@ -166,7 +166,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
     private void smelt(@Nullable SmeltingRecipe recipe, Level world) {
         if (recipe != null && this.canSmelt(recipe)) {
             ItemStack burnItem = this.items.get(253);
-            ItemStack craftingResult = recipe.getResultItem();
+            ItemStack craftingResult = recipe.assemble(new SimpleContainer(burnItem));
             ItemStack burnResult = this.items.get(255);
             if (burnResult.isEmpty()) {
                 this.items.set(255, craftingResult.copy());

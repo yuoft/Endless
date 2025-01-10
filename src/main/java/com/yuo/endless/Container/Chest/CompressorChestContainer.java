@@ -68,7 +68,7 @@ public class CompressorChestContainer extends InfinityChestContainer {
     @Override
     public void removed(Player pPlayer) {
         super.removed(pPlayer);
-        this.chestTile.clearContent();
+//        this.chestTile.clearContent();
         this.chestTile.stopOpen(pPlayer);
     }
 }
