@@ -14,22 +14,17 @@ import java.util.function.Supplier;
 
 public enum EndlessItemTiers implements Tier {
 
-    SKULL_FIRE(1561, 10.0f, 10, 2, 10, () -> {
-        return Ingredient.of(EndlessBlocks.crystalMatrixBlock.get());
-    }),
-    NEUTRON(3152, 15.0f, 97, 6, 21, () -> {
-        return Ingredient.of(EndlessItems.neutroniumIngot.get());
-    }),
-    CRYSTAL(2401, 10.0f, 48, 5, 17, () -> {
-        return Ingredient.of(EndlessItems.crystalMatrixIngot.get());
-    }),
+    SKULL_FIRE(1561, 10.0f, 10, 2, 10,
+            () -> Ingredient.of(EndlessBlocks.crystalMatrixBlock.get())),
+    NEUTRON(3152, 15.0f, 97, 6, 21,
+            () -> Ingredient.of(EndlessItems.neutroniumIngot.get())),
+    CRYSTAL(2401, 10.0f, 48, 5, 17,
+            () -> Ingredient.of(EndlessItems.crystalMatrixIngot.get())),
     //数值无穷表示：Double或Float的POSITIVE_INFINITY（正）或NEGATIVE_INFINITY（负）
-    INFINITY_TOOL(9999, Float.MAX_VALUE, 10, 9999, 99, () -> {
-        return Ingredient.of(EndlessItems.infinityIngot.get());
-    }),
-    INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 99, () -> {
-        return Ingredient.of(EndlessItems.infinityIngot.get());
-    });
+    INFINITY_TOOL(9999, Float.MAX_VALUE, 10, 9999, 99,
+            () -> Ingredient.of(EndlessItems.infinityIngot.get())),
+    INFINITY_SWORD(9999, 9999.0f, Float.POSITIVE_INFINITY, 9999, 99,
+            () -> Ingredient.of(EndlessItems.infinityIngot.get()));
 
     private final int uses;//耐久
     private final float speed;//使用效率
@@ -68,7 +63,7 @@ public enum EndlessItemTiers implements Tier {
     }
 
     public Ingredient getRepairIngredient() {
-        return (Ingredient)this.repairIngredient.get();
+        return this.repairIngredient.get();
     }
 
     @Nullable

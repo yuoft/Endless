@@ -1,6 +1,10 @@
 package com.yuo.endless.Proxy;
 
+import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Gui.*;
+import com.yuo.endless.Client.Model.CosmicModelLoader;
+import com.yuo.endless.Client.Model.HaloItemModelLoader;
+import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Client.Render.EndlessChestTileRender;
 import com.yuo.endless.Config;
 import com.yuo.endless.Container.EndlessMenuTypes;
@@ -10,16 +14,19 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.InfinityCrossBow;
 import com.yuo.endless.Tiles.EndlessTileTypes;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,10 +39,11 @@ public class ClientProxy implements IProxy {
     @Override
     public void registerHandlers() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
-//        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
-//        AvaritiaShaders.init();
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
+        AvaritiaShaders.init();
         modBus.addListener(this::clientSetup);
+        modBus.addListener(this::addLayers);
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {
@@ -66,25 +74,16 @@ public class ClientProxy implements IProxy {
         //流体半透明渲染
         ItemBlockRenderTypes.setRenderLayer(EndlessFluids.infinityFluid.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(EndlessFluids.infinityFluidFlowing.get(), RenderType.translucent());
-        event.enqueueWork(this::addLayer);
     }
 
-    public void addLayer() {
-//        EntityRenderersEvent.AddLayers
-        EntityRenderDispatcher m = Minecraft.getInstance().getEntityRenderDispatcher();/*
-        Stream.concat(m.getSkinMap().values().stream(), m.renderers.values().stream()).filter(LivingEntityRenderer.class::isInstance).map(r ->
-                (LivingEntityRenderer)r).filter(render -> render.getModel() instanceof PlayerModel).unordered().distinct().forEach(render -> {
-            EntityRenderer<? extends Player> rendererPlayer = render..getRenderManager().getSkinMap().get("default");
-            EntityRenderer<? extends Player> rendererPlayerSlim = render.getRenderManager().getSkinMap().get("slim");
-            if (rendererPlayer != null) {
-                LivingEntityRenderer livingRenderer = (LivingEntityRenderer) rendererPlayer;
-                livingRenderer.addLayer(new InfinityArmorModel.PlayerRender(livingRenderer));
-            }
-            if (rendererPlayerSlim != null) {
-                LivingEntityRenderer livingRenderer = (LivingEntityRenderer)rendererPlayerSlim;
-                livingRenderer.addLayer(new InfinityArmorModel.PlayerRender(livingRenderer));
-            }
-        });*/
+    public void addLayers(EntityRenderersEvent.AddLayers e) {
+        addLayer(e, "default");
+        addLayer(e, "slim");
+    }
+
+    public void addLayer(EntityRenderersEvent.AddLayers e, String s) {
+        LivingEntityRenderer r = e.getSkin(s);
+        r.addLayer((RenderLayer)new InfinityArmorModel.PlayerRender((RenderLayerParent)r));
     }
 
     //使用动态属性来切换无尽镐，铲形态

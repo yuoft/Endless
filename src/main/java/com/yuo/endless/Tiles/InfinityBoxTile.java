@@ -146,7 +146,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
                 ItemStack burnResult = this.items.get(255);
                 if (burnResult.isEmpty()) {
                     return true;
-                } else if (!burnResult.equals(itemstack, false)) {
+                } else if (!ItemStack.isSame(burnResult, itemstack)) {
                     return false;
                 } else if (burnResult.getCount() + itemstack.getCount() <= this.getMaxStackSize() && burnResult.getCount() + itemstack.getCount() <= burnResult.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
                     return true;

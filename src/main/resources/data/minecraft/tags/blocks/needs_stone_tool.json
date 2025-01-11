@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "endless:double_compressed_crafting_table",
+    "endless:extreme_crafting_table",
+    "endless:neutronium_collector",
+    "endless:dense_neutronium_collector",
+    "endless:denser_neutronium_collector",
+    "endless:densest_neutronium_collector",
+    "endless:neutron_compressor",
+    "endless:neutron_compressor",
+    "endless:neutron_compressor",
+  ]
+}

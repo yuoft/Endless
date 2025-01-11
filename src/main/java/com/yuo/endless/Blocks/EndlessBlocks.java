@@ -24,7 +24,7 @@ public class EndlessBlocks {
     public static RegistryObject<Block> compressedCraftingTable = BLOCKS.register("compressed_crafting_table",
             () -> new OrdinaryBlock(Material.WOOD, 0, ToolActions.AXE_DIG, 5, 5));
     public static RegistryObject<Block> doubleCompressedCraftingTable = BLOCKS.register("double_compressed_crafting_table",
-            () -> new OrdinaryBlock(Material.WOOD, 1, ToolActions.AXE_DIG, 5, 5));
+            () -> new OrdinaryToolBlock(Material.WOOD, 1, ToolActions.AXE_DIG, 5, 5));
     public static RegistryObject<Block> extremeCraftingTable = BLOCKS.register("extreme_crafting_table", ExtremeCraft::new);
     public static RegistryObject<Block> neutroniumCollector = BLOCKS.register("neutronium_collector", NeutronCollector::new);
     public static RegistryObject<Block> denseNeutroniumCollector = BLOCKS.register("dense_neutronium_collector", DenseNeutronCollector::new);

@@ -10,7 +10,7 @@ import net.minecraftforge.common.ToolAction;
 public class OrdinaryBlock extends Block {
 
 	public OrdinaryBlock(Material material, int harvestLevel, ToolAction toolType, float hardness, float resistancelln) {
-		super(Properties.of(material).strength(hardness, resistancelln).requiresCorrectToolForDrops());
+		super(Properties.of(material).strength(hardness, resistancelln));
 	}
 
 }

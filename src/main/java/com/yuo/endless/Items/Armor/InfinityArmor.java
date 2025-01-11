@@ -1,13 +1,14 @@
 package com.yuo.endless.Items.Armor;
 
+import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.ColorText;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,8 +28,9 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IItemRenderProperties;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -163,27 +165,13 @@ public class InfinityArmor extends ArmorItem {
         return "endless:textures/models/infinity_armor.png";
     }
 
-//    @OnlyIn(Dist.CLIENT)
-//    public HumanoidModel<?> getArmorModel(LivingEntity entity, ItemStack itemstack, EquipmentSlot armorSlot, HumanoidModel<?> _deafult) {
-//        InfinityArmorModel model = (armorSlot == EquipmentSlot.LEGS) ? (new InfinityArmorModel(0.5F)).setLegs(true) : new InfinityArmorModel(1.0F);
-//        model.update(entity, itemstack, armorSlot);
-//        return model;
-//    }
-
-    @Override
+    @OnlyIn(Dist.CLIENT)
     public void initializeClient(Consumer<IItemRenderProperties> consumer) {
         consumer.accept(new IItemRenderProperties() {
-            @Override
-            public Font getFont(ItemStack stack) {
-                return IItemRenderProperties.super.getFont(stack);
-            }
-
-            @NotNull
-            @Override
-            public HumanoidModel<?> getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
-//                InfinityArmorModel model = (armorSlot == EquipmentSlot.LEGS) ? (new InfinityArmorModel(0.5F)).setLegs(true) : new InfinityArmorModel(1.0F);
-//                model.update(entityLiving, itemStack, armorSlot);
-                return _default;
+            public HumanoidModel getArmorModel(LivingEntity entityLiving, ItemStack itemstack, EquipmentSlot armorSlot, HumanoidModel _deafult) {
+                InfinityArmorModel model = (armorSlot == EquipmentSlot.LEGS) ? new InfinityArmorModel(InfinityArmorModel.createMeshes(new CubeDeformation(1.0F), 0.0F, true).getRoot().bake(64, 64)) : new InfinityArmorModel(InfinityArmorModel.createMeshes(new CubeDeformation(1.0F), 0.0F, false).getRoot().bake(64, 64));
+                model.update(entityLiving, itemstack, armorSlot);
+                return (HumanoidModel)model;
             }
         });
     }

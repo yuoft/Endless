@@ -350,7 +350,7 @@ public class EventHandler {
      * @param player 玩家
      * @return 结果
      */
-    public static boolean isInfinite(Player player) {
+    public static boolean isInfinite(LivingEntity player) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.getType() != EquipmentSlot.Type.ARMOR) {
                 continue;
