@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "endless:infinity_chest"
+    "endless:infinity_chest",
+    "endless:extreme_crafting_table"
   ]
 }

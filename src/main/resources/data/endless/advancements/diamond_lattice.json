@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:diamond_lattice"
+				"items": ["endless:diamond_lattice"]
 			}
 		]
       }

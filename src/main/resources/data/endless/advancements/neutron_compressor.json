@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:neutron_compressor"
+				"items": ["endless:neutron_compressor"]
 			}
 		]
       }

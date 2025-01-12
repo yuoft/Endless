@@ -31,7 +31,7 @@ public class ExtremeCraft extends BaseEntityBlock {
 
     @Override
     public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {
-        return player.getUseItem().getItem() instanceof PickaxeItem pickaxeItem && pickaxeItem.getTier().getLevel() >= Tiers.IRON.getLevel();
+        return player.getMainHandItem().getItem() instanceof PickaxeItem pickaxeItem && pickaxeItem.getTier().getLevel() >= Tiers.DIAMOND.getLevel();
     }
 
     @org.jetbrains.annotations.Nullable

@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:neutronium_ingot"
+				"items": ["endless:neutronium_ingot"]
 			}
 		]
       }

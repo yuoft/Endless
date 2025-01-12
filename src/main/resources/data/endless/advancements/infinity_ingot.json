@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:infinity_ingot"
+				"items": ["endless:infinity_ingot"]
 			}
 		]
       }

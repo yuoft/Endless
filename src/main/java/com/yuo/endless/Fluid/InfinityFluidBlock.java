@@ -15,8 +15,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
@@ -27,6 +29,10 @@ public class InfinityFluidBlock extends LiquidBlock {
     public static final Properties FLUID_PROP = Properties.of(Material.LAVA).noCollission().randomTicks().strength(Float.MAX_VALUE).noDrops();
     public InfinityFluidBlock(Supplier<? extends FlowingFluid> fluid) {
         super(fluid, FLUID_PROP);
+    }
+
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(LiquidBlock.LEVEL);
     }
 
     @Override

@@ -18,16 +18,16 @@
       "conditions": {
         "items": [
           {
-            "item": "endless:infinity_helmet"
+            "items": ["endless:infinity_helmet"]
           },
           {
-            "item": "endless:infinity_chestplate"
+            "items": ["endless:infinity_chestplate"]
           },
           {
-            "item": "endless:infinity_leggings"
+            "items": ["endless:infinity_leggings"]
           },
           {
-            "item": "endless:infinity_boots"
+            "items": ["endless:infinity_boots"]
           }
         ]
       }

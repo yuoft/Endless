@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item":"endless:densest_neutronium_collector"
+				"items":["endless:densest_neutronium_collector"]
 			}
 		]
       }

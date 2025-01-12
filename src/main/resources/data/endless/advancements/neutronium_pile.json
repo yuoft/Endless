@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:neutronium_pile"
+				"items": ["endless:neutronium_pile"]
 			}
 		]
       }

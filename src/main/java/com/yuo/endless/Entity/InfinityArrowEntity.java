@@ -67,7 +67,7 @@ public class InfinityArrowEntity extends AbstractArrow {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putDouble("damage", Float.POSITIVE_INFINITY);
+        compound.putDouble("damage", Float.MAX_VALUE);
     }
 
     @Override
@@ -178,14 +178,14 @@ public class InfinityArrowEntity extends AbstractArrow {
         if (living.level.isClientSide) return;
         if (living instanceof WitherBoss wither){
             wither.setInvulnerableTicks(0);
-            wither.hurt(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+            wither.hurt(new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
         } else if (living instanceof EnderDragon dragon && this.shooter instanceof Player){
-            dragon.hurt(dragon.head, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+            dragon.hurt(dragon.head, new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
         } else if (living instanceof ArmorStand){
             living.hurt(DamageSource.GENERIC, 10);
         } else if (Endless.isDE && living instanceof DraconicGuardianEntity){
             DraconicGuardianEntity draconicGuardian = (DraconicGuardianEntity) living;
-            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
             draconicGuardian.setHealth(-1);
             draconicGuardian.die(new InfinityDamageSource(this.shooter));
         } else {
@@ -194,8 +194,8 @@ public class InfinityArrowEntity extends AbstractArrow {
                     if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
                         living.hurt(new InfinityDamageSource(this.shooter), Config.SERVER.infinityBearDamage.get());
                     else living.hurt(new InfinityDamageSource(this.shooter), Config.SERVER.infinityArmorBearDamage.get());
-                } else living.hurt(new InfinityDamageSource(this.shooter),  Float.POSITIVE_INFINITY);
-            } else living.hurt(new InfinityDamageSource(this.shooter), Float.POSITIVE_INFINITY);
+                } else living.hurt(new InfinityDamageSource(this.shooter),  Float.MAX_VALUE);
+            } else living.hurt(new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
             if (living instanceof Player player){
                 if (EventHandler.isInfinite(player)){
                     this.discard();

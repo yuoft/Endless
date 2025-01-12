@@ -44,6 +44,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
     protected final ChestLidController chestLidController;
     private LazyOptional<IItemHandlerModifiable> chestHandler;
     private static final String NBT_COUNT = "infinity_count";
+    private static final String NBT_ITEM = "infinity_item";
 
     public AbsEndlessChestTile(BlockEntityType<?> typeIn, EndlessChestType chestType, Supplier<Block> supplier, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -139,7 +140,6 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     public void NbtRead(CompoundTag nbt) {
         if (!this.tryLoadLootTable(nbt)) {
-//            ContainerHelper.loadAllItems(nbt, this.items);
             loadAllItems(nbt, this.items);
         }
     }
@@ -152,7 +152,6 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     public void NbtWrite(CompoundTag compound) {
         if (!this.trySaveLootTable(compound)) {
-//            ContainerHelper.saveAllItems(compound, this.items);
             saveAllItems(compound, this.items);
         }
     }
@@ -170,7 +169,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             if (!stack.isEmpty()) {
                 CompoundTag tag = new CompoundTag();
                 tag.putByte("Slot", (byte)i);
-                tag.put("Item", stack.serializeNBT());
+                tag.put(NBT_ITEM, stack.serializeNBT());
                 tag.putInt(NBT_COUNT, stack.getCount());
                 listNBT.add(tag);
             }
@@ -193,10 +192,14 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             CompoundTag tag = listNBT.getCompound(i);
             int slot = tag.getByte("Slot") & 255;
             if (slot < stacks.size()) {
-                ItemStack stack = ItemStack.of(tag.getCompound("Item"));
-                int count = tag.getInt(NBT_COUNT);
-                stack.setCount(count);
-                stacks.set(slot, stack);
+                if (tag.contains(NBT_ITEM)) {
+                    ItemStack stack = ItemStack.of(tag.getCompound(NBT_ITEM));
+                    int count = tag.getInt(NBT_COUNT);
+                    stack.setCount(count);
+                    stacks.set(slot, stack);
+                }else {
+                    stacks.set(slot, ItemStack.of(tag));
+                }
             }
         }
     }
@@ -225,7 +228,7 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        if (level != null) {
+        if (level != null && pkt.getTag() != null) {
             handleUpdateTag(pkt.getTag());
         }
     }

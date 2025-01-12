@@ -17,7 +17,7 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "endless:ultimate_stew"
+          "items": ["endless:ultimate_stew"]
         }
       }
     },
@@ -25,7 +25,7 @@
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
-          "item": "endless:cosmic_meatballs"
+          "items": ["endless:cosmic_meatballs"]
         }
       }
     }

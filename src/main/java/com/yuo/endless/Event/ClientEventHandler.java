@@ -7,6 +7,7 @@ import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -63,7 +64,7 @@ public class ClientEventHandler {
         event.registerEntityRenderer(EntityRegistry.INFINITY_FIREWORK.get(), InfinityFireWorkRender::new);
         event.registerEntityRenderer(EntityRegistry.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
 
-        event.registerEntityRenderer(EntityRegistry.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
+        event.registerEntityRenderer(EntityRegistry.GAPING_VOID.get(), (Context renderManagerIn) -> new GapingVoidRender(renderManagerIn)); //渲染实体
         event.registerEntityRenderer(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntityRender::new);
     }
 }

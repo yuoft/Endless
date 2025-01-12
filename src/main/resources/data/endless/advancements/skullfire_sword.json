@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item":"endless:skullfire_sword"
+				"items":["endless:skullfire_sword"]
 			}
 		]
       }

@@ -3,6 +3,8 @@ package com.yuo.endless.Blocks;
 import com.yuo.endless.Tiles.CompressorChestTile;
 import com.yuo.endless.Tiles.EndlessTileTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,6 +20,11 @@ public class CompressorChest extends AbsEndlessChest{
     public CompressorChest() {
         super(EndlessTileTypes.COMPRESS_CHEST_TILE::get, EndlessChestType.COMPRESSOR,
                 Properties.of(Material.WOOD).strength(4f, 10f).sound(SoundType.WOOD));
+    }
+
+    @Override
+    public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {
+        return true;
     }
 
     @Override

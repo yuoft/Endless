@@ -6,12 +6,14 @@ import com.yuo.endless.Items.Armor.InfinityArmor;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
+import com.yuo.endless.NetWork.NetWorkHandler;
+import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.*;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,7 +25,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,9 +37,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -63,19 +62,6 @@ public class EventHandler {
     public static List<String> playersWithChest = new ArrayList<>();
     public static List<String> playersWithLegs = new ArrayList<>();
     public static List<String> playersWithFeet = new ArrayList<>();
-
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void screenPre(DrawScreenEvent.Pre e) {
-//        AvaritiaShaders.inventoryRender = true;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void screenPost(DrawScreenEvent.Post e) {
-//        AvaritiaShaders.inventoryRender = false;
-    }
 
     //无尽鞋子 无摔落伤害
     @SubscribeEvent
@@ -225,7 +211,7 @@ public class EventHandler {
         Entity source = event.getSource().getDirectEntity();
         if (!(source instanceof Player player)) return;
 
-        if (entityLiving instanceof Skeleton){ //炽焰之啄颅剑击杀小白掉落调零骷髅头
+        if (entityLiving instanceof AbstractSkeleton){ //炽焰之啄颅剑击杀小白掉落调零骷髅头
             ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
             if (heldItem.getItem() instanceof SkullfireSword){
                 spawnDrops(Items.WITHER_SKELETON_SKULL, 1, entityLiving.level, entityLiving.getOnPos(), event);
@@ -257,9 +243,11 @@ public class EventHandler {
             }
             ItemStack totem = getPlayerBagItem(player);
             if (!totem.isEmpty()){
-                Minecraft.getInstance().particleEngine.createTrackingEmitter(player, ParticleTypes.TOTEM_OF_UNDYING, 30);
-                player.level.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.TOTEM_USE, player.getSoundSource(), 1.0F, 1.0F, false);
-                Minecraft.getInstance().gameRenderer.displayItemActivation(totem);
+                NetWorkHandler.INSTANCE.sendToServer(new TotemPacket(totem, player));
+                if (player instanceof ServerPlayer serverplayer) {
+                    serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
+                    CriteriaTriggers.USED_TOTEM.trigger(serverplayer, totem);
+                }
                 player.removeAllEffects();
                 int damage = totem.getDamageValue();
                 if (damage == 9){ //最后一次

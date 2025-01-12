@@ -18,7 +18,7 @@
       "conditions": {
         "items":[
           {
-            "item": "endless:endest_pearl"
+            "items": ["endless:endest_pearl"]
           }
         ]
       }

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "endless:compressed_crafting_table",
+    "endless:double_compressed_crafting_table",
+    "endless:compressed_chest"
+  ]
+}

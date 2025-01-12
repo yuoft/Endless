@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:infinity_sword"
+				"items": ["endless:infinity_sword"]
 			}
 		]
       }

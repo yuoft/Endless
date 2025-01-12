@@ -1,5 +1,6 @@
 package com.yuo.endless.Entity;
 
+import com.google.common.collect.Sets;
 import com.yuo.endless.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -28,24 +29,26 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 //箭实体
 public class InfinityArrowSubEntity extends AbstractArrow {
     private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(InfinityArrowSubEntity.class, EntityDataSerializers.INT);
     private Potion potion = Potions.EMPTY;
-    private Collection<MobEffectInstance> customPotionEffects;
+    private final Set<MobEffectInstance> effects;
     private boolean fixedColor;
     private boolean isLighting; //是否是光灵箭
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
         this.setBaseDamage(Config.SERVER.subArrowDamage.get());
+        this.effects = Sets.newHashSet();
     }
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, double x, double y, double z, Level worldIn) {
         super(type, x, y, z, worldIn);
         this.setBaseDamage(Config.SERVER.subArrowDamage.get());
+        this.effects = Sets.newHashSet();
     }
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, LivingEntity shooter, Level worldIn, ItemStack stack) {
@@ -53,16 +56,17 @@ public class InfinityArrowSubEntity extends AbstractArrow {
         this.setBaseDamage(Config.SERVER.subArrowDamage.get());
         this.isLighting = stack.getItem() == Items.SPECTRAL_ARROW;
         this.setPotionEffect(stack); //添加药水效果
+        this.effects = Sets.newHashSet();
     }
 
     @Override
     protected ItemStack getPickupItem() {
-        if (this.customPotionEffects.isEmpty() && this.potion == Potions.EMPTY) {
+        if (this.effects.isEmpty() && this.potion == Potions.EMPTY) {
             return new ItemStack(Items.ARROW);
         } else {
             ItemStack itemstack = new ItemStack(Items.TIPPED_ARROW);
             PotionUtils.setPotion(itemstack, this.potion);
-            PotionUtils.setCustomEffects(itemstack, this.customPotionEffects);
+            PotionUtils.setCustomEffects(itemstack, this.effects);
             if (this.fixedColor) {
                 itemstack.getOrCreateTag().putInt("CustomPotionColor", this.getColor());
             }
@@ -83,10 +87,10 @@ public class InfinityArrowSubEntity extends AbstractArrow {
             compound.putInt("Color", this.getColor());
         }
 
-        if (!this.customPotionEffects.isEmpty()) {
+        if (!this.effects.isEmpty()) {
             ListTag listnbt = new ListTag();
 
-            for(MobEffectInstance instance : this.customPotionEffects) {
+            for(MobEffectInstance instance : this.effects) {
                 listnbt.add(instance.save(new CompoundTag()));
             }
 
@@ -102,7 +106,7 @@ public class InfinityArrowSubEntity extends AbstractArrow {
             this.potion = PotionUtils.getPotion(compound);
         }
 
-        for(MobEffectInstance instance : PotionUtils.getAllEffects(compound)) {
+        for(MobEffectInstance instance : PotionUtils.getCustomEffects(compound)) {
             this.addEffect(instance);
         }
 
@@ -129,10 +133,10 @@ public class InfinityArrowSubEntity extends AbstractArrow {
             } else {
                 this.spawnPotionParticles(2);
             }
-        } else if (this.inGround && this.inGroundTime != 0 && !this.customPotionEffects.isEmpty() && this.inGroundTime >= 600) {
+        } else if (this.inGround && this.inGroundTime != 0 && !this.effects.isEmpty() && this.inGroundTime >= 600) {
             this.level.broadcastEntityEvent(this, (byte)0);
             this.potion = Potions.EMPTY;
-            this.customPotionEffects.clear();
+            this.effects.clear();
             this.entityData.set(COLOR, -1);
         }
         if (inGround && inGroundTime >= 100){
@@ -176,8 +180,8 @@ public class InfinityArrowSubEntity extends AbstractArrow {
             living.addEffect(new MobEffectInstance(instance.getEffect(), Math.max(instance.getDuration() / 8, 1), instance.getAmplifier(), instance.isAmbient(), instance.isVisible()));
         }
 
-        if (!this.customPotionEffects.isEmpty()) {
-            for(MobEffectInstance effectInstance : this.customPotionEffects) {
+        if (!this.effects.isEmpty()) {
+            for(MobEffectInstance effectInstance : this.effects) {
                 living.addEffect(effectInstance);
             }
         }
@@ -191,12 +195,12 @@ public class InfinityArrowSubEntity extends AbstractArrow {
     }
 
     public void setPotionEffect(ItemStack stack) {
-        if (stack.getItem() == Items.TIPPED_ARROW) {
+        if (stack.is(Items.TIPPED_ARROW)) {
             this.potion = PotionUtils.getPotion(stack);
             List<MobEffectInstance> collection = PotionUtils.getCustomEffects(stack);
             if (!collection.isEmpty()) {
                 for(MobEffectInstance instance : collection) {
-                    this.customPotionEffects.add(new MobEffectInstance(instance));
+                    this.effects.add(new MobEffectInstance(instance));
                 }
             }
 
@@ -206,9 +210,10 @@ public class InfinityArrowSubEntity extends AbstractArrow {
             } else {
                 this.setFixedColor(i);
             }
-        } else if (stack.getItem() == Items.ARROW) {
+        } else if (stack.is(Items.ARROW)) {
             this.potion = Potions.EMPTY;
-            this.customPotionEffects.clear();
+            if (this.effects != null)
+                this.effects.clear();
             this.entityData.set(COLOR, -1);
         }
 
@@ -221,17 +226,17 @@ public class InfinityArrowSubEntity extends AbstractArrow {
 
     private void refreshColor() {
         this.fixedColor = false;
-        if (this.potion == Potions.EMPTY && this.customPotionEffects.isEmpty()) {
+        if (this.potion == Potions.EMPTY && this.effects.isEmpty()) {
             this.entityData.set(COLOR, -1);
         } else {
-            this.entityData.set(COLOR, PotionUtils.getColor(this.customPotionEffects));
+            this.entityData.set(COLOR, PotionUtils.getColor(this.effects));
         }
 
     }
 
     public void addEffect(MobEffectInstance effect) {
-        this.customPotionEffects.add(effect);
-        this.entityData.set(COLOR, PotionUtils.getColor(this.customPotionEffects));
+        this.effects.add(effect);
+        this.entityData.set(COLOR, PotionUtils.getColor(this.effects));
     }
 
     @Override

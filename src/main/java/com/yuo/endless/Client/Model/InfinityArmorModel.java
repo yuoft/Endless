@@ -90,7 +90,7 @@ public class InfinityArmorModel extends HumanoidModel {
         MeshDefinition m = new MeshDefinition();
         PartDefinition p = m.getRoot();
         p.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cube), PartPose.offset(0.0F, 0.0F + f, 0.0F));
-        p.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cube.extend(0.5f)), PartPose.offset(0.0F, 0.0F + f, 0.0F));
+        p.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(32, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cube.extend(-0.5f)), PartPose.offset(0.0F, 0.0F + f, 0.0F));
         p.addOrReplaceChild("body", CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, cube), PartPose.offset(0.0F, 0.0F + f, 0.0F));
         p.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, cube), PartPose.offset(-5.0F, 2.0F + f, 0.0F));
         p.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(40, 16).mirror().addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, cube), PartPose.offset(5.0F, 2.0F + f, 0.0F));
@@ -146,8 +146,8 @@ public class InfinityArmorModel extends HumanoidModel {
             AvaritiaShaders.cosmicExternalScale.set(25.0F);
             AvaritiaShaders.cosmicExternalScale2.set(25.0F);
         } else {
-            AvaritiaShaders.cosmicExternalScale.set(1.0F);
-            AvaritiaShaders.cosmicExternalScale2.set(1.0F);
+            AvaritiaShaders.cosmicExternalScale.set(20.0F);
+            AvaritiaShaders.cosmicExternalScale2.set(20.0F);
             AvaritiaShaders.cosmicYaw.set((float)((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
             AvaritiaShaders.cosmicPitch.set(-((float)((this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0D)));
             AvaritiaShaders.cosmicYaw2.set((float)((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
@@ -174,13 +174,13 @@ public class InfinityArmorModel extends HumanoidModel {
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.babyYHeadOffset / 16.0F * f2), -0.029999999329447746D);
         if (invulnRender) {
-            float scale = 0.824625f;
-            mStack.scale(scale, scale, scale);
+//            float scale = 0.824625f;
+//            mStack.scale(scale, scale, scale);
             this.hat.render(mStack, ver(RenderType.create("eyes", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 0,
                     RenderType.CompositeState.builder().setShaderState(RenderType.POSITION_COLOR_TEX_LIGHTMAP_SHADER).setTextureState(new RenderStateShard.TextureStateShard(this.eyeTex, false, false)).setCullState(RenderType.NO_CULL).createCompositeState(true))), i1, i2, col[0], col[1], col[2], 1.0F);
         } else {
-            float scale = 0.824625f;
-            mStack.scale(scale, scale, scale);
+//            float scale = 0.824625f;
+//            mStack.scale(scale, scale, scale);
             this.hat.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).buffer(this.buf, this::mask3), i1, i2, i3, i4, i5, i6);
         }
         mStack.popPose();

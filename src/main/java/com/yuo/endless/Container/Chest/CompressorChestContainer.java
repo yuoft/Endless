@@ -46,11 +46,11 @@ public class CompressorChestContainer extends InfinityChestContainer {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
-            if (index < 54) { //取出
-                if (!super.moveItemStackTo(itemstack1, 54, this.slots.size(), true)) {
+            if (index < 108) { //取出
+                if (!super.moveItemStackTo(itemstack1, 108, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }//放入
-            } else if (!this.moveItemStackTo(itemstack1, 0, 54, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 0, 108, false)) {
                 return ItemStack.EMPTY;
             }
 

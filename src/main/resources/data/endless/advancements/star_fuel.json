@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item":"endless:star_fuel"
+				"items":["endless:star_fuel"]
 			}
 		]
       }

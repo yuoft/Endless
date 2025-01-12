@@ -409,7 +409,7 @@ public class InfinityCrossBow extends CrossbowItem {
         }
 
         CompoundTag compoundnbt1 = new CompoundTag();
-        projectile.deserializeNBT(compoundnbt1);
+        projectile.save(compoundnbt1);
         listnbt.add(compoundnbt1);
         compoundnbt.put("ChargedProjectiles", listnbt);
     }

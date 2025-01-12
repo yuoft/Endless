@@ -3,6 +3,8 @@ package com.yuo.endless.Items.Tool;
 import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianPartEntity;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
@@ -23,9 +25,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -40,6 +45,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
@@ -51,6 +57,18 @@ public class InfinitySword extends SwordItem {
 
     public InfinitySword() {
         super(EndlessItemTiers.INFINITY_SWORD, 0, -2.4f, new Properties().tab(EndlessTab.endless).fireResistant());
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> multimap = getDefaultAttributeModifiers(slot);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.putAll(multimap);
+        if (slot == EquipmentSlot.MAINHAND){
+            builder.put(ForgeMod.REACH_DISTANCE.get(), Modifiers.getModifierHandRang(0,5.0d));
+            return builder.build();
+        }
+        return super.getAttributeModifiers(slot, stack);
     }
 
     /**
@@ -174,10 +192,10 @@ public class InfinitySword extends SwordItem {
             target.setSecondsOnFire(fireAspect * 4);
         }
         if (target instanceof EnderDragon dragon && attacker instanceof Player){ //攻击末影龙
-            dragon.hurt(dragon.head, new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+            dragon.hurt(dragon.head, new InfinityDamageSource(attacker), Float.MAX_VALUE);
         }else if (target instanceof WitherBoss wither){
             wither.setInvulnerableTicks(0);
-            wither.hurt(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+            wither.hurt(new InfinityDamageSource(attacker), Float.MAX_VALUE);
         } else if (target instanceof ArmorStand){
             target.hurt(DamageSource.GENERIC, 10);
             return true;
@@ -187,8 +205,8 @@ public class InfinitySword extends SwordItem {
                     if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
                         target.hurt(new InfinityDamageSource(attacker), Config.SERVER.infinityBearDamage.get());
                     else target.hurt(new InfinityDamageSource(attacker), Config.SERVER.infinityArmorBearDamage.get());
-                } else target.hurt(new InfinityDamageSource(attacker),  Float.POSITIVE_INFINITY);
-            } else target.hurt(new InfinityDamageSource(attacker), Float.POSITIVE_INFINITY);
+                } else target.hurt(new InfinityDamageSource(attacker),  Float.MAX_VALUE);
+            } else target.hurt(new InfinityDamageSource(attacker), Float.MAX_VALUE);
         }
         if (target instanceof Player player){
             if (EventHandler.isInfinite(player)){ //玩家穿戴全套无尽 则不执行死亡
@@ -216,8 +234,7 @@ public class InfinitySword extends SwordItem {
      * @param target 被攻击实体
      */
     private static void spawnHealthParticle(Entity target){
-        if (target instanceof LivingEntity){
-            LivingEntity living = (LivingEntity) target;
+        if (target instanceof LivingEntity living){
             float maxHealth = living.getMaxHealth();
             if (target.level instanceof ServerLevel) {
                 int k = (int)((double)maxHealth * 0.5);
@@ -281,15 +298,15 @@ public class InfinitySword extends SwordItem {
     public static void damageGuardian(Entity entity, Player player){
         if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
             if (entity instanceof DraconicGuardianEntity draconicGuardian){
-                draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
+                draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], new InfinityDamageSource(player), Float.MAX_VALUE);
                 draconicGuardian.setHealth(-1);
                 draconicGuardian.die(new InfinityDamageSource(player));
             }else if (entity instanceof GuardianCrystalEntity crystal){
                 crystal.kill();
             }else if (entity instanceof DraconicGuardianPartEntity draconicGuardian) {
                 DraconicGuardianEntity dragon = draconicGuardian.dragon;
-                    dragon.hurt(DamageSource.thorns(player), Float.POSITIVE_INFINITY);
-                    dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(player), Float.POSITIVE_INFINITY);
+                    dragon.hurt(DamageSource.thorns(player), Float.MAX_VALUE);
+                    dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(player), Float.MAX_VALUE);
                     GuardianCrystalEntity crystal = dragon.closestGuardianCrystal;
                     if (crystal != null) {
                         crystal.kill();

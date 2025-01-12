@@ -10,22 +10,17 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.ForgeFlowingFluid.Flowing;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 
-public class InfinityFluid extends Flowing {
+public abstract class InfinityFluid extends ForgeFlowingFluid {
     public static final TagKey<Fluid> INFINITY = FluidTags.create(new ResourceLocation(Endless.MOD_ID, "infinity"));
 
     protected InfinityFluid(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public boolean isSource(FluidState state) {
-        return false;
     }
 
     @Override
@@ -34,19 +29,11 @@ public class InfinityFluid extends Flowing {
     }
 
     //能否流动到此方块
-
     @Override
     protected boolean canSpreadTo(BlockGetter getter, BlockPos frompos, BlockState fromblockstate, Direction direction, BlockPos topos, BlockState toblockstate, FluidState tofluidstate, Fluid fluid) {
         float hardness = toblockstate.getBlock().defaultDestroyTime();
         if (hardness > 0 && hardness < 50) return true;
         return super.canSpreadTo(getter, frompos, fromblockstate, direction, topos, toblockstate, tofluidstate, fluid);
-    }
-
-    //流动到此，设置流体
-    @Override
-    protected void spreadTo(LevelAccessor worldIn, BlockPos pos, BlockState blockStateIn, Direction direction, FluidState fluidStateIn) {
-        beforeDestroyingBlock(worldIn, pos, blockStateIn);
-        worldIn.setBlock(pos, fluidStateIn.createLegacyBlock(), 3);
     }
 
     //替换方块
@@ -61,13 +48,8 @@ public class InfinityFluid extends Flowing {
     }
 
     @Override
-    public int getAmount(FluidState fluidState) {
-        return 0;
-    }
-
-    @Override
     protected FluidAttributes createAttributes() {
-        return setAttr(new ResourceLocation(""), new ResourceLocation(""), 0).build(getSource());
+        return setAttr(EndlessFluids.STILL_OIL_TEXTURE, EndlessFluids.FLOWING_OIL_TEXTURE, 0xff333333).build(getSource());
     }
 
     public static FluidAttributes.Builder setAttr(ResourceLocation still, ResourceLocation flowing, int color){
@@ -87,15 +69,18 @@ public class InfinityFluid extends Flowing {
             registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
-        protected void fillStateContainer(StateDefinition.Builder<Fluid, FluidState> builder) {
+        @Override
+        protected void createFluidStateDefinition(Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
 
-        public int getLevel(FluidState state) {
+        @Override
+        public int getAmount(FluidState state) {
             return state.getValue(LEVEL);
         }
 
+        @Override
         public boolean isSource(FluidState state) {
             return false;
         }
@@ -106,10 +91,12 @@ public class InfinityFluid extends Flowing {
             super(properties);
         }
 
-        public int getLevel(FluidState state) {
+        @Override
+        public int getAmount(FluidState state) {
             return 8;
         }
 
+        @Override
         public boolean isSource(FluidState state) {
             return true;
         }

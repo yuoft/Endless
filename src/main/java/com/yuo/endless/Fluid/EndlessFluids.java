@@ -14,6 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class EndlessFluids {
     public static final ResourceLocation STILL_OIL_TEXTURE = new ResourceLocation(Endless.MOD_ID, "block/fluids/fluid");
     public static final ResourceLocation FLOWING_OIL_TEXTURE = new ResourceLocation(Endless.MOD_ID, "block/fluids/fluid_flow");
+    public static final ResourceLocation OVERLAY_OIL_TEXTURE = new ResourceLocation(Endless.MOD_ID, "block/fluids/fluid_overlay");
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Endless.MOD_ID);
 
@@ -22,7 +23,7 @@ public class EndlessFluids {
 
     public static ForgeFlowingFluid.Properties INFINITY_PRO = new ForgeFlowingFluid.Properties(infinityFluid, infinityFluidFlowing,
             //材质，颜色，亮度，流体密度,温度,稠度,稀有度
-            InfinityFluid.setAttr(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE, 0xff333333))
+            InfinityFluid.setAttr(STILL_OIL_TEXTURE, FLOWING_OIL_TEXTURE, 0xff333333).overlay(OVERLAY_OIL_TEXTURE))
             //流体桶,流体方块,流体消失速度，防爆性
             .bucket(EndlessItems.infinityFluidBucket).block(EndlessBlocks.infinityFluid).slopeFindDistance(1)
             .tickRate(40).explosionResistance(Float.MAX_VALUE);

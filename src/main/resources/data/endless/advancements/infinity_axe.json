@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:infinity_axe"
+				"items": ["endless:infinity_axe"]
 			}
 		]
       }

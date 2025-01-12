@@ -18,7 +18,7 @@
       "conditions": { 
 		"items":[
 			{
-				"item": "endless:extreme_crafting_table"
+				"items": ["endless:extreme_crafting_table"]
 			}
 		]
       }

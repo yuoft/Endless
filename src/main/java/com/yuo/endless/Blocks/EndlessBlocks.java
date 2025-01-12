@@ -16,11 +16,11 @@ public class EndlessBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Endless.MOD_ID);
 
     public static RegistryObject<Block> infinityBlock = BLOCKS.register("infinity_block",
-            () -> new OrdinaryBlock(Material.METAL, 6, ToolActions.PICKAXE_DIG, 1000, 1000));
+            () -> new OrdinaryToolBlock(Material.METAL, 6, ToolActions.PICKAXE_DIG, 10000000, 100000000));
     public static RegistryObject<Block> crystalMatrixBlock = BLOCKS.register("crystal_matrix_block",
-            () -> new OrdinaryBlock(Material.METAL, 4, ToolActions.PICKAXE_DIG, 10, 50));
+            () -> new OrdinaryToolBlock(Material.METAL, 4, ToolActions.PICKAXE_DIG, 100000, 500000));
     public static RegistryObject<Block> neutroniumBlock = BLOCKS.register("neutronium_block",
-            () -> new OrdinaryBlock(Material.METAL, 5, ToolActions.PICKAXE_DIG, 15, 100));
+            () -> new OrdinaryToolBlock(Material.METAL, 5, ToolActions.PICKAXE_DIG, 15000, 100000));
     public static RegistryObject<Block> compressedCraftingTable = BLOCKS.register("compressed_crafting_table",
             () -> new OrdinaryBlock(Material.WOOD, 0, ToolActions.AXE_DIG, 5, 5));
     public static RegistryObject<Block> doubleCompressedCraftingTable = BLOCKS.register("double_compressed_crafting_table",

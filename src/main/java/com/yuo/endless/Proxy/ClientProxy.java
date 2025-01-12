@@ -19,8 +19,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -83,7 +81,7 @@ public class ClientProxy implements IProxy {
 
     public void addLayer(EntityRenderersEvent.AddLayers e, String s) {
         LivingEntityRenderer r = e.getSkin(s);
-        r.addLayer((RenderLayer)new InfinityArmorModel.PlayerRender((RenderLayerParent)r));
+        r.addLayer(new InfinityArmorModel.PlayerRender(r));
     }
 
     //使用动态属性来切换无尽镐，铲形态
