@@ -20,13 +20,13 @@ import java.util.List;
 
 public class Singularity extends Item {
     //原版+联动奇点
-    public static final List<String> linkageTypes = Arrays.asList("coal", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay",
-            "ruby", "dragon", "space", "xray", "ultra", "silver", "copper", "zinc", "nickel", "lead", "tin", "draconium", "awakened_draconium",
-            "manasteel", "terrasteel", "elementium", "dark_matter", "red_matter", "cobalt", "manyullyn");
+    public static final List<String> linkageTypes = Arrays.asList("coal", "copper", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay",
+             "silver", "zinc", "nickel", "lead", "tin", "draconium", "awakened_draconium", "manasteel", "terrasteel", "elementium",
+            "dark_matter", "red_matter", "cobalt", "manyullyn");
     //原版奇点
-    private static final String[] baseTypes = new String[]{ "coal", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay"};
-    private static final Integer[] colors = new Integer[]{ 0x1f1e1e, 0xe6e6e6, 0xfffd90, 0x9efeeb, 0x4c4143, 0x82f6ad, 0x31618b, 0xbd2008, 0xeee6de, 0xacaebd};
-    private static final Integer[] colors2 = new Integer[]{ 0x050505, 0xf2f2f2, 0xffd83e, 0x70fbf0, 0x4d494d, 0x17dd62, 0x1b3588, 0x941400, 0xf2efed, 0xafb9d6};
+    private static final String[] baseTypes = new String[]{ "coal", "copper", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay"};
+    private static final Integer[] colors = new Integer[]{ 0x1f1e1e, 0x95654c, 0xe6e6e6, 0xfffd90, 0x9efeeb, 0x4c4143, 0x82f6ad, 0x31618b, 0xbd2008, 0xeee6de, 0xacaebd};
+    private static final Integer[] colors2 = new Integer[]{ 0x050505, 0xbd896d, 0xf2f2f2, 0xffd83e, 0x70fbf0, 0x4d494d, 0x17dd62, 0x1b3588, 0x941400, 0xf2efed, 0xafb9d6};
     //用于添加新奇点
     public static final List<String> TYPE = new ArrayList<>(); //奇点类型
     public static final List<Integer> INDEX = new ArrayList<>(); //底色

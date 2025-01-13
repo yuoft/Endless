@@ -5,7 +5,7 @@ import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Compat.Curios.CuriosCompat;
 import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Entity.EntityRegistry;
-import com.yuo.endless.Fluid.EndlessFluids;
+import com.yuo.endless.Blocks.Fluid.EndlessFluids;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.Proxy.ClientProxy;
@@ -14,6 +14,7 @@ import com.yuo.endless.Proxy.IProxy;
 import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.EndlessTileTypes;
+import com.yuo.endless.World.Structure.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -137,7 +138,7 @@ public class Endless {
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
-//        ModStructures.STRUCTURES.register(modEventBus);
+        ModStructures.STRUCTURES.register(modEventBus);
         proxy.registerHandlers();
     }
 
@@ -195,7 +196,7 @@ public class Endless {
         isEnchantingInfuser = checkMod("enchantinginfuser");
         isTouhouLittleMaid = checkMod("touhou_little_maid");
         isTravelersBackpack = checkMod("travellersbackpack");
-        isAE2 = checkMod("appliedenergistics2");
+        isAE2 = checkMod("ae2");
         isWaystones = checkMod("waystones");
         isAlexsMobs = checkMod("alexsmobs");
         isTTF = checkMod("twilightforest");

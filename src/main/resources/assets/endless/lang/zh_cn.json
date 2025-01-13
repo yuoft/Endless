@@ -140,6 +140,8 @@
     "endless.text.itemInfo.bucket_fluid":"流体：",
     "endless.text.itemInfo.bucket_num":"流体数量：%s",
     "endless.text.itemInfo.custom_singularity":"§7玩家自定义",
+    "endless.text.itemInfo.infinity_mob_spawn_egg":"§b生成无尽生物",
+    "endless.text.itemInfo.infinity_bow":"§c毁灭模式！！！",
     "minecraft:null":"未知",
     "minecraft:water":"水",
     "minecraft:lava":"岩浆",

@@ -3,9 +3,7 @@ package com.yuo.endless.Items;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessTab;
-import com.yuo.endless.Entity.EntityRegistry;
-import com.yuo.endless.Event.ModSpawnEgg;
-import com.yuo.endless.Fluid.EndlessFluids;
+import com.yuo.endless.Blocks.Fluid.EndlessFluids;
 import com.yuo.endless.Items.Armor.CrystalMatrixArmor;
 import com.yuo.endless.Items.Armor.EndlessArmorMaterials;
 import com.yuo.endless.Items.Armor.InfinityArmor;
@@ -44,8 +42,7 @@ public class EndlessItems {
 	public static RegistryObject<Item> infinityNugget = ITEMS.register("infinity_nugget", InfinityItem::new);
 	public static RegistryObject<Item> infinityArrow = ITEMS.register("infinity_arrow", InfinityArrow::new);
 
-	public static RegistryObject<ModSpawnEgg> infinityMobSpawnEgg = ITEMS.register("infinity_mob_spawn_egg", () ->
-			new ModSpawnEgg(EntityRegistry.INFINITY_MOB, 0xff2233, 0x3ff211));
+	public static RegistryObject<InfinityMobSpawnEgg> infinityMobSpawnEgg = ITEMS.register("infinity_mob_spawn_egg", InfinityMobSpawnEgg::new);
 
 	//奇点
 	public static RegistryObject<Item> singularity = ITEMS.register("singularity", Singularity::new);
@@ -124,7 +121,7 @@ public class EndlessItems {
 	//冰与火
 	public static void registerIafItem(){
 		Singularity.addSingularity(new Singularity.SingularityData("silver", 0xf3faff,0xe5ecf7));//银
-		Singularity.addSingularity(new Singularity.SingularityData("copper", 0x95654c,0xbd896d));//铜
+//		Singularity.addSingularity(new Singularity.SingularityData("copper", 0x95654c,0xbd896d));//铜
 	}
 
 	//机械动力

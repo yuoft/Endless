@@ -91,6 +91,11 @@ public class InfinityMobEntity extends Zombie {
     }
 
     @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -103,7 +108,7 @@ public class InfinityMobEntity extends Zombie {
 
     //被攻击时
     @Override
-    protected void actuallyHurt(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         Entity entity = source.getDirectEntity();
         //攻击者为玩家且是无尽伤害
         if (InfinityDamageSource.isInfinity(source) && entity instanceof Player) {
@@ -113,7 +118,14 @@ public class InfinityMobEntity extends Zombie {
             amount = amount > 10 ? 10 : amount;
             amount = Math.max(amount, 0.5f); //最低0.5
         }
-        super.actuallyHurt(source, amount);
+        if (this.checkTotemDeathProtection(source)) {
+            this.heal(512.0F);
+        }
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public void kill() {
     }
 
     public void startSeenByPlayer(ServerPlayer pPlayer) {

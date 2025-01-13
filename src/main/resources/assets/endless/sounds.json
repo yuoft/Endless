@@ -8,5 +8,35 @@
 				"stream": true
 			}
 		]
+	},
+	"infinity_bow_star": {
+		"category": "neutral",
+		"subtitle": "sound.endless.infinity_bow_star",
+		"sounds": [
+			{
+				"name":"endless:infinity_bow_star",
+				"stream": true
+			}
+		]
+	},
+	"infinity_bow_shoot": {
+		"category": "neutral",
+		"subtitle": "sound.endless.infinity_bow_shoot",
+		"sounds": [
+			{
+				"name":"endless:infinity_bow_shoot",
+				"stream": true
+			}
+		]
+	},
+	"infinity_bow_end": {
+		"category": "neutral",
+		"subtitle": "sound.endless.infinity_bow_end",
+		"sounds": [
+			{
+				"name":"endless:infinity_bow_end",
+				"stream": true
+			}
+		]
 	}
 }

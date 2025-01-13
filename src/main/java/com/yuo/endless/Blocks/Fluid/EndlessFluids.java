@@ -1,4 +1,4 @@
-package com.yuo.endless.Fluid;
+package com.yuo.endless.Blocks.Fluid;
 
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Endless;

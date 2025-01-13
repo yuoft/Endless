@@ -41,6 +41,8 @@ public class InfinityArmorModel extends HumanoidModel {
 
     static boolean invulnRender;
 
+    public static boolean useMenu = false;
+
     static boolean playerFlying;
 
     static boolean player;
@@ -64,15 +66,15 @@ public class InfinityArmorModel extends HumanoidModel {
     }
 
     RenderType mask(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 0, RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState((RenderStateShard.EmptyTextureStateShard)new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING).createCompositeState(true));
+        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 0, RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING).createCompositeState(true));
     }
 
     static RenderType mask2(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 0, RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader2)).setTextureState((RenderStateShard.EmptyTextureStateShard)new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
+        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 0, RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader2)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
     }
 
     RenderType mask3(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 0, RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState((RenderStateShard.EmptyTextureStateShard)new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
+        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 0, RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
     }
 
     public InfinityArmorModel(ModelPart r, int x) {
@@ -126,8 +128,10 @@ public class InfinityArmorModel extends HumanoidModel {
         copyBipedAngles(this, this.invuln);
         super.renderToBuffer(mStack, vertexBuilder, i1, i2, i3, i4, i5, i6);
         long time = 0;
+        Player playerMc = Minecraft.getInstance().player;
         if (this.mc.player != null) {
             time = this.mc.player.level.getGameTime();
+            playerMc = this.mc.player;
         }
         double pulse = Math.sin(time / 10.0D) * 0.5D + 0.5D;
         double pulse_mag_sqr = pulse * pulse * pulse * pulse * pulse * pulse;
@@ -146,25 +150,32 @@ public class InfinityArmorModel extends HumanoidModel {
             AvaritiaShaders.cosmicExternalScale.set(25.0F);
             AvaritiaShaders.cosmicExternalScale2.set(25.0F);
         } else {
-            AvaritiaShaders.cosmicExternalScale.set(20.0F);
-            AvaritiaShaders.cosmicExternalScale2.set(20.0F);
-            AvaritiaShaders.cosmicYaw.set((float)((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
-            AvaritiaShaders.cosmicPitch.set(-((float)((this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0D)));
-            AvaritiaShaders.cosmicYaw2.set((float)((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
-            AvaritiaShaders.cosmicPitch2.set(-((float)((this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0D)));
+//            if (useMenu) {
+//                AvaritiaShaders.cosmicExternalScale.set(25.0F);
+//                AvaritiaShaders.cosmicExternalScale2.set(25.0F);
+//            } else {
+                AvaritiaShaders.cosmicExternalScale.set(1.0F);
+                AvaritiaShaders.cosmicExternalScale2.set(1.0F);
+//            }
+            AvaritiaShaders.cosmicYaw.set((float) ((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
+            AvaritiaShaders.cosmicPitch.set(-((float) ((this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0D)));
+            AvaritiaShaders.cosmicYaw2.set((float) ((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
+            AvaritiaShaders.cosmicPitch2.set(-((float) ((this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0D)));
         }
         mStack.pushPose();
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.babyYHeadOffset / 16.0F * f2), 0.0D);
         this.head.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).buffer(this.buf, this::mask), i1, i2, i3, i4, i5, i6);
-        if (invulnRender && !player)
+        if (invulnRender && !player) {
             hatsOver().forEach(t -> t.render(mStack, mat(AvaritiaShaders.MASK_SPRITES_INV[0]).buffer(this.buf, InfinityArmorModel::mask2), i1, i2, i3, i4, i5, i6));
+        }
         mStack.popPose();
         mStack.pushPose();
         mStack.scale(f1, f1, f1);
         mStack.translate(0.0D, (this.bodyYOffset / 16.0F * f2), 0.0D);
-        if (invulnRender && !player)
+        if (invulnRender && !player) {
             bodyPartsOver().forEach(t -> t.render(mStack, mat(AvaritiaShaders.MASK_SPRITES_INV[0]).buffer(this.buf, InfinityArmorModel::mask2), i1, i2, i3, i4, i5, i6));
+        }
         bodyParts().forEach(t -> t.render(mStack, mat(AvaritiaShaders.MASK_SPRITES[0]).buffer(this.buf, this::mask), i1, i2, i3, i4, i5, i6));
         bodyParts().forEach(t -> t.render(mStack, ver(glow(this.eyeTex)), i1, i2, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5D)));
         mStack.popPose();
@@ -174,8 +185,6 @@ public class InfinityArmorModel extends HumanoidModel {
         mStack.scale(f, f, f);
         mStack.translate(0.0D, (this.babyYHeadOffset / 16.0F * f2), -0.029999999329447746D);
         if (invulnRender) {
-//            float scale = 0.824625f;
-//            mStack.scale(scale, scale, scale);
             this.hat.render(mStack, ver(RenderType.create("eyes", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 0,
                     RenderType.CompositeState.builder().setShaderState(RenderType.POSITION_COLOR_TEX_LIGHTMAP_SHADER).setTextureState(new RenderStateShard.TextureStateShard(this.eyeTex, false, false)).setCullState(RenderType.NO_CULL).createCompositeState(true))), i1, i2, col[0], col[1], col[2], 1.0F);
         } else {

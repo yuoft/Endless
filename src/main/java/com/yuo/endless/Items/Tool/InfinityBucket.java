@@ -2,7 +2,7 @@ package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.EndlessTab;
-import com.yuo.endless.Fluid.EndlessFluidBucketWrapper;
+import com.yuo.endless.Blocks.Fluid.EndlessFluidBucketWrapper;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;

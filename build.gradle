@@ -23,7 +23,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.18.2-1.0-B'
+version = '1.18.2-0.1'
 group = 'com.github.yuo' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -209,6 +209,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:applied-energistics-2-${ae2_id}:${ae2_ver}")
     runtimeOnly fg.deobf("curse.maven:cofh-core-${cofh_id}:${cofh_ver}")
     runtimeOnly fg.deobf("curse.maven:thermal-foundation-${thermal_id}:${thermal_ver}")
+    runtimeOnly fg.deobf("curse.maven:storagedrawers-${storagedrawers_id}:${storagedrawers_ver}")
+    runtimeOnly fg.deobf("curse.maven:hammer-lib-${hammer_id}:${hammer_ver}")
+    runtimeOnly fg.deobf("curse.maven:solar-flux-reborn-${sfr_id}:${sfr_ver}")
 
 //    runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:${registrate_ver}")
 //    runtimeOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_ver}:${flywheel_ver}")

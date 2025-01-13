@@ -13,11 +13,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -92,12 +95,14 @@ public class InfinityArrow extends Item {
             lightningboltentity.setCause(target instanceof ServerPlayer ? (ServerPlayer)target : null);
             world.addFreshEntity(lightningboltentity);
         }
-        if (!world.isClientSide){
-            if (target instanceof WitherBoss wither){
-                wither.setInvulnerableTicks(0);
-                wither.hurt(new InfinityDamageSource(attacker), 49);
-            }
-        }
+        if (target instanceof WitherBoss wither){
+            wither.setInvulnerableTicks(0);
+            wither.hurt(new InfinityDamageSource(attacker), 49);
+        }else if (target instanceof EnderDragon dragon){
+            dragon.hurt(dragon.head, new InfinityDamageSource(attacker), 49);
+        }else if (target instanceof ArmorStand){
+            target.hurt(DamageSource.GENERIC, 10);
+        }else target.hurt(new InfinityDamageSource(attacker), 49);
         return super.hurtEnemy(stack, target, attacker);
     }
 

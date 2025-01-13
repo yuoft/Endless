@@ -140,8 +140,8 @@ public class ModRecipeManager {
         if (Endless.isIAF){
             CompressorManager.addRecipe(Singularity.getSingularity("silver"), (Config.SERVER.singularitySilver.get() + countEnd) * rateEnd,
                     getList(new ItemStack(IafBlockRegistry.SILVER_BLOCK.get())));
-            CompressorManager.addRecipe(Singularity.getSingularity("copper"), (Config.SERVER.singularityCopper.get() + countEnd) * rateEnd,
-                    getList(new ItemStack(IafBlockRegistry.COPPER_BLOCK.get())));
+//            CompressorManager.addRecipe(Singularity.getSingularity("copper"), (Config.SERVER.singularityCopper.get() + countEnd) * rateEnd,
+//                    getList(new ItemStack(IafBlockRegistry.COPPER_BLOCK.get())));
         }
         if (Endless.isCreate){
             CompressorManager.addRecipe(Singularity.getSingularity("zinc"), (Config.SERVER.singularityZinc.get() + countEnd) * rateEnd,
@@ -195,6 +195,8 @@ public class ModRecipeManager {
         //奇点合成配方
         CompressorManager.addRecipe(Singularity.getSingularity("coal"), (Config.SERVER.singularityCoal.get() + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.COAL_BLOCK)));
+        CompressorManager.addRecipe(Singularity.getSingularity("copper"), (Config.SERVER.singularityCopper.get() + countEnd) * rateEnd,
+                getList(new ItemStack(Blocks.COPPER_BLOCK)));
         CompressorManager.addRecipe(Singularity.getSingularity("iron"), (Config.SERVER.singularityIron.get() + countEnd) * rateEnd,
                 getList(new ItemStack(Blocks.IRON_BLOCK)));
         CompressorManager.addRecipe(Singularity.getSingularity("gold"), (Config.SERVER.singularityGold.get() + countEnd) * rateEnd,
@@ -243,7 +245,7 @@ public class ModRecipeManager {
                 new ItemStack(Items.SWEET_BERRIES));
 
         eternalSingularity = ExtremeCraftShpaelessManager.getInstance().addShapelessRecipe(new ItemStack(EndlessItems.eternalSingularity.get()),
-                Singularity.getSingularity("coal"), Singularity.getSingularity("iron"),
+                Singularity.getSingularity("coal"), Singularity.getSingularity("copper"), Singularity.getSingularity("iron"),
                 Singularity.getSingularity("gold"), Singularity.getSingularity("diamond"),
                 Singularity.getSingularity("netherite"), Singularity.getSingularity("emerald"),
                 Singularity.getSingularity("lapis"), Singularity.getSingularity("redstone"),
@@ -260,7 +262,9 @@ public class ModRecipeManager {
         }
         if (Endless.isIAF){
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(eternalSingularity,
-                    Singularity.getSingularity("silver"), Singularity.getSingularity("copper"));
+                    Singularity.getSingularity("silver"));
+            CompressorManager.addInputs(Singularity.getSingularity("copper"),
+                    getList(new ItemStack(IafBlockRegistry.COPPER_BLOCK.get())));
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
                     Ingredient.of(new ItemStack(IafItemRegistry.AMBROSIA.get())), Ingredient.of(
                             new ItemStack(IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get()), new ItemStack(IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get()),
@@ -280,7 +284,7 @@ public class ModRecipeManager {
         }
         if (Endless.isAE2){
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
-                    new ItemStack(AEItems.ITEM_CELL_64K), new ItemStack(AEItems.FLUID_CELL_64K),
+                    new ItemStack(AEItems.ITEM_CELL_256K), new ItemStack(AEItems.FLUID_CELL_256K),
                     new ItemStack(AEItems.SINGULARITY));
         }
         if (Endless.isDE){
@@ -331,7 +335,7 @@ public class ModRecipeManager {
             CompressorManager.addInputs(Singularity.getSingularity("iron"),
                     getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
         }
-        if (Endless.isIAF && Endless.isThermal){
+        if (Endless.isThermal){
             CompressorManager.addInputs(Singularity.getSingularity("copper"),
                     getList(new ItemStack(ThermalCore.BLOCKS.get("copper_block")),
                     new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
@@ -347,8 +351,6 @@ public class ModRecipeManager {
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(TinkerModifiers.dragonScale));
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(eternalSingularity, Singularity.getSingularity("cobalt"),
                     Singularity.getSingularity("manyullyn"));
-        }
-        if (Endless.isIAF && Endless.isTC3){ //52 48 49
             CompressorManager.addInputs(Singularity.getSingularity("copper"),
                     getList(new ItemStack(TinkerMaterials.copperNugget)));
         }

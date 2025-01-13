@@ -2,7 +2,7 @@
   "conditions": [
     {
       "type": "forge:mod_loaded",
-      "modid": "appliedenergistics2"
+      "modid": "ae2"
     }
   ],
   "type": "endless:extreme_craft",
@@ -22,22 +22,22 @@
       "item": "endless:infinity_ingot"
     },
     "B": {
-      "item": "appliedenergistics2:dense_energy_cell"
+      "item": "ae2:dense_energy_cell"
     },
     "C": {
-      "item": "appliedenergistics2:vibration_chamber"
+      "item": "ae2:vibration_chamber"
     },
     "D": {
-      "item": "appliedenergistics2:singularity"
+      "item": "ae2:singularity"
     },
     "E": {
-      "item": "appliedenergistics2:engineering_processor"
+      "item": "ae2:engineering_processor"
     },
     "F": {
-      "item": "appliedenergistics2:64k_storage_cell"
+      "item": "ae2:item_storage_cell_256k"
     }
   },
   "result": {
-    "item": "appliedenergistics2:creative_energy_cell"
+    "item": "ae2:creative_energy_cell"
   }
 }

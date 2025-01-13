@@ -41,26 +41,15 @@ public class EndlessJei implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
-//        registration.addItemStackInfo(new ItemStack(EndlessItems.extremeCraftingTable.get()));
 
         List<ExtremeCraftRecipe> recipes = recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE).stream().filter(Objects::nonNull).toList();
-        registration.addRecipes(recipes, ExtremeCraftRecipeCategory.UID);
+        registration .addRecipes(recipes, ExtremeCraftRecipeCategory.UID);
         List<ExtremeCraftShapeRecipe> recipes0 = recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(recipes0, ExtremeCraftShapeRecipeCategory.UID);
         registration.addRecipes(ExtremeCraftShpaelessManager.getInstance().getRecipeList(), ExtremeCraftShapeRecipeCategory.UID);
         List<NeutroniumRecipe> recipes1 = recipeManager.getAllRecipesFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(recipes1, NeutroniumCRecipeCategory.UID);
         registration.addRecipes(CompressorManager.getRecipes(), NeutroniumCRecipeCategory.UID);
-
-//        registration.addRecipes(ExtremeCraftingManager.getInstance().getRecipeList(), ExtremeCraftRecipeCategory.UID);
-//        registration.addRecipes(recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE).stream().
-//                filter(Objects::nonNull).collect(Collectors.toList()), ExtremeCraftRecipeCategory.UID);
-//        registration.addRecipes(ExtremeCraftShpaelessManager.getInstance().getRecipeList(), ExtremeCraftShapeRecipeCategory.UID);
-//        registration.addRecipes(recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE).stream().
-//                filter(Objects::nonNull).collect(Collectors.toList()), ExtremeCraftShapeRecipeCategory.UID);
-//        registration.addRecipes(CompressorManager.getRecipes(), NeutroniumCRecipeCategory.UID);
-//        registration.addRecipes(recipeManager.getAllRecipesFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE).stream().
-//                filter(Objects::nonNull).collect(Collectors.toList()), NeutroniumCRecipeCategory.UID);
     }
 
     //注册+号添加
@@ -88,7 +77,7 @@ public class EndlessJei implements IModPlugin {
 
     //注册物品不同nbt  使用nbt来在jei中显示
     @Override
-    public void registerItemSubtypes(ISubtypeRegistration registration) {
+    public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
         IModPlugin.super.registerItemSubtypes(registration);
         registration.registerSubtypeInterpreter(EndlessItems.singularity.get(), (e, u) -> {
             CompoundTag nbt = (CompoundTag) e.getOrCreateTag().get(Singularity.NBT_MOD);

@@ -9,7 +9,7 @@ import com.yuo.endless.Client.Render.EndlessChestTileRender;
 import com.yuo.endless.Config;
 import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Endless;
-import com.yuo.endless.Fluid.EndlessFluids;
+import com.yuo.endless.Blocks.Fluid.EndlessFluids;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.InfinityCrossBow;

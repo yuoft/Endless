@@ -1,8 +1,8 @@
 package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Endless;
-import com.yuo.endless.Fluid.EndlessFluids;
-import com.yuo.endless.Fluid.InfinityFluidBlock;
+import com.yuo.endless.Blocks.Fluid.EndlessFluids;
+import com.yuo.endless.Blocks.Fluid.InfinityFluidBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolActions;

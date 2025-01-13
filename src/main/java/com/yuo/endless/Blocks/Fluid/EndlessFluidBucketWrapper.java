@@ -1,4 +1,4 @@
-package com.yuo.endless.Fluid;
+package com.yuo.endless.Blocks.Fluid;
 
 import com.yuo.endless.Items.Tool.InfinityBucket;
 import net.minecraft.core.Direction;

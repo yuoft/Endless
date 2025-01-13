@@ -1,6 +1,9 @@
 package com.yuo.endless.Recipe;
 
+import com.yuo.endless.Items.Singularity;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.item.ItemStack;
 
@@ -76,8 +79,10 @@ public class CompressorManager {
                 }
             }
         }
-        if (flag)
-            recipes.add(new NeutroniumRecipe(output.getItem().getRegistryName(), input, amount, output));
+        if (flag) {
+            CompoundTag tag = output.getOrCreateTag().getCompound(Singularity.NBT_MOD);
+            recipes.add(new NeutroniumRecipe(new ResourceLocation(output.getItem().getDescriptionId() + "_" + tag.getString(Singularity.NBT_TYPE)), input, amount, output));
+        }
     }
 
     //获取输出

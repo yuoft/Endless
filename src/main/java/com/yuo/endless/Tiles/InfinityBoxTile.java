@@ -104,7 +104,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
                     }
                 }
                 if (tile.isBurning() && tile.canSmelt(recipe)) { //烧炼进度增加
-                    tile.cookingTime++;
+                    tile.cookingTime += 5;
                     if (tile.cookingTime == cookingTimeTotal) {
                         tile.cookingTime = 0;
                         tile.smelt(recipe, level);
