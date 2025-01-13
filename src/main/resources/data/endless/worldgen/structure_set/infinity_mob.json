@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "endless:infinity_mob",
+      "weight": 10
+    }
+  ],
+  "placement": {
+    "salt": 1695276474,
+    "spacing": 16,
+    "separation": 6,
+    "type": "minecraft:random_spread"
+  }
+}
