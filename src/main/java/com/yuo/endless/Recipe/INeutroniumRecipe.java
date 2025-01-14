@@ -1,7 +1,6 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Endless;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
@@ -13,7 +12,7 @@ public interface INeutroniumRecipe extends Recipe<Container> {
 
     @Override
     default RecipeType<?> getType(){
-        return Registry.RECIPE_TYPE.getOptional(TYPE_ID).get();
+        return RecipeTypeRegistry.NEUTRONIUM_RECIPE;
     }
 
     @Override

@@ -1,17 +1,14 @@
 package com.yuo.endless.Client;
 
-import codechicken.lib.util.ClientUtils;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.yuo.endless.Client.Lib.CCShaderInstance;
 import com.yuo.endless.Client.Lib.SpriteRegistryHelper;
 import com.yuo.endless.Endless;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -184,23 +181,21 @@ public class AvaritiaShaders {
                 cosmicOpacity = Objects.requireNonNull(cosmicShader.getUniform("opacity"));
                 cosmicUVs = Objects.requireNonNull(cosmicShader.getUniform("cosmicuvs"));
                 cosmicShader.onApply(() -> {
-                    cosmicTime.set((float) ClientUtils.getRenderTime());
                 });
             });
         } catch (IOException iOException) {
             throw new RuntimeException("endless shader error", iOException);
         }
         try {
-            event.registerShader((ShaderInstance)new CCShaderInstance((ResourceProvider) resourceManager, new ResourceLocation(Endless.MOD_ID, "cosmic"), DefaultVertexFormat.NEW_ENTITY), e -> {
+            event.registerShader(new CCShaderInstance(resourceManager, new ResourceLocation(Endless.MOD_ID, "cosmic"), DefaultVertexFormat.NEW_ENTITY), e -> {
                 cosmicShader2 = (CCShaderInstance) e;
-                cosmicTime2 = Objects.<Uniform>requireNonNull(cosmicShader2.getUniform("time"));
-                cosmicYaw2 = Objects.<Uniform>requireNonNull(cosmicShader2.getUniform("yaw"));
-                cosmicPitch2 = Objects.<Uniform>requireNonNull(cosmicShader2.getUniform("pitch"));
-                cosmicExternalScale2 = Objects.<Uniform>requireNonNull(cosmicShader2.getUniform("externalScale"));
-                cosmicOpacity2 = Objects.<Uniform>requireNonNull(cosmicShader2.getUniform("opacity"));
-                cosmicUVs2 = Objects.<Uniform>requireNonNull(cosmicShader2.getUniform("cosmicuvs"));
+                cosmicTime2 = Objects.requireNonNull(cosmicShader2.getUniform("time"));
+                cosmicYaw2 = Objects.requireNonNull(cosmicShader2.getUniform("yaw"));
+                cosmicPitch2 = Objects.requireNonNull(cosmicShader2.getUniform("pitch"));
+                cosmicExternalScale2 = Objects.requireNonNull(cosmicShader2.getUniform("externalScale"));
+                cosmicOpacity2 = Objects.requireNonNull(cosmicShader2.getUniform("opacity"));
+                cosmicUVs2 = Objects.requireNonNull(cosmicShader2.getUniform("cosmicuvs"));
                 cosmicShader2.onApply(() -> {
-                    cosmicTime.set((float) ClientUtils.getRenderTime());
                 });
             });
         } catch (IOException iOException) {

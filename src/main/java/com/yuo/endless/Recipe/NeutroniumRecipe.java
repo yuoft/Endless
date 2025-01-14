@@ -31,6 +31,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         this.count = countIn;
         this.output = outputIn;
     }
+
     public static class ModRecipeType implements RecipeType<NeutroniumRecipe> {
         @Override
         public String toString() {

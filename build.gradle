@@ -102,9 +102,18 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+jar {
+    manifest {
+        attributes([
+                //你资源包中的mixin配置文件
+                "MixinConfigs": "endless.mixins.json"
+        ])
+    }
+}
 mixin {
     //指定refmap.json文件生成位置
     add sourceSets.main, "endless.refmap.json"
+    config "endless.mixins.json"
 }
 
 repositories {
@@ -195,34 +204,34 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:jade-${jade_id}:${jade_ver}")
     runtimeOnly fg.deobf("curse.maven:neat-${neat_id}:${neat_ver}") //引入mod
     runtimeOnly fg.deobf("curse.maven:attributefix-${attributefix_id}:${attributefix_ver}")
-    runtimeOnly fg.deobf("curse.maven:brandons-core-${brandons_core_id}:${brandons_core_ver}")
-    runtimeOnly fg.deobf("codechicken:CodeChickenLib:${ccl_ver}:universal")
-    runtimeOnly fg.deobf("com.brandon3055.draconicevolution:Draconic-Evolution:${mc_ver}-${de_ver}:universal")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
-    runtimeOnly fg.deobf("curse.maven:patchouli-${patchouli_id}:${patchouli_ver}")
-    runtimeOnly fg.deobf("vazkii.botania:Botania:${mc_ver}-${bot_ver}")
-    runtimeOnly fg.deobf("curse.maven:projecte-${pe_id}:${pe_ver}")
-    runtimeOnly fg.deobf("teamtwilight:twilightforest:${tf_ver}:universal")
-    runtimeOnly fg.deobf("curse.maven:yuoenchants-${ye_id}:${ye_ver}")
-    runtimeOnly fg.deobf("curse.maven:citadel-${citadel_id}:${citadel_ver}")
-    runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-${iaf_id}:${iaf_ver}")
-    runtimeOnly fg.deobf("curse.maven:applied-energistics-2-${ae2_id}:${ae2_ver}")
-    runtimeOnly fg.deobf("curse.maven:cofh-core-${cofh_id}:${cofh_ver}")
-    runtimeOnly fg.deobf("curse.maven:thermal-foundation-${thermal_id}:${thermal_ver}")
-    runtimeOnly fg.deobf("curse.maven:storagedrawers-${storagedrawers_id}:${storagedrawers_ver}")
-    runtimeOnly fg.deobf("curse.maven:hammer-lib-${hammer_id}:${hammer_ver}")
-    runtimeOnly fg.deobf("curse.maven:solar-flux-reborn-${sfr_id}:${sfr_ver}")
+//    runtimeOnly fg.deobf("curse.maven:brandons-core-${brandons_core_id}:${brandons_core_ver}")
+//    runtimeOnly fg.deobf("codechicken:CodeChickenLib:${ccl_ver}:universal")
+//    runtimeOnly fg.deobf("com.brandon3055.draconicevolution:Draconic-Evolution:${mc_ver}-${de_ver}:universal")
+//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
+//    runtimeOnly fg.deobf("curse.maven:patchouli-${patchouli_id}:${patchouli_ver}")
+//    runtimeOnly fg.deobf("vazkii.botania:Botania:${mc_ver}-${bot_ver}")
+//    runtimeOnly fg.deobf("curse.maven:projecte-${pe_id}:${pe_ver}")
+//    runtimeOnly fg.deobf("teamtwilight:twilightforest:${tf_ver}:universal")
+//    runtimeOnly fg.deobf("curse.maven:yuoenchants-${ye_id}:${ye_ver}")
+//    runtimeOnly fg.deobf("curse.maven:citadel-${citadel_id}:${citadel_ver}")
+//    runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-${iaf_id}:${iaf_ver}")
+//    runtimeOnly fg.deobf("curse.maven:applied-energistics-2-${ae2_id}:${ae2_ver}")
+//    runtimeOnly fg.deobf("curse.maven:cofh-core-${cofh_id}:${cofh_ver}")
+//    runtimeOnly fg.deobf("curse.maven:thermal-foundation-${thermal_id}:${thermal_ver}")
+//    runtimeOnly fg.deobf("curse.maven:storagedrawers-${storagedrawers_id}:${storagedrawers_ver}")
+//    runtimeOnly fg.deobf("curse.maven:hammer-lib-${hammer_id}:${hammer_ver}")
+//    runtimeOnly fg.deobf("curse.maven:solar-flux-reborn-${sfr_id}:${sfr_ver}")
 
 //    runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:${registrate_ver}")
 //    runtimeOnly fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_ver}:${flywheel_ver}")
 //    runtimeOnly fg.deobf("com.simibubi.create:create-${mc_ver}:${create_ver}:slim")
 
-    runtimeOnly fg.deobf("curse.maven:slashblade-${sb_id}:${sb_ver}")
-    runtimeOnly fg.deobf("curse.maven:cucumber-${cucumber_id}:${cucumber_ver}")
-    runtimeOnly fg.deobf("curse.maven:mystical-agriculture-${ma_id}:${ma_ver}")
-    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-${mantle_ver}")
-    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tc3_ver}")
-    runtimeOnly fg.deobf("curse.maven:refined-storage-${rs_id}:${rs_ver}")
+//    runtimeOnly fg.deobf("curse.maven:slashblade-${sb_id}:${sb_ver}")
+//    runtimeOnly fg.deobf("curse.maven:cucumber-${cucumber_id}:${cucumber_ver}")
+//    runtimeOnly fg.deobf("curse.maven:mystical-agriculture-${ma_id}:${ma_ver}")
+//    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-${mantle_ver}")
+//    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tc3_ver}")
+//    runtimeOnly fg.deobf("curse.maven:refined-storage-${rs_id}:${rs_ver}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

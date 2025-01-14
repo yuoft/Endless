@@ -53,6 +53,11 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         }
     }
 
+    @Override
+    public RecipeType<?> getType() {
+        return RecipeTypeRegistry.EXTREME_CRAFT_RECIPE;
+    }
+
     //配方序列器
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ExtremeCraftRecipe>{
 

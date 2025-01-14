@@ -39,11 +39,12 @@ public class EndlessJei implements IModPlugin {
 
     //注册配方类别
     @Override
+    @Deprecated
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
 
         List<ExtremeCraftRecipe> recipes = recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE).stream().filter(Objects::nonNull).toList();
-        registration .addRecipes(recipes, ExtremeCraftRecipeCategory.UID);
+        registration.addRecipes(recipes, ExtremeCraftRecipeCategory.UID);
         List<ExtremeCraftShapeRecipe> recipes0 = recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(recipes0, ExtremeCraftShapeRecipeCategory.UID);
         registration.addRecipes(ExtremeCraftShpaelessManager.getInstance().getRecipeList(), ExtremeCraftShapeRecipeCategory.UID);

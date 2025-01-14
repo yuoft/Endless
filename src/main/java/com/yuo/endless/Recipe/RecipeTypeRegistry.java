@@ -1,7 +1,6 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Endless;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,8 +23,8 @@ public class RecipeTypeRegistry {
     public static void register(IEventBus eventBus) {
         RECIPE_TYPES.register(eventBus);
 
-        Registry.register(Registry.RECIPE_TYPE, ExtremeCraftRecipe.TYPE_ID, EXTREME_CRAFT_RECIPE);
-        Registry.register(Registry.RECIPE_TYPE, ExtremeCraftShapeRecipe.TYPE_SHAPE_ID, EXTREME_CRAFT_SHAPE_RECIPE);
-        Registry.register(Registry.RECIPE_TYPE, NeutroniumRecipe.TYPE_ID, NEUTRONIUM_RECIPE);
+//        Registry.register(Registry.RECIPE_TYPE, ExtremeCraftRecipe.TYPE_ID, EXTREME_CRAFT_RECIPE);
+//        Registry.register(Registry.RECIPE_TYPE, ExtremeCraftShapeRecipe.TYPE_SHAPE_ID, EXTREME_CRAFT_SHAPE_RECIPE);
+//        Registry.register(Registry.RECIPE_TYPE, NeutroniumRecipe.TYPE_ID, NEUTRONIUM_RECIPE);
     }
 }
