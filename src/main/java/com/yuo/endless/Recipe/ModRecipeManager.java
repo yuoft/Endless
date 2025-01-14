@@ -140,8 +140,6 @@ public class ModRecipeManager {
         if (Endless.isIAF){
             CompressorManager.addRecipe(Singularity.getSingularity("silver"), (Config.SERVER.singularitySilver.get() + countEnd) * rateEnd,
                     getList(new ItemStack(IafBlockRegistry.SILVER_BLOCK.get())));
-//            CompressorManager.addRecipe(Singularity.getSingularity("copper"), (Config.SERVER.singularityCopper.get() + countEnd) * rateEnd,
-//                    getList(new ItemStack(IafBlockRegistry.COPPER_BLOCK.get())));
         }
         if (Endless.isCreate){
             CompressorManager.addRecipe(Singularity.getSingularity("zinc"), (Config.SERVER.singularityZinc.get() + countEnd) * rateEnd,
@@ -334,11 +332,8 @@ public class ModRecipeManager {
                     getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
             CompressorManager.addInputs(Singularity.getSingularity("iron"),
                     getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
-        }
-        if (Endless.isThermal){
             CompressorManager.addInputs(Singularity.getSingularity("copper"),
-                    getList(new ItemStack(ThermalCore.BLOCKS.get("copper_block")),
-                    new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
+                    getList(new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
             CompressorManager.addInputs(Singularity.getSingularity("silver"),
                     getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
         }
@@ -351,8 +346,6 @@ public class ModRecipeManager {
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(TinkerModifiers.dragonScale));
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(eternalSingularity, Singularity.getSingularity("cobalt"),
                     Singularity.getSingularity("manyullyn"));
-            CompressorManager.addInputs(Singularity.getSingularity("copper"),
-                    getList(new ItemStack(TinkerMaterials.copperNugget)));
         }
     }
 

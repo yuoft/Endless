@@ -182,7 +182,7 @@ public class Singularity extends Item {
                 items.add(stack);
             }
         }
-        super.fillItemCategory(tab, items);
+//        super.fillItemCategory(tab, items);
     }
 
 

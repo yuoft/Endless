@@ -128,10 +128,8 @@ public class InfinityArmorModel extends HumanoidModel {
         copyBipedAngles(this, this.invuln);
         super.renderToBuffer(mStack, vertexBuilder, i1, i2, i3, i4, i5, i6);
         long time = 0;
-        Player playerMc = Minecraft.getInstance().player;
         if (this.mc.player != null) {
             time = this.mc.player.level.getGameTime();
-            playerMc = this.mc.player;
         }
         double pulse = Math.sin(time / 10.0D) * 0.5D + 0.5D;
         double pulse_mag_sqr = pulse * pulse * pulse * pulse * pulse * pulse;
@@ -150,13 +148,8 @@ public class InfinityArmorModel extends HumanoidModel {
             AvaritiaShaders.cosmicExternalScale.set(25.0F);
             AvaritiaShaders.cosmicExternalScale2.set(25.0F);
         } else {
-//            if (useMenu) {
-//                AvaritiaShaders.cosmicExternalScale.set(25.0F);
-//                AvaritiaShaders.cosmicExternalScale2.set(25.0F);
-//            } else {
-                AvaritiaShaders.cosmicExternalScale.set(1.0F);
-                AvaritiaShaders.cosmicExternalScale2.set(1.0F);
-//            }
+            AvaritiaShaders.cosmicExternalScale.set(1.0F);
+            AvaritiaShaders.cosmicExternalScale2.set(1.0F);
             AvaritiaShaders.cosmicYaw.set((float) ((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));
             AvaritiaShaders.cosmicPitch.set(-((float) ((this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0D)));
             AvaritiaShaders.cosmicYaw2.set((float) ((this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0D));

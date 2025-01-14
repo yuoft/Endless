@@ -1,11 +1,9 @@
 package com.yuo.endless.Event;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import com.yuo.endless.Client.Model.InfinityArmorModel;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import com.yuo.endless.Client.AvaritiaShaders;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,18 +15,16 @@ public class SoundEvent {
     public static Date lastplayedlog = null;
     public static Date lastplayedleaf = null;
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onKeyboardInput(InputEvent.KeyInputEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player != null && player.level.isClientSide){
-            int key = event.getKey();
-//            boolean keyE = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_E);
-//            boolean keyEsc = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_ESCAPE);
-            if (key == InputConstants.KEY_E)
-                InfinityArmorModel.useMenu = !InfinityArmorModel.useMenu;
-            if (key == InputConstants.KEY_ESCAPE && InfinityArmorModel.useMenu)
-                InfinityArmorModel.useMenu = false;
-        }
+    public static void screenPre(ScreenEvent.DrawScreenEvent.Pre e) {
+        AvaritiaShaders.inventoryRender = true;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void screenPost(ScreenEvent.DrawScreenEvent.Post e) {
+        AvaritiaShaders.inventoryRender = false;
     }
 
     //减少声音播放 间隔10ms
