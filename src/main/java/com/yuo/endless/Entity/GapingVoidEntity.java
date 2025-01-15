@@ -163,11 +163,11 @@ public class GapingVoidEntity extends Entity {
         }
 
         AABB aabb = new AABB(position.offset(-suckRange, -suckRange, -suckRange), position.offset(suckRange,suckRange,suckRange));
-        List<Entity> list = level.getEntitiesOfClass(Entity.class, aabb);
+        List<Player> list = level.getEntitiesOfClass(Player.class, aabb);
 
         //吸引非全套无尽玩家
-        list.forEach(entity -> {
-            if (entity instanceof Player player && !EventHandler.isInfinite(player)) {
+        list.forEach(player -> {
+            if (!EventHandler.isInfinite(player)) {
                 setEntityMotionFromVector(player, position, getVoidScale(age) * 0.5 * 0.075);
             }
         });
