@@ -2,7 +2,7 @@
   "structures": [
     {
       "structure": "endless:infinity_mob",
-      "weight": 10
+      "weight": 1
     }
   ],
   "placement": {

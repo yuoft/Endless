@@ -264,3 +264,8 @@ publishing {
         }
     }
 }
+
+
+tasks.withType(JavaCompile).configureEach {
+    options.warnings = false
+}

@@ -162,6 +162,16 @@ public class GapingVoidEntity extends Entity {
             }
         }
 
+        AABB aabb = new AABB(position.offset(-suckRange, -suckRange, -suckRange), position.offset(suckRange,suckRange,suckRange));
+        List<Entity> list = level.getEntitiesOfClass(Entity.class, aabb);
+
+        //吸引非全套无尽玩家
+        list.forEach(entity -> {
+            if (entity instanceof Player player && !EventHandler.isInfinite(player)) {
+                setEntityMotionFromVector(player, position, getVoidScale(age) * 0.5 * 0.075);
+            }
+        });
+
         if (level.isClientSide) {
             return;
         }
@@ -175,7 +185,7 @@ public class GapingVoidEntity extends Entity {
 
         double radius = getVoidScale(age) * 0.5; //引力系数
         for (Entity suckee : sucked) { //将所以实体吸引到此实体处
-            if (suckee != this) {
+            if (suckee != this && !(suckee instanceof Player)) {
                 double dist = getDist(suckee.getOnPos(), position); //距离
                 if (dist <= suckRange)
                     setEntityMotionFromVector(suckee, position, radius * 0.075d);
@@ -202,19 +212,12 @@ public class GapingVoidEntity extends Entity {
             }
         }
 
-        //给予内部玩家失明buff
-        if (age % 20 == 0){
-            AABB alignedBB = new AABB(position.offset(-nomRange, -nomRange, -nomRange), position.offset(nomRange,nomRange,nomRange));
-            List<LivingEntity> livings = level.getEntitiesOfClass(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
-
-        }
-
         // 每半秒破坏一次方块
         if (age % 10 == 0) {
             int blockRange = Math.round(getVoidScale(age)); //破坏半径
             Iterable<BlockPos> boxMutable = BlockPos.betweenClosed(position.offset(-blockRange, -blockRange, -blockRange), position.offset(blockRange, blockRange, blockRange));
             for (BlockPos pos : boxMutable) {
-                if (pos.getY() < 0 || pos.getY() > 255) { //0层以下或255以上，不破坏
+                if (pos.getY() < -64 || pos.getY() > 311) { //-64层以下或311以上，不破坏
                     continue;
                 }
                 double dist = getDist(pos, position);
@@ -252,11 +255,6 @@ public class GapingVoidEntity extends Entity {
         double motionX = finalVector.x * modifier;
         double motionY = finalVector.y * modifier;
         double motionZ = finalVector.z * modifier;
-        if (entity instanceof Player player){
-            if (player.isCreative() || EventHandler.isInfinite(player) || player.getAbilities().flying) return; //创造或全套无尽 不会被吸引
-            Vec3 vector3d = new Vec3(motionX, motionY, motionZ).normalize();
-            player.push(vector3d.x, vector3d.y, vector3d.z);
-        }
         entity.setDeltaMovement(motionX, motionY, motionZ);
     }
 
