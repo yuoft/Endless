@@ -16,6 +16,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.item.ItemEntity;
@@ -40,6 +41,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -190,6 +192,10 @@ public class EventHandler {
             boolean hasSword = player.getActiveItemStack().getItem() == EndlessItems.infinitySword.get();
             if (hasSword){
                 InfinitySword.clearBuff(player);
+            }
+
+            if (!player.world.isRemote) {
+                changeHandRange(player);
             }
         }
     }
@@ -442,6 +448,16 @@ public class EventHandler {
     }
 
     /**
+     * 物品是否属于无尽物品
+     * @param item 物品
+     * @return 是 true
+     */
+    public static boolean isInfinityItemTool(Item item){
+        return item instanceof InfinityAxe || item instanceof InfinityHoe || item instanceof InfinityPickaxe ||
+                item instanceof InfinityShovel || item instanceof InfinitySword;
+    }
+
+    /**
      * 添加额外掉落
      * @param item 需要掉落的物品
      * @param count 数量
@@ -513,6 +529,45 @@ public class EventHandler {
                 }
             }
         }
+    }
+
+    /**
+     * 增加5格触及距离
+     * @param player 玩家
+     */
+    public static void changeHandRange(PlayerEntity player){
+        ModifiableAttributeInstance reachDistance = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        ItemStack mainhand = player.getHeldItemMainhand();
+        boolean flag = !mainhand.isEmpty() && isInfinityItemTool(mainhand.getItem());
+        if (reachDistance != null){
+            if (!flag){
+                RemoveModifier(reachDistance, 2d);
+                return;
+            }
+            AddModifier(reachDistance, 2d);
+        }
+    }
+
+    /**
+     * 添加属性修饰器
+     * @param attr 属性实例
+     * @param value 附魔等级
+     */
+    private static void AddModifier(ModifiableAttributeInstance attr,double value){
+        AttributeModifier modifier = Modifiers.getModifierRange(value);
+        attr.removeModifier(modifier.getID());
+        attr.applyPersistentModifier(modifier);
+    }
+
+    /**
+     * 清除属性修饰器
+     * @param attr 属性实例
+     * @param value 附魔等级
+     */
+    private static void RemoveModifier(ModifiableAttributeInstance attr, double value){
+        AttributeModifier modifier = Modifiers.getModifierRange(value);
+        if (attr.getModifier(modifier.getID()) == null) return;
+        attr.removeModifier(modifier.getID());
     }
 }
 
