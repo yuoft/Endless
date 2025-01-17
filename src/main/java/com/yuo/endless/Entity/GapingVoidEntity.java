@@ -165,6 +165,13 @@ public class GapingVoidEntity extends Entity {
             }
         }
 
+        AxisAlignedBB aabb = new AxisAlignedBB(position.add(-suckRange, -suckRange, -suckRange), position.add(suckRange,suckRange,suckRange));
+        List<PlayerEntity> players = world.getEntitiesWithinAABB(PlayerEntity.class, aabb);
+        players.forEach(player -> {
+           if (!EventHandler.isInfinite(player))
+               setEntityMotionFromVector(player, position, getVoidScale(age) * 0.5 * 0.075d);
+        });
+
         if (world.isRemote) {
             return;
         }
@@ -178,7 +185,7 @@ public class GapingVoidEntity extends Entity {
 
         double radius = getVoidScale(age) * 0.5; //引力系数
         for (Entity suckee : sucked) { //将所以实体吸引到此实体处
-            if (suckee != this) {
+            if (suckee != this && !(suckee instanceof PlayerEntity)) {
                 double dist = getDist(suckee.getPosition(), position); //距离
                 if (dist <= suckRange)
                     setEntityMotionFromVector(suckee, position, radius * 0.075d);
@@ -205,13 +212,6 @@ public class GapingVoidEntity extends Entity {
                     }
                 }
             }
-        }
-
-        //给予内部玩家失明buff
-        if (age % 20 == 0){
-            AxisAlignedBB alignedBB = new AxisAlignedBB(position.add(-nomRange, -nomRange, -nomRange), position.add(nomRange,nomRange,nomRange));
-            List<LivingEntity> livings = world.getEntitiesWithinAABB(LivingEntity.class, alignedBB, OMNOM_PREDICATE);
-
         }
 
         // 每半秒破坏一次方块
@@ -257,12 +257,6 @@ public class GapingVoidEntity extends Entity {
         double motionX = finalVector.x * modifier;
         double motionY = finalVector.y * modifier;
         double motionZ = finalVector.z * modifier;
-        if (entity instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) entity;
-            if (player.isCreative() || EventHandler.isInfinite(player) || player.abilities.isFlying) return; //创造或全套无尽 不会被吸引
-            Vector3d vector3d = new Vector3d(motionX, motionY, motionZ).normalize();
-            player.addVelocity(vector3d.x, vector3d.y, vector3d.z);
-        }
         entity.setMotion(motionX, motionY, motionZ);
     }
 
