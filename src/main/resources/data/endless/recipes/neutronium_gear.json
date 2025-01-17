@@ -1,15 +1,20 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "endless:nether_craft",
   "pattern": [
-    " x ",
-    "xyx",
-    " x "
+    "  x  ",
+    " xzx ",
+    "xzyzx",
+    " xzx ",
+    "  x  "
   ],
   "key": {
     "x": {
       "item": "endless:neutronium_ingot"
     },
     "y": {
+      "item": "minecraft:nether_star"
+    },
+    "z": {
       "item": "endless:crystal_matrix_ingot"
     }
   },

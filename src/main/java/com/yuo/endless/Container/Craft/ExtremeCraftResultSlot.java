@@ -1,4 +1,4 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Craft;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.Recipe.*;

@@ -78,7 +78,7 @@ public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeC
      * @param ingredient 输入
      * @return 输出
      */
-    private Ingredient getSingularityIngredient(Ingredient ingredient) {
+    public static Ingredient getSingularityIngredient(Ingredient ingredient) {
         ItemStack[] matchingStacks = ingredient.getMatchingStacks();
         List<ItemStack> singularityStacks = new ArrayList<>();
         for (ItemStack stack : matchingStacks) { //通过奇点nbt来获取stack后填入list

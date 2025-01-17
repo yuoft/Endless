@@ -1,15 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "endless:ender_craft",
   "pattern": [
-    "y y",
-    "x x",
-    "   "
+    " xx xx ",
+    " xz zx ",
+    " xz zx ",
+    " xz zx ",
+    "xyz zyx",
+    "xxx xxx",
+    "       "
   ],
   "key": {
     "x": {
       "item": "endless:neutronium_ingot"
     },
     "y": {
+      "item": "endless:neutronium_gear"
+    },
+    "z": {
       "item": "minecraft:netherite_ingot"
     }
   },

@@ -1,27 +1,27 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Craft;
 
-import com.yuo.endless.Tiles.ExtremeCraftTile;
+import com.yuo.endless.Tiles.AbsCraftTile;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.item.ItemStack;
 
 public class ExtremeCraftInventoryResult extends CraftResultInventory {
 
-    private final ExtremeCraftTile craftTile;
+    private final AbsCraftTile craftTile;
 
-    public ExtremeCraftInventoryResult(ExtremeCraftTile tile){
+    public ExtremeCraftInventoryResult(AbsCraftTile tile){
         this.craftTile = tile;
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return craftTile.getStackInSlot(81);
+        return craftTile.getStackInSlot(craftTile.getCraftType().getCraftTotal());
     }
 
     @Override
     public ItemStack decrStackSize(int par1, int par2) {
-        ItemStack stack = craftTile.getStackInSlot(81);
+        ItemStack stack = craftTile.getStackInSlot(craftTile.getCraftType().getCraftTotal());
         if (!stack.isEmpty()) {
-            craftTile.setInventorySlotContents(81, ItemStack.EMPTY);
+            craftTile.setInventorySlotContents(craftTile.getCraftType().getCraftTotal(), ItemStack.EMPTY);
             return stack;
         } else {
             return ItemStack.EMPTY;
@@ -30,6 +30,6 @@ public class ExtremeCraftInventoryResult extends CraftResultInventory {
 
     @Override
     public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
-        craftTile.setInventorySlotContents(81, par2ItemStack);
+        craftTile.setInventorySlotContents(craftTile.getCraftType().getCraftTotal(), par2ItemStack);
     }
 }

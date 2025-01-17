@@ -96,7 +96,9 @@
     "block.endless.neutronium_block":"§b中子素块",
     "block.endless.compressed_crafting_table":"压缩工作台",
     "block.endless.double_compressed_crafting_table":"二重压缩工作台",
-    "block.endless.extreme_crafting_table":"终极工作台",
+    "block.endless.extreme_crafting_table":"§c终极工作台",
+    "block.endless.ender_crafting_table":"§3末地工作台",
+    "block.endless.nether_crafting_table":"§b下界工作台",
     "block.endless.neutronium_collector":"中子素收集器",
     "block.endless.dense_neutronium_collector":"致密中子素收集器",
     "block.endless.denser_neutronium_collector":"高级致密中子素收集器",
@@ -204,7 +206,9 @@
     "advancements.endless.eternal_singularity.title":"永恒奇点",
     "advancements.endless.eternal_singularity.desc":"合成永恒奇点",
 
-    "gui.endless.extreme_crafting_table":"终极工作台",
+    "gui.endless.extreme_crafting_table":"§c终极工作台",
+    "gui.endless.ender_crafting_table":"§3末地工作台",
+    "gui.endless.nether_crafting_table":"§b下界工作台",
     "gui.endless.neutronium_collector":"中子素收集器",
     "gui.endless.dense_neutronium_collector":"致密中子素收集器",
     "gui.endless.denser_neutronium_collector":"高级致密中子素收集器",
@@ -215,8 +219,12 @@
     "gui.endless.stack_count":"数量：%s",
 
 
-    "jei.endless.extreme_craft":"终极有序合成",
-    "jei.endless.extreme_craft_shape":"终极无序合成",
+    "jei.endless.extreme_craft":"§c终极有序合成",
+    "jei.endless.extreme_craft_shape":"§c终极无序合成",
+    "jei.endless.ender_craft":"§3末影有序合成",
+    "jei.endless.ender_craft_shape":"§3末影无序合成",
+    "jei.endless.nether_craft":"§b炼狱有序合成",
+    "jei.endless.nether_craft_shape":"§b炼狱无序合成",
 
     "jade.endless.neutron_collector_progress":"收集进度：%s%%",
     "jade.endless.neutron_compressor_progress":"压缩进度：%s%%",

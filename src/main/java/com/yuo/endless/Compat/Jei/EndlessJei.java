@@ -1,6 +1,8 @@
 package com.yuo.endless.Compat.Jei;
 
-import com.yuo.endless.Container.ExtremeCraftContainer;
+import com.yuo.endless.Container.Craft.EnderCraftContainer;
+import com.yuo.endless.Container.Craft.ExtremeCraftContainer;
+import com.yuo.endless.Container.Craft.NetherCraftContainer;
 import com.yuo.endless.Container.NeutroniumCompressorContainer;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
@@ -33,7 +35,11 @@ public class EndlessJei implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
                 new ExtremeCraftRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
+                new EnderCraftRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
+                new NetherCraftRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
                 new ExtremeCraftShapeRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
+                new EnderCraftShapeRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
+                new NetherCraftShapeRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
                 new NeutroniumCRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
@@ -42,11 +48,21 @@ public class EndlessJei implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().world).getRecipeManager();
         registration.addRecipes(ExtremeCraftingManager.getInstance().getRecipeList(), ExtremeCraftRecipeCategory.UID);
+        registration.addRecipes(ExtremeCraftShpaelessManager.getInstance().getRecipeList(), ExtremeCraftShapeRecipeCategory.UID);
+
         registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE).stream().
                 filter(Objects::nonNull).collect(Collectors.toList()), ExtremeCraftRecipeCategory.UID);
-        registration.addRecipes(ExtremeCraftShpaelessManager.getInstance().getRecipeList(), ExtremeCraftShapeRecipeCategory.UID);
+        registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.ENDER_CRAFT_RECIPE).stream().
+                filter(Objects::nonNull).collect(Collectors.toList()), EnderCraftRecipeCategory.UID);
+        registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.NETHER_CRAFT_RECIPE).stream().
+                filter(Objects::nonNull).collect(Collectors.toList()), NetherCraftRecipeCategory.UID);
         registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE).stream().
                 filter(Objects::nonNull).collect(Collectors.toList()), ExtremeCraftShapeRecipeCategory.UID);
+        registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.ENDER_CRAFT_SHAPE_RECIPE).stream().
+                filter(Objects::nonNull).collect(Collectors.toList()), EnderCraftShapeRecipeCategory.UID);
+        registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.NETHER_CRAFT_SHAPE_RECIPE).stream().
+                filter(Objects::nonNull).collect(Collectors.toList()), NetherCraftShapeRecipeCategory.UID);
+
         registration.addRecipes(CompressorManager.getRecipes(), NeutroniumCRecipeCategory.UID);
         registration.addRecipes(recipeManager.getRecipesForType(RecipeTypeRegistry.NEUTRONIUM_RECIPE).stream().
                 filter(Objects::nonNull).collect(Collectors.toList()), NeutroniumCRecipeCategory.UID);
@@ -56,7 +72,11 @@ public class EndlessJei implements IModPlugin {
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(ExtremeCraftContainer.class, ExtremeCraftRecipeCategory.UID, 0, 81, 82, 36);
+        registration.addRecipeTransferHandler(EnderCraftContainer.class, EnderCraftRecipeCategory.UID, 0, 49, 50, 36);
+        registration.addRecipeTransferHandler(NetherCraftContainer.class, NetherCraftRecipeCategory.UID, 0, 25, 26, 36);
         registration.addRecipeTransferHandler(ExtremeCraftContainer.class, ExtremeCraftShapeRecipeCategory.UID, 0, 81, 82, 36);
+        registration.addRecipeTransferHandler(EnderCraftContainer.class, EnderCraftShapeRecipeCategory.UID, 0, 49, 50, 36);
+        registration.addRecipeTransferHandler(NetherCraftContainer.class, NetherCraftShapeRecipeCategory.UID, 0, 25, 26, 36);
         registration.addRecipeTransferHandler(NeutroniumCompressorContainer.class, NeutroniumCRecipeCategory.UID, 0, 1, 2, 36);
     }
 
@@ -64,7 +84,11 @@ public class EndlessJei implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(EndlessItems.extremeCraftingTable.get()), ExtremeCraftRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(EndlessItems.enderCraftingTable.get()), EnderCraftRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(EndlessItems.netherCraftingTable.get()), NetherCraftRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(EndlessItems.extremeCraftingTable.get()), ExtremeCraftShapeRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(EndlessItems.enderCraftingTable.get()), EnderCraftShapeRecipeCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(EndlessItems.netherCraftingTable.get()), NetherCraftShapeRecipeCategory.UID);
         registration.addRecipeCatalyst(new ItemStack(EndlessItems.neutronCompressor.get()), NeutroniumCRecipeCategory.UID);
     }
 

@@ -2,6 +2,9 @@ package com.yuo.endless.Container;
 
 import com.yuo.endless.Container.Chest.CompressorChestContainer;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
+import com.yuo.endless.Container.Craft.EnderCraftContainer;
+import com.yuo.endless.Container.Craft.ExtremeCraftContainer;
+import com.yuo.endless.Container.Craft.NetherCraftContainer;
 import com.yuo.endless.Endless;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.ContainerType;
@@ -18,6 +21,12 @@ public class ContainerTypeRegistry {
     public static final RegistryObject<ContainerType<ExtremeCraftContainer>> extremeCraftContainer = CONTAINERS.register("extreme_craft_container", () ->
             IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
                     new ExtremeCraftContainer(windowId, inv)));
+    public static final RegistryObject<ContainerType<EnderCraftContainer>> enderCraftContainer = CONTAINERS.register("ender_craft_container", () ->
+            IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
+                    new EnderCraftContainer(windowId, inv)));
+    public static final RegistryObject<ContainerType<NetherCraftContainer>> netherCraftContainer = CONTAINERS.register("nether_craft_container", () ->
+            IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
+                    new NetherCraftContainer(windowId, inv)));
     public static final RegistryObject<ContainerType<NeutronCollectorContainer>> neutronCollectorContainer = CONTAINERS.register("neutron_collector_container", () ->
             IForgeContainerType.create((int windowId, PlayerInventory inv, PacketBuffer data) ->
                     new NeutronCollectorContainer(windowId, inv)));

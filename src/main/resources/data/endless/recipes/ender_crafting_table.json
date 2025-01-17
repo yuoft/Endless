@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xzx",
+    "xyx",
+    "xzx"
+  ],
+  "key": {
+    "x": {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    "z": {
+      "item": "minecraft:nether_star"
+    },
+    "y": {
+      "item": "endless:compressed_crafting_table"
+    }
+  },
+  "result": {
+    "item": "endless:ender_crafting_table"
+  }
+}

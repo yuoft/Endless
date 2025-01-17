@@ -1,18 +1,17 @@
-package com.yuo.endless.Container;
+package com.yuo.endless.Container.Craft;
 
-import com.yuo.endless.Tiles.ExtremeCraftTile;
+import com.yuo.endless.Tiles.AbsCraftTile;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public class ExtremeCraftInventory extends CraftingInventory {
-    private final ExtremeCraftTile craftTile;
+    private final AbsCraftTile craftTile;
     private final Container container;
 
-    public ExtremeCraftInventory(Container containerIn, ExtremeCraftTile tile) {
-        super(containerIn, 9, 9);
+    public ExtremeCraftInventory(Container containerIn, AbsCraftTile tile) {
+        super(containerIn, tile.getCraftType().getCraftNum(), tile.getCraftType().getCraftNum());
         this.craftTile = tile;
         this.container = containerIn;
     }

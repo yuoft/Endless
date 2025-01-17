@@ -14,6 +14,10 @@ public class EndlessTileTypes {
 
     public static final RegistryObject<TileEntityType<ExtremeCraftTile>> EXTREME_CRAFT_TILE = TILE_ENTITIES.register("extreme_craft_tile",
             () -> TileEntityType.Builder.create(ExtremeCraftTile::new, EndlessBlocks.extremeCraftingTable.get()).build(null));
+    public static final RegistryObject<TileEntityType<EnderCraftTile>> ENDER_CRAFT_TILE = TILE_ENTITIES.register("ender_craft_tile",
+            () -> TileEntityType.Builder.create(EnderCraftTile::new, EndlessBlocks.enderCraftingTable.get()).build(null));
+    public static final RegistryObject<TileEntityType<NetherCraftTile>> NETHER_CRAFT_TILE = TILE_ENTITIES.register("nether_craft_tile",
+            () -> TileEntityType.Builder.create(NetherCraftTile::new, EndlessBlocks.netherCraftingTable.get()).build(null));
     public static final RegistryObject<TileEntityType<NeutronCollectorTile>> NEUTRON_COLLECTOR_TILE = TILE_ENTITIES.register("neutron_collector_tile",
             () -> TileEntityType.Builder.create(NeutronCollectorTile::new, EndlessBlocks.neutroniumCollector.get()).build(null));
     public static final RegistryObject<TileEntityType<DenseNeutronCollectorTile>> DENSE_NEUTRON_COLLECTOR_TILE = TILE_ENTITIES.register("dense_neutron_collector_tile",

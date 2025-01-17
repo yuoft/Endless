@@ -1,6 +1,6 @@
 package com.yuo.endless.Recipe;
 
-import com.yuo.endless.Container.ExtremeCraftInventory;
+import com.yuo.endless.Container.Craft.ExtremeCraftInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;

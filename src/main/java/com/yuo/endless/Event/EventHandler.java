@@ -67,7 +67,6 @@ public class EventHandler {
     public static List<String> playersWithLegs = new ArrayList<>();
     public static List<String> playersWithFeet = new ArrayList<>();
 
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void screenPre(GuiScreenEvent.DrawScreenEvent.Pre e) {

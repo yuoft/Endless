@@ -47,6 +47,11 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         this.result = result;
     }
 
+    @Override
+    public IRecipeType<?> getType() {
+        return RecipeTypeRegistry.EXTREME_CRAFT_RECIPE;
+    }
+
     public static class RecipeType implements IRecipeType<ExtremeCraftRecipe> {
         @Override
         public String toString() {
@@ -59,7 +64,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         @Override
         public ExtremeCraftRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
             Map<String, Ingredient> map = deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] astring = shrink(patternFromJson(JSONUtils.getJsonArray(json, "pattern")));
+            String[] astring = shrink(patternFromJson(JSONUtils.getJsonArray(json, "pattern"), MAX_HEIGHT, MAX_WIDTH));
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = deserializeIngredients(astring, map, i, j);
@@ -281,17 +286,17 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         return map;
     }
 
-    public static String[] patternFromJson(JsonArray jsonArr) {
+    public static String[] patternFromJson(JsonArray jsonArr, int maxHeight, int maxWidth) {
         String[] astring = new String[jsonArr.size()];
         if (astring.length > 9) {
-            throw new JsonSyntaxException("Invalid pattern: too many rows, " + MAX_HEIGHT + " is maximum");
+            throw new JsonSyntaxException("Invalid pattern: too many rows, " + maxHeight + " is maximum");
         } else if (astring.length == 0) {
             throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
         } else {
             for(int i = 0; i < astring.length; ++i) {
                 String s = JSONUtils.getString(jsonArr.get(i), "pattern[" + i + "]");
                 if (s.length() > 9) {
-                    throw new JsonSyntaxException("Invalid pattern: too many columns, " + MAX_WIDTH + " is maximum");
+                    throw new JsonSyntaxException("Invalid pattern: too many columns, " + maxWidth + " is maximum");
                 }
 
                 if (i > 0 && astring[0].length() != s.length()) {

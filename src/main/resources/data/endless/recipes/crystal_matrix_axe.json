@@ -1,15 +1,20 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "endless:nether_craft",
   "pattern": [
-    "xx ",
-    "xy ",
-    " y "
+    " III ",
+    "IICI ",
+    "   N ",
+    "   N ",
+    "   N "
   ],
   "key": {
-    "x": {
+    "I": {
       "item": "endless:crystal_matrix_ingot"
     },
-    "y": {
+    "C": {
+      "item": "minecraft:nether_star"
+    },
+    "N": {
       "item": "minecraft:diamond"
     }
   },

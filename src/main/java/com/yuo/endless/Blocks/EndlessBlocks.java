@@ -1,5 +1,6 @@
 package com.yuo.endless.Blocks;
 
+import com.yuo.endless.Blocks.ExtremeCraft.CraftType;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Fluid.EndlessFluids;
 import com.yuo.endless.Fluid.InfinityFluidBlock;
@@ -25,7 +26,9 @@ public class EndlessBlocks {
             () -> new OrdinaryBlock(Material.WOOD, 0, ToolType.AXE, 5, 5));
     public static RegistryObject<Block> doubleCompressedCraftingTable = BLOCKS.register("double_compressed_crafting_table",
             () -> new OrdinaryBlock(Material.WOOD, 1, ToolType.AXE, 5, 5));
-    public static RegistryObject<Block> extremeCraftingTable = BLOCKS.register("extreme_crafting_table", ExtremeCraft::new);
+    public static RegistryObject<Block> extremeCraftingTable = BLOCKS.register("extreme_crafting_table", () -> new ExtremeCraft(CraftType.EXTREME_CRAFT));
+    public static RegistryObject<Block> enderCraftingTable = BLOCKS.register("ender_crafting_table", () -> new ExtremeCraft(CraftType.ENDER_CRAFT));
+    public static RegistryObject<Block> netherCraftingTable = BLOCKS.register("nether_crafting_table", () -> new ExtremeCraft(CraftType.NETHER_CRAFT));
     public static RegistryObject<Block> neutroniumCollector = BLOCKS.register("neutronium_collector", NeutronCollector::new);
     public static RegistryObject<Block> denseNeutroniumCollector = BLOCKS.register("dense_neutronium_collector", DenseNeutronCollector::new);
     public static RegistryObject<Block> denserNeutroniumCollector = BLOCKS.register("denser_neutronium_collector", DoubleNeutronCollector::new);

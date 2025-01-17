@@ -34,16 +34,19 @@ public class InfinitySuperArrowEntity extends AbstractArrowEntity {
     private int range;
     public InfinitySuperArrowEntity(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);
+        this.noClip = true;
     }
 
     public InfinitySuperArrowEntity(EntityType<? extends AbstractArrowEntity> type, double x, double y, double z, World worldIn) {
         super(type, x, y, z, worldIn);
+        this.noClip = true;
     }
 
     public InfinitySuperArrowEntity(EntityType<? extends AbstractArrowEntity> type, LivingEntity shooter, World worldIn, int range) {
         super(type, shooter, worldIn);
         this.shooter = shooter;
         this.range = range;
+        this.noClip = true;
     }
 
     @Override

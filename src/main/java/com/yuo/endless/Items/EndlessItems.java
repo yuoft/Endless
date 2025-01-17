@@ -106,6 +106,10 @@ public class EndlessItems {
 			() -> new BlockItem(EndlessBlocks.doubleCompressedCraftingTable.get(), BLOCK_TAB));
 	public static RegistryObject<BlockItem> extremeCraftingTable = ITEMS.register("extreme_crafting_table",
 			() -> new BlockItem(EndlessBlocks.extremeCraftingTable.get(), BLOCK_TAB.isImmuneToFire()));
+	public static RegistryObject<BlockItem> enderCraftingTable = ITEMS.register("ender_crafting_table",
+			() -> new BlockItem(EndlessBlocks.enderCraftingTable.get(), BLOCK_TAB.isImmuneToFire()));
+	public static RegistryObject<BlockItem> netherCraftingTable = ITEMS.register("nether_crafting_table",
+			() -> new BlockItem(EndlessBlocks.netherCraftingTable.get(), BLOCK_TAB.isImmuneToFire()));
 	public static RegistryObject<BlockItem> neutroniumCollector = ITEMS.register("neutronium_collector",
 			() -> new BlockItem(EndlessBlocks.neutroniumCollector.get(), BLOCK_TAB));
 	public static RegistryObject<BlockItem> denseNeutroniumCollector = ITEMS.register("dense_neutronium_collector",

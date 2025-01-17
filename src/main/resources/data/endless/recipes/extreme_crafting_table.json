@@ -1,13 +1,23 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "endless:nether_craft",
   "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
+    "       ",
+    " zzazz ",
+    " zxxxz ",
+    " axyxa ",
+    " zxxxz ",
+    " zzazz ",
+    "       "
   ],
   "key": {
     "x": {
       "item": "endless:crystal_matrix_ingot"
+    },
+    "a": {
+      "item": "endless:neutronium_gear"
+    },
+    "z": {
+      "item": "endless:neutronium_ingot"
     },
     "y": {
       "item": "endless:double_compressed_crafting_table"

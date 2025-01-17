@@ -67,6 +67,8 @@ public class ClientProxy implements IProxy {
         //绑定Container和ContainerScreen
         event.enqueueWork(() -> {
             ScreenManager.registerFactory(ContainerTypeRegistry.extremeCraftContainer.get(), ExtremeCraftScreen::new);
+            ScreenManager.registerFactory(ContainerTypeRegistry.enderCraftContainer.get(), EnderCraftScreen::new);
+            ScreenManager.registerFactory(ContainerTypeRegistry.netherCraftContainer.get(), NetherCraftScreen::new);
             ScreenManager.registerFactory(ContainerTypeRegistry.neutronCollectorContainer.get(), NeutronCollectorScreen::new);
             ScreenManager.registerFactory(ContainerTypeRegistry.denseNeutronCollectorContainer.get(), DenseNeutronCollectorScreen::new);
             ScreenManager.registerFactory(ContainerTypeRegistry.doubleNeutronCollectorContainer.get(), DoubleNeutronCollectorScreen::new);

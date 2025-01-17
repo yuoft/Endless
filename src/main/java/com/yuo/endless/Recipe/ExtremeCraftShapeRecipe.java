@@ -14,7 +14,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -38,7 +37,7 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
 
     @Override
     public IRecipeType<?> getType() {
-        return Registry.RECIPE_TYPE.getOptional(TYPE_SHAPE_ID).get();
+        return RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE;
     }
 
     @Override
@@ -56,9 +55,6 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExtremeCraftShapeRecipe>{
         @Override
         public ExtremeCraftShapeRecipe read(ResourceLocation recipeId, JsonObject json) { //从json中获取信息
-            String s = JSONUtils.getString(json, "type", "");
-            if (!"endless:extreme_craft_shape".equals(s))
-                throw new JsonParseException("Type error!");
             NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
@@ -95,6 +91,10 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
 
     @Override
     public boolean matches(IInventory iInventory, World world) {
+        return recipeMatcher(iInventory, world, this.items);
+    }
+
+    public static boolean recipeMatcher(IInventory iInventory, World world, NonNullList<Ingredient> items){
         ArrayList<ItemStack> stacks = new ArrayList<>(); //输入的物品
         for (int slot = 0; slot < iInventory.getSizeInventory(); slot++) {
             ItemStack stack = iInventory.getStackInSlot(slot);
@@ -154,7 +154,7 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
         this.items.addAll(ingredients);
     }
 
-    private static NonNullList<Ingredient> readIngredients(JsonArray jsonArray) {
+    public static NonNullList<Ingredient> readIngredients(JsonArray jsonArray) {
         NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
         for(int i = 0; i < jsonArray.size(); ++i) {

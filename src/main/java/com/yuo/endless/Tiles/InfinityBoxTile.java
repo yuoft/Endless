@@ -103,7 +103,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements IRecipeHolde
                     }
                 }
                 if (this.isBurning() && this.canSmelt(recipe)) { //烧炼进度增加
-                    this.cookingTime++;
+                    this.cookingTime += 5;
                     if (this.cookingTime == cookingTimeTotal) {
                         this.cookingTime = 0;
                         this.smelt(recipe, world);

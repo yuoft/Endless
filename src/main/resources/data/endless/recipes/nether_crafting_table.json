@@ -1,18 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
+    "xxx",
     "xyx",
-    "xyx"
+    "xxx"
   ],
   "key": {
     "x": {
       "item": "endless:diamond_lattice"
     },
     "y": {
-      "item": "minecraft:nether_star"
+      "item": "minecraft:crafting_table"
     }
   },
   "result": {
-    "item": "endless:crystal_matrix_ingot"
+    "item": "endless:nether_crafting_table"
   }
 }

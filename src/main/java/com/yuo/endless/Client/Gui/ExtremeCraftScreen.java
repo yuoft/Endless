@@ -3,7 +3,7 @@ package com.yuo.endless.Client.Gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yuo.endless.Config;
-import com.yuo.endless.Container.ExtremeCraftContainer;
+import com.yuo.endless.Container.Craft.ExtremeCraftContainer;
 import com.yuo.endless.Endless;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;

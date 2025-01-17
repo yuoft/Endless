@@ -2,6 +2,7 @@ package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Endless;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 
 import java.util.UUID;
 
@@ -38,6 +39,10 @@ public class Modifiers {
 
     public static AttributeModifier getModifierSpeed(int type, double value){
         return new AttributeModifier(UUID_SPEED[type], Endless.MOD_ID + ":movement_speed", value, AttributeModifier.Operation.MULTIPLY_BASE);
+    }
+
+    public static AttributeModifier getModifierRange(double value){
+        return new AttributeModifier(UUID.fromString("c063a72f-a70c-414e-bd00-635b7a25be11"), Endless.MOD_ID + ":range", value, Operation.ADDITION);
     }
 
     public static AttributeModifier getModifierAtkSpeed(int type, double value){

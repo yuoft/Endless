@@ -1,13 +1,17 @@
 package com.yuo.endless.Blocks;
 
-import com.yuo.endless.Container.ExtremeCraftContainer;
+import com.yuo.endless.Tiles.AbsCraftTile;
+import com.yuo.endless.Tiles.EnderCraftTile;
 import com.yuo.endless.Tiles.ExtremeCraftTile;
-import net.minecraft.block.*;
+import com.yuo.endless.Tiles.NetherCraftTile;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -20,15 +24,17 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public class ExtremeCraft extends Block {
     private static final ITextComponent CONTAINER_NAME = new TranslationTextComponent("gui.endless.extreme_crafting_table");
+    private final CraftType type;
 
-    public ExtremeCraft() {
-        super(Properties.create(Material.ROCK).hardnessAndResistance(10, 50).harvestLevel(1)
-                .harvestTool(ToolType.PICKAXE).sound(SoundType.GLASS).setRequiresTool());
+    public ExtremeCraft(CraftType type) {
+        super(type.properties);
+        this.type = type;
     }
 
     @Override
@@ -41,11 +47,15 @@ public class ExtremeCraft extends Block {
         return BlockRenderType.MODEL;
     }
 
-
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new ExtremeCraftTile();
+        switch (type) {
+            case EXTREME_CRAFT: return new ExtremeCraftTile();
+            case ENDER_CRAFT: return new EnderCraftTile();
+            case NETHER_CRAFT: return new NetherCraftTile();
+            default: throw new RuntimeException("Unknown type: " + type);
+        }
     }
 
     @Override
@@ -53,7 +63,11 @@ public class ExtremeCraft extends Block {
         if (worldIn.isRemote) {
             return ActionResultType.SUCCESS;
         } else {
-            player.openContainer(state.getContainer(worldIn, pos));
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof AbsCraftTile){
+                NetworkHooks.openGui((ServerPlayerEntity) player, (INamedContainerProvider) tile, pos);
+            }
+//            player.openContainer(state.getContainer(worldIn, pos));
             player.addStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
             return ActionResultType.CONSUME;
         }
@@ -61,8 +75,15 @@ public class ExtremeCraft extends Block {
 
     @Override
     public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos) {
-        return new SimpleNamedContainerProvider((id, inventory, player) ->
-                new ExtremeCraftContainer(id, inventory, (ExtremeCraftTile) worldIn.getTileEntity(pos)), CONTAINER_NAME);
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof AbsCraftTile){
+            switch (type) {
+                case EXTREME_CRAFT: return new ExtremeCraftTile();
+                case ENDER_CRAFT: return new EnderCraftTile();
+                case NETHER_CRAFT: return new NetherCraftTile();
+                default: throw new RuntimeException("Unknown type: " + type);
+            }
+        }return null;
     }
 
     //被破坏时 里面所有物品掉落
@@ -70,8 +91,8 @@ public class ExtremeCraft extends Block {
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.matchesBlock(newState.getBlock())) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof ExtremeCraftTile) {
-                ((ExtremeCraftTile) tileentity).dropItem(worldIn, pos);
+            if (tileentity instanceof AbsCraftTile) {
+                ((AbsCraftTile) tileentity).dropItem(worldIn, pos);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
 
@@ -84,4 +105,51 @@ public class ExtremeCraft extends Block {
         }
     }
 
+    /**
+     * 合成台属性
+     */
+    public enum CraftType{
+        EXTREME_CRAFT("extreme_craft", 9,81,
+                Properties.create(Material.ROCK).hardnessAndResistance(15, 100).harvestLevel(3)
+                        .harvestTool(ToolType.PICKAXE).sound(SoundType.GLASS).setRequiresTool()),
+        ENDER_CRAFT("ender_craft", 7,49,
+                Properties.create(Material.ROCK).hardnessAndResistance(10, 50).harvestLevel(2)
+                        .harvestTool(ToolType.PICKAXE).sound(SoundType.STONE).setRequiresTool()),
+        NETHER_CRAFT("nether_craft", 5,25,
+                Properties.create(Material.ROCK).hardnessAndResistance(5, 30).harvestLevel(1)
+                        .harvestTool(ToolType.PICKAXE).sound(SoundType.NETHER_BRICK).setRequiresTool());
+
+        private final String type;
+        private final int craftNum;
+        private final int craftTotal;
+        private final Properties properties;
+        CraftType(String type, int craftNum, int craftTotal, Properties properties){
+            this.type = type;
+            this.craftNum = craftNum;
+            this.craftTotal = craftTotal;
+            this.properties = properties;
+        }
+
+        /**
+         * @return 合成栏总数
+         */
+        public int getCraftTotal() {
+            return craftTotal;
+        }
+
+        public Properties getProperties() {
+            return properties;
+        }
+
+        /**
+         * @return 配方大小
+         */
+        public int getCraftNum() {
+            return craftNum;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
 }
