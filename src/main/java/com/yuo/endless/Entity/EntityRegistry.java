@@ -33,4 +33,8 @@ public class EntityRegistry {
             //防火，碰撞大小（宽，高），跟踪范围，更新时间，免疫方块
             .immuneToFire().size(0.6F, 1.95F).trackingRange(16).updateInterval(2).func_233607_a_(Blocks.WITHER_ROSE,
                             Blocks.SWEET_BERRY_BUSH, Blocks.SOUL_SAND, Blocks.COBWEB).build("infinity_mob"));
+
+    public static final RegistryObject<EntityType<SwordVoidEntity>> INFINITY_SWORD = ENTITY_TYPES.register("infinity_sword",
+            () -> EntityType.Builder.create(SwordVoidEntity::new, EntityClassification.MISC)
+                    .size(0.5f, 0.5F).build("infinity_sword"));
 }

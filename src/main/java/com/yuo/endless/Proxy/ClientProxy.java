@@ -128,6 +128,7 @@ public class ClientProxy implements IProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
         RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntityRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityRegistry.INFINITY_SWORD.get(), SwordVoidRender::new);
     }
 
     //设置弓物品的动态属性
