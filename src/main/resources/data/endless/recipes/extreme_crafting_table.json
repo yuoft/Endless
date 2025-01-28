@@ -14,10 +14,10 @@
       "item": "endless:crystal_matrix_ingot"
     },
     "a": {
-      "item": "endless:neutronium_gear"
+      "item": "minecraft:beacon"
     },
     "z": {
-      "item": "endless:neutronium_ingot"
+      "item": "endless:diamond_lattice"
     },
     "y": {
       "item": "endless:double_compressed_crafting_table"
