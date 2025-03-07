@@ -37,9 +37,9 @@ public class ToolHelper {
             Material.GLASS, Material.EXPLOSIVE, Material.BUILDABLE_GLASS, Material.ICE_SOLID, Material.SPONGE, Material.SHULKER_SHELL, Material.WOOL,
             Material.PISTON, Material.BARRIER);
     public static final Set<Material> MATERIAL_AXE = Sets.newHashSet(Material.WOOD, Material.PORTAL, Material.WEB, Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT,
-            Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.GRASS, Material.NETHER_WOOD, Material.BAMBOO, Material.BAMBOO_SAPLING,
+            Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.NETHER_WOOD, Material.BAMBOO, Material.BAMBOO_SAPLING,
             Material.LEAVES, Material.CACTUS);
-    public static final Set<Material> MATERIAL_SHOVEL = Sets.newHashSet(Material.SAND, Material.SNOW, Material.CLAY, Material.CAKE,
+    public static final Set<Material> MATERIAL_SHOVEL = Sets.newHashSet(Material.DIRT, Material.SAND, Material.SNOW, Material.GRASS, Material.CLAY, Material.CAKE,
             Material.SNOW, Material.POWDER_SNOW, Material.TOP_SNOW);
 
     /**

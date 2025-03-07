@@ -1,6 +1,5 @@
 package com.yuo.endless.Entity;
 
-import codechicken.lib.math.MathHelper;
 import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.google.common.collect.Lists;
 import com.yuo.endless.Config;
@@ -97,7 +96,7 @@ public class InfinityArrowEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity(); //被击中的实体
         float f = (float)this.getDeltaMovement().length();
-        int i = MathHelper.ceil(Mth.clamp((double)f * this.baseDamage, 0.0D, 2.147483647E9D));
+        int i = Mth.ceil(Mth.clamp((double)f * this.baseDamage, 0.0D, 2.147483647E9D));
         if (this.getPierceLevel() > 0) {  //穿透等级
             if (this.piercingIgnoreEntityIds == null) {
                 this.piercingIgnoreEntityIds = new IntOpenHashSet(5);
