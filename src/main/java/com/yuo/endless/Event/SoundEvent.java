@@ -1,6 +1,8 @@
 package com.yuo.endless.Event;
 
 import com.yuo.endless.Client.AvaritiaShaders;
+import com.yuo.endless.Client.Gui.InfinityBoxScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -14,17 +16,26 @@ import java.util.Date;
 public class SoundEvent {
     public static Date lastplayedlog = null;
     public static Date lastplayedleaf = null;
+    public static boolean IS_INFINITY_CHEST; //无尽箱子物品数量显示控制，防止RS冲突
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void screenPre(ScreenEvent.DrawScreenEvent.Pre e) {
         AvaritiaShaders.inventoryRender = true;
+        Screen screen = e.getScreen();
+        if (screen instanceof InfinityBoxScreen){
+            IS_INFINITY_CHEST = true;
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void screenPost(ScreenEvent.DrawScreenEvent.Post e) {
         AvaritiaShaders.inventoryRender = false;
+        Screen screen = e.getScreen();
+        if (screen instanceof InfinityBoxScreen){
+            IS_INFINITY_CHEST = false;
+        }
     }
 
     //减少声音播放 间隔10ms

@@ -23,7 +23,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.18.2-0.3'
+version = '1.18.2-0.4'
 group = 'com.github.yuo' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -210,7 +210,7 @@ dependencies {
 //    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${mc_ver}-${curios_ver}")
 //    runtimeOnly fg.deobf("curse.maven:patchouli-${patchouli_id}:${patchouli_ver}")
 //    runtimeOnly fg.deobf("vazkii.botania:Botania:${mc_ver}-${bot_ver}")
-//    runtimeOnly fg.deobf("curse.maven:projecte-${pe_id}:${pe_ver}")
+    runtimeOnly fg.deobf("curse.maven:projecte-${pe_id}:${pe_ver}")
 //    runtimeOnly fg.deobf("teamtwilight:twilightforest:${tf_ver}:universal")
 //    runtimeOnly fg.deobf("curse.maven:yuoenchants-${ye_id}:${ye_ver}")
 //    runtimeOnly fg.deobf("curse.maven:citadel-${citadel_id}:${citadel_ver}")
@@ -231,7 +231,7 @@ dependencies {
 //    runtimeOnly fg.deobf("curse.maven:mystical-agriculture-${ma_id}:${ma_ver}")
 //    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-${mantle_ver}")
 //    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tc3_ver}")
-//    runtimeOnly fg.deobf("curse.maven:refined-storage-${rs_id}:${rs_ver}")
+    runtimeOnly fg.deobf("curse.maven:refined-storage-${rs_id}:${rs_ver}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
