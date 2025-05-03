@@ -2,6 +2,7 @@ package com.yuo.endless.Mixin;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yuo.endless.Client.Model.IItemRenderer;
+import com.yuo.endless.Event.SoundEvent;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -27,11 +28,14 @@ public abstract class ItemRendererMixin {
      */
     @ModifyVariable(method = "renderItemOverlayIntoGUI", at = @At("STORE"), ordinal = 1)
     private String injected(String x) {
-        String s = x.replaceAll("\\D", ""); //去除非数字
-        if (s.isEmpty()) {
-            s = "1";
+        if (SoundEvent.IS_INFINITY_CHEST){
+            String s = x.replaceAll("\\D", ""); //去除非数字
+            if (s.isEmpty()) {
+                s = "1";
+            }
+            return endless$getSimplifiedCount(Integer.parseInt(s));
         }
-        return endless$getSimplifiedCount(Integer.parseInt(s));
+        return x;
     }
 
     @Unique

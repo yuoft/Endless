@@ -23,7 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.16.5-1.6'
+version = '1.16.5-1.7'
 group = 'com.github.yuoft' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Endless'
 
@@ -222,6 +222,7 @@ dependencies {
 //    runtimeOnly fg.deobf("curse.maven:placebo-283644:4501015")
 //    runtimeOnly fg.deobf("slimeknights.mantle:Mantle:${mc_ver}-1.6.158")
 //    runtimeOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_ver}-${tconstruct_ver}")
+    runtimeOnly fg.deobf("curse.maven:refinedstorage-243076:3630064")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

@@ -1,6 +1,5 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Armor.InfinityArmor;
@@ -38,9 +37,6 @@ import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.*;
@@ -68,18 +64,6 @@ public class EventHandler {
     public static List<String> playersWithChest = new ArrayList<>();
     public static List<String> playersWithLegs = new ArrayList<>();
     public static List<String> playersWithFeet = new ArrayList<>();
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void screenPre(GuiScreenEvent.DrawScreenEvent.Pre e) {
-        AvaritiaShaders.inventoryRender = true;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void screenPost(GuiScreenEvent.DrawScreenEvent.Post e) {
-        AvaritiaShaders.inventoryRender = false;
-    }
 
     //无尽鞋子 无摔落伤害
     @SubscribeEvent
