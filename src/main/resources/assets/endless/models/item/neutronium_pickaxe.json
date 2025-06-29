@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "endless:item/tool/neutron_pickaxe"
+  }
+}

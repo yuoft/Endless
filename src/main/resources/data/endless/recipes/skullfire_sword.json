@@ -1,0 +1,34 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "       IX",
+    "      IXI",
+    "     IXI ",
+    "    IXI  ",
+    " B IXI   ",
+    "  BXI    ",
+    "  WB     ",
+    " W  B    ",
+    "D        "
+  ],
+  "key": {
+    "I": {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    "X": {
+      "item": "minecraft:blaze_powder"
+    },
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "D": {
+      "item": "minecraft:nether_star"
+    },
+    "W": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result": {
+    "item": "endless:skullfire_sword"
+  }
+}

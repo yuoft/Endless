@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botania"
+    }
+  ],
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "BBBBDBBBB",
+    "BACADACAB",
+    "BCAEDEACB",
+    "BAEEDEEAB",
+    "DDDDFDDDD",
+    "BAEEDEEAB",
+    "BCAEDEACB",
+    "BACADACAB",
+    "BBBBDBBBB"
+  ],
+  "key": {
+    "A": {
+      "item": "endless:infinity_catalyst"
+    },
+    "B": {
+      "item": "endless:neutronium_ingot"
+    },
+    "C": {
+      "item": "botania:mana_pool"
+    },
+    "D": {
+      "item": "botania:fabulous_pool"
+    },
+    "E": {
+      "item": "botania:dragonstone_block"
+    },
+    "F": {
+      "item": "botania:mana_tablet"
+    }
+  },
+  "result": {
+    "item": "botania:creative_pool"
+  }
+}

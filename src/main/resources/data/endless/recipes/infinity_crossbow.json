@@ -1,0 +1,33 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "  YYYYY ",
+    " AZ  X  ",
+    "YZZZX   ",
+    "Y ZBZ   ",
+    "Y XZZZ  ",
+    "YX  ZZ  ",
+    "Y     Z ",
+    "       Z"
+  ],
+  "key": {
+    "X": {
+      "item": "endless:infinity_nugget"
+    },
+    "Y": {
+      "item": "endless:infinity_ingot"
+    },
+    "Z": {
+      "item": "endless:neutronium_ingot"
+    },
+    "B": {
+      "item": "endless:neutronium_gear"
+    },
+    "A": {
+      "item": "endless:crystal_matrix_block"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_crossbow"
+  }
+}

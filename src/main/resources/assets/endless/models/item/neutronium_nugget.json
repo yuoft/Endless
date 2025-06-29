@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/neutron_nugget",
+    "halo": "endless:item/halo_noise"
+  },
+  "loader": "endless:halo",
+  "halo": {
+    "texture": "#halo",
+    "color": 1308622847,
+    "size": 8,
+    "pulse": false
+  }
+}

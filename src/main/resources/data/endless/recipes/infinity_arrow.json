@@ -1,0 +1,31 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "XY       ",
+    "YYYY     ",
+    " YZ      ",
+    " Y Z     ",
+    "    Z    ",
+    "     Z   ",
+    "      AA ",
+    "      AAA",
+    "       A "
+  ],
+  "key": {
+    "X": {
+      "item": "endless:infinity_nugget"
+    },
+    "Y": {
+      "item": "endless:infinity_ingot"
+    },
+    "A": {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    "Z": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_arrow"
+  }
+}

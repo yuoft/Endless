@@ -1,0 +1,30 @@
+{
+  "parent": "endless:infinity_ingot",
+  "display": { 
+    "icon": { 
+      "item": "endless:infinity_totem"
+    },
+    "title": {
+		"translate": "advancements.endless.infinity_totem.title"
+	},
+    "description": {
+		"translate": "advancements.endless.infinity_totem.desc"
+	},
+    "frame": "challenge"
+  },
+  "criteria": { 
+    "infinity_arrow": {
+      "trigger": "minecraft:used_totem",
+      "conditions": {
+        "item": {
+          "items": [
+            "endless:infinity_totem"
+          ]
+        }
+      }
+    }
+  },
+  "rewards": { 
+    "experience": 200
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "endless:item/tool/infinity_shovel"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "endless:destroyer": 1
+      },
+      "model": "endless:item/infinity_destroyer"
+    }
+  ]
+}

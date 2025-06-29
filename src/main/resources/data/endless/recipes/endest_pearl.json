@@ -1,0 +1,34 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "   EEE   ",
+    " EEPPPEE ",
+    " EPPAPPE ",
+    "EPPANAPPE",
+    "EPANSNAPE",
+    "EPPANAPPE",
+    " EPPAPPE ",
+    " EEPPPEE ",
+    "   EEE   "
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:end_stone"
+    },
+    "A": {
+      "item": "minecraft:tnt"
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    },
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:endest_pearl"
+  }
+}

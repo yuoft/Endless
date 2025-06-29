@@ -1,0 +1,31 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    "       II",
+    "      III",
+    "     III ",
+    "    III  ",
+    " C III   ",
+    "  CII    ",
+    "  NC     ",
+    " N  C    ",
+    "X        "
+  ],
+  "key": {
+    "I": {
+      "item": "endless:infinity_ingot"
+    },
+    "X": {
+      "item": "endless:infinity_catalyst"
+    },
+    "C": {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_sword"
+  }
+}

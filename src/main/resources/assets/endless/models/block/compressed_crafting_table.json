@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "endless:block/triple_craft",
+    "all": "endless:block/triple_craft"
+  }
+}

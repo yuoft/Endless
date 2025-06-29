@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/eternal/eternal_singularity2",
+    "layer1": "endless:item/eternal/eternal_singularity"
+  },
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "endless:item/eternal/eternal_singularity_mask"
+  }
+}

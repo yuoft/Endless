@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mxn",
+    "xyx",
+    "mxn"
+  ],
+  "key": {
+    "m": {
+      "item": "minecraft:crafting_table"
+    },
+    "n": {
+      "item": "minecraft:furnace"
+    },
+    "x": {
+      "item": "endless:infinity_ingot"
+    },
+    "y": {
+      "item": "endless:compressed_chest"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_chest"
+  }
+}

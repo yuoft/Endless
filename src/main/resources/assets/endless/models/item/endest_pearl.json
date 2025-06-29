@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/endest_pearl",
+    "halo": "endless:item/halo"
+  },
+  "loader": "endless:halo",
+  "halo": {
+    "texture": "#halo",
+    "color": -16777216,
+    "size": 4,
+    "pulse": true
+  }
+}

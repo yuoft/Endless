@@ -1,0 +1,10 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "endless:item/matter_cluster/matter_cluster"
+  },
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "endless:item/matter_cluster/matter_cluster_mask"
+  }
+}

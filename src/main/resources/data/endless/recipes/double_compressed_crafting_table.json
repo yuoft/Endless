@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "endless:compressed_crafting_table"
+    }
+  },
+  "result": {
+    "item": "endless:double_compressed_crafting_table"
+  }
+}

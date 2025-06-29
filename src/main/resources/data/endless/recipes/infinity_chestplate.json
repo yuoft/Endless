@@ -1,0 +1,28 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    " NN   NN ",
+    "NNN   NNN",
+    "NNN   NNN",
+    " NIIIIIN ",
+    " NIIXIIN ",
+    " NIIIIIN ",
+    " NIIIIIN ",
+    " NIIIIIN ",
+    "  NNNNN  "
+  ],
+  "key": {
+    "I": {
+      "item": "endless:infinity_ingot"
+    },
+    "X": {
+      "item": "endless:crystal_matrix_block"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_chestplate"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "endless:infinity_block",
+    "endless:crystal_matrix_block",
+    "endless:neutronium_block",
+    "endless:extreme_crafting_table",
+    "endless:neutronium_collector",
+    "endless:dense_neutronium_collector",
+    "endless:denser_neutronium_collector",
+    "endless:densest_neutronium_collector",
+    "endless:neutron_compressor",
+    "endless:infinity_chest"
+  ]
+}

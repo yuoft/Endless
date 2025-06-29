@@ -1,0 +1,22 @@
+{
+  "type": "endless:extreme_craft",
+  "pattern": [
+    " NNN NNN ",
+    " NIN NIN ",
+    " NIN NIN ",
+    "NNIN NINN",
+    "NIIN NIIN",
+    "NNNN NNNN"
+  ],
+  "key": {
+    "I": {
+      "item": "endless:infinity_ingot"
+    },
+    "N": {
+      "item": "endless:neutronium_ingot"
+    }
+  },
+  "result": {
+    "item": "endless:infinity_boots"
+  }
+}

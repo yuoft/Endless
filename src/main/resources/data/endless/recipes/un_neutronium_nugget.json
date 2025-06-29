@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+		"item": "endless:neutronium_nugget"
+	}
+  ],
+  "result": {
+    "item": "endless:neutronium_pile",
+    "count": 9
+  }
+}

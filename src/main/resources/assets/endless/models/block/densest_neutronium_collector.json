@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "endless:block/collector/triple_collector_front",
+    "up": "endless:block/collector/triple_collector_top",
+    "down": "endless:block/collector/triple_collector_top",
+    "north": "endless:block/collector/triple_collector_front",
+    "south": "endless:block/collector/triple_collector_side",
+    "east": "endless:block/collector/triple_collector_side",
+    "west": "endless:block/collector/triple_collector_side"
+  }
+}
