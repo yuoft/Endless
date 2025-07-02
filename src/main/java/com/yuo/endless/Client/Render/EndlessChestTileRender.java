@@ -20,14 +20,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -87,6 +85,6 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
 
     protected Material getMaterial(AbsEndlessChest chest) {
         String chestName = chest.getType() == EndlessChestType.INFINITY ? "infinity_chest" : chest.getType() == EndlessChestType.COMPRESSOR ? "compressor_chest" : "chest";
-        return new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "entity/" + chestName));
+        return new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/chest/" + chestName));
     }
 }

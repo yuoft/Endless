@@ -33,8 +33,8 @@ import vazkii.botania.client.render.ColorHandler;
  */
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientEventHandler {
-    public static final ModelLayerLocation COMPRESSOR_CHEST_TEXTURE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "entity/compressor_chest"), "main");
-    public static final ModelLayerLocation INFINITY_CHEST_TEXTURE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "entity/infinity_chest"), "main");
+    public static final ModelLayerLocation COMPRESSOR_CHEST_TEXTURE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/chest/compressor_chest"), "main");
+    public static final ModelLayerLocation INFINITY_CHEST_TEXTURE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/chest/infinity_chest"), "main");
     public static final ModelLayerLocation NORMAL_CHEST_LOCATION = new ModelLayerLocation(ResourceLocation.parse("entity/chest/normal"), "main");
 
     public static ResourceLocation chooseChestTexture(EndlessChestType type) {
@@ -71,7 +71,7 @@ public class ClientEventHandler {
         event.registerEntityRenderer(EntityRegistry.INFINITY_FIREWORK.get(), InfinityFireWorkRender::new);
         event.registerEntityRenderer(EntityRegistry.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
 
-        event.registerEntityRenderer(EntityRegistry.GAPING_VOID.get(), (Context renderManagerIn) -> new GapingVoidRender(renderManagerIn)); //渲染实体
+        event.registerEntityRenderer(EntityRegistry.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
         event.registerEntityRenderer(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntityRender::new);
     }
 

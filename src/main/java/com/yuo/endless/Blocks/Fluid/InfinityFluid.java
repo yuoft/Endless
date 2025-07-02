@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,16 +48,7 @@ public abstract class InfinityFluid extends ForgeFlowingFluid {
 
     @Override
     public FluidType getFluidType() {
-        return setAttr(EndlessFluids.STILL_OIL_TEXTURE, EndlessFluids.FLOWING_OIL_TEXTURE, 0xff333333);
-    }
-
-    public static FluidType setAttr(ResourceLocation still, ResourceLocation flowing, int color){
-        //材质，颜色，亮度，流体密度,温度,稠度,稀有度
-        return new FluidType(FluidType.Properties.create()
-                .density(100000)
-                .temperature(Integer.MAX_VALUE)
-                .viscosity(100000)
-                .rarity(Rarity.EPIC));
+        return EndlessFluidTypes.INFINITY_FLUID_TYPE.get();
     }
 
     public static class Flowing extends InfinityFluid {

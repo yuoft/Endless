@@ -1,7 +1,7 @@
 {
   "parent": "block/block",
   "textures": {
-    "texture": "endless:entity/compressor_chest",
+    "texture": "endless:block/chest/compressor_chest",
     "particle": "endless:block/compressor_chest_break"
   },
   "elements": [
