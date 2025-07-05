@@ -15,7 +15,6 @@ import com.yuo.endless.Proxy.IProxy;
 import com.yuo.endless.Recipe.ModRecipeManager;
 import com.yuo.endless.Recipe.RecipeTypeRegistry;
 import com.yuo.endless.Tiles.EndlessTileTypes;
-import com.yuo.endless.World.Structure.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
@@ -142,7 +141,7 @@ public class Endless {
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
-        ModStructures.STRUCTURES.register(modEventBus);
+//        ModStructures.STRUCTURES.register(modEventBus);
         proxy.registerHandlers();
     }
 
