@@ -107,6 +107,7 @@
   "block.endless.infinity_potato":"Infinity Potato",
 
   "fluid.endless.infinity_fluid":"§cInfinity Fluid",
+  "fluid_type.endless.infinity_fluid":"§cInfinity Fluid",
   "block.endless.infinity_fluid":"§cInfinity Fluid",
 
   "entity.endless.infinity_arrow":"Infinity Arrow",
@@ -222,6 +223,8 @@
 
   "jade.endless.neutron_collector_progress":"Collection progress:%s%%",
   "jade.endless.neutron_compressor_progress":"Compression progress:%s%%",
+  "config.jade.plugin_endless.compressor": "Compression",
+  "config.jade.plugin_endless.collector": "Collection",
 
   "death.attack.infinity":"%1$s was annihilated",
   "death.attack.infinity_weapon.0":"%1$s was sliced to ribbons by %2$s using %3$s",

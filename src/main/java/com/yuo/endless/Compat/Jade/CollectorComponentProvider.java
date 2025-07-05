@@ -14,7 +14,7 @@ import snownee.jade.api.ui.IElement;
 
 import java.text.DecimalFormat;
 
-public class CollectorComponentProvider implements IBlockComponentProvider, IServerDataProvider {
+public class CollectorComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
@@ -26,7 +26,7 @@ public class CollectorComponentProvider implements IBlockComponentProvider, ISer
         }
     }
     @Override
-    public void appendServerData(CompoundTag compoundTag, Accessor accessor) {
+    public void appendServerData(CompoundTag compoundTag, BlockAccessor accessor) {
         if (accessor.getTarget() instanceof AbsNeutronCollectorTile ncTile){
             compoundTag.putInt("Timer", ncTile.data.get(0));
         }
@@ -48,6 +48,6 @@ public class CollectorComponentProvider implements IBlockComponentProvider, ISer
 
     @Override
     public ResourceLocation getUid() {
-        return null;/*ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "collector");*/
+        return ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "collector");
     }
 }

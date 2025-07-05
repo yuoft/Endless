@@ -107,6 +107,7 @@
     "block.endless.infinity_potato":"无尽小土豆",
 
     "fluid.endless.infinity_fluid":"§c熔融无尽",
+    "fluid_type.endless.infinity_fluid":"§c熔融无尽",
     "block.endless.infinity_fluid":"§c熔融无尽",
 
     "entity.endless.infinity_arrow":"无尽箭",
@@ -224,6 +225,8 @@
 
     "jade.endless.neutron_collector_progress":"收集进度：%s%%",
     "jade.endless.neutron_compressor_progress":"压缩进度：%s%%",
+    "config.jade.plugin_endless.compressor": "压缩",
+    "config.jade.plugin_endless.collector": "收集",
 
     "death.attack.infinity":"%1$s被彻底湮灭",
     "death.attack.infinity_weapon.0":"%1$s被%2$s使用%3$s切成了条",

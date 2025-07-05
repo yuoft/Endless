@@ -50,7 +50,7 @@ public class NeutroniumCompressorScreen extends AbstractContainerScreen<Neutroni
 
     @Override
     protected void renderLabels(GuiGraphics matrixStack, int x, int y) {
-        matrixStack.drawString(this.font, this.menu.getNumber() + "/" + this.menu.getCount(), 39, 54, 0x696969 );
+        matrixStack.drawCenteredString(this.font, this.menu.getNumber() + "/" + this.menu.getCount(), 39, 54, 0x696969 );
         super.renderLabels(matrixStack, x, y);
     }
 

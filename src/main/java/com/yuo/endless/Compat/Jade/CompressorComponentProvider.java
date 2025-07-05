@@ -12,7 +12,7 @@ import snownee.jade.api.config.IPluginConfig;
 
 import java.text.DecimalFormat;
 
-public class CompressorComponentProvider implements IBlockComponentProvider, IServerDataProvider {
+public class CompressorComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 
     /**
      * 获取压缩进度
@@ -39,7 +39,7 @@ public class CompressorComponentProvider implements IBlockComponentProvider, ISe
     }
 
     @Override
-    public void appendServerData(CompoundTag compoundTag, Accessor accessor) {
+    public void appendServerData(CompoundTag compoundTag, BlockAccessor accessor) {
         if (accessor.getTarget() instanceof NeutroniumCompressorTile ncTile){
             compoundTag.putInt("Number", ncTile.data.get(0));
             compoundTag.putInt("NumberTotal", ncTile.data.get(1));
@@ -48,6 +48,6 @@ public class CompressorComponentProvider implements IBlockComponentProvider, ISe
 
     @Override
     public ResourceLocation getUid() {
-        return null;/*ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "compressor");*/
+        return ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "compressor");
     }
 }

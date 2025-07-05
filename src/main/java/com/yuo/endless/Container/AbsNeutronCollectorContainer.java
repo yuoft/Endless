@@ -65,7 +65,7 @@ public class AbsNeutronCollectorContainer extends AbstractContainerMenu {
     //获取运行时间
     @OnlyIn(Dist.CLIENT)
     public int getTimer(){
-        return (int) Math.ceil(this.data.get(0) / 3600.0 * 24);
+        return (int) Math.ceil(this.data.get(0) / (collectorTile.getCraftTime() * 1.0) * 24);
     }
 
     @Override
