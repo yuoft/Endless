@@ -20,11 +20,15 @@ import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacements.Type;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
@@ -35,6 +39,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 @Mod("endless")
 public class Endless {
@@ -181,7 +187,10 @@ public class Endless {
             }
         };
         DispenserBlock.registerBehavior(EndlessItems.infinityFluidBucket.get(), itemBehavior);
-//        event.enqueueWork(ModStructures::setupStructures);
+        event.enqueueWork(() -> {
+            if (Config.SERVER.mobSpawn.get() && new Random().nextFloat() < Config.SERVER.mobWeigh.get() * 0.1f) //默认不生成
+                SpawnPlacements.register(EntityRegistry.INFINITY_MOB.get(), Type.ON_GROUND, Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        });
     }
 
     private void checkMods(){
