@@ -120,7 +120,7 @@ public class InfinityMobEntity extends Zombie {
             amount = amount > 10 ? 10 : amount;
             amount = Math.max(amount, 0.5f); //最低0.5
         }
-        if (this.checkTotemDeathProtection(source)) {
+        if (amount >= this.getHealth() && this.checkTotemDeathProtection(source)) {
             this.heal(512.0F);
         }
         return super.hurt(source, amount);
