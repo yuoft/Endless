@@ -84,7 +84,7 @@ public class InfinityBow extends BowItem {
     public void onUseTick(Level world, LivingEntity player, ItemStack bow, int count) {
         CompoundTag nbt = bow.getOrCreateTag();
         boolean flag = nbt.getBoolean("InfinityBow");
-        if (flag && player instanceof Player) {
+        if (flag && player instanceof Player && findArrow(player).getItem() == EndlessItems.infinityArrow.get()) {
             int useTime = getUseTime(count);
             int circleNum = getCircleNumFormBowUseTime(useTime);
 
@@ -116,7 +116,7 @@ public class InfinityBow extends BowItem {
      * @return 数量
      */
     public int getCircleNumFormBowUseTime(int time){
-        if (time > 0 && time<= 50) return 1;
+        if (time >= 0 && time<= 50) return 1;
         else if (time > 50 && time <= 100) return 2;
         else if (time > 100 && time <= 150) return 3;
         else return 4;
