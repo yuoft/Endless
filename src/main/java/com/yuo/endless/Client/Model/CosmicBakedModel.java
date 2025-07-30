@@ -11,12 +11,16 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -80,27 +84,51 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         }
 
         VertexConsumer cons = source.getBuffer(AvaritiaShaders.COSMIC_RENDER_TYPE);
-        List<TextureAtlasSprite> atlasSprite = new ArrayList<>();
+        BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
+        if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) { //是否是方块
+            ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-        for (ResourceLocation res : this.maskSprite) {
-            atlasSprite.add(mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
-        }
-
-        mc.getItemRenderer().renderQuadList(pStack, cons, bakeItem(atlasSprite), stack, light, overlay);
-    }
-    private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
-    private static final FaceBakery FACE_BAKERY = new FaceBakery();
-    public static List<BakedQuad> bakeItem(final List<TextureAtlasSprite> sprites) {
-        final LinkedList<BakedQuad> quads = new LinkedList<>();
-        for (final TextureAtlasSprite sprite : sprites) {
-            final List<BlockElement> unbaked = ITEM_MODEL_GENERATOR.processFrames(sprites.indexOf(sprite), "layer" + sprites.indexOf(sprite), sprite.contents());
-            for (final BlockElement element : unbaked) {
-                for (final Map.Entry<Direction, BlockElementFace> entry : element.faces.entrySet()) {
-                    quads.add(FACE_BAKERY.bakeQuad(element.from, element.to, entry.getValue(), sprite, entry.getKey(), new PerspectiveModelState(ImmutableMap.of()), element.rotation, element.shade, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID,"dynamic")));
+//            for (BakedModel bakedModel : model.getRenderPasses(stack, true)) {  加上后渲染出错
+//                for (RenderType rendertype : bakedModel.getRenderTypes(stack, true))
+//                    itemRenderer.renderModelLists(bakedModel, stack, light, overlay, pStack, source.getBuffer(rendertype));
+//            }
+            List<BakedQuad> blockLayer = new ArrayList<>();
+            RandomSource random = RandomSource.create();
+            for (Direction direction : Direction.values()) //获取六面
+                blockLayer.addAll(model.getQuads(null, direction, random));
+            List<TextureAtlasSprite> maskSprites = new ArrayList<>();
+            for (ResourceLocation res : this.maskSprite)
+                maskSprites.add(Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
+            List<BakedQuad> overlayQuads = new ArrayList<>();
+            for (BakedQuad base : blockLayer) { //添加纹理
+                for (TextureAtlasSprite sprite : maskSprites) {
+                    BakedQuad masked = new BakedQuad(base.getVertices(), base.getTintIndex(), base.getDirection(), sprite, base.isShade());
+                    overlayQuads.add(masked);
                 }
             }
+            mc.getItemRenderer().renderQuadList(pStack, cons, overlayQuads, stack, light, overlay);
+        } else {
+            List<TextureAtlasSprite> atlasSprite = new ArrayList<>();
+
+            for (ResourceLocation res : this.maskSprite) {
+                atlasSprite.add(mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
+            }
+
+            mc.getItemRenderer().renderQuadList(pStack, cons, bakeItem(atlasSprite), stack, light, overlay);
         }
-        return quads;
+    }
+
+    public static boolean isBlockContext(ItemDisplayContext context) {
+        return switch (context) {
+            case THIRD_PERSON_LEFT_HAND -> true;
+            case THIRD_PERSON_RIGHT_HAND -> true;
+            case FIRST_PERSON_LEFT_HAND -> true;
+            case FIRST_PERSON_RIGHT_HAND -> true;
+            case GROUND -> true;
+            case FIXED -> true;
+            case GUI -> true;
+            default -> false;
+        };
     }
 
     public float getMatterClusterOpacity(ItemStack itemStack){

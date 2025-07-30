@@ -37,6 +37,14 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
 
     }
 
+    public void setMatrix2x2Array(float[] values, int count) {
+        if (this.type != UniformType.MAT2)
+            throw new IllegalStateException("Uniform '%s' is not of type MAT2.".formatted(getName()));
+        if (values.length != count * 4)
+            throw new IllegalArgumentException("Invalid size for mat2 array. Expected %d floats, got %d.".formatted(Integer.valueOf(count * 4), Integer.valueOf(values.length)));
+        glUniformF(false, values);
+    }
+
     static CCUniform makeUniform(String name, UniformType type, int count, @Nullable Shader parent) {
         if (count % type.getSize() != 0) {
             throw new IllegalArgumentException("Expected count to be a multiple of the uniform type size: " + type.getSize());

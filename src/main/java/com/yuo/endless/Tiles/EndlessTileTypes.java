@@ -28,4 +28,6 @@ public class EndlessTileTypes {
             () -> BlockEntityType.Builder.of(CompressorChestTile::new, EndlessBlocks.compressedChest.get()).build(null));
     public static final RegistryObject<BlockEntityType<InfinityBoxTile>> INFINITY_CHEST_TILE = TILE_ENTITIES.register("infinity_chest_tile",
             () -> BlockEntityType.Builder.of(InfinityBoxTile::new, EndlessBlocks.infinityBox.get()).build(null));
+    public static final RegistryObject<BlockEntityType<CosmicTile>> AA_TILE = TILE_ENTITIES.register("cosmic_tile",
+            () -> BlockEntityType.Builder.of(CosmicTile::new, EndlessBlocks.cosmicBlock.get()).build(null));
 }

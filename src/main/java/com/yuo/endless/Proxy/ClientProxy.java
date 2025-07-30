@@ -3,6 +3,7 @@ package com.yuo.endless.Proxy;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Gui.*;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
+import com.yuo.endless.Client.Render.AABlockRender;
 import com.yuo.endless.Client.Render.EndlessChestTileRender;
 import com.yuo.endless.Config;
 import com.yuo.endless.Container.EndlessMenuTypes;
@@ -63,6 +64,7 @@ public class ClientProxy implements IProxy {
         event.enqueueWork(() ->{
             BlockEntityRenderers.register(EndlessTileTypes.COMPRESS_CHEST_TILE.get(), EndlessChestTileRender::new);
             BlockEntityRenderers.register(EndlessTileTypes.INFINITY_CHEST_TILE.get(), EndlessChestTileRender::new);
+            BlockEntityRenderers.register(EndlessTileTypes.AA_TILE.get(), AABlockRender::new);
         });
         //流体半透明渲染
         ItemBlockRenderTypes.setRenderLayer(EndlessFluids.infinityFluid.get(), RenderType.translucent());

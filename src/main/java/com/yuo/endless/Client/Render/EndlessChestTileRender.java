@@ -72,7 +72,6 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
 
             pPoseStack.popPose();
         }
-
     }
 
     private void render(PoseStack pPoseStack, VertexConsumer pConsumer, ModelPart pLidPart, ModelPart pLockPart, ModelPart pBottomPart, float pLidAngle, int pPackedLight, int pPackedOverlay) {

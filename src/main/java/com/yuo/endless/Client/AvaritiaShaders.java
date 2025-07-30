@@ -48,6 +48,15 @@ public class AvaritiaShaders {
                     .createCompositeState(true)
     );
 
+    public static final RenderType COSMIC_BLOCK_RENDER_TYPE = RenderType.create("endless:cosmic_block", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
+            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
+            .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)
+            .setLightmapState(RenderStateShard.LIGHTMAP)
+            .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+            .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
+            .createCompositeState(true));
+
+
     public AvaritiaShaders() {
     }
 

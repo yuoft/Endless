@@ -2,7 +2,6 @@ package com.yuo.endless.Mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Client.Model.IItemRenderer;
-import com.yuo.endless.Event.SoundEvent;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
@@ -69,6 +67,5 @@ public abstract class ItemRendererMixin {
             pPoseStack.popPose();
         }
     }
-
 }
 

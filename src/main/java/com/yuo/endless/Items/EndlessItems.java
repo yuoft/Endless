@@ -117,6 +117,8 @@ public class EndlessItems {
 			() -> new BlockItem(EndlessBlocks.compressedChest.get(), BLOCK_TAB.stacksTo(1)));
 	public static RegistryObject<BlockItem> infinityBox = ITEMS.register("infinity_chest",
 			() -> new BlockItem(EndlessBlocks.infinityBox.get(), BLOCK_TAB.stacksTo(1).fireResistant()));
+	public static RegistryObject<BlockItem> cosmicBlock = ITEMS.register("cosmic_block",
+			() -> new BlockItem(EndlessBlocks.cosmicBlock.get(), BLOCK_TAB.stacksTo(1).fireResistant()));
 
 	//冰与火
 	public static void registerIafItem(){

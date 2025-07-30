@@ -33,6 +33,7 @@ public class EndlessBlocks {
     public static RegistryObject<Block> neutronCompressor = BLOCKS.register("neutron_compressor", NeutroniumCompressor::new);
     public static RegistryObject<Block> compressedChest = BLOCKS.register("compressed_chest", CompressorChest::new);
     public static RegistryObject<Block> infinityBox = BLOCKS.register("infinity_chest", InfinityBox::new);
+    public static RegistryObject<Block> cosmicBlock = BLOCKS.register("cosmic_block", CosmicBlock::new);
 
     public static RegistryObject<InfinityFluidBlock> infinityFluid = BLOCKS.register("infinity_fluid",
             () -> new InfinityFluidBlock(EndlessFluids.infinityFluid));

@@ -17,7 +17,7 @@
   ],
   "spawners": {
     "type": "endless:infinity_mob",
-    "weight": 50,
+    "weight": 10,
     "minCount": 1,
     "maxCount": 1
   }

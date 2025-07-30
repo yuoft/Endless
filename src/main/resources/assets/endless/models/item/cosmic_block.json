@@ -1,0 +1,7 @@
+{
+  "parent": "endless:block/cosmic_block",
+  "loader": "endless:cosmic",
+  "cosmic": {
+    "mask": "endless:block/cosmic_block_mask"
+  }
+}
