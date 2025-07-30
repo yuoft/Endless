@@ -9,13 +9,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AABlockRender implements BlockEntityRenderer<CosmicTile> {
-    public AABlockRender(BlockEntityRendererProvider.Context context) {}
+public class CosmicBlockRender implements BlockEntityRenderer<CosmicTile> {
+    public CosmicBlockRender(BlockEntityRendererProvider.Context context) {}
 
     @Override
     public void render(CosmicTile cosmicTile, float v, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int i1) {
         BlockState blockState = cosmicTile.getBlockState();
-        ItemStack stack = new ItemStack(EndlessItems.aa.get());
+        ItemStack stack = new ItemStack(EndlessItems.cosmicBlock.get());
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.scale(1.0011123F, 1.0011123F, 1.0011123F);
@@ -25,7 +25,7 @@ public class AABlockRender implements BlockEntityRenderer<CosmicTile> {
     }
 
     @Override
-    public boolean shouldRenderOffScreen(CosmicTile p_112306_) {
+    public boolean shouldRenderOffScreen(CosmicTile cosmicTile) {
         return true;
     }
 }

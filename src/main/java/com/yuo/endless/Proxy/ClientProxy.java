@@ -1,9 +1,7 @@
 package com.yuo.endless.Proxy;
 
-import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Gui.*;
-import com.yuo.endless.Client.Model.InfinityArmorModel;
-import com.yuo.endless.Client.Render.AABlockRender;
+import com.yuo.endless.Client.Render.CosmicBlockRender;
 import com.yuo.endless.Client.Render.EndlessChestTileRender;
 import com.yuo.endless.Config;
 import com.yuo.endless.Container.EndlessMenuTypes;
@@ -17,12 +15,10 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -64,7 +60,7 @@ public class ClientProxy implements IProxy {
         event.enqueueWork(() ->{
             BlockEntityRenderers.register(EndlessTileTypes.COMPRESS_CHEST_TILE.get(), EndlessChestTileRender::new);
             BlockEntityRenderers.register(EndlessTileTypes.INFINITY_CHEST_TILE.get(), EndlessChestTileRender::new);
-            BlockEntityRenderers.register(EndlessTileTypes.AA_TILE.get(), AABlockRender::new);
+            BlockEntityRenderers.register(EndlessTileTypes.AA_TILE.get(), CosmicBlockRender::new);
         });
         //流体半透明渲染
         ItemBlockRenderTypes.setRenderLayer(EndlessFluids.infinityFluid.get(), RenderType.translucent());
