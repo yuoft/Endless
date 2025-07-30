@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraft.world.phys.AABB;
 
 public class Quad implements IVertexProducer, IVertexConsumer {
     public CachedFormat format;
@@ -19,7 +18,6 @@ public class Quad implements IVertexProducer, IVertexConsumer {
     private final Vector3 v1 = new Vector3();
     private final Vector3 v2 = new Vector3();
     private final Vector3 t = new Vector3();
-    private final Cuboid6 c = new Cuboid6();
 
     public Quad() {
     }
@@ -77,65 +75,17 @@ public class Quad implements IVertexProducer, IVertexConsumer {
         this.copyFrom(quad);
     }
 
-    public void pipe(IVertexConsumer consumer) {
-        if (consumer instanceof IVertexConsumer) {
-            consumer.put(this);
-        } else {
-            consumer.setQuadTint(this.tintIndex);
-            consumer.setQuadOrientation(this.orientation);
-            consumer.setApplyDiffuseLighting(this.diffuseLighting);
-            consumer.setTexture(this.sprite);
-            Quad.Vertex[] var2 = this.vertices;
-            int var3 = var2.length;
-
-            for(int var4 = 0; var4 < var3; ++var4) {
-                Quad.Vertex v = var2[var4];
-
-                for(int e = 0; e < this.format.elementCount; ++e) {
-                    consumer.put(e, v.raw[e]);
-                }
-            }
-        }
-
-    }
-
-    public InterpHelper resetInterp(InterpHelper helper, int s) {
-        helper.reset(this.vertices[0].dx(s), this.vertices[0].dy(s), this.vertices[1].dx(s), this.vertices[1].dy(s), this.vertices[2].dx(s), this.vertices[2].dy(s), this.vertices[3].dx(s), this.vertices[3].dy(s));
-        return helper;
-    }
-
-    public void clamp(AABB bb) {
-        this.clamp(this.c.set(bb));
-    }
-
-    public void clamp(Cuboid6 cuboid) {
-        Quad.Vertex[] var2 = this.vertices;
-        int var3 = var2.length;
-
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Quad.Vertex vertex = var2[var4];
-            float[] vec = vertex.vec;
-            vec[0] = (float) MathHelper.clip((double)vec[0], cuboid.min.x, cuboid.max.x);
-            vec[1] = (float)MathHelper.clip((double)vec[1], cuboid.min.y, cuboid.max.y);
-            vec[2] = (float)MathHelper.clip((double)vec[2], cuboid.min.z, cuboid.max.z);
-        }
-
-        this.calculateOrientation(true);
-    }
-
     public void calculateOrientation(boolean setNormal) {
         this.v1.set(this.vertices[3].vec).subtract(this.t.set(this.vertices[1].vec));
         this.v2.set(this.vertices[2].vec).subtract(this.t.set(this.vertices[0].vec));
         Vector3 normal = this.v2.crossProduct(this.v1).normalize();
         if (this.format.hasNormal && setNormal) {
             Quad.Vertex[] var3 = this.vertices;
-            int var4 = var3.length;
 
-            for(int var5 = 0; var5 < var4; ++var5) {
-                Quad.Vertex vertex = var3[var5];
-                vertex.normal[0] = (float)normal.x;
-                vertex.normal[1] = (float)normal.y;
-                vertex.normal[2] = (float)normal.z;
+            for (Vertex vertex : var3) {
+                vertex.normal[0] = (float) normal.x;
+                vertex.normal[1] = (float) normal.y;
+                vertex.normal[2] = (float) normal.z;
                 vertex.normal[3] = 0.0F;
             }
         }
@@ -162,7 +112,7 @@ public class Quad implements IVertexProducer, IVertexConsumer {
         }
     }
 
-    public Quad copyFrom(Quad quad) {
+    public void copyFrom(Quad quad) {
         this.tintIndex = quad.tintIndex;
         this.orientation = quad.orientation;
         this.diffuseLighting = quad.diffuseLighting;
@@ -175,7 +125,6 @@ public class Quad implements IVertexProducer, IVertexConsumer {
             }
         }
 
-        return this;
     }
 
     public void reset(CachedFormat format) {
@@ -194,11 +143,6 @@ public class Quad implements IVertexProducer, IVertexConsumer {
             v.reset(format);
         }
 
-        this.vertexIndex = 0;
-        this.full = false;
-    }
-
-    public void rewind() {
         this.vertexIndex = 0;
         this.full = false;
     }
@@ -277,55 +221,6 @@ public class Quad implements IVertexProducer, IVertexConsumer {
 
         }
 
-        public float dx(int s) {
-            return s <= 1 ? this.vec[0] : this.vec[2];
-        }
-
-        public float dy(int s) {
-            return s > 0 ? this.vec[1] : this.vec[2];
-        }
-
-        public Quad.Vertex interpColorFrom(InterpHelper interpHelper, Quad.Vertex[] others) {
-            for(int e = 0; e < 4; ++e) {
-                float p1 = others[0].color[e];
-                float p2 = others[1].color[e];
-                float p3 = others[2].color[e];
-                float p4 = others[3].color[e];
-                if (p1 != p2 || p2 != p3 || p3 != p4) {
-                    this.color[e] = interpHelper.interpolate(p1, p2, p3, p4);
-                }
-            }
-
-            return this;
-        }
-
-        public Quad.Vertex interpUVFrom(InterpHelper interpHelper, Quad.Vertex[] others) {
-            for(int e = 0; e < 2; ++e) {
-                float p1 = others[0].uv[e];
-                float p2 = others[1].uv[e];
-                float p3 = others[2].uv[e];
-                float p4 = others[3].uv[e];
-                if (p1 != p2 || p2 != p3 || p3 != p4) {
-                    this.uv[e] = interpHelper.interpolate(p1, p2, p3, p4);
-                }
-            }
-
-            return this;
-        }
-
-        public Quad.Vertex interpLightMapFrom(InterpHelper interpHelper, Quad.Vertex[] others) {
-            for(int e = 0; e < 2; ++e) {
-                float p1 = others[0].lightmap[e];
-                float p2 = others[1].lightmap[e];
-                float p3 = others[2].lightmap[e];
-                float p4 = others[3].lightmap[e];
-                if (p1 != p2 || p2 != p3 || p3 != p4) {
-                    this.lightmap[e] = interpHelper.interpolate(p1, p2, p3, p4);
-                }
-            }
-
-            return this;
-        }
 
         public Quad.Vertex copy() {
             return new Quad.Vertex(this);

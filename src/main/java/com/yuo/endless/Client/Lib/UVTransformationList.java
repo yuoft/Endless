@@ -49,21 +49,6 @@ public class UVTransformationList extends UVTransformation {
         return this;
     }
 
-    public UVTransformationList prepend(UVTransformation t) {
-        if (t.isRedundant()) {
-            return this;
-        }
-
-        if (t instanceof UVTransformationList) {
-            transformations.addAll(0, ((UVTransformationList) t).transformations);
-        } else {
-            transformations.add(0, t);
-        }
-
-        compact();
-        return this;
-    }
-
     private void compact() {
         ArrayList<UVTransformation> newList = new ArrayList<>(transformations.size());
         UVTransformation prev = null;
@@ -95,7 +80,7 @@ public class UVTransformationList extends UVTransformation {
 
     @Override
     public boolean isRedundant() {
-        return transformations.size() == 0;
+        return transformations.isEmpty();
     }
 
     @Override

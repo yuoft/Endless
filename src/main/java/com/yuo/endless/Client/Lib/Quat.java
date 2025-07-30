@@ -1,8 +1,5 @@
 package com.yuo.endless.Client.Lib;
 
-import org.joml.Quaterniond;
-import org.joml.Quaternionf;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -25,27 +22,6 @@ public class Quat implements Copyable<Quat> {
         this.y = quat.y;
         this.z = quat.z;
         this.s = quat.s;
-    }
-
-    public Quat(Quaternionf quat) {
-        this.x = (double)quat.x;
-        this.y = (double)quat.y;
-        this.z = (double)quat.z;
-        this.s = (double)quat.w;
-    }
-
-    public Quat(Quaterniond quat) {
-        this.x = quat.x;
-        this.y = quat.y;
-        this.z = quat.z;
-        this.s = quat.w;
-    }
-
-    public Quat(double d, double d1, double d2, double d3) {
-        this.x = d1;
-        this.y = d2;
-        this.z = d3;
-        this.s = d;
     }
 
     public Quat set(Quat quat) {
@@ -78,10 +54,6 @@ public class Quat implements Copyable<Quat> {
         return this.set(Math.cos(angle), ax * d4, ay * d4, az * d4);
     }
 
-    public Quat setAroundAxis(Vector3 axis, double angle) {
-        return this.setAroundAxis(axis.x, axis.y, axis.z, angle);
-    }
-
     public Quat multiply(Quat quat) {
         double d = this.s * quat.s - this.x * quat.x - this.y * quat.y - this.z * quat.z;
         double d1 = this.s * quat.x + this.x * quat.s - this.y * quat.z + this.z * quat.y;
@@ -92,26 +64,6 @@ public class Quat implements Copyable<Quat> {
         this.y = d2;
         this.z = d3;
         return this;
-    }
-
-    public Quat rightMultiply(Quat quat) {
-        double d = this.s * quat.s - this.x * quat.x - this.y * quat.y - this.z * quat.z;
-        double d1 = this.s * quat.x + this.x * quat.s + this.y * quat.z - this.z * quat.y;
-        double d2 = this.s * quat.y - this.x * quat.z + this.y * quat.s + this.z * quat.x;
-        double d3 = this.s * quat.z + this.x * quat.y - this.y * quat.x + this.z * quat.s;
-        this.s = d;
-        this.x = d1;
-        this.y = d2;
-        this.z = d3;
-        return this;
-    }
-
-    public Quaternionf toQuaternionF() {
-        return new Quaternionf((float)this.x, (float)this.y, (float)this.z, (float)this.s);
-    }
-
-    public Quaterniond toQuaternionD() {
-        return new Quaterniond(this.x, this.y, this.z, this.s);
     }
 
     public double mag() {

@@ -7,10 +7,6 @@ public class ColourARGB extends Colour {
         super((colour >> 16) & 0xFF, (colour >> 8) & 0xFF, colour & 0xFF, (colour >> 24) & 0xFF);
     }
 
-    public ColourARGB(int a, int r, int g, int b) {
-        super(r, g, b, a);
-    }
-
     public ColourARGB(ColourARGB colour) {
         super(colour);
     }
@@ -28,11 +24,6 @@ public class ColourARGB extends Colour {
     @Override
     public int pack() {
         return pack(this);
-    }
-
-    @Override
-    public float[] packArray() {
-        return new float[] { (a & 0xFF) / 255f, (r & 0xFF) / 255f, (g & 0xFF) / 255f, (b & 0xFF) / 255f };
     }
 
     public static int pack(Colour colour) {

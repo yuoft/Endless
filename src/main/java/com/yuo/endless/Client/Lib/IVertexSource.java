@@ -16,7 +16,6 @@ public interface IVertexSource {
 
     /**
      * The number of vertices available in the model.
-     *
      * By default, this method just returns the
      * length of the @link #getVertices()} array.
      *

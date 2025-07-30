@@ -1,23 +1,15 @@
 package com.yuo.endless.Client.Lib;
 
-import net.minecraft.core.Vec3i;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class Translation extends Transformation {
 
-    public static final Translation CENTER = new Translation(Vector3.CENTER);
-
     public Vector3 vec;
 
     public Translation(Vector3 vec) {
         this.vec = vec;
-    }
-
-    public Translation(Vec3i vec) {
-        this.vec = Vector3.fromVec3i(vec);
     }
 
     public Translation(double x, double y, double z) {

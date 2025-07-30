@@ -12,16 +12,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class VertexUtils {
-    private static final ConcurrentMap<Pair<VertexFormat, VertexFormat>, int[]> formatMaps = new ConcurrentHashMap();
+    private static final ConcurrentMap<Pair<VertexFormat, VertexFormat>, int[]> formatMaps = new ConcurrentHashMap<>();
     private static final int[] DEFAULT_MAPPING;
 
     public VertexUtils() {
     }
 
     public static int[] mapFormats(VertexFormat from, VertexFormat to) {
-        return from.equals(DefaultVertexFormat.BLOCK) && to.equals(DefaultVertexFormat.BLOCK) ? DEFAULT_MAPPING : (int[])formatMaps.computeIfAbsent(Pair.of(from, to), (pair) -> {
-            return generateMapping((VertexFormat)pair.getLeft(), (VertexFormat)pair.getRight());
-        });
+        return from.equals(DefaultVertexFormat.BLOCK) && to.equals(DefaultVertexFormat.BLOCK) ? DEFAULT_MAPPING : formatMaps.computeIfAbsent(Pair.of(from, to), (pair) -> generateMapping(pair.getLeft(), pair.getRight()));
     }
 
     public static void putQuad(IVertexConsumer consumer, BakedQuad quad) {
@@ -54,7 +52,7 @@ public class VertexUtils {
 
     public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
         int length = Math.min(4, to.length);
-        VertexFormatElement element = (VertexFormatElement)formatFrom.getElements().get(e);
+        VertexFormatElement element = formatFrom.getElements().get(e);
         int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffset(e);
         int count = element.getElementCount();
         VertexFormatElement.Type type = element.getType();
@@ -97,7 +95,7 @@ public class VertexUtils {
     }
 
     public static void pack(float[] from, int[] to, VertexFormat formatTo, int v, int e) {
-        VertexFormatElement element = (VertexFormatElement)formatTo.getElements().get(e);
+        VertexFormatElement element = formatTo.getElements().get(e);
         int vertexStart = v * formatTo.getVertexSize() + formatTo.getOffset(e);
         int count = element.getElementCount();
         VertexFormatElement.Type type = element.getType();
@@ -109,7 +107,6 @@ public class VertexUtils {
                 int pos = vertexStart + size * i;
                 int index = pos >> 2;
                 int offset = pos & 3;
-                boolean  b = false;
                 float f = i < from.length ? from[i] : 0.0F;
                 int bits;
                 if (type == Type.FLOAT) {
@@ -133,11 +130,11 @@ public class VertexUtils {
         int[] eMap = new int[fromCount];
 
         for(int e = 0; e < fromCount; ++e) {
-            VertexFormatElement expected = (VertexFormatElement)from.getElements().get(e);
+            VertexFormatElement expected = from.getElements().get(e);
 
             int e2;
             for(e2 = 0; e2 < toCount; ++e2) {
-                VertexFormatElement current = (VertexFormatElement)to.getElements().get(e2);
+                VertexFormatElement current = to.getElements().get(e2);
                 if (expected.getUsage() == current.getUsage() && expected.getIndex() == current.getIndex()) {
                     break;
                 }

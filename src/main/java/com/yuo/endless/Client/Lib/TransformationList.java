@@ -47,19 +47,6 @@ public class TransformationList extends Transformation {
         return mat;
     }
 
-    /**
-     * Returns a global space matrix as opposed to an object space matrix (reverse application order)
-     *
-     * @return The matrix.
-     */
-    public Matrix4 reverseCompile() {
-        Matrix4 mat = new Matrix4();
-        for (Transformation t : transformations) {
-            t.apply(mat);
-        }
-        return mat;
-    }
-
     @Override
     public void apply(Vector3 vec) {
         if (mat != null) {
@@ -104,22 +91,6 @@ public class TransformationList extends Transformation {
         return this;
     }
 
-    public TransformationList prepend(Transformation t) {
-        if (t.isRedundant()) {
-            return this;
-        }
-
-        mat = null;//matrix invalid
-        if (t instanceof TransformationList) {
-            transformations.addAll(0, ((TransformationList) t).transformations);
-        } else {
-            transformations.add(0, t);
-        }
-
-        compact();
-        return this;
-    }
-
     private void compact() {
         ArrayList<Transformation> newList = new ArrayList<>(transformations.size());
         Iterator<Transformation> iterator = transformations.iterator();
@@ -158,7 +129,7 @@ public class TransformationList extends Transformation {
 
     @Override
     public boolean isRedundant() {
-        return transformations.size() == 0;
+        return transformations.isEmpty();
     }
 
     @Override

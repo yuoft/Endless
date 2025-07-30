@@ -4,11 +4,10 @@ import com.google.gson.*;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
-import com.mojang.blaze3d.vertex.VertexFormatElement.Type;
-import com.mojang.blaze3d.vertex.VertexFormatElement.Usage;
 import com.yuo.endless.Client.Lib.CachedFormat;
 import com.yuo.endless.Client.Lib.IVertexConsumer;
 import com.yuo.endless.Client.Lib.Quad;
+import com.yuo.endless.Client.Lib.VertexUtils;
 import com.yuo.endless.Client.Model.HaloItemModelLoader.HaloItemModelGeometry;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -49,10 +48,8 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
             IntArrayList layerColors = new IntArrayList();
             JsonArray layerColorsArr = modelContents.getAsJsonArray("layerColors");
             if (layerColorsArr != null) {
-                Iterator var6 = layerColorsArr.iterator();
 
-                while(var6.hasNext()) {
-                    JsonElement jsonElement = (JsonElement)var6.next();
+                for (JsonElement jsonElement : layerColorsArr) {
                     layerColors.add(jsonElement.getAsInt());
                 }
             }
@@ -70,7 +67,7 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
     }
 
     public static class HaloItemModelGeometry implements IUnbakedGeometry<HaloItemModelLoader.HaloItemModelGeometry> {
-        private static final ConcurrentMap<org.apache.commons.lang3.tuple.Pair<VertexFormat, VertexFormat>, int[]> formatMaps = new ConcurrentHashMap();
+        private static final ConcurrentMap<org.apache.commons.lang3.tuple.Pair<VertexFormat, VertexFormat>, int[]> formatMaps = new ConcurrentHashMap<>();
         private static final int[] DEFAULT_MAPPING;
         private final BlockModel baseModel;
         private final IntList layerColors;
@@ -92,12 +89,10 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
             if (layerColors.isEmpty()) {
                 return model;
             } else {
-                Map<Direction, List<BakedQuad>> faceQuads = new HashMap();
+                Map<Direction, List<BakedQuad>> faceQuads = new HashMap<>();
                 Direction[] var3 = Direction.values();
-                int var4 = var3.length;
 
-                for(int var5 = 0; var5 < var4; ++var5) {
-                    Direction face = var3[var5];
+                for (Direction face : var3) {
                     faceQuads.put(face, transformQuads(model.getQuads(null, face, RandomSource.create()), layerColors));
                 }
 
@@ -107,11 +102,9 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
         }
 
         static List<BakedQuad> transformQuads(List<BakedQuad> quads, IntList layerColors) {
-            ArrayList<BakedQuad> newQuads = new ArrayList(quads.size());
-            Iterator var3 = quads.iterator();
+            ArrayList<BakedQuad> newQuads = new ArrayList<>(quads.size());
 
-            while(var3.hasNext()) {
-                BakedQuad quad = (BakedQuad)var3.next();
+            for (BakedQuad quad : quads) {
                 newQuads.add(transformQuad(quad, layerColors));
             }
 
@@ -119,52 +112,11 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
         }
 
         public static int[] mapFormats(VertexFormat from, VertexFormat to) {
-            return from.equals(DefaultVertexFormat.BLOCK) && to.equals(DefaultVertexFormat.BLOCK) ? DEFAULT_MAPPING : (int[])formatMaps.computeIfAbsent(Pair.of(from, to), (pair) -> {
-                return generateMapping((VertexFormat)pair.getLeft(), (VertexFormat)pair.getRight());
-            });
+            return from.equals(DefaultVertexFormat.BLOCK) && to.equals(DefaultVertexFormat.BLOCK) ? DEFAULT_MAPPING : formatMaps.computeIfAbsent(Pair.of(from, to), (pair) -> generateMapping(pair.getLeft(), pair.getRight()));
         }
 
         public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
-            int length = Math.min(4, to.length);
-            VertexFormatElement element = (VertexFormatElement)formatFrom.getElements().get(e);
-            int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffset(e);
-            int count = element.getElementCount();
-            VertexFormatElement.Type type = element.getType();
-            VertexFormatElement.Usage usage = element.getUsage();
-            int size = type.getSize();
-            int mask = (256 << 8 * (size - 1)) - 1;
-
-            for(int i = 0; i < length; ++i) {
-                if (i < count) {
-                    int pos = vertexStart + size * i;
-                    int index = pos >> 2;
-                    int offset = pos & 3;
-                    int bits = from[index];
-                    bits >>>= offset * 8;
-                    if ((pos + size - 1) / 4 != index) {
-                        bits |= from[index + 1] << (4 - offset) * 8;
-                    }
-
-                    bits &= mask;
-                    if (type == Type.FLOAT) {
-                        to[i] = Float.intBitsToFloat(bits);
-                    } else if (type != Type.UBYTE && type != Type.USHORT) {
-                        if (type == Type.UINT) {
-                            to[i] = (float)((double)((long)bits & 4294967295L) / 4.294967295E9);
-                        } else if (type == Type.BYTE) {
-                            to[i] = (float)((byte)bits) / (float)(mask >> 1);
-                        } else if (type == Type.SHORT) {
-                            to[i] = (float)((short)bits) / (float)(mask >> 1);
-                        } else if (type == Type.INT) {
-                            to[i] = (float)((double)((long)bits & 4294967295L) / 2.147483647E9);
-                        }
-                    } else {
-                        to[i] = (float)bits / (float)mask;
-                    }
-                } else {
-                    to[i] = i == 3 && usage == Usage.POSITION ? 1.0F : 0.0F;
-                }
-            }
+            VertexUtils.unpack(from, to, formatFrom, v, e);
 
         }
 
@@ -174,11 +126,11 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
             int[] eMap = new int[fromCount];
 
             for(int e = 0; e < fromCount; ++e) {
-                VertexFormatElement expected = (VertexFormatElement)from.getElements().get(e);
+                VertexFormatElement expected = from.getElements().get(e);
 
                 int e2;
                 for(e2 = 0; e2 < toCount; ++e2) {
-                    VertexFormatElement current = (VertexFormatElement)to.getElements().get(e2);
+                    VertexFormatElement current = to.getElements().get(e2);
                     if (expected.getUsage() == current.getUsage() && expected.getIndex() == current.getIndex()) {
                         break;
                     }
@@ -211,7 +163,7 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
                         unpack(quad.getVertices(), data, formatTo, v, eMap[e]);
                         consumer.put(e, data);
                     } else {
-                        consumer.put(e, new float[0]);
+                        consumer.put(e);
                     }
                 }
             }
@@ -232,15 +184,11 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
                     float g = (float)(tint >> 8 & 255) / 255.0F;
                     float b = (float)(tint & 255) / 255.0F;
                     Quad.Vertex[] var8 = newQuad.vertices;
-                    int var9 = var8.length;
 
-                    for(int var10 = 0; var10 < var9; ++var10) {
-                        Quad.Vertex v = var8[var10];
+                    for (Quad.Vertex v : var8) {
                         float[] var10000 = v.color;
                         var10000[0] *= r;
-                        var10000 = v.color;
                         var10000[1] *= g;
-                        var10000 = v.color;
                         var10000[2] *= b;
                     }
 
@@ -255,7 +203,7 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
         public BakedModel bake(IGeometryBakingContext owner, ModelBaker bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
             BakedModel bakedBaseModel = this.baseModel.bake(bakery, this.baseModel, spriteGetter, modelTransform, modelLocation, false);
             Material particleLocation = this.baseModel.getMaterial(this.texture);
-            TextureAtlasSprite particle = (TextureAtlasSprite)spriteGetter.apply(particleLocation);
+            TextureAtlasSprite particle = spriteGetter.apply(particleLocation);
             return new HaloBakedModel(tintLayers(bakedBaseModel, this.layerColors), particle, this.color, this.size, this.pulse);
         }
 

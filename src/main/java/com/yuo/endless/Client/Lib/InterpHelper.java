@@ -8,8 +8,8 @@ package com.yuo.endless.Client.Lib;
  */
 
 public class InterpHelper {
-    private float[][] posCache = new float[4][2];
-    private float[] valCache = new float[4];
+    private final float[][] posCache = new float[4][2];
+    private final float[] valCache = new float[4];
 
     private float x0;
     private float x1;

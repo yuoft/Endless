@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.server.packs.resources.ResourceProvider;
 
 import java.io.BufferedReader;
@@ -44,28 +43,8 @@ public class ResourceUtils {
      * @return The gotten resource.
      * @throws IOException If the resource doesn't exist, or some other IO error occurred.
      */
-    public static Resource getResource(String location) throws IOException {
-        return getResource(ResourceLocation.parse(location));
-    }
-
-    /**
-     * Get's an IResource from the resource manager.
-     *
-     * @param location The resource to get.
-     * @return The gotten resource.
-     * @throws IOException If the resource doesn't exist, or some other IO error occurred.
-     */
     public static Resource getResource(ResourceLocation location) throws IOException {
         return getResourceManager().getResourceOrThrow(location);
-    }
-
-    /**
-     * Registers a IResourceManagerReloadListener to MC's resource manager.
-     *
-     * @param reloadListener The listener.
-     */
-    public static void registerReloadListener(ResourceManagerReloadListener reloadListener) {
-        getResourceManager().registerReloadListener(reloadListener);
     }
 
     /**

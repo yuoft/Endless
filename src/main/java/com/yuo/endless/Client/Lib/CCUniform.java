@@ -4,6 +4,7 @@ import com.mojang.blaze3d.shaders.Shader;
 import com.mojang.blaze3d.shaders.Uniform;
 import com.yuo.endless.Client.Lib.UniformType.Carrier;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -18,22 +19,19 @@ import org.lwjgl.system.MemoryUtil;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import java.util.Objects;
 
 public abstract class CCUniform extends Uniform implements ICCUniform {
     protected final UniformType type;
 
     protected CCUniform(String name, UniformType type, int count, @Nullable Shader parent) {
-        super(name, type.getVanillaType(), count, parent);
+        super(name, type.getVanillaType(), count, Objects.requireNonNull(parent));
         this.type = type;
-        if (this.intValues != null) {
-            MemoryUtil.memFree(this.intValues);
-            this.intValues = null;
-        }
+        MemoryUtil.memFree(this.intValues);
+        this.intValues = null;
 
-        if (this.floatValues != null) {
-            MemoryUtil.memFree(this.floatValues);
-            this.floatValues = null;
-        }
+        MemoryUtil.memFree(this.floatValues);
+        this.floatValues = null;
 
     }
 
@@ -41,7 +39,7 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
         if (this.type != UniformType.MAT2)
             throw new IllegalStateException("Uniform '%s' is not of type MAT2.".formatted(getName()));
         if (values.length != count * 4)
-            throw new IllegalArgumentException("Invalid size for mat2 array. Expected %d floats, got %d.".formatted(Integer.valueOf(count * 4), Integer.valueOf(values.length)));
+            throw new IllegalArgumentException("Invalid size for mat2 array. Expected %d floats, got %d.".formatted(count * 4, values.length));
         glUniformF(false, values);
     }
 
@@ -49,33 +47,19 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
         if (count % type.getSize() != 0) {
             throw new IllegalArgumentException("Expected count to be a multiple of the uniform type size: " + type.getSize());
         } else {
-            Object var10000;
-            switch (type.getCarrier()) {
-                case INT:
-                case U_INT:
-                    var10000 = new CCUniform.IntUniform(name, type, count, parent);
-                    break;
-                case FLOAT:
-                case MATRIX:
-                    var10000 = new CCUniform.FloatUniform(name, type, count, parent);
-                    break;
-                case DOUBLE:
-                case D_MATRIX:
-                    var10000 = new CCUniform.DoubleUniform(name, type, count, parent);
-                    break;
-                default:
-                    throw new IncompatibleClassChangeError();
-            }
-
-            return (CCUniform)var10000;
+            return switch (type.getCarrier()) {
+                case INT, U_INT -> new IntUniform(name, type, count, parent);
+                case FLOAT, MATRIX -> new FloatUniform(name, type, count, parent);
+                case DOUBLE, D_MATRIX -> new DoubleUniform(name, type, count, parent);
+            };
         }
     }
 
-    public IntBuffer getIntBuffer() {
+    public @NotNull IntBuffer getIntBuffer() {
         throw new NotImplementedException("TODO");
     }
 
-    public FloatBuffer getFloatBuffer() {
+    public @NotNull FloatBuffer getFloatBuffer() {
         throw new NotImplementedException("TODO");
     }
 
@@ -124,10 +108,6 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
 
         }
 
-        public int[] make(int len) {
-            return new int[len];
-        }
-
         public int len(int[] cache) {
             return cache.length;
         }
@@ -167,10 +147,6 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
 
         }
 
-        public float[] make(int len) {
-            return new float[len];
-        }
-
         public int len(float[] cache) {
             return cache.length;
         }
@@ -208,10 +184,6 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
                 default -> throw new IllegalStateException("Unhandled uniform type for DoubleUniform: " + this.type);
             }
 
-        }
-
-        public double[] make(int len) {
-            return new double[len];
         }
 
         public int len(double[] cache) {
@@ -275,7 +247,7 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
             this.glUniformI(i0, i1, i2, i3);
         }
 
-        public void set(float[] p_85632_) {
+        public void set(float @NotNull [] p_85632_) {
             this.glUniformF(false, p_85632_);
         }
 
@@ -315,11 +287,11 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
             this.glUniformF(true, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33);
         }
 
-        public void set(Matrix4f mat) {
+        public void set(@NotNull Matrix4f mat) {
             this.glUniformMatrix4f(mat);
         }
 
-        public void set(Matrix3f mat) {
+        public void set(@NotNull Matrix3f mat) {
             this.glUniformMatrix3f(mat);
         }
 
@@ -396,8 +368,6 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
         }
 
         public abstract void flush();
-
-        public abstract T make(int var1);
 
         public abstract int len(T var1);
 

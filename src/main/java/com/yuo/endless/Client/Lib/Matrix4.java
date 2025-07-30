@@ -3,7 +3,6 @@ package com.yuo.endless.Client.Lib;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.Vec3i;
 import org.joml.Matrix4f;
-import org.joml.Vector4f;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -42,35 +41,14 @@ public class Matrix4 extends Transformation {
         set(mat);
     }
 
-    public Matrix4(float[] matrix) {
-        set(matrix);
-    }
-
-    public Matrix4(double[] matrix) {
-        set(matrix);
-    }
-
-    public Matrix4(FloatBuffer buffer) {
-        set(buffer);
-    }
-
-    public Matrix4(DoubleBuffer buffer) {
-        set(buffer);
-    }
-
-    public Matrix4(Matrix4f mat) {
-        set(mat);
-    }
-
     public Matrix4(PoseStack stack) {
         set(stack);
     }
 
-    public Matrix4 setIdentity() {
+    public void setIdentity() {
         m00 = m11 = m22 = m33 = 1;
         m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0;
 
-        return this;
     }
 
     //region Translate, Scale, Transpose.
@@ -116,47 +94,10 @@ public class Matrix4 extends Transformation {
         return this;
     }
 
-    public Matrix4 transpose() {
-        double n00 = m00;
-        double n10 = m01;
-        double n20 = m02;
-        double n30 = m03;
-        double n01 = m10;
-        double n11 = m11;
-        double n21 = m12;
-        double n31 = m13;
-        double n02 = m20;
-        double n12 = m21;
-        double n22 = m22;
-        double n32 = m23;
-        double n03 = m30;
-        double n13 = m31;
-        double n23 = m32;
-        double n33 = m33;
-
-        m00 = n00;
-        m01 = n01;
-        m02 = n02;
-        m03 = n03;
-        m10 = n10;
-        m11 = n11;
-        m12 = n12;
-        m13 = n13;
-        m20 = n20;
-        m21 = n21;
-        m22 = n22;
-        m23 = n23;
-        m30 = n30;
-        m31 = n31;
-        m32 = n32;
-        m33 = n33;
-
-        return this;
-    }
     //endregion
 
     //region Rotate
-    public Matrix4 rotate(double angle, Vector3 axis) {
+    public void rotate(double angle, Vector3 axis) {
         double c = Math.cos(angle);
         double s = Math.sin(angle);
         double mc = 1.0f - c;
@@ -200,53 +141,9 @@ public class Matrix4 extends Transformation {
         m21 = t21;
         m31 = t31;
 
-        return this;
     }
 
-    public Matrix4 rotate(Rotation rotation) {
-        rotation.apply(this);
-        return this;
-    }
     //endregion
-
-    //region Multiply
-    public Matrix4 leftMultiply(Matrix4 mat) {
-        double n00 = m00 * mat.m00 + m10 * mat.m01 + m20 * mat.m02 + m30 * mat.m03;
-        double n01 = m01 * mat.m00 + m11 * mat.m01 + m21 * mat.m02 + m31 * mat.m03;
-        double n02 = m02 * mat.m00 + m12 * mat.m01 + m22 * mat.m02 + m32 * mat.m03;
-        double n03 = m03 * mat.m00 + m13 * mat.m01 + m23 * mat.m02 + m33 * mat.m03;
-        double n10 = m00 * mat.m10 + m10 * mat.m11 + m20 * mat.m12 + m30 * mat.m13;
-        double n11 = m01 * mat.m10 + m11 * mat.m11 + m21 * mat.m12 + m31 * mat.m13;
-        double n12 = m02 * mat.m10 + m12 * mat.m11 + m22 * mat.m12 + m32 * mat.m13;
-        double n13 = m03 * mat.m10 + m13 * mat.m11 + m23 * mat.m12 + m33 * mat.m13;
-        double n20 = m00 * mat.m20 + m10 * mat.m21 + m20 * mat.m22 + m30 * mat.m23;
-        double n21 = m01 * mat.m20 + m11 * mat.m21 + m21 * mat.m22 + m31 * mat.m23;
-        double n22 = m02 * mat.m20 + m12 * mat.m21 + m22 * mat.m22 + m32 * mat.m23;
-        double n23 = m03 * mat.m20 + m13 * mat.m21 + m23 * mat.m22 + m33 * mat.m23;
-        double n30 = m00 * mat.m30 + m10 * mat.m31 + m20 * mat.m32 + m30 * mat.m33;
-        double n31 = m01 * mat.m30 + m11 * mat.m31 + m21 * mat.m32 + m31 * mat.m33;
-        double n32 = m02 * mat.m30 + m12 * mat.m31 + m22 * mat.m32 + m32 * mat.m33;
-        double n33 = m03 * mat.m30 + m13 * mat.m31 + m23 * mat.m32 + m33 * mat.m33;
-
-        m00 = n00;
-        m01 = n01;
-        m02 = n02;
-        m03 = n03;
-        m10 = n10;
-        m11 = n11;
-        m12 = n12;
-        m13 = n13;
-        m20 = n20;
-        m21 = n21;
-        m22 = n22;
-        m23 = n23;
-        m30 = n30;
-        m31 = n31;
-        m32 = n32;
-        m33 = n33;
-
-        return this;
-    }
 
     public Matrix4 multiply(Matrix4 mat) {
         double n00 = m00 * mat.m00 + m01 * mat.m10 + m02 * mat.m20 + m03 * mat.m30;
@@ -296,14 +193,6 @@ public class Matrix4 extends Transformation {
         vec.z = z;
     }
 
-    public void multMatrix(Vector4f vec) {
-        double x = m00 * vec.x() + m01 * vec.y() + m02 * vec.z() + m03 * vec.w();
-        double y = m10 * vec.x() + m11 * vec.y() + m12 * vec.z() + m13 * vec.w();
-        double z = m20 * vec.x() + m21 * vec.y() + m22 * vec.z() + m23 * vec.w();
-        double w = m30 * vec.x() + m31 * vec.y() + m32 * vec.z() + m33 * vec.w();
-
-        vec.set((float) x, (float) y, (float) z, (float) w);
-    }
     //endregion
 
     //region Set
@@ -441,120 +330,6 @@ public class Matrix4 extends Transformation {
     @Override
     public Matrix4 copy() {
         return new Matrix4(this);
-    }
-
-    public float[] toArrayF() {
-        float[] matrix = new float[16];
-        matrix[0] = (float) m00;
-        matrix[1] = (float) m10;
-        matrix[2] = (float) m20;
-        matrix[3] = (float) m30;
-        matrix[4] = (float) m01;
-        matrix[5] = (float) m11;
-        matrix[6] = (float) m21;
-        matrix[7] = (float) m31;
-        matrix[8] = (float) m02;
-        matrix[9] = (float) m12;
-        matrix[10] = (float) m22;
-        matrix[11] = (float) m32;
-        matrix[12] = (float) m03;
-        matrix[13] = (float) m13;
-        matrix[14] = (float) m23;
-        matrix[15] = (float) m33;
-
-        return matrix;
-    }
-
-    public double[] toArrayD() {
-        double[] matrix = new double[16];
-        matrix[0] = m00;
-        matrix[1] = m10;
-        matrix[2] = m20;
-        matrix[3] = m30;
-        matrix[4] = m01;
-        matrix[5] = m11;
-        matrix[6] = m21;
-        matrix[7] = m31;
-        matrix[8] = m02;
-        matrix[9] = m12;
-        matrix[10] = m22;
-        matrix[11] = m32;
-        matrix[12] = m03;
-        matrix[13] = m13;
-        matrix[14] = m23;
-        matrix[15] = m33;
-
-        return matrix;
-    }
-
-    public FloatBuffer toFloatBuffer() {
-        FloatBuffer buff = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-        save(buff);
-        return buff.flip();
-    }
-
-    public void save(FloatBuffer buff) {
-        buff.put((float) m00).put((float) m10).put((float) m20).put((float) m30);
-        buff.put((float) m01).put((float) m11).put((float) m21).put((float) m31);
-        buff.put((float) m02).put((float) m12).put((float) m22).put((float) m32);
-        buff.put((float) m03).put((float) m13).put((float) m23).put((float) m33);
-    }
-
-    public DoubleBuffer toDoubleBuffer() {
-        DoubleBuffer buff = ByteBuffer.allocateDirect(16 * 8).order(ByteOrder.nativeOrder()).asDoubleBuffer();
-        save(buff);
-        return buff.flip();
-    }
-
-    public void save(DoubleBuffer buff) {
-        buff.put(m00).put(m10).put(m20).put(m30);
-        buff.put(m01).put(m11).put(m21).put(m31);
-        buff.put(m02).put(m12).put(m22).put(m32);
-        buff.put(m03).put(m13).put(m23).put(m33);
-    }
-
-    public Matrix4f toMatrix4f() {
-        Matrix4f mat = new Matrix4f();
-        mat.m00((float) m00);
-        mat.m01((float) m01);
-        mat.m02((float) m02);
-        mat.m03((float) m03);
-        mat.m10((float) m10);
-        mat.m11((float) m11);
-        mat.m12((float) m12);
-        mat.m13((float) m13);
-        mat.m20((float) m20);
-        mat.m21((float) m21);
-        mat.m22((float) m22);
-        mat.m23((float) m23);
-        mat.m30((float) m30);
-        mat.m31((float) m31);
-        mat.m32((float) m32);
-        mat.m33((float) m33);
-        mat.transpose();
-        return mat;
-    }
-
-    public static Vector3 gluProject(Vector3 obj, Matrix4 modelMatrix, Matrix4 projMatrix, IntBuffer viewport) {
-        Vector4f o = new Vector4f((float) obj.x, (float) obj.y, (float) obj.z, 1.0F);
-        modelMatrix.multMatrix(o);
-        projMatrix.multMatrix(o);
-
-        if (o.w() == 0) {
-            return Vector3.ZERO.copy();
-        }
-        o.w = (1.0F / o.w()) * 0.5F;
-
-        o.x = o.x() * o.w() + 0.5F;
-        o.y = o.y() * o.w() + 0.5F;
-        o.z = o.z() * o.w() + 0.5F;
-
-        Vector3 winPos = new Vector3();
-        winPos.z = o.z();
-
-        winPos.x = o.x() * viewport.get(viewport.position() + 2) + viewport.get(viewport.position() + 0);
-        winPos.y = o.y() * viewport.get(viewport.position() + 3) + viewport.get(viewport.position() + 1);
-        return winPos;
     }
 
     @Override

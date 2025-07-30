@@ -40,7 +40,6 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
     private static boolean modelRender;
     private static boolean playerFlying;
     private static boolean player;
-    private static boolean legs = true;
     private final ResourceLocation eyeTex = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/models/infinity_armor_eyes.png");
     private final ResourceLocation wingTex = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/models/infinity_armor_wing.png");
     private final ResourceLocation wingGlowTex = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/models/infinity_armor_wingglow.png");
@@ -64,13 +63,10 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
     }
 
     private static RenderType mask2(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> {
-            return AvaritiaShaders.cosmicShader;
-        })).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
+        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
     }
 
     public static MeshDefinition createMesh(CubeDeformation deformation, float f, boolean islegs) {
-        legs = islegs;
         int legoffset = islegs ? 32 : 0;
         MeshDefinition meshDefinition = new MeshDefinition();
         PartDefinition p = meshDefinition.getRoot();
@@ -191,7 +187,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             pPoseStack.pushPose();
             this.rebuildWings();
             pPoseStack.scale(f2, f2, f2);
-            pPoseStack.translate(0.0, (double)(this.bodyYOffset / 16.0F * f3), 0.0);
+            pPoseStack.translate(0.0, this.bodyYOffset / 16.0F * f3, 0.0);
             model.renderToBufferWing(pPoseStack, this.mc.renderBuffers().bufferSource().getBuffer(RenderType.armorCutoutNoCull(this.wingTex)), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
             model.renderToBufferWing(pPoseStack, material(WING).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
             model.renderToBufferWing(pPoseStack, this.mc.renderBuffers().bufferSource().getBuffer(this.glow(this.wingGlowTex)), pPackedLight, pPackedOverlay, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5));
@@ -200,7 +196,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
 
     }
 
-    public void update(LivingEntity e, ItemStack itemStack, EquipmentSlot equipmentSlot) {
+    public void update(LivingEntity e) {
         modelRender = false;
         playerFlying = false;
         player = false;

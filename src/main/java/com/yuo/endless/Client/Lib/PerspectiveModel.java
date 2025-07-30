@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -11,7 +12,7 @@ public interface PerspectiveModel extends BakedModel {
     @Nullable
     PerspectiveModelState getModelState();
 
-    default BakedModel applyTransform(ItemDisplayContext context, PoseStack pStack, boolean leftFlip) {
+    default @NotNull BakedModel applyTransform(@NotNull ItemDisplayContext context, @NotNull PoseStack pStack, boolean leftFlip) {
         PerspectiveModelState modelState = this.getModelState();
         if (modelState != null) {
             Transformation transform = this.getModelState().getTransform(context);

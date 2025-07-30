@@ -211,14 +211,14 @@ public class OBJParser {
     }
 
     private static Vector3 parseUV(String s, int line) {
-        double[] doubles = parseDoubles(s, " ");
+        double[] doubles = parseDoubles(s);
         if (doubles.length < 2) throw new IllegalStateException("Expected u and v component. Line " + line + " " + s);
 
         return new Vector3(doubles[0], 1 - doubles[1], 0);
     }
 
     private static Vector3 parseVec3(String s, int line) {
-        double[] doubles = parseDoubles(s, " ");
+        double[] doubles = parseDoubles(s);
         if (doubles.length < 3) throw new IllegalStateException("Expected x, y and z component. Line " + line + " " + s);
 
         return new Vector3(doubles);
@@ -282,8 +282,8 @@ public class OBJParser {
         return vec3;
     }
 
-    private static double[] parseDoubles(String s, String token) {
-        String[] as = s.split(token);
+    private static double[] parseDoubles(String s) {
+        String[] as = s.split(" ");
         double[] values = new double[as.length];
         for (int i = 0; i < as.length; i++) {
             values[i] = Double.parseDouble(as[i]);

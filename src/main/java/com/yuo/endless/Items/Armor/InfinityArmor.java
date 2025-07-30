@@ -178,7 +178,7 @@ public class InfinityArmor extends ArmorItem {
                         armorSlot == EquipmentSlot.LEGS
                                 ? new InfinityArmorModel(InfinityArmorModel.createMesh(new CubeDeformation(1.0F), 0.0F, true).getRoot().bake(64, 64))
                                 : new InfinityArmorModel(InfinityArmorModel.createMesh(new CubeDeformation(1.0F), 0.0F, false).getRoot().bake(64, 64));
-                model.update(entityLiving, itemstack, armorSlot);
+                model.update(entityLiving);
                 return model;
             }
         });

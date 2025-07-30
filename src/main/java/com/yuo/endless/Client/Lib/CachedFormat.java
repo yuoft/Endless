@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CachedFormat {
-    private static final Map<VertexFormat, CachedFormat> formatCache = new ConcurrentHashMap();
+    private static final Map<VertexFormat, CachedFormat> formatCache = new ConcurrentHashMap<>();
     public static final CachedFormat BLOCK;
     public final VertexFormat format;
     public final boolean hasPosition;
@@ -27,7 +27,7 @@ public class CachedFormat {
     public final int elementCount;
 
     public static CachedFormat lookup(VertexFormat format) {
-        return format == DefaultVertexFormat.BLOCK ? BLOCK : (CachedFormat)formatCache.computeIfAbsent(format, CachedFormat::new);
+        return format == DefaultVertexFormat.BLOCK ? BLOCK : formatCache.computeIfAbsent(format, CachedFormat::new);
     }
 
     private CachedFormat(VertexFormat format) {
@@ -48,7 +48,7 @@ public class CachedFormat {
         int lightMapIndex = -1;
 
         for(int i = 0; i < this.elementCount; ++i) {
-            VertexFormatElement element = (VertexFormatElement)elements.get(i);
+            VertexFormatElement element = elements.get(i);
             switch (element.getUsage()) {
                 case POSITION:
                     if (hasPosition) {
@@ -120,10 +120,9 @@ public class CachedFormat {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (!(obj instanceof CachedFormat)) {
+        } else if (!(obj instanceof CachedFormat other)) {
             return false;
         } else {
-            CachedFormat other = (CachedFormat)obj;
             return other.elementCount == this.elementCount && other.positionIndex == this.positionIndex && other.normalIndex == this.normalIndex && other.colorIndex == this.colorIndex && other.uvIndex == this.uvIndex && other.lightMapIndex == this.lightMapIndex;
         }
     }

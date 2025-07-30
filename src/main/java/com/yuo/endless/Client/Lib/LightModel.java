@@ -19,10 +19,6 @@ public class LightModel implements IVertexOperation {
             return this;
         }
 
-        public Light setAmbient(Vector3 vec) {
-            ambient.set(vec);
-            return this;
-        }
     }
 
     public static LightModel standardLightModel;
@@ -38,8 +34,8 @@ public class LightModel implements IVertexOperation {
         //@formatter:on
     }
 
-    private Vector3 ambient = new Vector3();
-    private Light[] lights = new Light[8];
+    private final Vector3 ambient = new Vector3();
+    private final Light[] lights = new Light[8];
     private int lightCount;
 
     public LightModel addLight(Light light) {

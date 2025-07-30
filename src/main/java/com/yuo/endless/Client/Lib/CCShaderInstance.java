@@ -3,24 +3,22 @@ package com.yuo.endless.Client.Lib;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.blaze3d.shaders.Program;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ChainedJsonException;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.util.GsonHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL20;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class CCShaderInstance extends ShaderInstance {
-    private final List<Runnable> applyCallbacks = new LinkedList();
+    private final List<Runnable> applyCallbacks = new LinkedList<>();
 
     protected CCShaderInstance(ResourceProvider resourceProvider, ResourceLocation loc, VertexFormat format) throws IOException {
         super(resourceProvider, loc, format);
@@ -30,8 +28,7 @@ public class CCShaderInstance extends ShaderInstance {
         try {
             return new CCShaderInstance(resourceProvider, loc, format);
         } catch (IOException var4) {
-            IOException ex = var4;
-            throw new RuntimeException("Failed to initialize shader.", ex);
+            throw new RuntimeException("Failed to initialize shader.", var4);
         }
     }
 
@@ -40,21 +37,19 @@ public class CCShaderInstance extends ShaderInstance {
     }
 
     public void apply() {
-        Iterator var1 = this.applyCallbacks.iterator();
 
-        while(var1.hasNext()) {
-            Runnable callback = (Runnable)var1.next();
+        for (Runnable callback : this.applyCallbacks) {
             callback.run();
         }
 
         super.apply();
     }
 
-    public @Nullable CCUniform getUniform(String name) {
+    public @Nullable CCUniform getUniform(@NotNull String name) {
         return (CCUniform)super.getUniform(name);
     }
 
-    protected void parseUniformNode(JsonElement json) throws ChainedJsonException {
+    protected void parseUniformNode(@NotNull JsonElement json) throws ChainedJsonException {
         JsonObject obj = GsonHelper.convertToJsonObject(json, "uniform");
         String name = GsonHelper.getAsString(obj, "name");
         String typeStr = GsonHelper.getAsString(obj, "type");
@@ -124,44 +119,15 @@ public class CCShaderInstance extends ShaderInstance {
         }
     }
 
-    public Program compileProgram(ResourceProvider resourceProvider, Program.Type programType, ResourceLocation loc) throws IOException {
-        String var10002 = loc.getNamespace();
-        String var10003 = loc.getPath();
-        ResourceLocation adjustedLoc = new ResourceLocation(var10002, "shaders/core/" + var10003 + programType.getExtension());
-        String cacheString = "ccl__" + adjustedLoc;
-        Program program = (Program)programType.getPrograms().get(cacheString);
-        if (program != null) {
-            return program;
-        } else {
-            GlslProcessor.ProcessedShader processedShader = (new GlslProcessor(resourceProvider, adjustedLoc)).process();
-            int id = GL20.glCreateShader(programType.getGlType());
-            GL20.glShaderSource(id, processedShader.processedSource());
-            GL20.glCompileShader(id);
-            if (GL20.glGetShaderi(id, 35713) == 0) {
-                String s1 = GL20.glGetShaderInfoLog(id);
-                var10002 = programType.getName();
-                throw new IOException("Couldn't compile " + var10002 + " program (" + processedShader.sourceName() + ", " + adjustedLoc + ") : " + s1);
-            } else {
-                program = new Program(programType, id, cacheString);
-                programType.getPrograms().put(cacheString, program);
-                return program;
-            }
-        }
-    }
-
     private static float[] parseFloats(int count, JsonArray jsonValues) throws ChainedJsonException {
         int i = 0;
         float[] values = new float[Math.max(count, 16)];
-        Iterator var4 = jsonValues.iterator();
 
-        while(var4.hasNext()) {
-            JsonElement jsonValue = (JsonElement)var4.next();
-
+        for (JsonElement jsonValue : jsonValues) {
             try {
                 values[i++] = GsonHelper.convertToFloat(jsonValue, "value");
             } catch (Exception var8) {
-                Exception ex = var8;
-                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
+                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(var8);
                 chainedjsonexception.prependJsonKey("values[" + i + "]");
                 throw chainedjsonexception;
             }
@@ -177,16 +143,12 @@ public class CCShaderInstance extends ShaderInstance {
     private static int[] parseInts(int count, JsonArray jsonValues) throws ChainedJsonException {
         int i = 0;
         int[] values = new int[Math.max(count, 16)];
-        Iterator var4 = jsonValues.iterator();
 
-        while(var4.hasNext()) {
-            JsonElement jsonValue = (JsonElement)var4.next();
-
+        for (JsonElement jsonValue : jsonValues) {
             try {
                 values[i++] = GsonHelper.convertToInt(jsonValue, "value");
             } catch (Exception var8) {
-                Exception ex = var8;
-                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
+                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(var8);
                 chainedjsonexception.prependJsonKey("values[" + i + "]");
                 throw chainedjsonexception;
             }
@@ -202,16 +164,12 @@ public class CCShaderInstance extends ShaderInstance {
     private static double[] parseDoubles(int count, JsonArray jsonValues) throws ChainedJsonException {
         int i = 0;
         double[] values = new double[Math.max(count, 16)];
-        Iterator var4 = jsonValues.iterator();
 
-        while(var4.hasNext()) {
-            JsonElement jsonValue = (JsonElement)var4.next();
-
+        for (JsonElement jsonValue : jsonValues) {
             try {
                 values[i++] = GsonHelper.convertToDouble(jsonValue, "value");
             } catch (Exception var8) {
-                Exception ex = var8;
-                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(ex);
+                ChainedJsonException chainedjsonexception = ChainedJsonException.forException(var8);
                 chainedjsonexception.prependJsonKey("values[" + i + "]");
                 throw chainedjsonexception;
             }

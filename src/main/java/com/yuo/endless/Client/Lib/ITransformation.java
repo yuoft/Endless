@@ -53,10 +53,4 @@ public abstract class ITransformation<Vector, Transformation extends ITransforma
      */
     public abstract Transformation inverse() throws IrreversibleTransformationException;
 
-    /**
-     * Scala ++ operator
-     */
-    public Transformation $plus$plus(Transformation t) {
-        return with(t);
-    }
 }

@@ -99,8 +99,5 @@ public abstract class AttributeKey<T> {
             return unsafeCast(attributeKeys.get(index));
         }
 
-        public static int numAttributes() {
-            return attributeKeys.size();
-        }
     }
 }

@@ -1,6 +1,5 @@
 package com.yuo.endless.Client.Model;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.Client.AvaritiaShaders;
@@ -11,9 +10,7 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -36,14 +33,6 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
     }
 
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource source, int light, int overlay) {
-//        if (stack.getItem() == EndlessItems.infinitySword.get()) {
-//            this.parentState = TransformUtils.DEFAULT_TOOL;
-//        } else if (stack.getItem() != EndlessItems.infinityBow.get() && stack.getItem() != EndlessItems.infinityCrossBow.get()) {
-//            this.parentState = TransformUtils.DEFAULT_ITEM;
-//        } else {
-//            this.parentState = TransformUtils.DEFAULT_BOW;
-//        }
-
         this.renderWrapped(stack, pStack, source, light, overlay, true);
         if (source instanceof MultiBufferSource.BufferSource bs) {
             bs.endBatch();
@@ -86,8 +75,6 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         VertexConsumer cons = source.getBuffer(AvaritiaShaders.COSMIC_RENDER_TYPE);
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
         if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) { //是否是方块
-            ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-
 //            for (BakedModel bakedModel : model.getRenderPasses(stack, true)) {  加上后渲染出错
 //                for (RenderType rendertype : bakedModel.getRenderTypes(stack, true))
 //                    itemRenderer.renderModelLists(bakedModel, stack, light, overlay, pStack, source.getBuffer(rendertype));
@@ -116,19 +103,6 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
 
             mc.getItemRenderer().renderQuadList(pStack, cons, bakeItem(atlasSprite), stack, light, overlay);
         }
-    }
-
-    public static boolean isBlockContext(ItemDisplayContext context) {
-        return switch (context) {
-            case THIRD_PERSON_LEFT_HAND -> true;
-            case THIRD_PERSON_RIGHT_HAND -> true;
-            case FIRST_PERSON_LEFT_HAND -> true;
-            case FIRST_PERSON_RIGHT_HAND -> true;
-            case GROUND -> true;
-            case FIXED -> true;
-            case GUI -> true;
-            default -> false;
-        };
     }
 
     public float getMatterClusterOpacity(ItemStack itemStack){

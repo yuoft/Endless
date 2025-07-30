@@ -5,8 +5,6 @@ package com.yuo.endless.Client.Lib;
  */
 public class PlanarLightModel implements IVertexOperation {
 
-    public static PlanarLightModel standardLightModel = LightModel.standardLightModel.reducePlanar();
-
     public int[] colours;
 
     public PlanarLightModel(int[] colours) {

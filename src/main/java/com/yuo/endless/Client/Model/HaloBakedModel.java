@@ -37,10 +37,10 @@ public class HaloBakedModel extends WrappedItemModel implements IItemRenderer{
         Quad quad = new Quad();
         quad.reset(CachedFormat.BLOCK);
         quad.setTexture(sprite);
-        putVertex(quad.vertices[0], max, max, 0.0, (double)maxU, (double)minV);
-        putVertex(quad.vertices[1], min, max, 0.0, (double)minU, (double)minV);
-        putVertex(quad.vertices[2], min, min, 0.0, (double)minU, (double)maxV);
-        putVertex(quad.vertices[3], max, min, 0.0, (double)maxU, (double)maxV);
+        putVertex(quad.vertices[0], max, max, 0.0, maxU, minV);
+        putVertex(quad.vertices[1], min, max, 0.0, minU, minV);
+        putVertex(quad.vertices[2], min, min, 0.0, minU, maxV);
+        putVertex(quad.vertices[3], max, min, 0.0, maxU, maxV);
 
         for(int i = 0; i < 4; ++i) {
             System.arraycopy(colors, 0, quad.vertices[i].color, 0, 4);

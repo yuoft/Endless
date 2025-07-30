@@ -22,10 +22,6 @@ public class CopyingFileVisitor extends SimpleFileVisitor<Path> {
     private final Path toRoot;
     private final Predicate<Path> predicate;
 
-    public CopyingFileVisitor(Path fromRoot, Path toRoot) {
-        this(fromRoot, toRoot, SneakyUtils.trueP());
-    }
-
     public CopyingFileVisitor(Path fromRoot, Path toRoot, Predicate<Path> predicate) {
         this.fromRoot = fromRoot;
         this.toRoot = toRoot;

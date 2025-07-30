@@ -2,6 +2,7 @@ package com.yuo.endless.Client.Lib;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class DelegatingVertexConsumer implements ISpriteAwareVertexConsumer {
     protected final VertexConsumer delegate;
@@ -11,39 +12,38 @@ public abstract class DelegatingVertexConsumer implements ISpriteAwareVertexCons
     }
 
     public void sprite(TextureAtlasSprite sprite) {
-        VertexConsumer var3 = this.delegate;
-        if (var3 instanceof ISpriteAwareVertexConsumer spriteCons) {
+        if (this.delegate instanceof ISpriteAwareVertexConsumer spriteCons) {
             spriteCons.sprite(sprite);
         }
 
     }
 
-    public VertexConsumer vertex(double x, double y, double z) {
+    public @NotNull VertexConsumer vertex(double x, double y, double z) {
         this.delegate.vertex(x, y, z);
         return this;
     }
 
-    public VertexConsumer color(int r, int g, int b, int a) {
+    public @NotNull VertexConsumer color(int r, int g, int b, int a) {
         this.delegate.color(r, g, b, a);
         return this;
     }
 
-    public VertexConsumer uv(float u, float v) {
+    public @NotNull VertexConsumer uv(float u, float v) {
         this.delegate.uv(u, v);
         return this;
     }
 
-    public VertexConsumer overlayCoords(int u, int v) {
+    public @NotNull VertexConsumer overlayCoords(int u, int v) {
         this.delegate.overlayCoords(u, v);
         return this;
     }
 
-    public VertexConsumer uv2(int u, int v) {
+    public @NotNull VertexConsumer uv2(int u, int v) {
         this.delegate.uv2(u, v);
         return this;
     }
 
-    public VertexConsumer normal(float x, float y, float z) {
+    public @NotNull VertexConsumer normal(float x, float y, float z) {
         this.delegate.normal(x, y, z);
         return this;
     }

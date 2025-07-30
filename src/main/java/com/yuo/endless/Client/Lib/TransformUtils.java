@@ -53,10 +53,8 @@ public class TransformUtils {
         } else {
             ImmutableMap.Builder<ItemDisplayContext, Transformation> map = ImmutableMap.builder();
             ItemDisplayContext[] var2 = ItemDisplayContext.values();
-            int var3 = var2.length;
 
-            for(int var4 = 0; var4 < var3; ++var4) {
-                ItemDisplayContext value = var2[var4];
+            for (ItemDisplayContext value : var2) {
                 map.put(value, create(itemTransforms.getTransform(value)));
             }
 
@@ -84,7 +82,7 @@ public class TransformUtils {
 
     static {
         IDENTITY = PerspectiveModelState.IDENTITY;
-        Map<ItemDisplayContext, Transformation> map = new HashMap();
+        Map<ItemDisplayContext, Transformation> map = new HashMap<>();
         Transformation thirdPerson = create(0.0F, 2.5F, 0.0F, 75.0F, 45.0F, 0.0F, 0.375F);
         map.put(ItemDisplayContext.GUI, create(0.0F, 0.0F, 0.0F, 30.0F, 225.0F, 0.0F, 0.625F));
         map.put(ItemDisplayContext.GROUND, create(0.0F, 3.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.25F));
@@ -94,7 +92,7 @@ public class TransformUtils {
         map.put(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, create(0.0F, 0.0F, 0.0F, 0.0F, 45.0F, 0.0F, 0.4F));
         map.put(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, create(0.0F, 0.0F, 0.0F, 0.0F, 225.0F, 0.0F, 0.4F));
         DEFAULT_BLOCK = new PerspectiveModelState(ImmutableMap.copyOf(map));
-        map = new HashMap();
+        map = new HashMap<>();
         thirdPerson = create(0.0F, 3.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.55F);
         Transformation firstPerson = create(1.13F, 3.2F, 1.13F, 0.0F, -90.0F, 25.0F, 0.68F);
         map.put(ItemDisplayContext.GROUND, create(0.0F, 2.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F));
@@ -104,7 +102,7 @@ public class TransformUtils {
         map.put(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, firstPerson);
         map.put(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, flipLeft(firstPerson));
         DEFAULT_ITEM = new PerspectiveModelState(ImmutableMap.copyOf(map));
-        map = new HashMap();
+        map = new HashMap<>();
         map.put(ItemDisplayContext.GROUND, create(0.0F, 2.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F));
         map.put(ItemDisplayContext.FIXED, create(0.0F, 0.0F, 0.0F, 0.0F, 180.0F, 0.0F, 1.0F));
         map.put(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, create(0.0F, 4.0F, 0.5F, 0.0F, -90.0F, 55.0F, 0.85F));
@@ -112,7 +110,7 @@ public class TransformUtils {
         map.put(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, create(1.13F, 3.2F, 1.13F, 0.0F, -90.0F, 25.0F, 0.68F));
         map.put(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, create(1.13F, 3.2F, 1.13F, 0.0F, 90.0F, -25.0F, 0.68F));
         DEFAULT_TOOL = new PerspectiveModelState(ImmutableMap.copyOf(map));
-        map = new HashMap();
+        map = new HashMap<>();
         map.put(ItemDisplayContext.GROUND, create(0.0F, 2.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F));
         map.put(ItemDisplayContext.FIXED, create(0.0F, 0.0F, 0.0F, 0.0F, 180.0F, 0.0F, 1.0F));
         map.put(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, create(-1.0F, -2.0F, 2.5F, -80.0F, 260.0F, -40.0F, 0.9F));
@@ -120,7 +118,7 @@ public class TransformUtils {
         map.put(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, create(1.13F, 3.2F, 1.13F, 0.0F, -90.0F, 25.0F, 0.68F));
         map.put(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, create(1.13F, 3.2F, 1.13F, 0.0F, 90.0F, -25.0F, 0.68F));
         DEFAULT_BOW = new PerspectiveModelState(ImmutableMap.copyOf(map));
-        map = new HashMap();
+        map = new HashMap<>();
         map.put(ItemDisplayContext.GROUND, create(0.0F, 2.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.5F));
         map.put(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, create(0.0F, 4.0F, 2.5F, 0.0F, 90.0F, 55.0F, 0.85F));
         map.put(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, create(0.0F, 4.0F, 2.5F, 0.0F, -90.0F, -55.0F, 0.85F));

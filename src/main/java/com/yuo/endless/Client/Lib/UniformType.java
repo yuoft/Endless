@@ -47,7 +47,7 @@ public enum UniformType {
     private final UniformType.Carrier carrier;
     private final int size;
 
-    private UniformType(UniformType.Carrier carrier, int size) {
+    UniformType(UniformType.Carrier carrier, int size) {
         this.carrier = carrier;
         this.size = size;
     }
@@ -61,53 +61,21 @@ public enum UniformType {
     }
 
     public int getVanillaType() {
-        byte var10000;
-        switch (this) {
-            case INT:
-            case U_INT:
-                var10000 = 0;
-                break;
-            case FLOAT:
-                var10000 = 4;
-                break;
-            case VEC2:
-                var10000 = 5;
-                break;
-            case I_VEC2:
-            case U_VEC2:
-            case B_VEC2:
-                var10000 = 1;
-                break;
-            case VEC3:
-                var10000 = 6;
-                break;
-            case I_VEC3:
-            case U_VEC3:
-            case B_VEC3:
-                var10000 = 2;
-                break;
-            case VEC4:
-                var10000 = 7;
-                break;
-            case I_VEC4:
-            case U_VEC4:
-            case B_VEC4:
-                var10000 = 3;
-                break;
-            case MAT2:
-                var10000 = 8;
-                break;
-            case MAT3:
-                var10000 = 9;
-                break;
-            case MAT4:
-                var10000 = 10;
-                break;
-            default:
-                var10000 = -1;
-        }
 
-        return var10000;
+        return switch (this) {
+            case INT, U_INT -> 0;
+            case FLOAT -> 4;
+            case VEC2 -> 5;
+            case I_VEC2, U_VEC2, B_VEC2 -> 1;
+            case VEC3 -> 6;
+            case I_VEC3, U_VEC3, B_VEC3 -> 2;
+            case VEC4 -> 7;
+            case I_VEC4, U_VEC4, B_VEC4 -> 3;
+            case MAT2 -> 8;
+            case MAT3 -> 9;
+            case MAT4 -> 10;
+            default -> -1;
+        };
     }
 
     public static @Nullable UniformType parse(String s) {
