@@ -3,157 +3,154 @@ package com.yuo.endless.Client.Model;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Transformation;
-import committee.nova.mods.avaritia.api.client.model.PerspectiveModel;
-import committee.nova.mods.avaritia.api.client.model.PerspectiveModelState;
+import com.yuo.endless.Client.Lib.PerspectiveModel;
+import com.yuo.endless.Client.Lib.PerspectiveModelState;
+import com.yuo.endless.Client.Lib.TransformUtils;
+import com.yuo.endless.Endless;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public abstract class WrappedItemModel implements PerspectiveModel {
-    ModelState parentState;
-
-    BakedModel wrapped;
-
-    LivingEntity entity;
-
-    ClientLevel world;
-
-    List<BakedQuad> maskQuad;
-
-    static ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
-
-    static FaceBakery FACE_BAKERY = new FaceBakery();
-
-    ItemOverrides overrideList;
+    protected BakedModel wrapped;
+    protected ModelState parentState;
+    @Nullable
+    protected LivingEntity entity;
+    @Nullable
+    protected ClientLevel world;
+    private static final ItemModelGenerator ITEM_MODEL_GENERATOR = new ItemModelGenerator();
+    private static final FaceBakery FACE_BAKERY = new FaceBakery();
+    protected ItemOverrides overrideList;
 
     public WrappedItemModel(BakedModel wrapped) {
         this.overrideList = new ItemOverrides() {
-            public BakedModel m_173464_(BakedModel originalModel, ItemStack stack, ClientLevel world, LivingEntity entity, int seed) {
+            @Override
+            public BakedModel resolve(final @NotNull BakedModel originalModel, final @NotNull ItemStack stack, final ClientLevel world, final LivingEntity entity, final int seed) {
                 WrappedItemModel.this.entity = entity;
-                WrappedItemModel.this.world = (world == null) ? ((entity == null) ? null : (ClientLevel)entity.level()) : null;
-                if (WrappedItemModel.this.isCosmic())
+                WrappedItemModel.this.world = ((world == null) ? ((entity == null) ? null : ((ClientLevel)entity.level())) : null);
+                if (WrappedItemModel.this.isCosmic()) {
                     return WrappedItemModel.this.wrapped.getOverrides().resolve(originalModel, stack, world, entity, seed);
+                }
                 return originalModel;
             }
         };
         this.wrapped = wrapped;
-        this.parentState = stateFromItemTransform(wrapped.getTransforms());
+        this.parentState = TransformUtils.stateFromItemTransforms(wrapped.getTransforms());
     }
 
 
-    public static ModelState stateFromItemTransform(ItemTransforms i) {
-        if (i == ItemTransforms.NO_TRANSFORMS)
-            return (ModelState)new PerspectiveModelState((Map)ImmutableMap.of());
-        ImmutableMap.Builder<ItemDisplayContext, Transformation> map = ImmutableMap.builder();
-        for (ItemDisplayContext value : ItemDisplayContext.values())
-            map.put(value, create(i.getTransform(value)));
-        return (ModelState)new PerspectiveModelState((Map)map.build());
-    }
-
-
-    static Transformation create(ItemTransform t) {
-        if (ItemTransform.NO_TRANSFORM.equals(t))
-            return Transformation.identity();
-        return create(t.translation, t.rotation, t.scale);
-    }
-
-
-    static Transformation create(Vector3f t, Vector3f r, Vector3f s) {
-        return new Transformation(t, (new Quaternionf())
-
-                .rotationXYZ((float)(r.x() * 0.017453292519943D), (float)(r.y() * 0.017453292519943D), (float)(r.z() * 0.017453292519943D)), s, null);
-    }
-    public static <T> boolean isNullOrContainsNull(T[] input) {
-        if (input != null) {
-            for (T t : input) {
-                if (t == null)
-                    return true;
-            }
-            return false;
-        }
-        return true;
-    }
-
-    static List<BakedQuad> bakeItem(Transformation s, TextureAtlasSprite... sprites) {
-        checkArgument(sprites, WrappedItemModel::isNullOrContainsNull);
-        LinkedList<BakedQuad> quads = new LinkedList();
-        for (int i = 0; i < sprites.length; i++) {
-            TextureAtlasSprite sprite = sprites[i];
-            List<BlockElement> unbaked = ITEM_MODEL_GENERATOR.processFrames(i, "layer" + i, sprite.contents);
-            Iterator<BlockElement> var6 = unbaked.iterator();
-            while (var6.hasNext()) {
-                BlockElement element = var6.next();
-                Iterator<Map.Entry<Direction, BlockElementFace>> var8 = element.faces.entrySet().iterator();
-                while (var8.hasNext()) {
-                    Map.Entry<Direction, BlockElementFace> entry = var8.next();
-                    quads.add(FACE_BAKERY.bakeQuad(element.from, element.to, entry.getValue(), sprite, entry.getKey(), new PerspectiveModelState(ImmutableMap.of()), element.rotation, element.shade, ResourceLocation.fromNamespaceAndPath("endless", "dynamic")));
+    public static List<BakedQuad> bakeItem(final List<TextureAtlasSprite> sprites) {
+        final LinkedList<BakedQuad> quads = new LinkedList<>();
+        for (final TextureAtlasSprite sprite : sprites) {
+            final List<BlockElement> unbaked = ITEM_MODEL_GENERATOR.processFrames(sprites.indexOf(sprite), "layer" + sprites.indexOf(sprite), sprite.contents());
+            for (final BlockElement element : unbaked) {
+                for (final Map.Entry<Direction, BlockElementFace> entry : element.faces.entrySet()) {
+                    quads.add(FACE_BAKERY.bakeQuad(element.from, element.to, entry.getValue(), sprite, entry.getKey(), new PerspectiveModelState(ImmutableMap.of()), element.rotation, element.shade, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID,"dynamic")));
                 }
             }
         }
         return quads;
     }
 
-    public PerspectiveModelState getModelTransform() {
-        return (PerspectiveModelState)this.parentState;
-    }
-
-    boolean isCosmic() {
+    public boolean isCosmic() {
         return false;
     }
 
-    static List<BakedQuad> bakeItem(TextureAtlasSprite... s) {
-        return bakeItem(Transformation.identity(), s);
+    @Override
+    public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand) {
+        return Collections.emptyList();
     }
 
-    public static <E> void checkArgument(E argument, Predicate<E> predicate) {
-        if (predicate.test(argument))
-            throw new RuntimeException("");
+    @Override
+    public @NotNull TextureAtlasSprite getParticleIcon() {
+        return this.wrapped.getParticleIcon();
     }
 
+    @Override
+    public @NotNull TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+        return this.wrapped.getParticleIcon(data);
+    }
+
+    @Override
+    public @NotNull ItemOverrides getOverrides() {
+        return this.overrideList;
+    }
+
+    @Override
     public boolean useAmbientOcclusion() {
         return this.wrapped.useAmbientOcclusion();
     }
 
+    @Override
     public boolean isGui3d() {
         return this.wrapped.isGui3d();
     }
 
+    @Override
     public boolean usesBlockLight() {
         return this.wrapped.usesBlockLight();
     }
 
-    public ItemOverrides getOverrides() {
-        return this.overrideList;
+    /**
+     * Render the wrapped model.
+     * <p>
+     * This does not take into account all the special edge cases hardcoded into
+     * {@link ItemRenderer#render(ItemStack, ItemDisplayContext, boolean, PoseStack, MultiBufferSource, int, int, BakedModel)}.
+     *
+     * @param stack         The stack.
+     * @param pStack        The pose stack.
+     * @param buffers       The {@link MultiBufferSource}.
+     * @param packedLight   The packed light coords. See {@link LightTexture}.
+     * @param packedOverlay The packed Overlay coords. See {@link OverlayTexture}.
+     * @param fabulous      If fabulous is required. (not sure on this desc, might be inaccurate as its value in vanilla
+     *                      is mixed with the aforementioned hardcoded edge cases.)
+     */
+    protected void renderWrapped(ItemStack stack, PoseStack pStack, MultiBufferSource buffers, int packedLight, int packedOverlay, boolean fabulous) {
+        renderWrapped(stack, pStack, buffers, packedLight, packedOverlay, fabulous, Function.identity());
     }
 
-    public void renderWrapped(ItemStack s, PoseStack p, MultiBufferSource c, int light, int packed, boolean fabulous) {
-        renderWrapped(s, p, c, light, packed, fabulous, Function.identity());
-    }
-
-    public void renderWrapped(ItemStack s, PoseStack p, MultiBufferSource c, int light, int packed, boolean fabulous, Function<VertexConsumer, VertexConsumer> v) {
-        BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, s, this.world, this.entity, 0);
+    /**
+     * Overload of {@link #renderWrapped(ItemStack, PoseStack, MultiBufferSource, int, int, boolean)}.
+     * <p>
+     * Except, with a callback to wrap the {@link VertexConsumer} used.
+     *
+     * @param stack         The stack.
+     * @param pStack        The pose stack.
+     * @param buffers       The {@link MultiBufferSource}.
+     * @param packedLight   The packed light coords. See {@link LightTexture}.
+     * @param packedOverlay The packed Overlay coords. See {@link OverlayTexture}.
+     * @param fabulous      If fabulous is required. (not sure on this desc, might be inaccurate as its value in vanilla
+     *                      is mixed with the aforementioned hardcoded edge cases.)
+     */
+    protected void renderWrapped(ItemStack stack, PoseStack pStack, MultiBufferSource buffers, int packedLight, int packedOverlay, boolean fabulous, Function<VertexConsumer, VertexConsumer> consOverride) {
+        BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        RenderType rType = ItemBlockRenderTypes.getRenderType(s, fabulous);
-        VertexConsumer builder = ItemRenderer.getFoilBuffer(c, rType, true, s.hasFoil());
-        itemRenderer.renderModelLists(model, s, light, packed, p, v.apply(builder));
+        for (BakedModel bakedModel : model.getRenderPasses(stack, true)) {
+            for (RenderType rendertype : bakedModel.getRenderTypes(stack, true)) {
+                itemRenderer.renderModelLists(bakedModel, stack, packedLight, packedOverlay, pStack,
+                        consOverride.apply(buffers.getBuffer(rendertype)));
+            }
+        }
     }
 }

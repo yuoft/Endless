@@ -1,13 +1,7 @@
 package com.yuo.endless.Client.Model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import committee.nova.mods.avaritia.api.client.model.CachedFormat;
-import committee.nova.mods.avaritia.api.client.model.PerspectiveModelState;
-import committee.nova.mods.avaritia.api.client.model.Quad;
-import committee.nova.mods.avaritia.api.client.model.bakedmodels.WrappedItemModel;
-import committee.nova.mods.avaritia.api.client.render.buffer.AlphaOverrideVertexConsumer;
-import committee.nova.mods.avaritia.api.client.util.TransformUtils;
-import committee.nova.mods.avaritia.api.client.util.colour.ColourARGB;
+import com.yuo.endless.Client.Lib.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Random;
 
-public class HaloBakedModel extends WrappedItemModel {
+public class HaloBakedModel extends WrappedItemModel implements IItemRenderer{
     private final Random random = new Random();
     private final BakedQuad haloQuad;
     private final boolean pulse;
@@ -73,9 +67,7 @@ public class HaloBakedModel extends WrappedItemModel {
                 double trans = (1.0 - scale) / 2.0;
                 pStack.translate(trans, trans, 0.0);
                 pStack.scale((float)scale, (float)scale, 1.0001F);
-                this.renderWrapped(stack, pStack, source, packedLight, packedOverlay, true, (e) -> {
-                    return new AlphaOverrideVertexConsumer(e, 0.6000000238418579);
-                });
+                this.renderWrapped(stack, pStack, source, packedLight, packedOverlay, true, (e) -> new AlphaOverrideVertexConsumer(e, 0.6000000238418579));
                 pStack.popPose();
             }
         }

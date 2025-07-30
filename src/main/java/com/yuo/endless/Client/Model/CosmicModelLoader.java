@@ -1,11 +1,9 @@
 package com.yuo.endless.Client.Model;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yuo.endless.Client.Model.CosmicModelLoader.CosmicGeometry;
-import committee.nova.mods.avaritia.client.model.CosmicBakeModel;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -40,7 +38,7 @@ public class CosmicModelLoader implements IGeometryLoader<CosmicGeometry> {
             JsonObject clean = modelContents.deepCopy();
             clean.remove("cosmic");
             clean.remove("loader");
-            BlockModel baseModel = (BlockModel)deserializationContext.deserialize(clean, BlockModel.class);
+            BlockModel baseModel = deserializationContext.deserialize(clean, BlockModel.class);
             return new CosmicModelLoader.CosmicGeometry(baseModel, maskTexture);
         }
     }
@@ -56,10 +54,8 @@ public class CosmicModelLoader implements IGeometryLoader<CosmicGeometry> {
 
         public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
             BakedModel baseBakedModel = this.baseModel.bake(baker, this.baseModel, spriteGetter, modelState, modelLocation, true);
-            List<ResourceLocation> textures = new ArrayList();
-            this.maskTextures.forEach((mask) -> {
-                textures.add(ResourceLocation.parse(mask));
-            });
+            List<ResourceLocation> textures = new ArrayList<>();
+            this.maskTextures.forEach((mask) -> textures.add(ResourceLocation.parse(mask)));
             return new CosmicBakedModel(baseBakedModel, textures);
         }
 

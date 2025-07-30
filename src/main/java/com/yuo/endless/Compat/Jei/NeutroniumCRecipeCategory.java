@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumRecipe> {
     //合成配方背景
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/gui/compressor.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/compressor.png");
     public static final RecipeType<NeutroniumRecipe> RECIPE_TYPE = RecipeType.create(Endless.MOD_ID, "neutronium", NeutroniumRecipe.class);
 
     private final IDrawable background;

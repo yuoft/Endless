@@ -1,13 +1,13 @@
 package com.yuo.endless.Client;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import committee.nova.mods.avaritia.api.client.shader.CCShaderInstance;
-import committee.nova.mods.avaritia.api.client.shader.CCUniform;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.yuo.endless.Client.Lib.CCShaderInstance;
+import com.yuo.endless.Client.Lib.CCUniform;
+import com.yuo.endless.Endless;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderType.CompositeState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,6 +16,7 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Objects;
 
@@ -23,7 +24,7 @@ import java.util.Objects;
  * 星空渲染 参考Re：Avaritia模组
  * Date:25/6/29
  */
-@OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Endless.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AvaritiaShaders {
 
     public static final float[] COSMIC_UVS = new float[40];
@@ -37,13 +38,21 @@ public class AvaritiaShaders {
     public static CCUniform cosmicExternalScale;
     public static CCUniform cosmicOpacity;
     public static CCUniform cosmicUVs;
-    public static RenderType COSMIC_RENDER_TYPE;
+    public static RenderType COSMIC_RENDER_TYPE = RenderType.create("endless:cosmic",
+            DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false,
+            RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
+                    .setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST)
+                    .setLightmapState(RenderStateShard.LIGHTMAP)
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
+                    .createCompositeState(true)
+    );
 
     public AvaritiaShaders() {
     }
 
     public static void init(RegisterShadersEvent event) {
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath("endless", "cosmic"), DefaultVertexFormat.BLOCK), (e) -> {
+        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "cosmic"), DefaultVertexFormat.BLOCK), (e) -> {
             cosmicShader = (CCShaderInstance)e;
             cosmicTime = Objects.requireNonNull(cosmicShader.getUniform("time"));
             cosmicYaw = Objects.requireNonNull(cosmicShader.getUniform("yaw"));
@@ -52,9 +61,7 @@ public class AvaritiaShaders {
             cosmicOpacity = Objects.requireNonNull(cosmicShader.getUniform("opacity"));
             cosmicUVs = Objects.requireNonNull(cosmicShader.getUniform("cosmicuvs"));
             cosmicTime.set((float)renderTime + renderFrame);
-            cosmicShader.onApply(() -> {
-                cosmicTime.set((float)renderTime + renderFrame);
-            });
+            cosmicShader.onApply(() -> cosmicTime.set((float)renderTime + renderFrame));
         });
     }
 
@@ -84,11 +91,5 @@ public class AvaritiaShaders {
     @SubscribeEvent
     public static void drawScreenPost(ScreenEvent.Render.Post e) {
         inventoryRender = false;
-    }
-
-    static {
-        COSMIC_RENDER_TYPE = RenderType.create("endless:cosmic", DefaultVertexFormat.BLOCK, Mode.QUADS, 2097152, true, false, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> {
-            return cosmicShader;
-        })).setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST).setLightmapState(RenderStateShard.LIGHTMAP).setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY).setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED).createCompositeState(true));
     }
 }

@@ -20,9 +20,3 @@ license = "${mod_license}"
     versionRange = "${minecraft_version_range}"
     ordering = "NONE"
     side = "BOTH"
-[[dependencies.endless]]
-    modId = "avaritia"
-    mandatory = true
-    versionRange = "[1.3.9.0,1.3.9.1)"
-    ordering = "NONE"
-    side = "BOTH"

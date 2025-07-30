@@ -6,11 +6,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.yuo.endless.Client.AvaritiaShaders;
+import com.yuo.endless.Client.Lib.ColorUtils;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
-import committee.nova.mods.avaritia.Static;
-import committee.nova.mods.avaritia.api.client.util.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -54,14 +53,14 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         super(createMesh(new CubeDeformation(1.0F), 0.0F).getRoot().bake(64, 64));
         this.bufferSource = this.mc.renderBuffers().bufferSource();
         this.random = new Random();
-        this.humanoidModel = new HumanoidModel(createMesh(new CubeDeformation(0.0F), 0.0F).getRoot().bake(64, 64));
+        this.humanoidModel = new HumanoidModel<>(createMesh(new CubeDeformation(0.0F), 0.0F).getRoot().bake(64, 64));
     }
 
     public InfinityArmorModel(ModelPart pRoot) {
         super(pRoot);
         this.bufferSource = this.mc.renderBuffers().bufferSource();
         this.random = new Random();
-        this.humanoidModel = new HumanoidModel(createMesh(new CubeDeformation(0.0F), 0.0F).getRoot().bake(64, 64));
+        this.humanoidModel = new HumanoidModel<>(createMesh(new CubeDeformation(0.0F), 0.0F).getRoot().bake(64, 64));
     }
 
     private static RenderType mask2(ResourceLocation tex) {
@@ -194,7 +193,6 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             pPoseStack.scale(f2, f2, f2);
             pPoseStack.translate(0.0, (double)(this.bodyYOffset / 16.0F * f3), 0.0);
             model.renderToBufferWing(pPoseStack, this.mc.renderBuffers().bufferSource().getBuffer(RenderType.armorCutoutNoCull(this.wingTex)), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
-            Static.LOGGER.info(material(WING));
             model.renderToBufferWing(pPoseStack, material(WING).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
             model.renderToBufferWing(pPoseStack, this.mc.renderBuffers().bufferSource().getBuffer(this.glow(this.wingGlowTex)), pPackedLight, pPackedOverlay, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5));
             pPoseStack.popPose();
@@ -271,7 +269,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         }
 
         public Iterable<ModelPart> playerParts() {
-            return ImmutableList.of(((PlayerModel)this.getParentModel()).head, ((PlayerModel)this.getParentModel()).hat, ((PlayerModel)this.getParentModel()).body, ((PlayerModel)this.getParentModel()).leftArm, ((PlayerModel)this.getParentModel()).rightArm, ((PlayerModel)this.getParentModel()).leftLeg, ((PlayerModel)this.getParentModel()).rightLeg);
+            return ImmutableList.of(this.getParentModel().head, this.getParentModel().hat, this.getParentModel().body, this.getParentModel().leftArm, (this.getParentModel()).rightArm, (this.getParentModel()).leftLeg, (this.getParentModel()).rightLeg);
         }
 
         public void render(@NotNull PoseStack pPoseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, @NotNull Player l, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

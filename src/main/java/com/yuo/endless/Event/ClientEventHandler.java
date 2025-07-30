@@ -1,6 +1,5 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.Blocks.CompressorChest;
 import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Model.CosmicModelLoader;
@@ -11,11 +10,7 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
-import committee.nova.mods.avaritia.client.model.HaloModelLoader;
-import committee.nova.mods.avaritia.client.render.tile.CompressedChestRenderer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +21,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegistryObject;
-import vazkii.botania.client.render.ColorHandler;
 
 /**
  * 客户端事件
@@ -79,7 +73,7 @@ public class ClientEventHandler {
             priority = EventPriority.HIGHEST
     )
     public static void onRegisterShaders(RegisterShadersEvent event) {
-        AvaritiaShaders.init(event);
+        AvaritiaShaders.init(event);//注册着色器
     }
     @SubscribeEvent
     public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {

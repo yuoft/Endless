@@ -6,10 +6,10 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.blaze3d.vertex.VertexFormatElement.Type;
 import com.mojang.blaze3d.vertex.VertexFormatElement.Usage;
+import com.yuo.endless.Client.Lib.CachedFormat;
+import com.yuo.endless.Client.Lib.IVertexConsumer;
+import com.yuo.endless.Client.Lib.Quad;
 import com.yuo.endless.Client.Model.HaloItemModelLoader.HaloItemModelGeometry;
-import committee.nova.mods.avaritia.api.client.model.CachedFormat;
-import committee.nova.mods.avaritia.api.client.model.IVertexConsumer;
-import committee.nova.mods.avaritia.api.client.model.Quad;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -21,7 +21,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.RenderTypeGroup;
@@ -65,7 +64,7 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
             JsonObject clean = modelContents.getAsJsonObject();
             clean.remove("halo");
             clean.remove("loader");
-            BlockModel baseModel = (BlockModel)deserializationContext.deserialize(clean, BlockModel.class);
+            BlockModel baseModel = deserializationContext.deserialize(clean, BlockModel.class);
             return new HaloItemModelLoader.HaloItemModelGeometry(baseModel, layerColors, texture, color, size, pulse);
         }
     }
@@ -99,10 +98,10 @@ public class HaloItemModelLoader implements IGeometryLoader<HaloItemModelGeometr
 
                 for(int var5 = 0; var5 < var4; ++var5) {
                     Direction face = var3[var5];
-                    faceQuads.put(face, transformQuads(model.getQuads((BlockState)null, face, RandomSource.create()), layerColors));
+                    faceQuads.put(face, transformQuads(model.getQuads(null, face, RandomSource.create()), layerColors));
                 }
 
-                List<BakedQuad> unculled = transformQuads(model.getQuads((BlockState)null, (Direction)null, RandomSource.create()), layerColors);
+                List<BakedQuad> unculled = transformQuads(model.getQuads(null, null, RandomSource.create()), layerColors);
                 return new SimpleBakedModel(unculled, faceQuads, model.useAmbientOcclusion(), model.usesBlockLight(), model.isGui3d(), model.getParticleIcon(), model.getTransforms(), ItemOverrides.EMPTY, RenderTypeGroup.EMPTY);
             }
         }

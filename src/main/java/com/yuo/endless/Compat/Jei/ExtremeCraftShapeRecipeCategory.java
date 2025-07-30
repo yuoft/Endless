@@ -4,13 +4,10 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
-import committee.nova.mods.avaritia.api.utils.lang.Localizable;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -108,7 +105,7 @@ public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeC
     public @NotNull List<Component> getTooltipStrings(ExtremeCraftShapeRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         int sX = 340 / 2;
         int sY = 100;
-        return mouseX > (double)(sX + 10) && mouseX < (double)(sX + 20) && mouseY > (double)(sY - 1) && mouseY < (double)(sY + 8) ? Collections.singletonList(Localizable.of("jei.tooltip.shapeless.recipe").build()) : Collections.emptyList();
+        return mouseX > (double)(sX + 10) && mouseX < (double)(sX + 20) && mouseY > (double)(sY - 1) && mouseY < (double)(sY + 8) ? Collections.singletonList(Component.translatable("jei.tooltip.shapeless.recipe")) : Collections.emptyList();
     }
 
 }

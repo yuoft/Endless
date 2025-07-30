@@ -8,8 +8,6 @@ import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.TotemPacket;
-import committee.nova.mods.avaritia.common.entity.ImmortalItemEntity;
-import committee.nova.mods.avaritia.common.item.tools.infinity.InfinitySwordItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -19,7 +17,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -58,7 +55,6 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -73,12 +69,12 @@ public class EventHandler {
     public static List<String> playersWithFeet = new ArrayList<>();
 
 //    @SubscribeEvent 物品到期销毁
-    public static void expCancel(ItemExpireEvent event) {
-        if (event.getEntity() instanceof ImmortalItemEntity) {
-            event.setCanceled(true);
-        }
-
-    }
+//    public static void expCancel(ItemExpireEvent event) {
+//        if (event.getEntity() instanceof ImmortalItemEntity) {
+//            event.setCanceled(true);
+//        }
+//
+//    }
 
     //无尽鞋子 无摔落伤害
     @SubscribeEvent
