@@ -38,6 +38,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.ApiStatus.Internal;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
@@ -85,6 +86,11 @@ public class InfinityMobEntity extends Zombie {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D)
                 .add(Attributes.ARMOR, 2.0d);
+    }
+
+    @Internal
+    public final boolean isSpawnCancelled() {  //禁止自然生成
+        return !(Config.SERVER.mobSpawn.get() && new Random().nextFloat() < Config.SERVER.mobWeigh.get() * 0.1f);
     }
 
     @Override

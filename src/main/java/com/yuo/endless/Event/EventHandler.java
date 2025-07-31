@@ -2,6 +2,7 @@ package com.yuo.endless.Event;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.Entity.InfinityMobEntity;
 import com.yuo.endless.Items.Armor.InfinityArmor;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;

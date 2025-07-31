@@ -147,12 +147,10 @@ public class Endless {
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
-//        ModStructures.STRUCTURES.register(modEventBus);
         proxy.registerHandlers();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-//        ModRecipeManager.addExtremeCrafts();
         ModRecipeManager.addExtremeCraftShape();
         ModRecipeManager.addCompressorCraft();
         ModRecipeManager.lastMinuteChanges();
@@ -187,10 +185,6 @@ public class Endless {
             }
         };
         DispenserBlock.registerBehavior(EndlessItems.infinityFluidBucket.get(), itemBehavior);
-//        event.enqueueWork(() -> {
-//            if (Config.SERVER.mobSpawn.get() && new Random().nextFloat() < Config.SERVER.mobWeigh.get() * 0.1f) //默认不生成
-//                SpawnPlacements.register(EntityRegistry.INFINITY_MOB.get(), Type.ON_GROUND, Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
-//        });
     }
 
     private void checkMods(){

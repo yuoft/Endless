@@ -1,9 +1,11 @@
 package com.yuo.endless.Event;
 
+import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityMobEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,5 +23,4 @@ public class EndlessMobEvent {
     public static void onRegisterEntitiesAttr(EntityAttributeCreationEvent event) {
         event.put(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntity.createAttributes().build());
     }
-
 }
