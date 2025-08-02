@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
 //    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
@@ -113,6 +114,8 @@ dependencies {
 //    runtimeOnly fg.deobf("curse.maven:draconic-evolution-223565:${de_id}")
     runtimeOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
     runtimeOnly fg.deobf("curse.maven:crafttweaker-239197:${crt_id}")
+
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 
 tasks.named('processResources', ProcessResources).configure {
@@ -146,6 +149,12 @@ tasks.named('jar', Jar).configure {
 
     // This is the preferred method to reobfuscate your jar file
     finalizedBy 'reobfJar'
+}
+
+mixin {
+    //指定refmap.json文件生成位置
+    add sourceSets.main, "endless.refmap.json"
+    config "endless.mixins.json"
 }
 
 publishing {
