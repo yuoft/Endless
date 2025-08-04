@@ -209,9 +209,14 @@ public class EventHandler {
     @SubscribeEvent
     public static void opTool(PlayerEvent.ItemCraftedEvent event){
         ItemStack stack = event.getCrafting();
-        if (stack.getItem().equals(EndlessItems.infinitySword.get())){
+        if (stack.getItem() == EndlessItems.infinitySword.get()){
             Map<Enchantment, Integer> map = new HashMap<>();
             map.put(Enchantments.MOB_LOOTING, 10);
+            EnchantmentHelper.setEnchantments( map, stack);
+        }
+        if (stack.getItem() == EndlessItems.infinityPickaxe.get()){
+            Map<Enchantment, Integer> map = new HashMap<>();
+            map.put(Enchantments.BLOCK_FORTUNE, 10);
             EnchantmentHelper.setEnchantments( map, stack);
         }
         if (isInfinityItem(stack.getItem())){

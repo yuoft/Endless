@@ -81,21 +81,6 @@ public class InfinityAxe extends AxeItem {
         }
     }
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        stack.getOrCreateTag().putBoolean("Unbreakable",true);
-        return super.onEntityItemUpdate(stack, entity);
-    }
-//
-//    @Override
-//    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> stacks) {
-//        if (this.allowdedIn(tab)){
-//            ItemStack stack = new ItemStack(this);
-//            stack.getOrCreateTag().putBoolean("Unbreakable",true);
-//            stacks.add(stack);
-//        }
-//    }
-
     //创建一个能被快速捡起的物品实体
     @org.jetbrains.annotations.Nullable
     @Override

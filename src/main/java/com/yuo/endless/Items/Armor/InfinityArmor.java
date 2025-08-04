@@ -149,20 +149,6 @@ public class InfinityArmor extends ArmorItem {
         stack.getOrCreateTag().putInt("Damage", 0);
     }
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        stack.getOrCreateTag().putBoolean("Unbreakable",true);
-        return super.onEntityItemUpdate(stack, entity);
-    }
-//    @Override
-//    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> stacks) {
-//        if (this.allowdedIn(tab)){
-//            ItemStack stack = new ItemStack(this);
-//            stack.getOrCreateTag().putBoolean("Unbreakable",true);
-//            stacks.add(stack);
-//        }
-//    }
-
     @org.jetbrains.annotations.Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
