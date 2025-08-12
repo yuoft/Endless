@@ -67,8 +67,8 @@ public class InfinityBucket extends Item {
         String fluidKey = tag.getString(FLUID_NAME);
         Fluid fluid = getFluidForKey(fluidKey);
         if (fluid != Fluids.EMPTY){
-            Component registryName = fluid.getFluidType().getDescription();
-            components.add(Component.translatable("endless.text.itemInfo.bucket_fluid").append(Objects.requireNonNullElseGet(registryName, () -> Component.translatable("minecraft:null"))));
+            String registryName = fluid.getFluidType().toString();
+            components.add(Component.translatable("endless.text.itemInfo.bucket_fluid").append(Component.translatable(registryName.isEmpty() ? Component.translatable("minecraft:null").toString() : registryName)));
             int fluidNum = tag.getInt(FLUID_NUMBER);
             if (fluidNum > 0){
                 components.add(Component.translatable("endless.text.itemInfo.bucket_num", fluidNum));
@@ -144,8 +144,8 @@ public class InfinityBucket extends Item {
                         LazyOptional<IFluidHandler> teCapability = tile.getCapability(ForgeCapabilities.FLUID_HANDLER, direction);
                         if (teCapability.isPresent()) {
                             fluidCap(teCapability, bucket, worldIn, blockpos, playerIn, true, handIn);
-                        }else return fillFluid(bucket, playerIn, worldIn, blockpos, fluid);
-                    }else return fillFluid(bucket, playerIn, worldIn, blockpos, fluid);
+                        }else return fillFluid(bucket, playerIn, worldIn, blockpos, fluid, direction);
+                    }else return fillFluid(bucket, playerIn, worldIn, blockpos, fluid, direction);
                 }else { //潜行 放出
                     BlockState blockstate = worldIn.getBlockState(blockpos);
                     BlockEntity tile = worldIn.getBlockEntity(blockpos);
@@ -168,11 +168,11 @@ public class InfinityBucket extends Item {
      * @param bucket 桶
      * @param fluid  当前流体
      */
-    private InteractionResultHolder<ItemStack> fillFluid(ItemStack bucket, Player playerIn, Level worldIn, BlockPos blockpos, Fluid fluid){
+    private InteractionResultHolder<ItemStack> fillFluid(ItemStack bucket, Player playerIn, Level worldIn, BlockPos blockpos, Fluid fluid, Direction direction){
         BlockState state = worldIn.getBlockState(blockpos);
-        if (state.getBlock() instanceof BucketPickup && state.liquid()) {
-            Fluid fluid0 = worldIn.getFluidState(blockpos).getType();
-//            Fluid fluid0 = ((BucketPickup)state.getBlock()).pickupBlock(worldIn, blockpos, state);
+        boolean directionLiquid = isDirectionLiquid(worldIn, blockpos, fluid, direction);
+        if ((state.getBlock() instanceof BucketPickup && state.liquid()) || directionLiquid) {
+            Fluid fluid0 = worldIn.getFluidState(directionLiquid ? blockpos.relative(direction) : blockpos).getType();
             if (fluid0 != Fluids.EMPTY && (fluid == Fluids.EMPTY || fluid == fluid0)) { //要装流体不为空 桶内为空或流体相同
                 CompoundTag tag = bucket.getOrCreateTag();
                 //范围装取流体
@@ -193,11 +193,13 @@ public class InfinityBucket extends Item {
                 if (soundevent == null) soundevent = fluid0.is(FluidTags.LAVA) ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL;
                 playerIn.playSound(soundevent, 1.0F, 1.0F);
                 //添加流体数据
-                String registryName = fluid0.getFluidType().getDescription().getString();
+                String registryName = fluid0.getFluidType().toString();
                 if (!registryName.isEmpty()){
                     tag.putString(FLUID_NAME, registryName);
                 }else tag.putString(FLUID_NAME, "minecraft:null");
-                tag.putInt(FLUID_NUMBER, fluidNum + 1);
+                if (fluid == fluid0){
+                    tag.putInt(FLUID_NUMBER, fluidNum + tag.getInt(FLUID_NUMBER));
+                }else tag.putInt(FLUID_NUMBER, fluidNum);
                 //填充桶？
                 if (!worldIn.isClientSide) {
                     CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) playerIn, bucket);
@@ -209,6 +211,19 @@ public class InfinityBucket extends Item {
     }
 
     /**
+     * 已有流体，装取时获取流体。解决无法点击到流体问题。
+     */
+    private boolean isDirectionLiquid(Level worldIn, BlockPos blockpos, Fluid fluid, Direction direction) {
+        BlockPos relative = blockpos.relative(direction);
+        BlockState state = worldIn.getBlockState(relative);
+        if (state.getBlock() instanceof BucketPickup && state.liquid()) {
+            Fluid fluid1 = worldIn.getFluidState(relative).getType();
+            return fluid1 != Fluids.EMPTY && (fluid == Fluids.EMPTY || fluid == fluid1);
+        }
+        return false;
+    }
+
+    /**
      * 获取流体能力接口 存放流体 音效和文字提示
      * @param teCap 容器能力接口
      * @param flag 存 true 放 false
@@ -216,7 +231,7 @@ public class InfinityBucket extends Item {
     private void fluidCap(LazyOptional<IFluidHandler> teCap, ItemStack bucket, Level worldIn, BlockPos blockpos, Player playerIn, boolean flag, InteractionHand handIn){
         IFluidHandler teHandler = teCap.orElse(EmptyFluidHandler.INSTANCE);
         EndlessFluidBucketWrapper wrapper = new EndlessFluidBucketWrapper(bucket);
-        Component registryName = getFluid(bucket).getFluidType().getDescription();
+        String registryName = getFluid(bucket).getFluidType().toString();
         wrapper.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent((e) ->{
             FluidStack fluidStack;
             if (flag){
@@ -225,8 +240,8 @@ public class InfinityBucket extends Item {
             if (!fluidStack.isEmpty()) {
                 worldIn.playSound(null, blockpos, Objects.requireNonNull(fluidStack.getFluid().getPickupSound().orElse(null)), SoundSource.BLOCKS, 1.0F, 1.0F);
                 String name = fluidStack.getTag().getString("FluidName");
-                if (!name.isEmpty() && registryName != null){
-                    String tex = flag ? I18n.get("endless.infinity_bucket.place") + I18n.get(registryName.toString())
+                if (!name.isEmpty() && registryName != null && !registryName.isEmpty()){
+                    String tex = flag ? I18n.get("endless.infinity_bucket.place") + I18n.get(registryName)
                             : I18n.get("endless.infinity_bucket.assume") + I18n.get(name);
                     playerIn.displayClientMessage(Component.translatable(tex + "  " + fluidStack.getAmount() + "mb"), true);
                 }
@@ -271,7 +286,7 @@ public class InfinityBucket extends Item {
                 if (!drainedFluid.isEmpty()) {
                     int actualFill = output.fill(drainedFluid.copy(), FluidAction.EXECUTE);
                     if (actualFill != drainedFluid.getAmount()) {
-                        System.out.println("Lost {"+ input.getFluidInTank(0).getFluid().getFluidType().getDescription() + "} fluid during transfer" + (drainedFluid.getAmount() - actualFill));
+                        System.out.println("Lost {"+ input.getFluidInTank(0).getFluid().getFluidType() + "} fluid during transfer" + (drainedFluid.getAmount() - actualFill));
                     }
                 }
                 return drainedFluid;
