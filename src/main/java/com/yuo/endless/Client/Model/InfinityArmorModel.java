@@ -95,9 +95,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
     }
 
     private RenderType mask(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> {
-            return AvaritiaShaders.cosmicShader;
-        })).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING).createCompositeState(true));
+        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING).createCompositeState(true));
     }
 
     private LayerDefinition rebuildWings() {
@@ -147,7 +145,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
 
         pPoseStack.pushPose();
         pPoseStack.scale(f, f, f);
-        pPoseStack.translate(0.0, (double)(this.babyYHeadOffset / 16.0F * f3), 0.0);
+        pPoseStack.translate(0.0, this.babyYHeadOffset / 16.0F * f3, 0.0);
         this.head.render(pPoseStack, material(MASK).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
         if (modelRender && !player) {
             this.hatsOver().forEach((t) -> {
@@ -158,25 +156,19 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         pPoseStack.popPose();
         pPoseStack.pushPose();
         pPoseStack.scale(f2, f2, f2);
-        pPoseStack.translate(0.0, (double)(this.bodyYOffset / 16.0F * f3), 0.0);
-        this.bodyParts().forEach((t) -> {
-            t.render(pPoseStack, material(MASK).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
-        });
+        pPoseStack.translate(0.0, this.bodyYOffset / 16.0F * f3, 0.0);
+        this.bodyParts().forEach((t) -> t.render(pPoseStack, material(MASK).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha));
         if (modelRender && !player) {
-            this.bodyPartsOver().forEach((t) -> {
-                t.render(pPoseStack, material(MASK_INV).buffer(this.bufferSource, InfinityArmorModel::mask2), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
-            });
+            this.bodyPartsOver().forEach((t) -> t.render(pPoseStack, material(MASK_INV).buffer(this.bufferSource, InfinityArmorModel::mask2), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha));
         }
 
-        this.bodyParts().forEach((t) -> {
-            t.render(pPoseStack, this.vertex(this.glow(this.eyeTex)), pPackedLight, pPackedOverlay, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5));
-        });
+        this.bodyParts().forEach((t) -> t.render(pPoseStack, this.vertex(this.glow(this.eyeTex)), pPackedLight, pPackedOverlay, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5)));
         pPoseStack.popPose();
         pPoseStack.pushPose();
         this.random.setSeed(time / 3L * 1723609L);
         float[] col = ColorUtils.HSVtoRGB(this.random.nextFloat() * 6.0F, 1.0F, 1.0F);
         pPoseStack.scale(f, f, f);
-        pPoseStack.translate(0.0, (double)(this.babyYHeadOffset / 16.0F * f3), -0.029999999329447746);
+        pPoseStack.translate(0.0, this.babyYHeadOffset / 16.0F * f3, -0.029999999329447746);
         this.hat.render(pPoseStack, material(MASK).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
         if (modelRender) {
             this.hat.render(pPoseStack, this.vertex(RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(RenderType.POSITION_COLOR_TEX_SHADER).setTextureState(new RenderStateShard.TextureStateShard(this.eyeTex, false, false)).setCullState(RenderType.NO_CULL).createCompositeState(true))), pPackedLight, pPackedOverlay, col[0], col[1], col[2], 1.0F);
@@ -271,9 +263,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         public void render(@NotNull PoseStack pPoseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, @NotNull Player l, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
             if (EventHandler.isInfinite(l)) {
                 AvaritiaShaders.cosmicOpacity.set(2.0F);
-                this.playerParts().forEach((t) -> {
-                    t.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, InfinityArmorModel::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F);
-                });
+                this.playerParts().forEach((t) -> t.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, InfinityArmorModel::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));
             }
 
         }

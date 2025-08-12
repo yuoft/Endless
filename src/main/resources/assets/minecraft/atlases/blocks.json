@@ -7,8 +7,8 @@
     },
     {
       "type": "minecraft:directory",
-      "prefix": "shaders/",
-      "source": "shaders"
+      "prefix": "models/",
+      "source": "models"
     },
     {
       "type": "minecraft:directory",
