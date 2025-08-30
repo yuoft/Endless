@@ -1,8 +1,10 @@
 package com.yuo.endless.Items;
 
 import com.yuo.endless.Entity.EntityRegistry;
+import com.yuo.endless.Entity.InfinityMobEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
@@ -11,9 +13,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BaseSpawner;
@@ -35,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class InfinityMobSpawnEgg extends Item {
+    public static final String EGG_NBT = "InfinityMobSpawnEgg";
 
     public InfinityMobSpawnEgg() {
         super(new Properties());
@@ -52,6 +57,9 @@ public class InfinityMobSpawnEgg extends Item {
             return InteractionResult.SUCCESS;
         } else {
             ItemStack itemstack = pContext.getItemInHand();
+            CompoundTag tag = itemstack.getOrCreateTag();
+            tag.putBoolean(EGG_NBT, true);
+            itemstack.setTag(tag);
             BlockPos blockpos = pContext.getClickedPos();
             Direction direction = pContext.getClickedFace();
             BlockState blockstate = level.getBlockState(blockpos);

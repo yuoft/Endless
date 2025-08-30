@@ -4,10 +4,14 @@ import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityMobEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Endless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EndlessMobEvent {

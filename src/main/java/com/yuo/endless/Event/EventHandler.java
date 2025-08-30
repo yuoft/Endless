@@ -2,6 +2,7 @@ package com.yuo.endless.Event;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityMobEntity;
 import com.yuo.endless.Items.Armor.InfinityArmor;
 import com.yuo.endless.Items.EndlessItems;
@@ -12,6 +13,7 @@ import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,15 +23,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,12 +39,14 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.MobSpawnEvent.SpawnPlacementCheck;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -58,6 +61,8 @@ import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.*;
 import java.util.List;
+
+import static com.yuo.endless.Items.InfinityMobSpawnEgg.EGG_NBT;
 
 /**
  * 事件处理类
@@ -76,6 +81,22 @@ public class EventHandler {
 //        }
 //
 //    }
+
+    @SubscribeEvent
+    public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
+        Mob entity = event.getEntity();
+        if (entity instanceof EnderMan enderMan) {
+            ServerLevelAccessor level = event.getLevel();
+            boolean b = Config.SERVER.mobSpawn.get() && level.getRandom().nextFloat() < Config.SERVER.mobWeigh.get() * 0.1f;
+            if (b){
+                InfinityMobEntity mob = new InfinityMobEntity(EntityRegistry.INFINITY_MOB.get(), level.getLevel());
+                BlockPos pos = enderMan.getOnPos();
+                mob.setPos(pos.getX() + level.getRandom().nextDouble() + 0.25d, pos.getY(), pos.getZ() + level.getRandom().nextDouble() + 0.25d);
+                level.addFreshEntity(mob);
+            }
+
+        }
+    }
 
     //无尽鞋子 无摔落伤害
     @SubscribeEvent
