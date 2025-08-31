@@ -1,6 +1,7 @@
 package com.yuo.endless.Entity;
 
 import com.yuo.endless.Config;
+import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.InfinityDamageSource;
 import net.minecraft.nbt.CompoundTag;
@@ -8,6 +9,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent.BossBarColor;
 import net.minecraft.world.BossEvent.BossBarOverlay;
@@ -18,6 +20,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.EquipmentSlot.Type;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -26,25 +30,35 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.Zombie.ZombieGroupData;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus.OverrideOnly;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class InfinityMobEntity extends Zombie {
 
@@ -72,11 +86,14 @@ public class InfinityMobEntity extends Zombie {
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(Monster.class)); //被攻击后呼叫所有怪物帮助
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EnderDragon.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, WitherBoss.class, true));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Animal.class, false)); //与所有生物敌对
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, false)); //与所有生物敌对
     }
 
     //属性
+    @NotNull
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 16.0D)
@@ -86,11 +103,6 @@ public class InfinityMobEntity extends Zombie {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D)
                 .add(Attributes.ARMOR, 2.0d);
-    }
-
-    @Internal
-    public final boolean isSpawnCancelled() {  //禁止自然生成
-        return !(Config.SERVER.mobSpawn.get() && new Random().nextFloat() < Config.SERVER.mobWeigh.get() * 0.1f);
     }
 
     @Override
@@ -155,8 +167,55 @@ public class InfinityMobEntity extends Zombie {
     }
 
     @Override
-    public boolean doHurtTarget(Entity pEntity) {
-        return super.doHurtTarget(pEntity);
+    public boolean doHurtTarget(@NotNull Entity target) {
+        float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float f1 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+        if (target instanceof LivingEntity) {
+            f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)target).getMobType());
+            f1 += (float)EnchantmentHelper.getKnockbackBonus(this);
+        }
+
+        int i = EnchantmentHelper.getFireAspect(this);
+        if (i > 0) {
+            target.setSecondsOnFire(i * 4);
+        }
+
+        //限制对全套无尽玩家 伤害
+        if (target instanceof LivingEntity living) {
+            boolean infinite = EventHandler.isInfinite(living);
+            if (infinite) f = f * 0.1f;
+        }
+
+        boolean flag = target.hurt(new InfinityDamageSource(this), f);
+        if (flag) {
+            if (f1 > 0.0F && target instanceof LivingEntity) {
+                ((LivingEntity)target).knockback((double)(f1 * 0.5F), (double) Mth.sin(this.getYRot() * 0.017453292F), (double)(-Mth.cos(this.getYRot() * 0.017453292F)));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6, 1.0, 0.6));
+            }
+
+            if (target instanceof Player player) {
+                this.maybeDisableShield(player, this.getMainHandItem(), player.isUsingItem() ? player.getUseItem() : ItemStack.EMPTY);
+            }
+
+            this.doEnchantDamageEffects(this, target);
+            this.setLastHurtMob(target);
+        }
+
+        if (flag) {
+            float f0 = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+            if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f0 * 0.3F) {
+                target.setSecondsOnFire(2 * (int)f);
+            }
+        }
+        return flag;
+    }
+
+    private void maybeDisableShield(Player player, ItemStack stack, ItemStack itemStack) {
+        if (!stack.isEmpty() && !itemStack.isEmpty() && stack.getItem() instanceof AxeItem && itemStack.is(Items.SHIELD)) {
+            player.getCooldowns().addCooldown(Items.SHIELD, 100);  //攻击破盾
+            this.level().broadcastEntityEvent(player, (byte)30);
+        }
+
     }
 
     //是否可以装备物品

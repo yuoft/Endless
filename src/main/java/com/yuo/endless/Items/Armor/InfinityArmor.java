@@ -62,7 +62,7 @@ public class InfinityArmor extends ArmorItem {
     @Override
     public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
         Item item = stack.getItem();
-        if (item == EndlessItems.infinityHead.get()) {
+        if (item == EndlessItems.infinityHead.get() && !player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
             if (player.isEyeInFluid(FluidTags.WATER)) { //玩家视线在水中
                 player.setAirSupply(300);
             }
@@ -70,7 +70,7 @@ public class InfinityArmor extends ArmorItem {
             if (stack.getOrCreateTag().getBoolean("flag"))
                 player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0)); //夜视
         }
-        if (item == EndlessItems.infinityChest.get()) {
+        if (item == EndlessItems.infinityChest.get() && !player.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
             //清除所有负面效果
             Collection<MobEffectInstance> effects = player.getActiveEffects();
             if (!effects.isEmpty()) {
@@ -85,7 +85,7 @@ public class InfinityArmor extends ArmorItem {
                 }
             }
         }
-        if (item == EndlessItems.infinityLegs.get()) {
+        if (item == EndlessItems.infinityLegs.get() && !player.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
             if (player.isOnFire()) player.clearFire();//着火时熄灭
             player.fireImmune(); //免疫火伤
         }
