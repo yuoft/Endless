@@ -57,9 +57,6 @@ public class InfinityMobSpawnEgg extends Item {
             return InteractionResult.SUCCESS;
         } else {
             ItemStack itemstack = pContext.getItemInHand();
-            CompoundTag tag = itemstack.getOrCreateTag();
-            tag.putBoolean(EGG_NBT, true);
-            itemstack.setTag(tag);
             BlockPos blockpos = pContext.getClickedPos();
             Direction direction = pContext.getClickedFace();
             BlockState blockstate = level.getBlockState(blockpos);
