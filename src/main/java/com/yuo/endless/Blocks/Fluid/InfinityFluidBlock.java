@@ -2,7 +2,7 @@ package com.yuo.endless.Blocks.Fluid;
 
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.Items.Tool.InfinityDamageSource;
+import com.yuo.endless.Items.Tool.InfinityDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -14,7 +14,6 @@ import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -52,12 +51,12 @@ public class InfinityFluidBlock extends LiquidBlock {
                     Boolean hasHead = player.getItemBySlot(EquipmentSlot.HEAD).getItem() == EndlessItems.infinityHead.get();
                     Boolean hasFeet = player.getItemBySlot(EquipmentSlot.FEET).getItem() == EndlessItems.infinityFeet.get();
                     if (hasChest || hasFeet || hasHead || hasLeg) { //有无尽装备时，debuff减半
-                        living.hurt(new InfinityDamageSource(player), 1.0f);
+                        living.hurt(InfinityDamageTypes.infinity(player), 1.0f);
                         fluid_level = Math.max(0, (int) Math.ceil(fluid_level / 2d));
-                    } else if (EventHandler.isInfinite(player)) { //全套无尽buff无影响
+                    } else if (EventHandler.isInfinite(player)) { //全套无尽buff无影响player
                         return;
-                    }else living.hurt(new InfinityDamageSource(living), 2.0f);
-                } else living.hurt(new InfinityDamageSource(living), 2.0f);
+                    }else living.hurt(InfinityDamageTypes.infinity(living), 2.0f);
+                } else living.hurt(InfinityDamageTypes.infinity(living), 2.0f);
                 living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 0, fluid_level - 1));
                 living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 0, fluid_level - 1));
             } else {

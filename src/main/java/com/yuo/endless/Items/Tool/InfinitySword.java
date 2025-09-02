@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -165,7 +164,7 @@ public class InfinitySword extends SwordItem {
                     (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).isMarker()) &&
                     player.distanceTo(livingentity) < 9.0D) {
                 livingentity.knockback(0.4F, Math.sin(player.yRotO * ((float)Math.PI / 180F)), -Math.cos(player.yRotO * ((float)Math.PI / 180F)));
-                livingentity.hurt(new InfinityDamageSource(player), Float.MAX_VALUE);
+                livingentity.hurt(InfinityDamageTypes.infinity(player), Float.MAX_VALUE);
             }
         }
         //横扫音效
@@ -187,10 +186,10 @@ public class InfinitySword extends SwordItem {
             target.setSecondsOnFire(fireAspect * 4);
         }
         if (target instanceof EnderDragon dragon && attacker instanceof Player){ //攻击末影龙
-            dragon.hurt(dragon.head, new InfinityDamageSource(attacker), Float.MAX_VALUE);
+            dragon.hurt(dragon.head, InfinityDamageTypes.infinity(attacker), Float.MAX_VALUE);
         }else if (target instanceof WitherBoss wither){
             wither.setInvulnerableTicks(0);
-            wither.hurt(new InfinityDamageSource(attacker), Float.MAX_VALUE);
+            wither.hurt(InfinityDamageTypes.infinity(attacker), Float.MAX_VALUE);
         } else if (target instanceof ArmorStand){
             target.hurt(attacker.damageSources().generic(), 10);
             return true;
@@ -198,10 +197,10 @@ public class InfinitySword extends SwordItem {
             if (target instanceof Player player){
                 if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
                     if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
-                        target.hurt(new InfinityDamageSource(attacker), Config.SERVER.infinityBearDamage.get());
-                    else target.hurt(new InfinityDamageSource(attacker), Config.SERVER.infinityArmorBearDamage.get());
-                } else target.hurt(new InfinityDamageSource(attacker),  Float.MAX_VALUE);
-            } else target.hurt(new InfinityDamageSource(attacker), Float.MAX_VALUE);
+                        target.hurt(InfinityDamageTypes.infinity(attacker), Config.SERVER.infinityBearDamage.get());
+                    else target.hurt(InfinityDamageTypes.infinity(attacker), Config.SERVER.infinityArmorBearDamage.get());
+                } else target.hurt(InfinityDamageTypes.infinity(attacker),  Float.MAX_VALUE);
+            } else target.hurt(InfinityDamageTypes.infinity(attacker), Float.MAX_VALUE);
         }
         if (target instanceof Player player){
             if (EventHandler.isInfinite(player)){ //玩家穿戴全套无尽 则不执行死亡
@@ -214,7 +213,7 @@ public class InfinitySword extends SwordItem {
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
             if (!target.level().isClientSide)
-                target.die(new InfinityDamageSource(attacker));
+                target.die(InfinityDamageTypes.infinity(attacker));
             if (Config.SERVER.swordKill.get()){
                 target.kill();
                 target.deathTime = 20;
@@ -256,7 +255,7 @@ public class InfinitySword extends SwordItem {
         if (player.level().isClientSide) return;
         AABB aabb = player.getBoundingBox().deflate(range);//范围
         List<Entity> toAttack = player.level().getEntities(player, aabb);//生物列表
-        DamageSource src = new InfinityDamageSource(player);//伤害类型
+        DamageSource src = InfinityDamageTypes.infinity(player);//伤害类型
         for (Entity entity : toAttack) { //循环遍历
             if (entity instanceof LivingEntity){
                 if(type) { //潜行攻击所有生物
@@ -293,15 +292,15 @@ public class InfinitySword extends SwordItem {
     public static void damageGuardian(Entity entity, Player player){
         if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
             if (entity instanceof DraconicGuardianEntity draconicGuardian){
-                draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], new InfinityDamageSource(player), Float.MAX_VALUE);
+                draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], InfinityDamageTypes.infinity(player), Float.MAX_VALUE);
                 draconicGuardian.setHealth(-1);
-                draconicGuardian.die(new InfinityDamageSource(player));
+                draconicGuardian.die(InfinityDamageTypes.infinity(player));
             }else if (entity instanceof GuardianCrystalEntity crystal){
                 crystal.kill();
             }else if (entity instanceof DraconicGuardianPartEntity draconicGuardian) {
                 DraconicGuardianEntity dragon = draconicGuardian.dragon;
                     dragon.hurt(player.damageSources().thorns(player), Float.MAX_VALUE);
-                    dragon.attackEntityPartFrom(dragon.dragonPartHead, new InfinityDamageSource(player), Float.MAX_VALUE);
+                    dragon.attackEntityPartFrom(dragon.dragonPartHead, InfinityDamageTypes.infinity(player), Float.MAX_VALUE);
                     GuardianCrystalEntity crystal = dragon.closestGuardianCrystal;
                     if (crystal != null) {
                         crystal.kill();
@@ -309,7 +308,7 @@ public class InfinitySword extends SwordItem {
                     if (dragon.isAlive() || dragon.getHealth() > 0) {
                         dragon.setHealth(-1);
                         if (!player.level().isClientSide) {
-                            dragon.die(new InfinityDamageSource(player));
+                            dragon.die(InfinityDamageTypes.infinity(player));
                         }
                     }
                     dragon.kill();

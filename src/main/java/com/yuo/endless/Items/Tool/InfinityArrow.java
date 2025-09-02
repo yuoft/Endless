@@ -101,12 +101,12 @@ public class InfinityArrow extends Item {
         }
         if (target instanceof WitherBoss wither){
             wither.setInvulnerableTicks(0);
-            wither.hurt(new InfinityDamageSource(attacker), 49);
+            wither.hurt(InfinityDamageTypes.infinity(attacker), 49);
         }else if (target instanceof EnderDragon dragon){
-            dragon.hurt(dragon.head, new InfinityDamageSource(attacker), 49);
+            dragon.hurt(dragon.head, InfinityDamageTypes.infinity(attacker), 49);
         }else if (target instanceof ArmorStand){
             target.hurt(attacker.damageSources().generic(), 10);
-        }else target.hurt(new InfinityDamageSource(attacker), 49);
+        }else target.hurt(InfinityDamageTypes.infinity(attacker), 49);
         return super.hurtEnemy(stack, target, attacker);
     }
 

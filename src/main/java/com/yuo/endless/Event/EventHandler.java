@@ -120,7 +120,7 @@ public class EventHandler {
         Boolean hasFeet = living.getItemBySlot(EquipmentSlot.FEET).getItem() == EndlessItems.infinityFeet.get();
         float amount = event.getAmount();
         if (living instanceof Player player){ //怪物无法触发全部伤害减免
-            if (!InfinityDamageSource.isInfinity(event.getSource())){ //非无尽伤害才进行减免
+            if (!InfinityDamageTypes.isInfinity(event.getSource())){ //非无尽伤害才进行减免
                 if (isInfinite(player)){
                     event.setAmount(0.0f);
                     event.setCanceled(true);
@@ -278,7 +278,7 @@ public class EventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onDeath(LivingDeathEvent event) { //不能被无尽伤害外的攻击杀死
         if (event.getEntity() instanceof Player player) {
-            if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
+            if (isInfinite(player) && !InfinityDamageTypes.isInfinity(event.getSource())) {
                 player.setHealth(player.getMaxHealth());
                 event.setCanceled(true);
             }
@@ -337,7 +337,7 @@ public class EventHandler {
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
+        if (isInfinite(player) && !InfinityDamageTypes.isInfinity(event.getSource())) {
             event.setCanceled(true);
         }
     }
@@ -362,7 +362,7 @@ public class EventHandler {
         if (event.getSource().getDirectEntity() instanceof Player) {
             return; //造成伤害的实体是玩家
         }
-        if (isInfinite(player) && !InfinityDamageSource.isInfinity(event.getSource())) {
+        if (isInfinite(player) && !InfinityDamageTypes.isInfinity(event.getSource())) {
             event.setCanceled(true);
         }
         String key = player.getGameProfile().getName() + ":" + player.level().isClientSide;

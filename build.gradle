@@ -116,6 +116,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:codechicken-lib-1-8-242818:${ccl_id}")
     runtimeOnly fg.deobf("curse.maven:brandons-core-231382:${bc_id}")
     runtimeOnly fg.deobf("curse.maven:draconic-evolution-223565:${de_id}")
+    runtimeOnly fg.deobf("curse.maven:selene-499980:4806893")
+    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:${mmmm_id}")
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }

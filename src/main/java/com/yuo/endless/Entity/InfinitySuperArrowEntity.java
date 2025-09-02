@@ -1,6 +1,6 @@
 package com.yuo.endless.Entity;
 
-import com.yuo.endless.Items.Tool.InfinityDamageSource;
+import com.yuo.endless.Items.Tool.InfinityDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -269,7 +269,7 @@ public class InfinitySuperArrowEntity extends AbstractArrow {
                 BlockPos position = living.blockPosition();
                 double dis = Math.sqrt(pos.distToCenterSqr(position.getX(), position.getY(), position.getZ()));
                 if (dis <= range) {
-                    living.hurt(new InfinityDamageSource((LivingEntity) this.getOwner()), Float.MAX_VALUE);
+                    living.hurt(InfinityDamageTypes.infinity((LivingEntity) this.getOwner()), Float.MAX_VALUE);
                     living.setHealth(-1);
                     living.kill();
                 }

@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Event.EventHandler;
-import com.yuo.endless.Items.Tool.InfinityDamageSource;
+import com.yuo.endless.Items.Tool.InfinityDamageTypes;
 import com.yuo.endless.Items.Tool.InfinitySword;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -165,7 +165,7 @@ public class InfinityArrowEntity extends AbstractArrow {
                 }
             }
         } else {
-            entity.hurt(new InfinityDamageSource(this.shooter), (float)i);
+            entity.hurt(InfinityDamageTypes.infinity(this.shooter), (float)i);
         }
         this.playSound(this.soundEvent, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
         if (this.getPierceLevel() <= 0) {
@@ -178,23 +178,23 @@ public class InfinityArrowEntity extends AbstractArrow {
         if (living.level().isClientSide) return;
         if (living instanceof WitherBoss wither){
             wither.setInvulnerableTicks(0);
-            wither.hurt(new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
+            wither.hurt(InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
         } else if (living instanceof EnderDragon dragon && this.shooter instanceof Player){
-            dragon.hurt(dragon.head, new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
+            dragon.hurt(dragon.head, InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
         } else if (living instanceof ArmorStand){
             living.hurt(this.damageSources().generic(), 10);
         } else if (Endless.isDE && living instanceof DraconicGuardianEntity draconicGuardian){
-            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
+            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
             draconicGuardian.setHealth(-1);
-            draconicGuardian.die(new InfinityDamageSource(this.shooter));
+            draconicGuardian.die(InfinityDamageTypes.infinity(this.shooter));
         } else {
             if (living instanceof Player player){
                 if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
                     if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
-                        living.hurt(new InfinityDamageSource(this.shooter), Config.SERVER.infinityBearDamage.get());
-                    else living.hurt(new InfinityDamageSource(this.shooter), Config.SERVER.infinityArmorBearDamage.get());
-                } else living.hurt(new InfinityDamageSource(this.shooter),  Float.MAX_VALUE);
-            } else living.hurt(new InfinityDamageSource(this.shooter), Float.MAX_VALUE);
+                        living.hurt(InfinityDamageTypes.infinity(this.shooter), Config.SERVER.infinityBearDamage.get());
+                    else living.hurt(InfinityDamageTypes.infinity(this.shooter), Config.SERVER.infinityArmorBearDamage.get());
+                } else living.hurt(InfinityDamageTypes.infinity(this.shooter),  Float.MAX_VALUE);
+            } else living.hurt(InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
             if (living instanceof Player player){
                 if (EventHandler.isInfinite(player)){
                     this.discard();

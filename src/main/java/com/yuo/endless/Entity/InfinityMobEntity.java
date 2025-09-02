@@ -3,7 +3,7 @@ package com.yuo.endless.Entity;
 import com.yuo.endless.Config;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.Items.Tool.InfinityDamageSource;
+import com.yuo.endless.Items.Tool.InfinityDamageTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -131,7 +131,7 @@ public class InfinityMobEntity extends Zombie {
     public boolean hurt(DamageSource source, float amount) {
         Entity entity = source.getDirectEntity();
         //攻击者为玩家且是无尽伤害
-        if (InfinityDamageSource.isInfinity(source) && entity instanceof Player) {
+        if (InfinityDamageTypes.isInfinity(source) && entity instanceof Player) {
             amount *= 0.1f;
         } else { //伤害最高10点
             amount *= 0.01f;
@@ -186,7 +186,7 @@ public class InfinityMobEntity extends Zombie {
             if (infinite) f = f * 0.1f;
         }
 
-        boolean flag = target.hurt(new InfinityDamageSource(this), f);
+        boolean flag = target.hurt(InfinityDamageTypes.infinity(this), f);
         if (flag) {
             if (f1 > 0.0F && target instanceof LivingEntity) {
                 ((LivingEntity)target).knockback((double)(f1 * 0.5F), (double) Mth.sin(this.getYRot() * 0.017453292F), (double)(-Mth.cos(this.getYRot() * 0.017453292F)));
