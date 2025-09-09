@@ -212,8 +212,10 @@ public class InfinitySword extends SwordItem {
 
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
-            if (!target.level().isClientSide)
-                target.die(InfinityDamageTypes.infinity(attacker));
+            if (!target.level().isClientSide){
+                if (!Endless.isDummmmmmy)
+                    target.die(InfinityDamageTypes.infinity(attacker));
+            }
             if (Config.SERVER.swordKill.get()){
                 target.kill();
                 target.deathTime = 20;
