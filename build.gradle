@@ -105,7 +105,7 @@ dependencies {
 //    implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:5753868")
 
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
-//    runtimeOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
+    runtimeOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_ver}")
 //    runtimeOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
 //    runtimeOnly fg.deobf("curse.maven:blood-magic-224791:${bloodmagic_id}")

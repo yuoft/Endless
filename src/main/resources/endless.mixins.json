@@ -8,8 +8,8 @@
     "GiveCommandMixin"
   ],
   "client": [
-    "ItemRendererMixin",
-    "GuiGraphicsMixin"
+    "GuiGraphicsMixin",
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
