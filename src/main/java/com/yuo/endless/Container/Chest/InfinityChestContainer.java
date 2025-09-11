@@ -4,16 +4,21 @@ import com.yuo.endless.Tiles.AbsEndlessChestTile;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ForgeHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Optional;
 
 public class InfinityChestContainer extends AbstractContainerMenu {
     protected AbsEndlessChestTile chestTile;
@@ -63,7 +68,7 @@ public class InfinityChestContainer extends AbstractContainerMenu {
                     break;
                 }
 
-                slot1 = (Slot)this.slots.get(i);
+                slot1 = this.slots.get(i);
                 itemstack = slot1.getItem(); //当前格物品
                 if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(stackIn, itemstack)) { //相同
                     int j = itemstack.getCount() + stackIn.getCount(); //总数量
@@ -105,7 +110,7 @@ public class InfinityChestContainer extends AbstractContainerMenu {
                     break;
                 }
 
-                slot1 = (Slot)this.slots.get(i);
+                slot1 = this.slots.get(i);
                 itemstack = slot1.getItem();
                 if (itemstack.isEmpty() && slot1.mayPlace(stackIn)) {
                     if (stackIn.getCount() > slot1.getMaxStackSize()) {
@@ -137,7 +142,7 @@ public class InfinityChestContainer extends AbstractContainerMenu {
         } catch (Exception var8) {
             CrashReport crashreport = CrashReport.forThrowable(var8, "Container click");
             CrashReportCategory crashreportcategory = crashreport.addCategory("Click info");
-            crashreportcategory.setDetail("Menu Type", () -> BuiltInRegistries.MENU.getKey(this.getType()).toString());
+            crashreportcategory.setDetail("Menu Type", () -> Objects.requireNonNull(BuiltInRegistries.MENU.getKey(this.getType())).toString());
             crashreportcategory.setDetail("Menu Class", () -> this.getClass().getCanonicalName());
             crashreportcategory.setDetail("Slot Count", this.slots.size());
             crashreportcategory.setDetail("Slot", slot);
@@ -151,20 +156,20 @@ public class InfinityChestContainer extends AbstractContainerMenu {
      * 玩家点击一个格子
      * @param slot 点击的容器格子
      * @param button 鼠标按键0左键1右键
-     * @param type 点击类型
+     * @param clickType 点击类型
      * @param player 玩家
      */
-    private void doClick(int slot, int button, ClickType type, Player player) {
-        ItemStack itemstack = ItemStack.EMPTY;
-        Inventory playerinventory = player.getInventory();
+    private void doClick(int slot, int button, ClickType clickType, Player player) {
+        Inventory inventory = player.getInventory();
+        Slot slot7;
         ItemStack itemstack9; //玩家操作的物品
-        ItemStack itemstack11;
-        int k3;
+        ItemStack itemstack2;
+        int i1;
         int k1;
-        if (type == ClickType.QUICK_CRAFT) { //快速合成  移动均分
-            int i1 = this.quickcraftStatus;
+        if (clickType == ClickType.QUICK_CRAFT) { //快速合成  移动均分
+            int i = this.quickcraftStatus;
             this.quickcraftStatus = getQuickcraftHeader(button);
-            if ((i1 != 1 || this.quickcraftStatus != 2) && i1 != this.quickcraftStatus) {
+            if ((i != 1 || this.quickcraftStatus != 2) && i != this.quickcraftStatus) {
                 this.resetQuickCraft();
             } else if (this.getCarried().isEmpty()) {
                 this.resetQuickCraft();
@@ -177,49 +182,56 @@ public class InfinityChestContainer extends AbstractContainerMenu {
                     this.resetQuickCraft();
                 }
             } else if (this.quickcraftStatus == 1) {
-                Slot slot7 = this.slots.get(slot);
-                itemstack11 = this.getCarried();
-                if (canItemQuickReplace(slot7, itemstack11, true) && slot7.mayPlace(itemstack11) && (this.quickcraftType == 2 || itemstack11.getCount() > this.quickcraftSlots.size()) && this.canDragTo(slot7)) {
+                slot7 = this.slots.get(slot);
+                itemstack9 = this.getCarried();
+                if (canItemQuickReplace(slot7, itemstack9, true) && slot7.mayPlace(itemstack9) && (this.quickcraftType == 2 || itemstack9.getCount() > this.quickcraftSlots.size()) && this.canDragTo(slot7)) {
                     this.quickcraftSlots.add(slot7);
                 }
             } else if (this.quickcraftStatus == 2) {
                 if (!this.quickcraftSlots.isEmpty()) {
-                    itemstack9 = this.getCarried().copy();
-                    k1 = this.getCarried().getCount();
-                    Iterator<Slot> var23 = this.quickcraftSlots.iterator();
+                    if (this.quickcraftSlots.size() == 1) {
+                        i1 = this.quickcraftSlots.iterator().next().index;
+                        this.resetQuickCraft();
+                        this.doClick(i1, this.quickcraftType, ClickType.PICKUP, player);
+                        return;
+                    }
 
-                    label334:
+                    itemstack2 = this.getCarried().copy();
+                    if (itemstack2.isEmpty()) {
+                        this.resetQuickCraft();
+                        return;
+                    }
+
+                    k1 = this.getCarried().getCount();
+                    Iterator<Slot> var9 = this.quickcraftSlots.iterator();
+
+                    label303:
                     while(true) {
-                        Slot slot8;
-                        ItemStack itemstack13;
+                        Slot slot1;
+                        ItemStack itemstack1;
                         do {
                             do {
                                 do {
                                     do {
-                                        if (!var23.hasNext()) {
-                                            itemstack9.setCount(k1);
-                                            this.setCarried(itemstack9);
-                                            break label334;
+                                        if (!var9.hasNext()) {
+                                            itemstack2.setCount(k1);
+                                            this.setCarried(itemstack2);
+                                            break label303;
                                         }
 
-                                        slot8 = (Slot)var23.next();
-                                        itemstack13 = this.getCarried();
-                                    } while(slot8 == null);
-                                } while(!canItemQuickReplace(slot8, itemstack13, true));
-                            } while(!slot8.mayPlace(itemstack13));
-                        } while(this.quickcraftType != 2 && itemstack13.getCount() < this.quickcraftSlots.size());
+                                        slot1 = var9.next();
+                                        itemstack1 = this.getCarried();
+                                    } while(slot1 == null);
+                                } while(!canItemQuickReplace(slot1, itemstack1, true));
+                            } while(!slot1.mayPlace(itemstack1));
+                        } while(this.quickcraftType != 2 && itemstack1.getCount() < this.quickcraftSlots.size());
 
-                        if (this.canDragTo(slot8)) {
-                            ItemStack itemstack14 = itemstack9.copy();
-                            int j3 = slot8.hasItem() ? slot8.getItem().getCount() : 0;
-                            int j4 = getQuickCraftPlaceCount(this.quickcraftSlots, this.quickcraftType, itemstack14) + j3;
-                            k3 = Math.min(itemstack14.getMaxStackSize(), slot8.getMaxStackSize(itemstack14));
-                            if (itemstack14.getCount() > k3) {
-                                itemstack14.setCount(k3);
-                            }
-
-                            k1 -= itemstack14.getCount() - j4;
-                            slot8.set(itemstack14);
+                        if (this.canDragTo(slot1)) {
+                            int j = slot1.hasItem() ? slot1.getItem().getCount() : 0;
+                            int k = Math.min(itemstack2.getMaxStackSize(), slot1.getMaxStackSize(itemstack2));
+                            int l = Math.min(getQuickCraftPlaceCount(this.quickcraftSlots, this.quickcraftType, itemstack2) + j, k);
+                            k1 -= l - j;
+                            slot1.setByPlayer(itemstack2.copyWithCount(l));
                         }
                     }
                 }
@@ -231,173 +243,177 @@ public class InfinityChestContainer extends AbstractContainerMenu {
         } else if (this.quickcraftStatus != 0) {
             this.resetQuickCraft();
         } else {
-            Slot slot6;
             int l2;
-            if (type != ClickType.PICKUP && type != ClickType.QUICK_MOVE || button != 0 && button != 1) {
-                if (type == ClickType.SWAP) { //交换物品
-                    slot6 = this.slots.get(slot);
-                    itemstack9 = playerinventory.getItem(button);
-                    itemstack11 = slot6.getItem();
-                    if (!itemstack9.isEmpty() || !itemstack11.isEmpty()) {
-                        if (itemstack9.isEmpty()) {
-                            if (slot6.mayPickup(player)) {
-                                playerinventory.setItem(button, itemstack11);
-                                slot6.onSwapCraft(itemstack11.getCount());
-                                slot6.set(ItemStack.EMPTY);
-                                slot6.onTake(player, itemstack11);
+            if ((clickType == ClickType.PICKUP || clickType == ClickType.QUICK_MOVE) && (button == 0 || button == 1)) {
+                ClickAction clickaction = button == 0 ? ClickAction.PRIMARY : ClickAction.SECONDARY;
+                if (slot == -999) {
+                    if (!this.getCarried().isEmpty()) {
+                        if (clickaction == ClickAction.PRIMARY) {
+                            player.drop(this.getCarried(), true);
+                            this.setCarried(ItemStack.EMPTY);
+                        } else {
+                            player.drop(this.getCarried().split(1), true);
+                        }
+                    }
+                } else if (clickType == ClickType.QUICK_MOVE) {
+                    if (slot < 0) {
+                        return;
+                    }
+
+                    slot7 = (Slot)this.slots.get(slot);
+                    if (!slot7.mayPickup(player)) {
+                        return;
+                    }
+
+                    for(itemstack9 = this.quickMoveStack(player, slot); !itemstack9.isEmpty() && ItemStack.isSameItem(slot7.getItem(), itemstack9); itemstack9 = this.quickMoveStack(player, slot)) {
+                    }
+                } else { //从容器拿放
+                    if (slot < 0) {
+                        return; //放入物品容器
+                    }
+
+                    slot7 = this.slots.get(slot);
+                    itemstack9 = slot7.getItem(); //物品格
+                    ItemStack itemstack10 = this.getCarried(); //鼠标物品
+                    player.updateTutorialInventoryAction(itemstack10, slot7.getItem(), clickaction);
+                    if (!this.tryItemClickBehaviourOverride(player, clickaction, slot7, itemstack9, itemstack10) && !ForgeHooks.onItemStackedOn(itemstack9, itemstack10, slot7, clickaction, player, this.createCarriedSlotAccess())) {
+                        if (itemstack9.isEmpty()) { //物品格为空
+                            if (!itemstack10.isEmpty()) {
+                                l2 = clickaction == ClickAction.PRIMARY ? itemstack10.getCount() : 1; //左键 还是右键  左键放完 右键放一个
+                                if (l2 > slot7.getMaxStackSize(itemstack10))
+                                    l2 = slot7.getMaxStackSize(itemstack10); //超过堆叠数
+
+                                this.setCarried(slot7.safeInsert(itemstack10, l2)); //只放64 有剩余
                             }
-                        } else if (itemstack11.isEmpty()) {
-                            if (slot6.mayPlace(itemstack9)) {
-                                l2 = slot6.getMaxStackSize(itemstack9);
-                                if (itemstack9.getCount() > l2) {
-                                    slot6.set(itemstack9.split(l2));
-                                } else {
-                                    slot6.set(itemstack9);
-                                    playerinventory.setItem(button, ItemStack.EMPTY);
+                        } else if (slot7.mayPickup(player)) { //容器物品格不为空 拿取
+                            if (itemstack10.isEmpty()) { //空物品
+                                l2 = clickaction == ClickAction.PRIMARY ? itemstack9.getMaxStackSize() : (itemstack9.getCount() + 1) / 2; //右键取一半物品
+                                Optional<ItemStack> optional1 = slot7.tryRemove(l2, Integer.MAX_VALUE, player);
+                                optional1.ifPresent((stack) -> {
+                                    this.setCarried(stack);
+                                    slot7.onTake(player, stack);
+                                });
+                            } else if (slot7.mayPlace(itemstack10)) { //能否放进此物品
+                                if (ItemStack.isSameItemSameTags(itemstack9, itemstack10)) {
+                                    l2 = clickaction == ClickAction.PRIMARY ? itemstack10.getCount() : 1;
+                                    if (l2 > slot7.getMaxStackSize(itemstack10) - itemstack9.getCount())  //物品相同 超过则放部分
+                                        l2 = slot7.getMaxStackSize(itemstack10) - itemstack9.getCount();
+
+                                    this.setCarried(slot7.safeInsert(itemstack10, l2));
+                                } else if (itemstack10.getCount() <= slot7.getMaxStackSize(itemstack10)) { //否则全放
+                                    this.setCarried(itemstack9);
+                                    slot7.setByPlayer(itemstack10);
                                 }
-                            }
-                        } else if (slot6.mayPickup(player) && slot6.mayPlace(itemstack9)) {
-                            l2 = slot6.getMaxStackSize(itemstack9);
-                            if (itemstack9.getCount() > l2) {
-                                slot6.set(itemstack9.split(l2));
-                                slot6.onTake(player, itemstack11);
-                                if (!playerinventory.add(itemstack11)) {
-                                    player.drop(itemstack11, true);
-                                }
-                            } else {
-                                slot6.set(itemstack9);
-                                playerinventory.setItem(button, itemstack11);
-                                slot6.onTake(player, itemstack11);
+                            } else if (ItemStack.isSameItemSameTags(itemstack9, itemstack10)) { //不能放入但是容器有物品 则合并到玩家鼠标物品
+                                int count = itemstack9.getCount(); //容器物品数量
+                                Optional<ItemStack> optional = slot7.tryRemove(count, itemstack10.getMaxStackSize() - itemstack10.getCount(), player);
+                                optional.ifPresent((stack) -> {
+                                    itemstack10.grow(stack.getCount());
+                                    slot7.onTake(player, stack);
+                                });
                             }
                         }
                     }
-                } else if (type == ClickType.CLONE && player.getAbilities().instabuild && this.getCarried().isEmpty() && slot >= 0) {
-                    slot6 = this.slots.get(slot); //创造模式复制物品
-                    if (slot6.hasItem()) {
-                        itemstack9 = slot6.getItem().copy();
-                        itemstack9.setCount(itemstack9.getMaxStackSize());
-                        this.setCarried(itemstack9);
-                    }
-                } else if (type == ClickType.THROW && this.getCarried().isEmpty() && slot >= 0) {
-                    slot6 = (Slot)this.slots.get(slot); //丢出物品
-                    k3 = button == 0 ? 1 : slot6.getItem().getCount();
-                    itemstack9 = slot6.safeTake(k3, Integer.MAX_VALUE, player);
-                    player.drop(itemstack9, true);
-                } else if (type == ClickType.PICKUP_ALL && slot >= 0) {
-                    slot6 = (Slot)this.slots.get(slot); //合并所有相同物品
-                    itemstack9 = this.getCarried(); //玩家物品
-                    if (!itemstack9.isEmpty() && (!slot6.hasItem() || !slot6.mayPickup(player))) {
-                        k1 = button == 0 ? 0 : this.slots.size() - 1;
-                        l2 = button == 0 ? 1 : -1;
 
-                        for(int j = 0; j < 2; ++j) {
-                            for(int k = k1; k >= 0 && k < this.slots.size() && itemstack9.getCount() < itemstack9.getMaxStackSize(); k += l2) {
-                                Slot slot1 = (Slot)this.slots.get(k);
-                                if (slot1.hasItem() && canItemQuickReplace(slot1, itemstack9, true) && slot1.mayPickup(player) && this.canTakeItemForPickAll(itemstack9, slot1)) {
-                                    ItemStack itemstack3 = slot1.getItem();
-                                    if (j != 0 || itemstack3.getCount() != itemstack3.getMaxStackSize()) {
-                                        ItemStack itemStack = slot1.safeTake(itemstack3.getCount(), itemstack9.getMaxStackSize() - itemstack9.getCount(), player);
-                                        itemstack9.grow(itemStack.getCount());
+                    slot7.setChanged();
+                }
+            } else {
+                Slot slot2;
+                int k2;
+                if (clickType == ClickType.SWAP) { //交换物品
+                    slot2 = this.slots.get(slot);
+                    itemstack2 = inventory.getItem(button);
+                    itemstack9 = slot2.getItem();
+                    if (!itemstack2.isEmpty() || !itemstack9.isEmpty()) {
+                        if (itemstack2.isEmpty()) {
+                            if (slot2.mayPickup(player)) {
+                                inventory.setItem(button, itemstack9);
+                                slot2.onSwapCraft(itemstack9.getCount());
+                                slot2.setByPlayer(ItemStack.EMPTY);
+                                slot2.onTake(player, itemstack9);
+                            }
+                        } else if (itemstack9.isEmpty()) {
+                            if (slot2.mayPlace(itemstack2)) {
+                                k2 = slot2.getMaxStackSize(itemstack2);
+                                if (itemstack2.getCount() > k2) {
+                                    slot2.setByPlayer(itemstack2.split(k2));
+                                } else {
+                                    inventory.setItem(button, ItemStack.EMPTY);
+                                    slot2.setByPlayer(itemstack2);
+                                }
+                            }
+                        } else if (slot2.mayPickup(player) && slot2.mayPlace(itemstack2)) {
+                            k2 = slot2.getMaxStackSize(itemstack2);
+                            if (itemstack2.getCount() > k2) {
+                                slot2.setByPlayer(itemstack2.split(k2));
+                                slot2.onTake(player, itemstack9);
+                                if (!inventory.add(itemstack9)) {
+                                    player.drop(itemstack9, true);
+                                }
+                            } else {
+                                inventory.setItem(button, itemstack9);
+                                slot2.setByPlayer(itemstack2);
+                                slot2.onTake(player, itemstack9);
+                            }
+                        }
+                    }
+                } else if (clickType == ClickType.CLONE && player.getAbilities().instabuild && this.getCarried().isEmpty() && slot >= 0) {
+                    slot2 = this.slots.get(slot);//创造模式复制物品
+                    if (slot2.hasItem()) {
+                        itemstack2 = slot2.getItem();
+                        this.setCarried(itemstack2.copyWithCount(itemstack2.getMaxStackSize()));
+                    }
+                } else if (clickType == ClickType.THROW && this.getCarried().isEmpty() && slot >= 0) {
+                    slot2 = this.slots.get(slot); //丢出物品
+                    i1 = button == 0 ? 1 : slot2.getItem().getCount();
+                    itemstack9 = slot2.safeTake(i1, Integer.MAX_VALUE, player);
+                    player.drop(itemstack9, true);
+                } else if (clickType == ClickType.PICKUP_ALL && slot >= 0) {
+                    slot2 = this.slots.get(slot);  //合并所有相同物品
+                    itemstack2 = this.getCarried(); //玩家物品
+                    if (!itemstack2.isEmpty() && (!slot2.hasItem() || !slot2.mayPickup(player))) {
+                        k1 = button == 0 ? 0 : this.slots.size() - 1;
+                        k2 = button == 0 ? 1 : -1;
+
+                        for(l2 = 0; l2 < 2; ++l2) {
+                            for(int l3 = k1; l3 >= 0 && l3 < this.slots.size() && itemstack2.getCount() < itemstack2.getMaxStackSize(); l3 += k2) {
+                                Slot slot8 = this.slots.get(l3);
+                                if (slot8.hasItem() && canItemQuickReplace(slot8, itemstack2, true) && slot8.mayPickup(player) && this.canTakeItemForPickAll(itemstack2, slot8)) {
+                                    ItemStack itemstack11 = slot8.getItem();
+                                    if (l2 != 0 || itemstack11.getCount() != itemstack11.getMaxStackSize()) {
+                                        ItemStack itemstack12 = slot8.safeTake(itemstack11.getCount(), itemstack2.getMaxStackSize() - itemstack2.getCount(), player);
+                                        itemstack2.grow(itemstack12.getCount());
                                     }
                                 }
                             }
                         }
                     }
-
-                    this.broadcastChanges();
                 }
-            } else if (slot == -999)//错误格
-            {
-                if (!this.getCarried().isEmpty()) {
-                    if (button == 0) {
-                        player.drop(this.getCarried(), true);
-                        this.setCarried(ItemStack.EMPTY);
-                    } else  {
-                        player.drop(this.getCarried().split(1), true);
-                    }
-                }
-            } else if (type == ClickType.QUICK_MOVE) //快速移动物品
-            {
-                if (slot < 0) {
-                    return;
-                }
-
-                slot6 = this.slots.get(slot);
-                if (!slot6.mayPickup(player)) {
-                    return;
-                }
-
-                for(itemstack9 = this.quickMoveStack(player, slot); !itemstack9.isEmpty() && ItemStack.isSameItem(slot6.getItem(), itemstack9); itemstack9 = this.quickMoveStack(player, slot)) {
-                    itemstack = itemstack9.copy();
-                }
-            } else  //从容器拿放
-            {
-                if (slot < 0) {
-                    return;  //放入物品容器
-                }
-
-                slot6 = this.slots.get(slot);
-                itemstack9 = slot6.getItem(); //物品格
-                itemstack11 = this.getCarried();
-                if (!itemstack9.isEmpty()) {
-                    itemstack = itemstack9.copy();
-                }
-
-                if (itemstack9.isEmpty()) { //物品格为空
-                    if (!itemstack11.isEmpty() && slot6.mayPlace(itemstack11)) {
-                        l2 = button == 0 ? itemstack11.getMaxStackSize() : 1; //左键 还是右键  左键放完 右键放一个
-                        if (l2 > slot6.getMaxStackSize(itemstack11)) {
-                            l2 = slot6.getMaxStackSize(itemstack11); //超过堆叠数
-                        }
-
-                        slot6.set(itemstack11.split(l2)); //只放64 有剩余
-                    }
-                } else if (slot6.mayPickup(player)) { //容器物品格不为空 拿取
-                    if (itemstack11.isEmpty()) { //空物品
-                        if (itemstack9.isEmpty()) {
-                            slot6.set(ItemStack.EMPTY);
-                            this.setCarried(ItemStack.EMPTY);
-                        } else {
-                            int i = (int) Math.floor((itemstack9.getCount() + 1) / 2.0); //右键取一半物品
-                            l2 = button == 0 ? itemstack9.getMaxStackSize() : Math.min(i, itemstack9.getMaxStackSize());
-                            this.setCarried(slot6.remove(l2));
-                            if (itemstack9.isEmpty()) {
-                                slot6.set(ItemStack.EMPTY);
-                            }
-
-                            slot6.onTake(player, this.getCarried());
-                        }
-                    } else if (slot6.mayPlace(itemstack11)) { //能否放进此物品
-                        if (ItemStack.isSameItemSameTags(itemstack9, itemstack11)) { //物品相同 超过则放部分
-                            l2 = button == 0 ? itemstack11.getCount() : 1;
-                            if (l2 > slot6.getMaxStackSize(itemstack11) - itemstack9.getCount()) {
-                                l2 = slot6.getMaxStackSize(itemstack11) - itemstack9.getCount();
-                            }
-
-                            itemstack11.shrink(l2);
-                            itemstack9.grow(l2);
-                        } else if (itemstack11.getCount() <= slot6.getMaxStackSize(itemstack11)) { //否则全放
-                            slot6.set(itemstack11);
-                            this.setCarried(itemstack9);
-                        }//不能放入但是容器有物品 则合并到玩家鼠标物品
-                    } else if (itemstack11.getMaxStackSize() > 1 && ItemStack.isSameItemSameTags(itemstack9, itemstack11) && !itemstack9.isEmpty()) {
-                        l2 = itemstack9.getCount(); //容器物品数量
-                        if (l2 + itemstack11.getCount() <= itemstack11.getMaxStackSize()) {
-                            itemstack11.grow(l2);
-                            itemstack9 = slot6.remove(l2);
-                            if (itemstack9.isEmpty()) {
-                                slot6.set(ItemStack.EMPTY); //取完置为空
-                            }
-
-                            slot6.onTake(player, this.getCarried());
-                        }
-                    }
-                }
-
-                slot6.setChanged();
             }
         }
 
+    }
+
+    private boolean tryItemClickBehaviourOverride(Player player, ClickAction clickAction, Slot slot, ItemStack stack, ItemStack itemStack) {
+        FeatureFlagSet featureflagset = player.level().enabledFeatures();
+        if (itemStack.isItemEnabled(featureflagset) && itemStack.overrideStackedOnOther(slot, clickAction, player)) {
+            return true;
+        } else {
+            return stack.isItemEnabled(featureflagset) && stack.overrideOtherStackedOnMe(itemStack, slot, clickAction, player, this.createCarriedSlotAccess());
+        }
+    }
+
+    private SlotAccess createCarriedSlotAccess() {
+        return new SlotAccess() {
+            public @NotNull ItemStack get() {
+                return InfinityChestContainer.this.getCarried();
+            }
+
+            public boolean set(@NotNull ItemStack stack) {
+                InfinityChestContainer.this.setCarried(stack);
+                return true;
+            }
+        };
     }
 
     public Container getContainer() {

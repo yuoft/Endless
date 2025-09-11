@@ -102,11 +102,16 @@ public class InfinityBoxContainer extends InfinityChestContainer {
             itemstack = itemStack1.copy();
 
             if (index < 243) { //取出
-                if (!super.moveItemStackTo(itemStack1, 253, this.slots.size(), true)) {
+                if (!super.moveItemStackTo(itemStack1, 256, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
-                }//放入
-            } else if (index == 252){
-                if (!super.moveItemStackTo(itemStack1, 253, this.slots.size(), true)) {
+                }
+            } else if (index == 252){ //放入
+                if (!super.moveItemStackTo(itemStack1, 256, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+                slot.onQuickCraft(itemStack1, itemstack);
+            }else if (index == 255){ //放入
+                if (!super.moveItemStackTo(itemStack1, 256, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.onQuickCraft(itemStack1, itemstack);
@@ -180,4 +185,10 @@ public class InfinityBoxContainer extends InfinityChestContainer {
         return inventory;
     }
 
+    /**
+     * 获取箱子名称
+     */
+    public String getDisplayName(){
+        return this.chestTile.getDisplayName().getString();
+    }
 }

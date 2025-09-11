@@ -2,11 +2,15 @@ package com.yuo.endless.Container.Chest;
 
 import com.yuo.endless.Blocks.AbsEndlessChest;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
+import java.util.Iterator;
 import java.util.Locale;
 
 public class InfinityBoxSlot extends Slot {
@@ -47,4 +51,5 @@ public class InfinityBoxSlot extends Slot {
     public void onSwapCraft(int i) {
         super.onSwapCraft(i);
     }
+
 }

@@ -2,23 +2,24 @@ package com.yuo.endless.Client.Gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.ColorText;
-import net.minecraft.client.gui.Font;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions.FontContext;
-import org.checkerframework.checker.units.qual.C;
-
-import java.text.DecimalFormat;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
+import org.jetbrains.annotations.NotNull;
 
 public class InfinityBoxScreen extends AbstractContainerScreen<InfinityBoxContainer> {
     private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/infinity_chest.png");
@@ -47,10 +48,18 @@ public class InfinityBoxScreen extends AbstractContainerScreen<InfinityBoxContai
         matrixStack.blit(INFINITY_CHEST_GFUI_TEXTURE, i + 86, j + 211, 0, 290, l, 16, 500, 500);
     }
 
+
     @Override
-    protected void renderLabels(GuiGraphics matrixStack, int x, int y) {
-        matrixStack.drawString(this.font, ColorText.makeFabulous(this.title.getString()), this.titleLabelX, this.titleLabelY, 4210752);
-        matrixStack.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752);
+    protected void renderLabels(GuiGraphics graphics, int i, int i1) {
+        super.renderLabels(graphics, i, i1);
+        graphics.drawString(this.font, ColorText.makeFabulous(this.menu.getDisplayName()), this.titleLabelX, this.titleLabelY, 4210752, false);
+    }
+
+    @Override
+    public Component getTitle() {
+        if (ModList.get().isLoaded("jade"))
+            return Component.literal(ColorText.makeFabulous(this.menu.getDisplayName()));
+        return Component.empty();
     }
 
     @Override
@@ -60,9 +69,70 @@ public class InfinityBoxScreen extends AbstractContainerScreen<InfinityBoxContai
         renderSlotCount(matrixStack);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
-    public void renderSlotCount(GuiGraphics pGuiGraphics) {
-        PoseStack poseStack = pGuiGraphics.pose();
-        for (int i = 0; i < 255; i++) {
+
+    @Override
+    public void renderSlot(@NotNull GuiGraphics graphics, Slot slot) {
+        int i = slot.x;
+        int j = slot.y;
+        ItemStack itemstack = slot.getItem();
+        boolean flag = false;
+        boolean flag1 = slot == this.clickedSlot && !this.draggingItem.isEmpty() && !this.isSplittingStack;
+        ItemStack itemstack1 = this.menu.getCarried();
+        if (slot == this.clickedSlot && !this.draggingItem.isEmpty() && this.isSplittingStack && !itemstack.isEmpty()) {
+            itemstack = itemstack.copyWithCount(itemstack.getCount() / 2);
+        } else if (this.isQuickCrafting && this.quickCraftSlots.contains(slot) && !itemstack1.isEmpty()) {
+            if (this.quickCraftSlots.size() == 1) {
+                return;
+            }
+
+            if (AbstractContainerMenu.canItemQuickReplace(slot, itemstack1, true) && this.menu.canDragTo(slot)) {
+                flag = true;
+                int k = Math.min(itemstack1.getMaxStackSize(), slot.getMaxStackSize(itemstack1));
+                int l = slot.getItem().isEmpty() ? 0 : slot.getItem().getCount();
+                int i1 = AbstractContainerMenu.getQuickCraftPlaceCount(this.quickCraftSlots, this.quickCraftingType, itemstack1) + l;
+                if (i1 > k) {
+                    i1 = k;
+                }
+
+                itemstack = itemstack1.copyWithCount(i1);
+            } else {
+                this.quickCraftSlots.remove(slot);
+                this.recalculateQuickCraftRemaining();
+            }
+        }
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 100.0F);
+        if (itemstack.isEmpty() && slot.isActive()) {
+            Pair<ResourceLocation, ResourceLocation> pair = slot.getNoItemIcon();
+            if (pair != null) {
+                TextureAtlasSprite textureatlassprite;
+                if (this.minecraft != null) {
+                    textureatlassprite = (TextureAtlasSprite)this.minecraft.getTextureAtlas(pair.getFirst()).apply(pair.getSecond());
+                    graphics.blit(i, j, 0, 16, 16, textureatlassprite);
+                }
+                flag1 = true;
+            }
+        }
+
+        if (!flag1) {
+            if (flag) {
+                graphics.fill(i, j, i + 16, j + 16, -2130706433);
+            }
+
+            graphics.renderItem(itemstack, i, j, slot.x + slot.y * this.imageWidth);
+//            graphics.renderItemDecorations(this.font, itemstack, i, j, s);  //移除原版数字渲染
+        }
+
+        graphics.pose().popPose();
+    }
+
+    /**
+     * 容器物品数量小数字渲染 by：无尽：重生
+     */
+    public void renderSlotCount(GuiGraphics graphics) {
+        PoseStack poseStack = graphics.pose();
+        for (int i = 0; i < menu.slots.size(); i++) {
             int count = menu.slots.get(i).getItem().getCount();
             float fontSize = 0.5F;
             if (count != 0L) {
@@ -77,7 +147,7 @@ public class InfinityBoxScreen extends AbstractContainerScreen<InfinityBoxContai
                 poseStack.pushPose();
                 poseStack.translate(leftPos + menu.getSlot(i).x, topPos + menu.getSlot(i).y, 300.0D);
                 poseStack.scale(fontSize, fontSize, 1.0F);
-                pGuiGraphics.drawString(this.font, stringCount,
+                graphics.drawString(this.font, stringCount,
                         (int) ((16 - this.font.width(stringCount) * fontSize) / fontSize),
                         (int) ((16 - this.font.lineHeight * fontSize) / fontSize),
                         16777215);

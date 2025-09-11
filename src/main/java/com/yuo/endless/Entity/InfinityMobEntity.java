@@ -89,7 +89,7 @@ public class InfinityMobEntity extends Zombie {
     @NotNull
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 4.0D)
+                .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 1.6D)
                 .add(Attributes.MAX_HEALTH, 1024.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 32.0D)
