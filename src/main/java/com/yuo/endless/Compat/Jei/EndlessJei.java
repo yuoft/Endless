@@ -27,7 +27,7 @@ import java.util.Objects;
 public class EndlessJei implements IModPlugin {
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return new ResourceLocation(Endless.MOD_ID, "jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "jei_plugin");
     }
 
     //插件告诉JEI定制菜谱类别

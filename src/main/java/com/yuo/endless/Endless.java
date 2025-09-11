@@ -148,7 +148,7 @@ public class Endless {
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
         RecipeTypeRegistry.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
-        proxy.registerHandlers();
+        proxy.registerHandlers(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

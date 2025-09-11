@@ -19,7 +19,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftRecipe> {
     //合成配方背景
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Endless.MOD_ID, "textures/gui/extreme_jei.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/extreme_jei.png");
     public static final RecipeType<ExtremeCraftRecipe> RECIPE_TYPE = RecipeType.create(Endless.MOD_ID, "extreme_craft", ExtremeCraftRecipe.class);
 
     private final IDrawable background;

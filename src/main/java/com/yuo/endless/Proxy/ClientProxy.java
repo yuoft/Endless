@@ -29,8 +29,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class ClientProxy implements IProxy {
 
     @Override
-    public void registerHandlers() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public void registerHandlers(IEventBus modBus) {
 //        ModelLoaderRegistry.registerLoader(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
 //        ModelLoaderRegistry.registerLoader(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
         modBus.addListener(this::clientSetup);
