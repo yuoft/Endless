@@ -14,7 +14,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
@@ -25,7 +24,7 @@ public class InfinityPickaxe extends PickaxeItem {
     private final ToolHelper handler;
 
     public InfinityPickaxe() {
-        super(EndlessItemTiers.INFINITY_TOOL, -3, -2.8f, new Properties().fireResistant());
+        super(EndlessTiers.INFINITY_TOOL, -3, -2.8f, new Properties().fireResistant());
         this.handler = new ToolHelper();
     }
 

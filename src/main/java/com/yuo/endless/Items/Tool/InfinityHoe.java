@@ -2,11 +2,9 @@ package com.yuo.endless.Items.Tool;
 
 import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.Config;
-import com.yuo.endless.EndlessTabs;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -15,9 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -25,7 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +30,7 @@ import java.util.function.Predicate;
 @SuppressWarnings("removal")
 public class InfinityHoe extends HoeItem {
     public InfinityHoe() {
-        super(EndlessItemTiers.INFINITY_TOOL, -10, 17.0f, new Properties().fireResistant());
+        super(EndlessTiers.INFINITY_TOOL, -10, 17.0f, new Properties().fireResistant());
     }
 
     @Override

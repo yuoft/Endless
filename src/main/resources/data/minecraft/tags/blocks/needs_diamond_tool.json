@@ -1,7 +1,9 @@
 {
   "replace": false,
   "values": [
-    "endless:infinity_chest",
-    "endless:extreme_crafting_table"
+    "endless:extreme_crafting_table",
+    "endless:dense_neutronium_collector",
+    "endless:denser_neutronium_collector",
+    "endless:densest_neutronium_collector"
   ]
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class SkullfireSword extends SwordItem {
     public SkullfireSword() {
-        super(EndlessItemTiers.SKULL_FIRE, 0, -2.4f, new Properties().fireResistant());
+        super(EndlessTiers.SKULL_FIRE, 0, -2.4f, new Properties().fireResistant());
     }
 
     @Override

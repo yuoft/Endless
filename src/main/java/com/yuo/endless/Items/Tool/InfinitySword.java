@@ -52,7 +52,7 @@ import java.util.function.Consumer;
 public class InfinitySword extends SwordItem {
 
     public InfinitySword() {
-        super(EndlessItemTiers.INFINITY_SWORD, 0, -2.4f, new Properties().fireResistant());
+        super(EndlessTiers.INFINITY_SWORD, 0, -2.4f, new Properties().fireResistant());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class InfinitySword extends SwordItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable Level level, List<Component> components, TooltipFlag pIsAdvanced) {
-        components.add(Component.keybind(ColorText.makeFabulous(I18n.get("endless.text.itemInfo.infinity")) + I18n.get("attribute.name.generic.attack_damage")));
+//        components.add(Component.keybind(ColorText.makeFabulous(I18n.get("endless.text.itemInfo.infinity")) + I18n.get("attribute.name.generic.attack_damage")));
     }
 
     @Override

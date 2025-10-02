@@ -1,6 +1,7 @@
 package com.yuo.endless.Blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.DiggerItem;
@@ -25,6 +26,10 @@ public class OrdinaryToolBlock extends Block {
 		this.toolAction = toolType;
 	}
 
+	@Override
+	public float getSpeedFactor() {
+		return super.getSpeedFactor();
+	}
 
 	@Override
 	public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {

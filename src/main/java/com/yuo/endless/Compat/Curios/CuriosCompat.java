@@ -9,6 +9,7 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 public class CuriosCompat {
 
     public static void sendImc(InterModEnqueueEvent evt){
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().build());
+        InterModComms.sendTo(CuriosApi.MODID,
+                SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().build());
     }
 }

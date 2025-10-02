@@ -8,7 +8,6 @@ import com.yuo.endless.Items.Armor.EndlessArmorMaterials;
 import com.yuo.endless.Items.Armor.InfinityArmor;
 import com.yuo.endless.Items.Armor.NeutroniumArmor;
 import com.yuo.endless.Items.Tool.*;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.BlockItem;
@@ -63,16 +62,16 @@ public class EndlessItems {
 	public static RegistryObject<Item> infinityFluidBucket = ITEMS.register("infinity_fluid_bucket",
 			() -> new InfinityFluidBucket(EndlessFluids.infinityFluid));
 
-	public static RegistryObject<Item> crystalMatrixSword = ITEMS.register("crystal_matrix_sword", () -> new OrdinarySword(EndlessItemTiers.CRYSTAL));
-	public static RegistryObject<Item> crystalMatrixPickaxe = ITEMS.register("crystal_matrix_pickaxe", () -> new OrdinaryPickaxe(EndlessItemTiers.CRYSTAL));
-	public static RegistryObject<Item> crystalMatrixAxe = ITEMS.register("crystal_matrix_axe", () -> new OrdinaryAxe(EndlessItemTiers.CRYSTAL));
-	public static RegistryObject<Item> crystalMatrixShovel = ITEMS.register("crystal_matrix_shovel", () -> new OrdinaryShovel(EndlessItemTiers.CRYSTAL));
-	public static RegistryObject<Item> crystalMatrixHoe = ITEMS.register("crystal_matrix_hoe", () -> new OrdinaryHoe(EndlessItemTiers.CRYSTAL));
-	public static RegistryObject<Item> neutroniumSword = ITEMS.register("neutronium_sword", () -> new OrdinarySword(EndlessItemTiers.NEUTRON));
-	public static RegistryObject<Item> neutroniumPickaxe = ITEMS.register("neutronium_pickaxe", () -> new OrdinaryPickaxe(EndlessItemTiers.NEUTRON));
-	public static RegistryObject<Item> neutroniumAxe = ITEMS.register("neutronium_axe", () -> new OrdinaryAxe(EndlessItemTiers.NEUTRON));
-	public static RegistryObject<Item> neutroniumShovel = ITEMS.register("neutronium_shovel", () -> new OrdinaryShovel(EndlessItemTiers.NEUTRON));
-	public static RegistryObject<Item> neutroniumHoe = ITEMS.register("neutronium_hoe", () -> new OrdinaryHoe(EndlessItemTiers.NEUTRON));
+	public static RegistryObject<Item> crystalMatrixSword = ITEMS.register("crystal_matrix_sword", () -> new OrdinarySword(EndlessTiers.CRYSTAL));
+	public static RegistryObject<Item> crystalMatrixPickaxe = ITEMS.register("crystal_matrix_pickaxe", () -> new OrdinaryPickaxe(EndlessTiers.CRYSTAL));
+	public static RegistryObject<Item> crystalMatrixAxe = ITEMS.register("crystal_matrix_axe", () -> new OrdinaryAxe(EndlessTiers.CRYSTAL));
+	public static RegistryObject<Item> crystalMatrixShovel = ITEMS.register("crystal_matrix_shovel", () -> new OrdinaryShovel(EndlessTiers.CRYSTAL));
+	public static RegistryObject<Item> crystalMatrixHoe = ITEMS.register("crystal_matrix_hoe", () -> new OrdinaryHoe(EndlessTiers.CRYSTAL));
+	public static RegistryObject<Item> neutroniumSword = ITEMS.register("neutronium_sword", () -> new OrdinarySword(EndlessTiers.NEUTRON));
+	public static RegistryObject<Item> neutroniumPickaxe = ITEMS.register("neutronium_pickaxe", () -> new OrdinaryPickaxe(EndlessTiers.NEUTRON));
+	public static RegistryObject<Item> neutroniumAxe = ITEMS.register("neutronium_axe", () -> new OrdinaryAxe(EndlessTiers.NEUTRON));
+	public static RegistryObject<Item> neutroniumShovel = ITEMS.register("neutronium_shovel", () -> new OrdinaryShovel(EndlessTiers.NEUTRON));
+	public static RegistryObject<Item> neutroniumHoe = ITEMS.register("neutronium_hoe", () -> new OrdinaryHoe(EndlessTiers.NEUTRON));
 
 
 	//盔甲

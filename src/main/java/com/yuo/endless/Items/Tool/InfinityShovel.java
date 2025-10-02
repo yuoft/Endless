@@ -1,10 +1,8 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.EndlessTabs;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -13,9 +11,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.context.UseOnContext;
@@ -31,7 +27,7 @@ public class InfinityShovel extends ShovelItem {
     private final ToolHelper handler;
 
     public InfinityShovel() {
-        super(EndlessItemTiers.INFINITY_TOOL, -2, -2.8f, new Properties().fireResistant());
+        super(EndlessTiers.INFINITY_TOOL, -2, -2.8f, new Properties().fireResistant());
         this.handler = new ToolHelper();
     }
 
