@@ -12,6 +12,7 @@ import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.*;
@@ -43,10 +44,13 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.MobSpawnEvent.SpawnPlacementCheck;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -81,6 +85,23 @@ public class EventHandler {
 //        }
 //
 //    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onTooltip(ItemTooltipEvent event) {
+        int x;
+        Item var2 = event.getItemStack().getItem();
+        if (var2 instanceof InfinitySword) {
+            List<Component> toolTip = event.getToolTip();
+            for(x = 0; x < toolTip.size(); ++x) {
+                if (toolTip.get(x).getString().contains(I18n.get("attribute.name.generic.attack_damage", new Object[0]))) {
+                    toolTip.remove(x);
+                    toolTip.add(x, Component.keybind(ColorText.makeFabulous(I18n.get("endless.text.itemInfo.infinity")) + I18n.get("attribute.name.generic.attack_damage")).withStyle(ChatFormatting.DARK_GREEN));
+                    break;
+                }
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {

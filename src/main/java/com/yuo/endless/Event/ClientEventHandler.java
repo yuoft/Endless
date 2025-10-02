@@ -1,6 +1,5 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Model.CosmicModelLoader;
 import com.yuo.endless.Client.Model.HaloItemModelLoader;
@@ -10,13 +9,20 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
+import com.yuo.endless.Items.Tool.ColorText;
+import com.yuo.endless.Items.Tool.InfinitySword;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,14 +36,6 @@ public class ClientEventHandler {
     public static final ModelLayerLocation COMPRESSOR_CHEST_TEXTURE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/chest/compressor_chest"), "main");
     public static final ModelLayerLocation INFINITY_CHEST_TEXTURE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/chest/infinity_chest"), "main");
     public static final ModelLayerLocation NORMAL_CHEST_LOCATION = new ModelLayerLocation(ResourceLocation.parse("entity/chest/normal"), "main");
-
-    public static ResourceLocation chooseChestTexture(EndlessChestType type) {
-        return switch (type) {
-            case COMPRESSOR -> COMPRESSOR_CHEST_TEXTURE.getModel();
-            case INFINITY -> INFINITY_CHEST_TEXTURE.getModel();
-            default -> NORMAL_CHEST_LOCATION.getModel();
-        };
-    }
 
     //箱子贴图
     @SubscribeEvent
