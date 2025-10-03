@@ -1,7 +1,7 @@
 {
-  "replace": false,
   "values": [
     "endless:infinity_block",
+    "endless:cosmic_block",
     "endless:crystal_matrix_block",
     "endless:neutronium_block",
     "endless:extreme_crafting_table",

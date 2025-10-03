@@ -14,7 +14,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
 /**
- * 通用普通方块制作
+ * 通用挖掘等级 普通方块制作
  */
 public class OrdinaryToolBlock extends Block {
 	private final int harvestLevel;
@@ -24,11 +24,6 @@ public class OrdinaryToolBlock extends Block {
 		super(Properties.of().mapColor(material).strength(hardness, resistancelln).requiresCorrectToolForDrops());
 		this.harvestLevel = harvestLevel;
 		this.toolAction = toolType;
-	}
-
-	@Override
-	public float getSpeedFactor() {
-		return super.getSpeedFactor();
 	}
 
 	@Override

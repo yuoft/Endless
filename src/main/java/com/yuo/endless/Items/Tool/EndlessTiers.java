@@ -24,10 +24,10 @@ public class EndlessTiers {
     public static Tier SKULL_FIRE = TierSortingRegistry.registerTier(new ForgeTier(3, 1561, 10, 10, 10, BlockTags.NEEDS_DIAMOND_TOOL,
             () -> Ingredient.of(EndlessBlocks.crystalMatrixBlock.get())), ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "skull_fire"),
             List.of(Tiers.IRON), List.of(Tiers.NETHERITE));
-    public static Tier CRYSTAL = TierSortingRegistry.registerTier(new ForgeTier(5, 2401, 12, 48, 17, NEEDS_CRYSTAL_TOOL,
+    public static Tier CRYSTAL = TierSortingRegistry.registerTier(new ForgeTier(5, 2401, 120, 48, 17, NEEDS_CRYSTAL_TOOL,
                     () -> Ingredient.of(EndlessItems.crystalMatrixIngot.get())),ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "crystal"),
             List.of(Tiers.NETHERITE), List.of());
-    public static Tier NEUTRON = TierSortingRegistry.registerTier(new ForgeTier(6, 3152, 30, 97, 21, NEEDS_NEUTRON_TOOL,
+    public static Tier NEUTRON = TierSortingRegistry.registerTier(new ForgeTier(6, 3152, 300, 97, 21, NEEDS_NEUTRON_TOOL,
                     () -> Ingredient.of(EndlessItems.neutroniumIngot.get())),ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "neutron"),
             List.of(CRYSTAL), List.of());
 

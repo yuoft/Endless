@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class OrdinaryHoe extends HoeItem {
 
@@ -31,5 +32,11 @@ public class OrdinaryHoe extends HoeItem {
             return builder.build();
         }
         return super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
+        int blockTool = OrdinaryPickaxe.getBlockTool(state);
+        return blockTool == 0 ? 150000 : blockTool == 1 ? 1000000 : super.getDestroySpeed(stack, state);
     }
 }
