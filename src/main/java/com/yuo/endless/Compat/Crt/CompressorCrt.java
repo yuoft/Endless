@@ -7,6 +7,7 @@ import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +29,7 @@ public class CompressorCrt {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
-                ResourceLocation res = ResourceLocation.fromNamespaceAndPath("crafttweaker", id);
+                ResourceLocation res = RlUtils.fa("crafttweaker", id);
                 //转化为列表
                 NonNullList<ItemStack> ingredients = NonNullList.create();
                 for (IItemStack itemStack : inputs) {

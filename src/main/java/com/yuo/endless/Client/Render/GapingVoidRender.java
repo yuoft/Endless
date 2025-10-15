@@ -7,6 +7,7 @@ import com.mojang.math.Axis;
 import com.yuo.endless.Client.Lib.*;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.GapingVoidEntity;
+import com.yuo.endless.RlUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -16,8 +17,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
-    private static final ResourceLocation VOID = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/entity/void.png");
-    private static final ResourceLocation VOID1 = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/entity/void_halo.png");
+    private static final ResourceLocation VOID = RlUtils.fa("textures/entity/void.png");
+    private static final ResourceLocation VOID1 = RlUtils.fa("textures/entity/void_halo.png");
 
     private final CCModel hemisphere;
 
@@ -30,7 +31,7 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
                     .setCullState(RenderType.NO_CULL).createCompositeState(false));
     public GapingVoidRender(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
-        this.hemisphere = new OBJParser(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "models/hemisphere.obj")).parse().get("model");
+        this.hemisphere = new OBJParser(RlUtils.fa("models/hemisphere.obj")).parse().get("model");
     }
 
     @Override

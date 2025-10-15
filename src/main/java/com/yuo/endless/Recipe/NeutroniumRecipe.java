@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.yuo.endless.Items.Singularity;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -158,7 +159,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
     //从json中获取物品
     public static ItemStack deserializeItem(JsonObject object) {
         String s = GsonHelper.getAsString(object, "item");
-        Item item = BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(s)).orElseThrow(
+        Item item = BuiltInRegistries.ITEM.getOptional(RlUtils.parse(s)).orElseThrow(
                 () -> new JsonSyntaxException("Unknown item '" + s + "'"));
         if (object.has("data")) {
             throw new JsonParseException("Disallowed data tag found");

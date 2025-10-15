@@ -49,7 +49,7 @@ public class Config {
      */
     private static void getToolBlocks(List<? extends String> list, Set<Block> set){
         for (String s : list) {
-            ResourceLocation resourceLocation = ResourceLocation.parse(s);
+            ResourceLocation resourceLocation = RlUtils.parse(s);
             Block block = BuiltInRegistries.BLOCK.get(resourceLocation);
             if (block == Blocks.AIR){
                 errorInfo.add("error block for ["+ s + "]");
@@ -288,7 +288,7 @@ public class Config {
     }
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> buildConfig(ForgeConfigSpec.Builder builder, String name, String comment){
-        return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> s instanceof String && ResourceLocation.tryParse((String) s) != null);
+        return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> s instanceof String && RlUtils.tryParse((String) s) != null);
     }
 
 }

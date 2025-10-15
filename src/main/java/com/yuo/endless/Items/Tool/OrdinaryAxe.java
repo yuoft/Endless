@@ -37,7 +37,7 @@ public class OrdinaryAxe extends AxeItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        int blockTool = OrdinaryPickaxe.getBlockTool(stack, state);
-        return blockTool == 0 ? 150000 : blockTool == 1 ? 1000000 : blockTool == 2 ? 20000 : super.getDestroySpeed(stack, state);
+        int blockTool = OrdinaryPickaxe.getBlockTool(state);
+        return blockTool == 0 ? 150000 : blockTool == 1 ? 1000000 : super.getDestroySpeed(stack, state);
     }
 }

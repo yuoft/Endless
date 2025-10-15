@@ -7,6 +7,7 @@ import com.yuo.endless.Blocks.AbsEndlessChest;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Endless;
+import com.yuo.endless.RlUtils;
 import com.yuo.endless.Tiles.AbsEndlessChestTile;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
@@ -84,6 +85,6 @@ public class EndlessChestTileRender implements BlockEntityRenderer<AbsEndlessChe
 
     protected Material getMaterial(AbsEndlessChest chest) {
         String chestName = chest.getType() == EndlessChestType.INFINITY ? "infinity_chest" : chest.getType() == EndlessChestType.COMPRESSOR ? "compressor_chest" : "chest";
-        return new Material(Sheets.CHEST_SHEET, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/chest/" + chestName));
+        return new Material(Sheets.CHEST_SHEET, RlUtils.fa("block/chest/" + chestName));
     }
 }

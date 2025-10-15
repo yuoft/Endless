@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Container.AbsNeutronCollectorContainer;
 import com.yuo.endless.Endless;
+import com.yuo.endless.RlUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -11,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class AbsNeutronCollectorScreen extends AbstractContainerScreen<AbsNeutronCollectorContainer> {
-    private final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/neutron_collector_gui.png");
+    private final ResourceLocation RESOURCE = RlUtils.fa("textures/gui/neutron_collector_gui.png");
     protected final int textureWidth = 176;
     protected final int textureHeight = 166;
 

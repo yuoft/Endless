@@ -1,6 +1,7 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Container.ExtremeCraftInventory;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -70,7 +71,7 @@ public class ExtremeCraftShpaelessManager {
      * @return 无尽配方
      */
     public ExtremeCraftShapeRecipe addShapelessRecipe(ItemStack result, ItemStack... stacks) {
-        ExtremeCraftShapeRecipe recipe = new ExtremeCraftShapeRecipe(ResourceLocation.parse(result.getItem().getDescriptionId()), getIngredients(stacks), result);
+        ExtremeCraftShapeRecipe recipe = new ExtremeCraftShapeRecipe(RlUtils.parse(result.getItem().getDescriptionId()), getIngredients(stacks), result);
         this.recipes.add(recipe);
         return recipe;
     }

@@ -1,6 +1,7 @@
 package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Items.Singularity;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -73,7 +74,7 @@ public class CompressorManager {
                 NeutroniumRecipe next = iterator.next();
                 if (next.hasOutput(output)){
                     iterator.remove();
-                    recipes.add(new NeutroniumRecipe(ResourceLocation.parse(output.getItem().getDescriptionId()), input, amount, output));
+                    recipes.add(new NeutroniumRecipe(RlUtils.parse(output.getItem().getDescriptionId()), input, amount, output));
                     flag = false;
                     break;
                 }
@@ -81,7 +82,7 @@ public class CompressorManager {
         }
         if (flag) {
             CompoundTag tag = output.getOrCreateTag().getCompound(Singularity.NBT_MOD);
-            recipes.add(new NeutroniumRecipe(ResourceLocation.parse(output.getItem().getDescriptionId() + "_" + tag.getString(Singularity.NBT_TYPE)), input, amount, output));
+            recipes.add(new NeutroniumRecipe(RlUtils.parse(output.getItem().getDescriptionId() + "_" + tag.getString(Singularity.NBT_TYPE)), input, amount, output));
         }
     }
 

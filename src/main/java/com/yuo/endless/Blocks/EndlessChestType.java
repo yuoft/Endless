@@ -1,6 +1,7 @@
 package com.yuo.endless.Blocks;
 
 import com.yuo.endless.Endless;
+import com.yuo.endless.RlUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -8,9 +9,9 @@ import net.minecraft.world.level.block.Blocks;
 import javax.annotation.Nullable;
 
 public enum EndlessChestType {
-    COMPRESSOR("compressed",256,108, 9, 256, 276, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/compressor_chest.png"), 256, 276),
-    INFINITY("infinity", Integer.MAX_VALUE, 256, 9, 500, 276, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/infinity_chest.png"), 500, 500),
-    NORMAL("normal",64, 27, 3, 176, 168, ResourceLocation.tryParse("textures/gui/container/shulker_box.png"), 256, 256);
+    COMPRESSOR("compressed",256,108, 9, 256, 276, RlUtils.fa("textures/gui/compressor_chest.png"), 256, 276),
+    INFINITY("infinity", Integer.MAX_VALUE, 256, 9, 500, 276, RlUtils.fa("textures/gui/infinity_chest.png"), 500, 500),
+    NORMAL("normal",64, 27, 3, 176, 168, RlUtils.tryParse("textures/gui/container/shulker_box.png"), 256, 256);
 
     private final String name;
     public final int size;

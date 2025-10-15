@@ -8,6 +8,7 @@ import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
 import com.yuo.endless.Recipe.ExtremeCraftingManager;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +30,7 @@ public class ExtremeCraftingCrt {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
-                ResourceLocation res = ResourceLocation.fromNamespaceAndPath("crafttweaker", id);
+                ResourceLocation res = RlUtils.fa("crafttweaker", id);
                 //转化为列表
                 NonNullList<Ingredient> ingredients = NonNullList.create();
                 for (IIngredient[] input : inputs) {

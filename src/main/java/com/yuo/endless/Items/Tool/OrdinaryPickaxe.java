@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
@@ -45,8 +44,8 @@ public class OrdinaryPickaxe extends PickaxeItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        int blockTool = getBlockTool(stack, state);
-        return blockTool == 0 ? 150000 : blockTool == 1 ? 1000000 : blockTool == 2 ? 20000 : super.getDestroySpeed(stack, state);
+        int blockTool = getBlockTool(state);
+        return blockTool == 0 ? 150000 : blockTool == 1 ? 1000000 : super.getDestroySpeed(stack, state);
     }
 
     /**
@@ -54,19 +53,16 @@ public class OrdinaryPickaxe extends PickaxeItem {
      * @param state 方块
      * @return 等级
      */
-    public static int getBlockTool(ItemStack stack, BlockState state){
+    public static int getBlockTool(BlockState state){
         Stream<TagKey<Block>> tags = state.getTags();
         Iterator<TagKey<Block>> iterator = tags.iterator();
-        if (stack.getItem() instanceof DiggerItem diggerItem){
-            while (iterator.hasNext()) {
-                TagKey<Block> tag = iterator.next();
-                ResourceLocation location = tag.location();
-                if (location.toString().equals("endless:needs_crystal_tool")) {
-                    if (diggerItem.getTier() == EndlessTiers.CRYSTAL) return 0;
-                    else if (diggerItem.getTier() == EndlessTiers.NEUTRON) return 1;
-                }else if (location.toString().equals("endless:needs_neutron_tool") && diggerItem.getTier() == EndlessTiers.NEUTRON) {
-                    return 2;
-                }
+        while (iterator.hasNext()) {
+            TagKey<Block> tag = iterator.next();
+            ResourceLocation location = tag.location();
+            if (location.toString().equals("endless:needs_crystal_tool")) {
+                return 0;
+            }else if (location.toString().equals("endless:needs_neutron_tool")) {
+                return 1;
             }
         }
 

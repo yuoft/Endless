@@ -9,6 +9,7 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.*;
+import com.yuo.endless.RlUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -27,7 +28,7 @@ import java.util.Objects;
 public class EndlessJei implements IModPlugin {
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "jei_plugin");
+        return RlUtils.fa("jei_plugin");
     }
 
     //插件告诉JEI定制菜谱类别

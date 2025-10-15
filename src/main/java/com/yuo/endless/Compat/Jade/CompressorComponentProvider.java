@@ -1,6 +1,7 @@
 package com.yuo.endless.Compat.Jade;
 
 import com.yuo.endless.Endless;
+import com.yuo.endless.RlUtils;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -48,6 +49,6 @@ public class CompressorComponentProvider implements IBlockComponentProvider, ISe
 
     @Override
     public ResourceLocation getUid() {
-        return ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "compressor");
+        return RlUtils.fa("compressor");
     }
 }

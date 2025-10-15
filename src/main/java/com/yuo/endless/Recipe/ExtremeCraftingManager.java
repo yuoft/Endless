@@ -2,6 +2,7 @@ package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Container.ExtremeCraftInventory;
 import com.yuo.endless.Items.EndlessItems;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -162,7 +163,7 @@ public class ExtremeCraftingManager {
                 ingredients.add(Ingredient.EMPTY);
         }
 
-        ExtremeCraftRecipe shapedrecipes = new ExtremeCraftRecipe(ResourceLocation.parse(result.getItem().getDescriptionId()), width, height, ingredients, result);
+        ExtremeCraftRecipe shapedrecipes = new ExtremeCraftRecipe(RlUtils.parse(result.getItem().getDescriptionId()), width, height, ingredients, result);
         this.recipes.add(shapedrecipes);
     }
 
@@ -188,7 +189,7 @@ public class ExtremeCraftingManager {
             }
         }
 
-        ExtremeCraftRecipe recipe = new ExtremeCraftRecipe(ResourceLocation.parse(result.getItem().getDescriptionId()), Math.min(arraylist.size(), 9), (int) Math.ceil(arraylist.size() / 9d), getList(arraylist), result);
+        ExtremeCraftRecipe recipe = new ExtremeCraftRecipe(RlUtils.parse(result.getItem().getDescriptionId()), Math.min(arraylist.size(), 9), (int) Math.ceil(arraylist.size() / 9d), getList(arraylist), result);
         this.recipes.add(recipe);
         return recipe;
     }

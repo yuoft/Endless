@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yuo.endless.Client.Model.CosmicModelLoader.CosmicGeometry;
+import com.yuo.endless.RlUtils;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -55,7 +56,7 @@ public class CosmicModelLoader implements IGeometryLoader<CosmicGeometry> {
         public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
             BakedModel baseBakedModel = this.baseModel.bake(baker, this.baseModel, spriteGetter, modelState, modelLocation, true);
             List<ResourceLocation> textures = new ArrayList<>();
-            this.maskTextures.forEach((mask) -> textures.add(ResourceLocation.parse(mask)));
+            this.maskTextures.forEach((mask) -> textures.add(RlUtils.parse(mask)));
             return new CosmicBakedModel(baseBakedModel, textures);
         }
 

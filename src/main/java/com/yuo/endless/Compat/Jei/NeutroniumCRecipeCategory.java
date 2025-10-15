@@ -3,6 +3,7 @@ package com.yuo.endless.Compat.Jei;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
+import com.yuo.endless.RlUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumRecipe> {
     //合成配方背景
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/compressor.png");
+    public static final ResourceLocation TEXTURE = RlUtils.fa("textures/gui/compressor.png");
     public static final RecipeType<NeutroniumRecipe> RECIPE_TYPE = RecipeType.create(Endless.MOD_ID, "neutronium", NeutroniumRecipe.class);
 
     private final IDrawable background;

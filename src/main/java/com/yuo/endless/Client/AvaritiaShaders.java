@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.yuo.endless.Client.Lib.CCShaderInstance;
 import com.yuo.endless.Client.Lib.CCUniform;
 import com.yuo.endless.Endless;
+import com.yuo.endless.RlUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -61,7 +62,7 @@ public class AvaritiaShaders {
     }
 
     public static void init(RegisterShadersEvent event) {
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "cosmic"), DefaultVertexFormat.BLOCK), (e) -> {
+        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), RlUtils.fa("cosmic"), DefaultVertexFormat.BLOCK), (e) -> {
             cosmicShader = (CCShaderInstance)e;
             cosmicTime = Objects.requireNonNull(cosmicShader.getUniform("time"));
             cosmicYaw = Objects.requireNonNull(cosmicShader.getUniform("yaw"));

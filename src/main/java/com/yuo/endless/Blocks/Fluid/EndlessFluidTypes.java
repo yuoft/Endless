@@ -1,6 +1,7 @@
 package com.yuo.endless.Blocks.Fluid;
 
 import com.yuo.endless.Endless;
+import com.yuo.endless.RlUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Rarity;
@@ -12,9 +13,9 @@ import net.minecraftforge.registries.RegistryObject;
 import org.joml.Vector3f;
 
 public class EndlessFluidTypes {
-    public static final ResourceLocation STILL_OIL_TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/fluids/fluid");
-    public static final ResourceLocation FLOWING_OIL_TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/fluids/fluid_flow");
-    public static final ResourceLocation OVERLAY_OIL_TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "block/fluids/fluid_overlay");
+    public static final ResourceLocation STILL_OIL_TEXTURE = RlUtils.fa("block/fluids/fluid");
+    public static final ResourceLocation FLOWING_OIL_TEXTURE = RlUtils.fa("block/fluids/fluid_flow");
+    public static final ResourceLocation OVERLAY_OIL_TEXTURE = RlUtils.fa("block/fluids/fluid_overlay");
 
     // 获得deferredRegister的流体type的注册对象
     public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, Endless.MOD_ID);

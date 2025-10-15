@@ -8,6 +8,7 @@ import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
+import com.yuo.endless.RlUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.*;
@@ -61,7 +62,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
 
         for(int i = 0; i < 10; ++i) {
             TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "shader/cosmic_" + i));
+                    .apply(RlUtils.fa( "shader/cosmic_" + i));
             AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
             AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
             AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();

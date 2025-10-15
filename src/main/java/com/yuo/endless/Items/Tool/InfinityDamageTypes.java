@@ -3,6 +3,7 @@ package com.yuo.endless.Items.Tool;
 import com.mojang.datafixers.util.Either;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
 
 public class InfinityDamageTypes {
 
-    public static ResourceKey<DamageType> INFINITY = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "infinity"));
+    public static ResourceKey<DamageType> INFINITY = ResourceKey.create(Registries.DAMAGE_TYPE, RlUtils.fa("infinity"));
 
     public static final RegistrySetBuilder DAMAGE_BUILDER = new RegistrySetBuilder().add(Registries.DAMAGE_TYPE, InfinityDamageTypes::bootstrap);
 

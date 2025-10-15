@@ -2,6 +2,7 @@ package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Config;
 import com.yuo.endless.Blocks.Fluid.EndlessFluidBucketWrapper;
+import com.yuo.endless.RlUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
@@ -79,7 +80,7 @@ public class InfinityBucket extends Item {
     private static Fluid getFluidForKey(String str){
         if (str.isEmpty()) return Fluids.EMPTY;
         if ("empty".equals(str)) return Fluids.EMPTY;
-        return getFluidForKey(ResourceLocation.tryParse(str));
+        return getFluidForKey(RlUtils.tryParse(str));
     }
 
     private static Fluid getFluidForKey(ResourceLocation res){

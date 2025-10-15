@@ -1,5 +1,6 @@
 package com.yuo.endless.Blocks;
 
+import com.yuo.endless.RlUtils;
 import com.yuo.endless.Tiles.AbsEndlessChestTile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -57,7 +58,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    public static final ResourceLocation CONTENTS = ResourceLocation.tryParse("contents");
+    public static final ResourceLocation CONTENTS = RlUtils.tryParse("contents");
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);

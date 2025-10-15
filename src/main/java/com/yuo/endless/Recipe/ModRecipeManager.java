@@ -4,6 +4,7 @@ import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
+import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -141,8 +142,8 @@ public class ModRecipeManager {
         if (Endless.isDE){
             String str0 = "draconicevolution:draconium_block"; //龙块
             String str1 = "draconicevolution:awakened_draconium_block"; //觉醒龙块
-            Block block0 = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(str0));
-            Block block1 = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(str1));
+            Block block0 = BuiltInRegistries.BLOCK.get(RlUtils.parse(str0));
+            Block block1 = BuiltInRegistries.BLOCK.get(RlUtils.parse(str1));
             if (block0 != Blocks.AIR){
                 CompressorManager.addRecipe(Singularity.getSingularity("draconium"), (Config.SERVER.singularityDragonIum.get() + countEnd) * rateEnd,
                         getList(new ItemStack(block0)));
@@ -269,7 +270,7 @@ public class ModRecipeManager {
 //                    new ItemStack(AEItems.SINGULARITY));
         }
         if (Endless.isDE){
-            Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse("draconicevolution:chaos_shard")); //混沌碎片
+            Item item = BuiltInRegistries.ITEM.get(RlUtils.parse("draconicevolution:chaos_shard")); //混沌碎片
             if (item != Items.AIR){
                 ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(item));
                 ExtremeCraftShpaelessManager.getInstance().addRecipeInput(eternalSingularity, Singularity.getSingularity("draconium"),

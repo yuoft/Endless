@@ -2,13 +2,9 @@ package com.yuo.endless.Compat.Jade;
 
 import com.yuo.endless.Blocks.AbsNeutronCollector;
 import com.yuo.endless.Blocks.NeutroniumCompressor;
-import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Tiles.AbsNeutronCollectorTile;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import snownee.jade.api.*;
-import snownee.jade.api.callback.JadeTooltipCollectedCallback;
 
 @WailaPlugin
 public class EndlessJade implements IWailaPlugin {
@@ -27,6 +23,5 @@ public class EndlessJade implements IWailaPlugin {
 
         registration.registerBlockComponent(new CollectorComponentProvider(), AbsNeutronCollector.class);
         registration.registerBlockComponent(new CompressorComponentProvider(), NeutroniumCompressor.class);
-
     }
 }

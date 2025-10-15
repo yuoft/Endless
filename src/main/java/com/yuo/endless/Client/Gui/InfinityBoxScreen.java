@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.ColorText;
+import com.yuo.endless.RlUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.NotNull;
 
 public class InfinityBoxScreen extends AbstractContainerScreen<InfinityBoxContainer> {
-    private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "textures/gui/infinity_chest.png");
+    private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = RlUtils.fa("textures/gui/infinity_chest.png");
     public InfinityBoxScreen(InfinityBoxContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageWidth = 500;

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Blocks.EndlessChestType;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
+import com.yuo.endless.RlUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -206,7 +207,7 @@ public class InfinityBoxTile extends AbsEndlessChestTile implements RecipeHolder
         this.cookingTime = nbt.getInt("CookingTime");
         CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
         for(String s : compoundnbt.getAllKeys()) {
-            this.recipes.put(ResourceLocation.parse(s), compoundnbt.getInt(s));
+            this.recipes.put(RlUtils.parse(s), compoundnbt.getInt(s));
         }
     }
 
