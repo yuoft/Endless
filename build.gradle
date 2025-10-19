@@ -85,6 +85,8 @@ repositories {
         name = 'Favouriteless Maven'
         url 'https://maven.favouriteless.net/releases'
     }
+    maven { url = "https://maven.createmod.net" } // Ponder, Flywheel
+    maven { url 'https://maven.covers1624.net/' }
     // flatDir {
     //     dir 'libs'
     // }
@@ -93,31 +95,66 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compileOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
+    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    compileOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
+    compileOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
+
 //    compileOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
+    compileOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
     compileOnly fg.deobf("curse.maven:blood-magic-224791:${bloodmagic_id}")
     compileOnly fg.deobf("curse.maven:enchanted-witchcraft-560363:${enchanted_id}")
     compileOnly fg.deobf("curse.maven:draconic-evolution-223565:${de_id}")
-    compileOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
-    compileOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
-    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     compileOnly fg.deobf("curse.maven:crafttweaker-239197:${crt_id}")
-//    implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:5753868")
+    compileOnly fg.deobf("curse.maven:projecte-226410:${pe_id}")
+    compileOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
+    compileOnly fg.deobf("curse.maven:ice-and-fire-dragons-264231:${iaf_id}")
+    compileOnly fg.deobf("curse.maven:create-328085:${create_id}")
+    compileOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_id}")
+    compileOnly fg.deobf("com.teamcofh:thermal_core:${minecraft_version}-${thermal_core_version}+")
+    compileOnly fg.deobf("curse.maven:cofh-core-69162:${cofh_core_id}")
+    compileOnly fg.deobf("curse.maven:thermal-foundation-222880:${thermal_id}")
+    compileOnly fg.deobf("curse.maven:mantle-74924:${mantle_id}")
+    compileOnly fg.deobf("curse.maven:tinkers-construct-74072:${tc3_id}")
+    compileOnly fg.deobf("curse.maven:yuoenchants-698171:${ye_id}")
+    compileOnly fg.deobf("curse.maven:applied-energistics-2-223794:${ae2_id}")
+    compileOnly fg.deobf("curse.maven:the-twilight-forest-227639:${ttf_id}")
+    compileOnly fg.deobf("curse.maven:slashblade-resharped-1022428:${sb_re_id}")
+    compileOnly fg.deobf("curse.maven:croparia-250235:${croparia_id}")
+    compileOnly fg.deobf("curse.maven:refined-storage-243076:${rs_id}")
 
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
+    runtimeOnly fg.deobf("curse.maven:selene-499980:4806893")
+    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:${mmmm_id}")
+    runtimeOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
+    runtimeOnly fg.deobf("curse.maven:crafttweaker-239197:${crt_id}")
+
     runtimeOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
     runtimeOnly fg.deobf("curse.maven:projecte-226410:${pe_id}")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_ver}")
-//    runtimeOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
+    runtimeOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
 //    runtimeOnly fg.deobf("curse.maven:blood-magic-224791:${bloodmagic_id}")
 //    runtimeOnly fg.deobf("curse.maven:enchanted-witchcraft-560363:${enchanted_id}")
-    runtimeOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
-    runtimeOnly fg.deobf("curse.maven:crafttweaker-239197:${crt_id}")
     runtimeOnly fg.deobf("curse.maven:codechicken-lib-1-8-242818:${ccl_id}")
     runtimeOnly fg.deobf("curse.maven:brandons-core-231382:${bc_id}")
     runtimeOnly fg.deobf("curse.maven:draconic-evolution-223565:${de_id}")
-    runtimeOnly fg.deobf("curse.maven:selene-499980:4806893")
-    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:${mmmm_id}")
+
+    runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
+    runtimeOnly fg.deobf("curse.maven:ice-and-fire-dragons-264231:${iaf_id}")
+    runtimeOnly fg.deobf("curse.maven:create-328085:${create_id}")
+    runtimeOnly fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_id}")
+    runtimeOnly fg.deobf("com.teamcofh:thermal_core:${minecraft_version}-${thermal_core_version}+")
+    runtimeOnly fg.deobf("curse.maven:cofh-core-69162:${cofh_core_id}")
+    runtimeOnly fg.deobf("curse.maven:thermal-foundation-222880:${thermal_id}")
+    runtimeOnly fg.deobf("curse.maven:thermal-cultivation-271835:${thermal_c_id}")
+    runtimeOnly fg.deobf("curse.maven:mantle-74924:${mantle_id}")
+    runtimeOnly fg.deobf("curse.maven:tinkers-construct-74072:${tc3_id}")
+    runtimeOnly fg.deobf("curse.maven:yuoenchants-698171:${ye_id}")
+    runtimeOnly fg.deobf("curse.maven:guideme-1173950:${guideme_id}")
+    runtimeOnly fg.deobf("curse.maven:applied-energistics-2-223794:${ae2_id}")
+    runtimeOnly fg.deobf("curse.maven:the-twilight-forest-227639:${ttf_id}")
+    runtimeOnly fg.deobf("curse.maven:slashblade-resharped-1022428:${sb_re_id}")
+    runtimeOnly fg.deobf("curse.maven:croparia-250235:${croparia_id}")
+    runtimeOnly fg.deobf("curse.maven:refined-storage-243076:${rs_id}")
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
