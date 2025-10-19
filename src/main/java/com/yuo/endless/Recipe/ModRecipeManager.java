@@ -6,6 +6,9 @@ import com.defacto34.croparia.init.BlockInit;
 import com.defacto34.croparia.init.ItemInit;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.refinedmods.refinedstorage.RSItems;
+import com.refinedmods.refinedstorage.apiimpl.storage.FluidStorageType;
+import com.refinedmods.refinedstorage.apiimpl.storage.ItemStorageType;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
@@ -344,9 +347,9 @@ public class ModRecipeManager {
                     getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
         }
         if (Endless.isRS){
-//            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
-//                    new ItemStack(RSItems.ITEM_STORAGE_DISKS.get(ItemStorageType.SIXTY_FOUR_K).get()),
-//                    new ItemStack(RSItems.FLUID_STORAGE_DISKS.get(FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get()));
+            ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
+                    new ItemStack(RSItems.ITEM_STORAGE_DISKS.get(ItemStorageType.SIXTY_FOUR_K).get()),
+                    new ItemStack(RSItems.FLUID_STORAGE_DISKS.get(FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get()));
         }
         if (Endless.isTC3){//52 48 49
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(TinkerModifiers.dragonScale));
