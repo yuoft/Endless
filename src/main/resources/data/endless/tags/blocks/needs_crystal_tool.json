@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "endless:cosmic_block",
     "endless:crystal_matrix_block"

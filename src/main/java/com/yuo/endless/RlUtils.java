@@ -1,5 +1,6 @@
 package com.yuo.endless;
 
+import net.minecraft.ResourceLocationException;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -7,18 +8,22 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class RlUtils {
     public static ResourceLocation fa(String path){
-        return ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, path);
+        return new ResourceLocation(Endless.MOD_ID, path);
     }
 
     public static ResourceLocation fa(String namespace, String path){
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+        return new ResourceLocation(namespace, path);
     }
 
     public static ResourceLocation tryParse(String s){
-        return ResourceLocation.tryParse(s);
+        try {
+            return new ResourceLocation(s);
+        } catch (ResourceLocationException var2) {
+            return null;
+        }
     }
 
     public static ResourceLocation parse(String s){
-        return ResourceLocation.parse(s);
+        return new ResourceLocation(s);
     }
 }
