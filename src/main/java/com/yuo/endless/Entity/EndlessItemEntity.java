@@ -17,7 +17,7 @@ public class EndlessItemEntity extends ItemEntity {
 
     public EndlessItemEntity(Level worldIn, double x, double y, double z, ItemStack stack) {
         super(worldIn, x, y, z, stack);
-        this.setPickUpDelay(5);
+        this.setPickUpDelay(1);
         this.lifespan = 3600; //物品消失时间减少2分钟
     }
 
