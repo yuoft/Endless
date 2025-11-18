@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeHooks;
 
 import java.util.Optional;
 
@@ -27,29 +28,24 @@ public class ExtremeCraftResultSlot extends ResultSlot {
     @Override
     public void onTake(Player thePlayer, ItemStack stack) {
         this.checkTakeAchievements(stack);
-        net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);
-        NonNullList<ItemStack> nonnulllist; //优先匹配工作台配方，没有则配方无尽配方
+        ForgeHooks.setCraftingPlayer(thePlayer);
+        NonNullList<ItemStack> nonnulllist = NonNullList.create(); //优先匹配工作台配方，没有则配方无尽配方
         Level world = thePlayer.level();
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get(), this.craftMatrix, world);
         Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), this.craftMatrix, world);
-//        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(this.craftMatrix, world);
         if (recipeOptional.isPresent()){ //有序配方
             nonnulllist = world.getRecipeManager().getRemainingItemsFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get(), this.craftMatrix, world);
         }else if (recipeOptionalIn .isPresent()){ //无序配方  需单独匹配容器
             nonnulllist = world.getRecipeManager().getRemainingItemsFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), this.craftMatrix, world);
-        }
-//        else if (shapeRecipe != null){
-//            nonnulllist = shapeRecipe.getRemainingItems(this.craftMatrix);
-//        }
-        else {
+        }else {
             if (Config.SERVER.isCraftTable.get()){
                 Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, this.craftMatrix, world);
                 if (optional.isPresent()){ // 原版配方
                     nonnulllist = world.getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, this.craftMatrix, world);
-                }else nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, world);
-            }else nonnulllist = ExtremeCraftingManager.getInstance().getRecipeShirkItem((ExtremeCraftInventory) this.craftMatrix, world);
+                }
+            }
         }
-        net.minecraftforge.common.ForgeHooks.setCraftingPlayer(null);
+        ForgeHooks.setCraftingPlayer(null);
 
         for(int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = this.craftMatrix.getItem(i);

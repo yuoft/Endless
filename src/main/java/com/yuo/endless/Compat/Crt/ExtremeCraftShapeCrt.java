@@ -8,7 +8,6 @@ import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
-import com.yuo.endless.Recipe.ExtremeCraftShpaelessManager;
 import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +43,7 @@ public class ExtremeCraftShapeCrt {
 
                 //添加到模组配方管理
                 ExtremeCraftShapeRecipe recipe = new ExtremeCraftShapeRecipe(res, ingredients, output.getInternal());
-                ExtremeCraftShpaelessManager.getInstance().addRecipe(recipe);
+//                ExtremeCraftShpaelessManager.getInstance().addRecipe(recipe);
             }
 
             @Override
@@ -75,7 +74,7 @@ public class ExtremeCraftShapeCrt {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
-                ExtremeCraftShpaelessManager.getInstance().removeRecipe(stack.getInternal());
+//                ExtremeCraftShpaelessManager.getInstance().removeRecipe(stack.getInternal());
             }
 
             @Override

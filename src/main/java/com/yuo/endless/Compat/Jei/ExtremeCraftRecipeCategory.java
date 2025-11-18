@@ -73,9 +73,6 @@ public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftR
                 }
             }
 
-            if (recipe.getResultItem().getItem() == EndlessItems.infinityFeet.get()){
-                ItemStack resultItem = recipe.getResultItem();
-            }
             int index = 0;
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {

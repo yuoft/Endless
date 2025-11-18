@@ -1,7 +1,7 @@
 package com.yuo.endless.Container;
 
-import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.EndlessRecipes;
+import com.yuo.endless.Recipe.NeutroniumRecipe;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.Slot;
@@ -17,7 +17,7 @@ public class NiumCSlot extends Slot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return !CompressorManager.getOutput(stack).isEmpty() ||
+        return !NeutroniumRecipe.getOutput(world, stack).isEmpty() ||
                 this.world.getRecipeManager().getRecipesFor(EndlessRecipes.NEUTRONIUM_RECIPE.get(), new SimpleContainer(stack), this.world).isEmpty();
     }
 }

@@ -62,9 +62,6 @@ import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 import java.util.*;
 import java.util.List;
 
-import static com.yuo.endless.Items.InfinityMobSpawnEgg.EGG_NBT;
-import static com.yuo.endless.Recipe.ModRecipeManager.getRecipeIterator;
-
 /**
  * 事件处理类
  */

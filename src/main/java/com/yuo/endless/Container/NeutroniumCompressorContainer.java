@@ -1,7 +1,7 @@
 package com.yuo.endless.Container;
 
-import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.EndlessRecipes;
+import com.yuo.endless.Recipe.NeutroniumRecipe;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -62,7 +62,7 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
             ItemStack itemStack1 = slot.getItem();
             itemstack = itemStack1.copy();
             if (index >= 2){
-                if (!CompressorManager.getOutput(itemStack1).isEmpty() || hasRecipe(itemStack1)){
+                if (!NeutroniumRecipe.getOutput(playerIn.level(), itemStack1).isEmpty() || hasRecipe(itemStack1)){
                     if (!this.moveItemStackTo(itemStack1, 0, 1, false)) return ItemStack.EMPTY;
                 }
                 if (index < 29) { //从物品栏到快捷栏

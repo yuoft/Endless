@@ -10,6 +10,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -69,8 +70,9 @@ public class NeutroniumCompressor extends BaseEntityBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState blockState, boolean pIsMoving) {
         if (!state.is(blockState.getBlock())) {
             BlockEntity tileentity = level.getBlockEntity(pos);
-            if (tileentity instanceof NeutroniumCompressorTile) {
-                Containers.dropContents(level, pos, (NeutroniumCompressorTile)tileentity);
+            if (tileentity instanceof NeutroniumCompressorTile neutroniumCompressorTile) {
+                neutroniumCompressorTile.items.set(2, ItemStack.EMPTY);
+                Containers.dropContents(level, pos, neutroniumCompressorTile);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
 

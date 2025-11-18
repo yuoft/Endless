@@ -4,7 +4,6 @@ import com.yuo.endless.Container.NeutroniumCompressorContainer;
 import com.yuo.endless.Container.NiumCIntArray;
 import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.NmCPacket;
-import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
 import com.yuo.endless.Recipe.EndlessRecipes;
 import net.minecraft.core.BlockPos;
@@ -60,44 +59,42 @@ public class NeutroniumCompressorTile extends BaseContainerBlockEntity implement
         tile.data.set(4, pos.getZ());
 
         ItemStack input = tile.items.get(0);
-        ItemStack stack1 = tile.items.get(1); //已有输出
+        ItemStack result = tile.items.get(1); //已有输出
         if (input.isEmpty()) return; //没有输入时 停止
-        ItemStack stack;
         Optional<NeutroniumRecipe> optional = level.getRecipeManager().getRecipeFor(EndlessRecipes.NEUTRONIUM_RECIPE.get(), new SimpleContainer(input), level);
         if (optional.isPresent()){
-            stack = optional.get().getResultItem();
-        }else stack = CompressorManager.getOutput(input); //获取此输入的输出
-        //判断输出 输出和已有输出不同 输出为空
-        if ((!stack1.isEmpty() && !(stack1.getItem() == stack.getItem())) || stack.isEmpty()) return;
-        //机器内有残留时
-        if (stack1.isEmpty() && tile.data.get(0) > 0){ //输入与缓存输入不同 或无法替换
-            if (!optional.map(recipe -> input.equals(tile.items.get(2), false)).orElseGet(() -> CompressorManager.isInput(input, tile.items.get(2))))
-                return;
-        }
+            NeutroniumRecipe neutroniumRecipe = optional.get();
+            ItemStack stack = neutroniumRecipe.getResultItem();
+            //判断输出 输出和已有输出不同 输出为空
+            if ((!result.isEmpty() && !result.is(stack.getItem())) || stack.isEmpty()) return;
+            //机器内有残留时
+            if (result.isEmpty() && tile.data.get(0) > 0){ //输入与缓存输入不同 或无法替换
+                if (!input.is(tile.items.get(2).getItem())) return;
+            }
 
-        int count = optional.map(NeutroniumRecipe::getRecipeCount).orElseGet(() -> CompressorManager.getCost(input));
-        tile.data.set(1,count );
-        if (count > 0 && tile.data.get(0) < count){
-            tile.items.set(2, new ItemStack(input.getItem()));  //缓存参与合成物品
-            int num = optional.isPresent() ? 1 : CompressorManager.getInputCost(input);
-            tile.data.set(0, tile.data.get(0) + num);
-            if (input.getCount() >= 1)
+            int count = neutroniumRecipe.getRecipeCount(); //总数
+            tile.data.set(1, count);
+            if (count > 0 && tile.data.get(0) < count){
+                tile.items.set(2, new ItemStack(input.getItem()));  //缓存参与合成物品
                 input.shrink(1);
-            setChanged(level, pos, state);
+                tile.data.set(0, tile.data.get(0) + 1); //进度加1
+                setChanged(level, pos, state);
+            }
+
+            if (tile.data.get(0) >= tile.data.get(1)){ //物品已满，设置输出
+                if (result.isEmpty()){
+                    tile.items.set(1, stack);
+                }else result.grow(1);
+                tile.data.set(0, 0);
+                tile.data.set(1, 0);
+                setChanged(level, pos, state);
+            }
+
+            if (!tile.items.get(2).isEmpty()){
+                NetWorkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new NmCPacket(pos, tile.items.get(2)));
+            }
         }
 
-        if (tile.data.get(0) >= tile.data.get(1)){ //物品已满，设置输出
-            if (stack1.isEmpty()){
-                tile.items.set(1, stack);
-            }else stack1.grow(1);
-            tile.data.set(0, 0);
-            tile.data.set(1, 0);
-            setChanged(level, pos, state);
-        }
-
-        if (!tile.items.get(2).isEmpty()){
-            NetWorkHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new NmCPacket(pos, tile.items.get(2)));
-        }
     }
 
     @Override
@@ -216,7 +213,7 @@ public class NeutroniumCompressorTile extends BaseContainerBlockEntity implement
     public boolean canPlaceItemThroughFace(int index, ItemStack stack, @org.jetbrains.annotations.Nullable Direction direction) {
         if (index == 0 && direction != Direction.DOWN){
             if (this.items.get(2).isEmpty() || this.items.get(2).equals(stack, false))
-                return !CompressorManager.getOutput(stack).isEmpty();
+                return !NeutroniumRecipe.getOutput(level, stack).isEmpty();
         }
         return false;
     }

@@ -5,17 +5,13 @@ import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.Singularity;
-import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
 import com.yuo.endless.RlUtils;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.openzen.zencode.java.ZenCodeType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ZenCodeType.Name("mods.endless.CompressorRecipe")
 @ZenRegister
@@ -45,7 +41,6 @@ public class CompressorCrt {
                 ItemStack internal = output.getInternal();
                 String type = internal.getOrCreateTag().getString(Singularity.NBT_TYPE);
                 NeutroniumRecipe recipe = new NeutroniumRecipe(res, ingredient, count, Singularity.getSingularity(type));
-                CompressorManager.addRecipe(recipe);
             }
 
             @Override
@@ -67,7 +62,7 @@ public class CompressorCrt {
             public void apply() {
                 ItemStack internal = stack.getInternal();
                 String type = internal.getOrCreateTag().getString(Singularity.NBT_TYPE);
-                CompressorManager.removeRecipe(Singularity.getSingularity(type));
+//                CompressorManager.removeRecipe(Singularity.getSingularity(type));
             }
 
             @Override

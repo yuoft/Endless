@@ -5,16 +5,24 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
 import com.yuo.endless.RlUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Collections;
 
 public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumRecipe> {
     //合成配方背景
@@ -56,5 +64,14 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
     public void setRecipe(IRecipeLayoutBuilder builder, NeutroniumRecipe recipe, IFocusGroup iFocusGroup) {
         builder.addSlot(RecipeIngredientRole.INPUT, 1,9).addIngredients(recipe.getInput());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 9).addItemStack(recipe.getResultItem());
+    }
+
+    @Override
+    public void getTooltip(ITooltipBuilder tooltip, NeutroniumRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        IRecipeCategory.super.getTooltip(tooltip, recipe, recipeSlotsView, mouseX, mouseY);
+        if (mouseX > 23 && mouseX < 45 && mouseY > 9 && mouseY < 24) {
+            tooltip.add(Component.translatable("endless.text.recipe.count", recipe.getRecipeCount()));
+        }
+
     }
 }

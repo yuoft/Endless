@@ -90,6 +90,14 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         return this.output.copy();
     }
 
+    public static ItemStack getOutput(Level level, ItemStack stack){
+        for (NeutroniumRecipe recipe : level.getRecipeManager().getAllRecipesFor(EndlessRecipes.NEUTRONIUM_RECIPE.get())) {
+            if (recipe.isInput(stack)) return recipe.getResultItem();
+        }
+
+        return ItemStack.EMPTY;
+    }
+
     //输入相同
     public boolean isInput(ItemStack stack){
         return input.test(stack);

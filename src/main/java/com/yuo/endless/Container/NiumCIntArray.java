@@ -10,20 +10,14 @@ public class NiumCIntArray implements ContainerData {
     private int posZ;
     @Override
     public int get(int index) {
-        switch(index) {
-            case 0:
-                return number;
-            case 1:
-                return numberTotal;
-            case 2:
-                return posX;
-            case 3:
-                return posY;
-            case 4:
-                return posZ;
-            default:
-                return 0;
-        }
+        return switch (index) {
+            case 0 -> number;
+            case 1 -> numberTotal;
+            case 2 -> posX;
+            case 3 -> posY;
+            case 4 -> posZ;
+            default -> 0;
+        };
     }
 
     @Override

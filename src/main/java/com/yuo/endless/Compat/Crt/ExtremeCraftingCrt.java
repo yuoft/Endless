@@ -7,7 +7,6 @@ import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
-import com.yuo.endless.Recipe.ExtremeCraftingManager;
 import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +44,7 @@ public class ExtremeCraftingCrt {
 
                 //添加到模组配方管理
                 ExtremeCraftRecipe recipe = new ExtremeCraftRecipe(res, 9, 9, ingredients, output.getInternal());
-                ExtremeCraftingManager.getInstance().addRecipe(recipe);
+//                ExtremeCraftingManager.getInstance().addRecipe(recipe);
             }
 
             @Override
@@ -65,7 +64,7 @@ public class ExtremeCraftingCrt {
         CraftTweakerAPI.apply(new IRuntimeAction() {
             @Override
             public void apply() {
-                ExtremeCraftingManager.getInstance().removeRecipe(stack.getInternal());
+//                ExtremeCraftingManager.getInstance().removeRecipe(stack.getInternal());
             }
 
             @Override

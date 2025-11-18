@@ -50,10 +50,8 @@ public class EndlessJei implements IModPlugin {
         registration.addRecipes(ExtremeCraftRecipeCategory.RECIPE_TYPE, recipes);
         List<ExtremeCraftShapeRecipe> recipes0 = recipeManager.getAllRecipesFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get()).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(ExtremeCraftShapeRecipeCategory.RECIPE_TYPE, recipes0);
-        registration.addRecipes(ExtremeCraftShapeRecipeCategory.RECIPE_TYPE, ExtremeCraftShpaelessManager.getInstance().getRecipeList());
         List<NeutroniumRecipe> recipes1 = recipeManager.getAllRecipesFor(EndlessRecipes.NEUTRONIUM_RECIPE.get()).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(NeutroniumCRecipeCategory.RECIPE_TYPE, recipes1);
-        registration.addRecipes(NeutroniumCRecipeCategory.RECIPE_TYPE, CompressorManager.getRecipes());
     }
 
     //注册+号添加

@@ -70,7 +70,6 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
         //获取配方 先检查无尽配方
         Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get(), inputInventory, world);
         Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), inputInventory, world);
-//        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(inputInventory, world);
         if (recipeOptional.isPresent()){ //json配方 有序
             ExtremeCraftRecipe recipe = recipeOptional.get();
             if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
@@ -81,16 +80,8 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
             if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
                 itemStack = recipe.getResultItem();
             }
-        }
-//        else if (shapeRecipe != null){ //硬编码配方
-//            if (outputInventory.setRecipeUsed(world, serverPlayer, shapeRecipe)){
-//                itemStack = shapeRecipe.getResultItem();
-//            }
-//        }
-        else {
-            ItemStack recipeOutPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
-            ItemStack recipeOutPut1 = ExtremeCraftShpaelessManager.getInstance().getRecipeOutPut(inputInventory, world);
-            if (Config.SERVER.isCraftTable.get()){
+        }else {
+            if (Config.SERVER.isCraftTable.get()) {
                 CraftingContainer craftingInv = getCraftingInv();
                 Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, world);
                 if (optional.isPresent() && isCraft()) {
@@ -98,10 +89,8 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
                     if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)) {
                         itemStack = recipe.assemble(craftingInv, RegistryAccess.EMPTY); //获取配方输出
                     }
-                }else {
-                    itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;
                 }
-            }else itemStack = recipeOutPut.isEmpty() ? recipeOutPut1 : recipeOutPut;
+            }
         }
         outputInventory.setItem(81, itemStack);
         serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.getStateId(), 81, itemStack));
