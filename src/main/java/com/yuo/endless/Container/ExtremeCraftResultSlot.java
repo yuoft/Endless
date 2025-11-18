@@ -30,16 +30,18 @@ public class ExtremeCraftResultSlot extends ResultSlot {
         net.minecraftforge.common.ForgeHooks.setCraftingPlayer(thePlayer);
         NonNullList<ItemStack> nonnulllist; //优先匹配工作台配方，没有则配方无尽配方
         Level world = thePlayer.level();
-        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
-        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
-        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(this.craftMatrix, world);
+        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get(), this.craftMatrix, world);
+        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), this.craftMatrix, world);
+//        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(this.craftMatrix, world);
         if (recipeOptional.isPresent()){ //有序配方
-            nonnulllist = world.getRecipeManager().getRemainingItemsFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, this.craftMatrix, world);
+            nonnulllist = world.getRecipeManager().getRemainingItemsFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get(), this.craftMatrix, world);
         }else if (recipeOptionalIn .isPresent()){ //无序配方  需单独匹配容器
-            nonnulllist = world.getRecipeManager().getRemainingItemsFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, this.craftMatrix, world);
-        }else if (shapeRecipe != null){
-            nonnulllist = shapeRecipe.getRemainingItems(this.craftMatrix);
-        }else {
+            nonnulllist = world.getRecipeManager().getRemainingItemsFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), this.craftMatrix, world);
+        }
+//        else if (shapeRecipe != null){
+//            nonnulllist = shapeRecipe.getRemainingItems(this.craftMatrix);
+//        }
+        else {
             if (Config.SERVER.isCraftTable.get()){
                 Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, this.craftMatrix, world);
                 if (optional.isPresent()){ // 原版配方

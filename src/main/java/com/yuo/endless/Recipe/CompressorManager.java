@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +24,7 @@ public class CompressorManager {
     public static void addRecipe(NeutroniumRecipe recipe){
         for (NeutroniumRecipe next : recipes) {
             if (next.hasOutput(recipe.getResultItem())) {
-                next.addInput(getInputs(next.getRecipeInput(), recipe.getRecipeInput()));
+//                next.addInput(getInputs(next.getIngredients(), recipe.getIngredients()));
                 return;
             }
         }
@@ -52,9 +53,9 @@ public class CompressorManager {
      * @param nullList 要合并的列表
      * @return 合并后的列表
      */
-    static NonNullList<ItemStack> getInputs(NonNullList<ItemStack> list, NonNullList<ItemStack> nullList){
-        for (ItemStack stack : list) {
-            nullList.removeIf(next -> next.equals(stack, false));
+    static NonNullList<Ingredient> getInputs(NonNullList<Ingredient> list, NonNullList<Ingredient> nullList){
+        for (Ingredient stack : list) {
+            nullList.removeIf(next -> next == stack);
         }
         list.addAll(nullList);
         return list;
@@ -74,7 +75,7 @@ public class CompressorManager {
                 NeutroniumRecipe next = iterator.next();
                 if (next.hasOutput(output)){
                     iterator.remove();
-                    recipes.add(new NeutroniumRecipe(RlUtils.parse(output.getItem().getDescriptionId()), input, amount, output));
+//                    recipes.add(new NeutroniumRecipe(RlUtils.parse(output.getItem().getDescriptionId()), input, amount, output));
                     flag = false;
                     break;
                 }
@@ -82,7 +83,7 @@ public class CompressorManager {
         }
         if (flag) {
             CompoundTag tag = output.getOrCreateTag().getCompound(Singularity.NBT_MOD);
-            recipes.add(new NeutroniumRecipe(RlUtils.parse(output.getItem().getDescriptionId() + "_" + tag.getString(Singularity.NBT_TYPE)), input, amount, output));
+//            recipes.add(new NeutroniumRecipe(RlUtils.parse(output.getItem().getDescriptionId() + "_" + tag.getString(Singularity.NBT_TYPE)), input, amount, output));
         }
     }
 
@@ -126,14 +127,14 @@ public class CompressorManager {
      */
     @Deprecated
     public static void changeAllCount(Difficulty difficulty){
-        ModRecipeManager.addCompressorCraft(); //重置配方
-        if (difficulty == Difficulty.EASY || difficulty == Difficulty.PEACEFUL){
-            return;
-        }
-        int count = difficulty == Difficulty.HARD ? 100 : 50;
-        for (NeutroniumRecipe recipe : recipes) {
-            recipe.setCount(recipe.getRecipeCount() + count);
-        }
+//        ModRecipeManager.addCompressorCraft(); //重置配方
+//        if (difficulty == Difficulty.EASY || difficulty == Difficulty.PEACEFUL){
+//            return;
+//        }
+//        int count = difficulty == Difficulty.HARD ? 100 : 50;
+//        for (NeutroniumRecipe recipe : recipes) {
+//            recipe.setCount(recipe.getRecipeCount() + count);
+//        }
     }
 
     /**
@@ -141,11 +142,11 @@ public class CompressorManager {
      * @param output  输出
      * @param map 输入
      */
-    public static void addInputs(ItemStack output, NonNullList<ItemStack> map) {
+    public static void addInputs(ItemStack output, NonNullList<Ingredient> map) {
         if (map.isEmpty()) return;
         for (NeutroniumRecipe recipe : recipes) {
             if (recipe.hasOutput(output)){
-                recipe.addInput(map);
+//                recipe.addInput(map);
             }
         }
     }
@@ -159,9 +160,9 @@ public class CompressorManager {
         if (input.isEmpty()) return 1;
         for (NeutroniumRecipe recipe : recipes) {
             if (recipe.isInput(input)) {
-                NonNullList<ItemStack> map = recipe.getRecipeInput();
-                for (ItemStack stack : map) {
-                    if (stack.equals(input, false)) return stack.getCount();
+                NonNullList<Ingredient> map = recipe.getIngredients();
+                for (Ingredient stack : map) {
+                    if (stack.test(input)) return 1;
                 }
             }
         }

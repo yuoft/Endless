@@ -1,0 +1,12 @@
+{
+  "type": "endless:neutronium",
+  "category": "misc",
+  "count": 1900,
+  "input": {
+    "tag": "forge:storage_blocks/coal"
+  },
+  "output": {
+    "item": "endless:singularity",
+    "nbt": "{type:coal}"
+  }
+}

@@ -2,6 +2,7 @@ package com.yuo.endless.Recipe;
 
 import com.yuo.endless.Container.ExtremeCraftInventory;
 import com.yuo.endless.RlUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

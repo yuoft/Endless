@@ -9,10 +9,6 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.refinedmods.refinedstorage.RSItems;
 import com.refinedmods.refinedstorage.apiimpl.storage.FluidStorageType;
 import com.refinedmods.refinedstorage.apiimpl.storage.ItemStorageType;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.Create;
-import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.yuo.Enchants.Items.YEItems;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
@@ -21,6 +17,7 @@ import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.RlUtils;
 import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.Container;
@@ -28,9 +25,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import twilightforest.init.TFBlocks;
@@ -38,7 +38,7 @@ import twilightforest.init.TFItems;
 import vazkii.botania.common.block.BotaniaBlocks;
 import vazkii.botania.common.item.BotaniaItems;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * 模组动态配方
@@ -337,14 +337,14 @@ public class ModRecipeManager {
                     new ItemStack(ThermalCore.ITEMS.get("stuffed_pumpkin")));
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(stew,
                     new ItemStack(ThermalCore.ITEMS.get("xp_stew")), new ItemStack(ThermalCore.ITEMS.get("spring_salad")));
-            CompressorManager.addInputs(Singularity.getSingularity("gold"),
-                    getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
-            CompressorManager.addInputs(Singularity.getSingularity("iron"),
-                    getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
-            CompressorManager.addInputs(Singularity.getSingularity("copper"),
-                    getList(new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
-            CompressorManager.addInputs(Singularity.getSingularity("silver"),
-                    getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
+//            CompressorManager.addInputs(Singularity.getSingularity("gold"),
+//                    getList(new ItemStack(ThermalCore.BLOCKS.get("electrum_block"), 2)));
+//            CompressorManager.addInputs(Singularity.getSingularity("iron"),
+//                    getList(new ItemStack(ThermalCore.BLOCKS.get("invar_block"), 2)));
+//            CompressorManager.addInputs(Singularity.getSingularity("copper"),
+//                    getList(new ItemStack(ThermalCore.BLOCKS.get("bronze_block"), 3), new ItemStack(ThermalCore.BLOCKS.get("constantan_block"), 2)));
+//            CompressorManager.addInputs(Singularity.getSingularity("silver"),
+//                    getList(new ItemStack(ThermalCore.BLOCKS.get("silver_block"))));
         }
         if (Endless.isRS){
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst,
@@ -355,6 +355,24 @@ public class ModRecipeManager {
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(infinityCatalyst, new ItemStack(TinkerModifiers.dragonScale));
             ExtremeCraftShpaelessManager.getInstance().addRecipeInput(eternalSingularity, Singularity.getSingularity("cobalt"),
                     Singularity.getSingularity("manyullyn"));
+        }
+    }
+
+    public static Iterator<Recipe<?>> getRecipeIterator(List<ExtremeCraftShapeRecipe> recipeList){
+        List<Recipe<?>> recipes = new ArrayList<>(recipeList);
+        return recipes.iterator();
+    }
+
+    public static class ModIterable implements Iterable<Recipe<?>> {
+        private final Iterator<Recipe<?>> recipeIterator;
+        public ModIterable(Iterator<Recipe<?>> recipeIterator) {
+            this.recipeIterator = recipeIterator;
+        }
+
+        @NotNull
+        @Override
+        public Iterator<Recipe<?>> iterator() {
+            return this.recipeIterator;
         }
     }
 

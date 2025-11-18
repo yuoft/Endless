@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,8 +36,8 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
     }
 
     @Override
-    public RecipeType<?> getType() {
-        return RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE;
+    public @NotNull RecipeType<?> getType() {
+        return EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get();
     }
 
     @Override
@@ -44,12 +45,6 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
         return this.items;
     }
 
-    public static class ModRecipeType implements RecipeType<ExtremeCraftShapeRecipe> {
-        @Override
-        public String toString() {
-            return ExtremeCraftShapeRecipe.TYPE_SHAPE_ID.toString();
-        }
-    }
     //配方序列器
     public static class Serializer implements RecipeSerializer<ExtremeCraftShapeRecipe>{
 
@@ -143,7 +138,7 @@ public class ExtremeCraftShapeRecipe implements IExtremeCraftRecipe{
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_SERIALIZER.get();
+        return EndlessRecipes.EXTREME_CRAFT_SHAPE_SERIALIZER.get();
     }
 
     public boolean hasOutput(ItemStack stack){

@@ -4,6 +4,7 @@ import com.yuo.endless.Blocks.EndlessBlocks;
 import com.yuo.endless.Blocks.Fluid.EndlessFluidTypes;
 import com.yuo.endless.Client.Sound.ModSounds;
 import com.yuo.endless.Compat.Curios.CuriosCompat;
+import com.yuo.endless.Compat.PE.EndlessEmc;
 import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Blocks.Fluid.EndlessFluids;
@@ -12,26 +13,17 @@ import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.Proxy.ClientProxy;
 import com.yuo.endless.Proxy.CommonProxy;
 import com.yuo.endless.Proxy.IProxy;
-import com.yuo.endless.Recipe.ModRecipeManager;
-import com.yuo.endless.Recipe.RecipeTypeRegistry;
+import com.yuo.endless.Recipe.EndlessRecipes;
 import com.yuo.endless.Tiles.EndlessTileTypes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
+import net.minecraft.core.*;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.SpawnPlacements.Type;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.levelgen.Heightmap.Types;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -40,11 +32,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
-
 @Mod("endless")
 public class Endless {
 	public static final String MOD_ID = "endless";
+
     public static boolean isEnchants = false; //更多附魔
     public static boolean isPE = false; //等价交换
     public static boolean isBOT = false; //植物魔法
@@ -114,31 +105,10 @@ public class Endless {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         checkMods();
-        if (isIAF){
-            EndlessItems.registerIafItem();
-        }
-        if (isCreate){
-            EndlessItems.registerCreate();
-        }
-        if (isThermal){
-            EndlessItems.registerThermal();
-        }
-        if (isDE){
-            EndlessItems.registerDE();
-        }
-        if (isBOT){
-            EndlessItems.registerBOT();
-        }
-        if (isPE){
-            EndlessItems.registerPE();
-        }
-        if (isTC3){
-            EndlessItems.registerTC3();
-        }
-        modEventBus.addListener(this::commonSetup);
-
         //注册物品至mod总线
         EndlessItems.ITEMS.register(modEventBus);
+        registerModCompat();
+        modEventBus.addListener(this::commonSetup);
         EndlessBlocks.BLOCKS.register(modEventBus);
         EndlessTabs.TABS.register(modEventBus);
         EntityRegistry.ENTITY_TYPES.register(modEventBus);
@@ -146,17 +116,17 @@ public class Endless {
         EndlessFluids.FLUIDS.register(modEventBus);
         EndlessTileTypes.TILE_ENTITIES.register(modEventBus);
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
-        RecipeTypeRegistry.register(modEventBus);
+        EndlessRecipes.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
         proxy.registerHandlers(modEventBus);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        ModRecipeManager.addExtremeCraftShape();
-        ModRecipeManager.addCompressorCraft();
-        ModRecipeManager.lastMinuteChanges();
         if (isCurios){
             FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosCompat::sendImc);
+        }
+        if (isPE){
+            EndlessEmc.registerEmc();
         }
 
         Config.loadConfig(); //加载工具黑名单
@@ -188,6 +158,36 @@ public class Endless {
         DispenserBlock.registerBehavior(EndlessItems.infinityFluidBucket.get(), itemBehavior);
     }
 
+    /**
+     * 注册联动奇点
+     */
+    private static void registerModCompat() {
+        if (isIAF){
+            EndlessItems.registerIafItem();
+        }
+        if (isCreate){
+            EndlessItems.registerCreate();
+        }
+        if (isThermal){
+            EndlessItems.registerThermal();
+        }
+        if (isDE){
+            EndlessItems.registerDE();
+        }
+        if (isBOT){
+            EndlessItems.registerBOT();
+        }
+        if (isPE){
+            EndlessItems.registerPE();
+        }
+        if (isTC3){
+            EndlessItems.registerTC3();
+        }
+    }
+
+    /**
+     * 联动模组检查
+     */
     private void checkMods(){
         isEnchants = checkMod("yuoenchants");
         isPE = checkMod("projecte");

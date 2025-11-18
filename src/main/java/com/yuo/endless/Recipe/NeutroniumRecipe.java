@@ -6,48 +6,45 @@ import com.google.gson.JsonSyntaxException;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.crafting.CraftingHelper;
 
 public class NeutroniumRecipe implements INeutroniumRecipe {
 
-    private final NonNullList<ItemStack> inputs; //可压缩物品 压缩效率 推荐为5的倍数
+    private final Ingredient input; //可压缩物品
     private int count; //数量 可能大于64
     private final ItemStack output;
     private final ResourceLocation id;
 
-    public NeutroniumRecipe(ResourceLocation idIn, NonNullList<ItemStack> inputIn, int countIn, ItemStack outputIn){
+    public NeutroniumRecipe(ResourceLocation idIn, Ingredient inputIn, int countIn, ItemStack outputIn){
         this.id = idIn;
-        this.inputs = inputIn;
+        this.input = inputIn;
         this.count = countIn;
         this.output = outputIn;
-    }
-
-    public static class ModRecipeType implements RecipeType<NeutroniumRecipe> {
-        @Override
-        public String toString() {
-            return NeutroniumRecipe.TYPE_ID.toString();
-        }
     }
 
     public static class Serializer implements RecipeSerializer<NeutroniumRecipe>{
 
         @Override
         public NeutroniumRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            NonNullList<ItemStack> list = NonNullList.create();
-            ItemStack input = deserializeItem(GsonHelper.getAsJsonObject(json, "input"));
-            list.add(input);
+            Ingredient list;
+            JsonObject object = GsonHelper.getAsJsonObject(json, "input");
+            if (object.has("tag")) {
+                list = Ingredient.of(ItemTags.create(ResourceLocation.parse(GsonHelper.getAsString(object, "tag"))));
+            }else {
+                list = Ingredient.of(deserializeItem(object));
+            }
             int count = GsonHelper.getAsInt(json, "count");
             ItemStack output = deserializeItem(GsonHelper.getAsJsonObject(json, "output"));
             String type = output.getOrCreateTag().getString("type");
@@ -58,21 +55,15 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         @org.jetbrains.annotations.Nullable
         @Override
         public NeutroniumRecipe fromNetwork(ResourceLocation resourceLocation, FriendlyByteBuf buffer) {
-            NonNullList<ItemStack> list = NonNullList.create();
-            int i = buffer.readInt();
-            for (int j = 0; j < i;j++)
-                list.add(buffer.readItem());
+            Ingredient input = Ingredient.fromNetwork(buffer);
             int count = buffer.readInt();
             ItemStack output = buffer.readItem();
-            return new NeutroniumRecipe(resourceLocation, list, count, output);
+            return new NeutroniumRecipe(resourceLocation, input, count, output);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, NeutroniumRecipe recipe) {
-            buffer.writeInt(recipe.inputs.size());
-            for (ItemStack stack : recipe.inputs) {
-                buffer.writeItem(stack);
-            }
+            recipe.input.toNetwork(buffer);
 
             buffer.writeInt(recipe.count);
             buffer.writeItem(recipe.output);
@@ -82,11 +73,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
     @Override
     public boolean matches(Container inv, Level worldIn) {
         ItemStack itemStack = inv.getItem(0);
-        for (ItemStack stack : inputs) {
-            if (ItemStack.isSameItem(stack, itemStack)) return true;
-        }
-
-        return false;
+        return input.test(itemStack);
     }
 
     @Override
@@ -105,11 +92,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
 
     //输入相同
     public boolean isInput(ItemStack stack){
-        for (ItemStack itemStack : inputs) {
-            if (ItemStack.isSameItem(stack, itemStack)) return true;
-        }
-
-        return false;
+        return input.test(stack);
     }
 
     //输出是否相同
@@ -122,23 +105,13 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
         this.count = count;
     }
 
-    //添加输入
-    public void addInput(NonNullList<ItemStack> map){
-        inputs.addAll(map);
-    }
-
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        NonNullList<ItemStack> list = NonNullList.create();
-        for (ItemStack input : inputs) {
-            list.add(new ItemStack(input.getItem(), count / input.getCount()));
-        }
-
-        return NonNullList.of(Ingredient.EMPTY, Ingredient.of(list.stream()));
+        return NonNullList.of(this.input);
     }
 
-    public NonNullList<ItemStack> getRecipeInput() {
-        return inputs;
+    public Ingredient getInput(){
+        return this.input;
     }
 
     @Override
@@ -148,12 +121,12 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RecipeTypeRegistry.NEUTRONIUM_SERIALIZER.get();
+        return EndlessRecipes.NEUTRONIUM_SERIALIZER.get();
     }
 
     //获取数量
     public int getRecipeCount(){
-        return count;
+        return this.count;
     }
 
     //从json中获取物品
@@ -167,5 +140,9 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
             int i = GsonHelper.getAsInt(object, "count", 1);
             return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(object, true);
         }
+    }
+
+    public static ItemStack itemStackFromJson(JsonObject object) {
+        return CraftingHelper.getItemStack(object, true, true);
     }
 }

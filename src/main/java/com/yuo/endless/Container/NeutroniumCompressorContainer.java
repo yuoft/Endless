@@ -1,7 +1,7 @@
 package com.yuo.endless.Container;
 
 import com.yuo.endless.Recipe.CompressorManager;
-import com.yuo.endless.Recipe.RecipeTypeRegistry;
+import com.yuo.endless.Recipe.EndlessRecipes;
 import com.yuo.endless.Tiles.NeutroniumCompressorTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -82,7 +82,7 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
     }
 
     protected boolean hasRecipe(ItemStack stack) {
-        return this.world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new SimpleContainer(stack), this.world).isPresent();
+        return this.world.getRecipeManager().getRecipeFor(EndlessRecipes.NEUTRONIUM_RECIPE.get(), new SimpleContainer(stack), this.world).isPresent();
     }
 
     /**

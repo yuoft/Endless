@@ -6,7 +6,7 @@ import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.NmCPacket;
 import com.yuo.endless.Recipe.CompressorManager;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
-import com.yuo.endless.Recipe.RecipeTypeRegistry;
+import com.yuo.endless.Recipe.EndlessRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -45,7 +45,7 @@ public class NeutroniumCompressorTile extends BaseContainerBlockEntity implement
     // 0：输入，1：输出，2：正在参与合成的物品
     public NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY); //物品栏
     public NiumCIntArray data = new NiumCIntArray();
-    private final RecipeType<NeutroniumRecipe> recipeType = RecipeTypeRegistry.NEUTRONIUM_RECIPE;
+    private final RecipeType<NeutroniumRecipe> recipeType = EndlessRecipes.NEUTRONIUM_RECIPE.get();
     private final int[] SLOT_IN = new int[]{0};
     private final int[] SLOT_OUT = new int[]{1};
 
@@ -63,7 +63,7 @@ public class NeutroniumCompressorTile extends BaseContainerBlockEntity implement
         ItemStack stack1 = tile.items.get(1); //已有输出
         if (input.isEmpty()) return; //没有输入时 停止
         ItemStack stack;
-        Optional<NeutroniumRecipe> optional = level.getRecipeManager().getRecipeFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE, new SimpleContainer(input), level);
+        Optional<NeutroniumRecipe> optional = level.getRecipeManager().getRecipeFor(EndlessRecipes.NEUTRONIUM_RECIPE.get(), new SimpleContainer(input), level);
         if (optional.isPresent()){
             stack = optional.get().getResultItem();
         }else stack = CompressorManager.getOutput(input); //获取此输入的输出

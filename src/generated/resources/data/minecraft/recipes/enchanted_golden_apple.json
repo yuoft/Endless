@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "default",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "endless:infinity_catalyst"
+    }
+  ],
+  "result": {
+    "item": "minecraft:enchanted_golden_apple"
+  }
+}

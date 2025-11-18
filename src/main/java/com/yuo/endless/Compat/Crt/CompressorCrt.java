@@ -11,7 +11,11 @@ import com.yuo.endless.RlUtils;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.openzen.zencode.java.ZenCodeType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ZenCodeType.Name("mods.endless.CompressorRecipe")
 @ZenRegister
@@ -31,15 +35,16 @@ public class CompressorCrt {
             public void apply() {
                 ResourceLocation res = RlUtils.fa("crafttweaker", id);
                 //转化为列表
-                NonNullList<ItemStack> ingredients = NonNullList.create();
-                for (IItemStack itemStack : inputs) {
-                    ingredients.add(itemStack.getInternal());
+                ItemStack[] stacks = new ItemStack[inputs.length];
+                for (int i = 0; i < inputs.length; i++) {
+                    stacks[i] = inputs[i].getInternal();
                 }
+                Ingredient ingredient = Ingredient.of(stacks);
 
                 //添加到模组配方管理
                 ItemStack internal = output.getInternal();
                 String type = internal.getOrCreateTag().getString(Singularity.NBT_TYPE);
-                NeutroniumRecipe recipe = new NeutroniumRecipe(res, ingredients, count, Singularity.getSingularity(type));
+                NeutroniumRecipe recipe = new NeutroniumRecipe(res, ingredient, count, Singularity.getSingularity(type));
                 CompressorManager.addRecipe(recipe);
             }
 

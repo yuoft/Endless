@@ -1,0 +1,12 @@
+{
+  "type": "endless:neutronium",
+  "category": "misc",
+  "count": 900,
+  "input": {
+    "tag": "forge:storage_blocks/emerald"
+  },
+  "output": {
+    "item": "endless:singularity",
+    "nbt": "{type:emerald}"
+  }
+}

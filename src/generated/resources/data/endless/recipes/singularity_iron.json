@@ -1,0 +1,12 @@
+{
+  "type": "endless:neutronium",
+  "category": "misc",
+  "count": 1300,
+  "input": {
+    "tag": "forge:storage_blocks/iron"
+  },
+  "output": {
+    "item": "endless:singularity",
+    "nbt": "{type:iron}"
+  }
+}

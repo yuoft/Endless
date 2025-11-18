@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -46,16 +47,9 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
         this.result = result;
     }
 
-    public static class ModRecipeType implements RecipeType<ExtremeCraftRecipe> {
-        @Override
-        public String toString() {
-            return ExtremeCraftRecipe.TYPE_ID.toString();
-        }
-    }
-
     @Override
-    public RecipeType<?> getType() {
-        return RecipeTypeRegistry.EXTREME_CRAFT_RECIPE;
+    public @NotNull RecipeType<?> getType() {
+        return EndlessRecipes.EXTREME_CRAFT_RECIPE.get();
     }
 
     //配方序列器
@@ -201,7 +195,7 @@ public class ExtremeCraftRecipe implements IExtremeCraftRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return RecipeTypeRegistry.EXTREME_CRAFT_SERIALIZER.get();
+        return EndlessRecipes.EXTREME_CRAFT_SERIALIZER.get();
     }
 
     //合成方块图标

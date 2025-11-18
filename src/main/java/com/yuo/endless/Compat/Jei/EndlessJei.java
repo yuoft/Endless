@@ -5,7 +5,6 @@ import com.yuo.endless.Client.Gui.NeutroniumCompressorScreen;
 import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Container.ExtremeCraftContainer;
 import com.yuo.endless.Container.NeutroniumCompressorContainer;
-import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.*;
@@ -47,12 +46,12 @@ public class EndlessJei implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
 
-        List<ExtremeCraftRecipe> recipes = recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE).stream().filter(Objects::nonNull).toList();
+        List<ExtremeCraftRecipe> recipes = recipeManager.getAllRecipesFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get()).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(ExtremeCraftRecipeCategory.RECIPE_TYPE, recipes);
-        List<ExtremeCraftShapeRecipe> recipes0 = recipeManager.getAllRecipesFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE).stream().filter(Objects::nonNull).toList();
+        List<ExtremeCraftShapeRecipe> recipes0 = recipeManager.getAllRecipesFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get()).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(ExtremeCraftShapeRecipeCategory.RECIPE_TYPE, recipes0);
         registration.addRecipes(ExtremeCraftShapeRecipeCategory.RECIPE_TYPE, ExtremeCraftShpaelessManager.getInstance().getRecipeList());
-        List<NeutroniumRecipe> recipes1 = recipeManager.getAllRecipesFor(RecipeTypeRegistry.NEUTRONIUM_RECIPE).stream().filter(Objects::nonNull).toList();
+        List<NeutroniumRecipe> recipes1 = recipeManager.getAllRecipesFor(EndlessRecipes.NEUTRONIUM_RECIPE.get()).stream().filter(Objects::nonNull).toList();
         registration.addRecipes(NeutroniumCRecipeCategory.RECIPE_TYPE, recipes1);
         registration.addRecipes(NeutroniumCRecipeCategory.RECIPE_TYPE, CompressorManager.getRecipes());
     }

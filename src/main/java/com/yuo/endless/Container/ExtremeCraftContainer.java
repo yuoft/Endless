@@ -68,9 +68,9 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
         ServerPlayer serverPlayer = (ServerPlayer)player;
         ItemStack itemStack = ItemStack.EMPTY;
         //获取配方 先检查无尽配方
-        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.EXTREME_CRAFT_RECIPE, inputInventory, world);
-        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(RecipeTypeRegistry.EXTREME_CRAFT_SHAPE_RECIPE, inputInventory, world);
-        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(inputInventory, world);
+        Optional<ExtremeCraftRecipe> recipeOptional = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_RECIPE.get(), inputInventory, world);
+        Optional<ExtremeCraftShapeRecipe> recipeOptionalIn = world.getRecipeManager().getRecipeFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), inputInventory, world);
+//        ExtremeCraftShapeRecipe shapeRecipe = ModRecipeManager.matchesRecipe(inputInventory, world);
         if (recipeOptional.isPresent()){ //json配方 有序
             ExtremeCraftRecipe recipe = recipeOptional.get();
             if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
@@ -81,11 +81,13 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
             if (outputInventory.setRecipeUsed(world, serverPlayer, recipe)){
                 itemStack = recipe.getResultItem();
             }
-        }else if (shapeRecipe != null){ //硬编码配方
-            if (outputInventory.setRecipeUsed(world, serverPlayer, shapeRecipe)){
-                itemStack = shapeRecipe.getResultItem();
-            }
-        }else {
+        }
+//        else if (shapeRecipe != null){ //硬编码配方
+//            if (outputInventory.setRecipeUsed(world, serverPlayer, shapeRecipe)){
+//                itemStack = shapeRecipe.getResultItem();
+//            }
+//        }
+        else {
             ItemStack recipeOutPut = ExtremeCraftingManager.getInstance().getRecipeOutPut(inputInventory, world);
             ItemStack recipeOutPut1 = ExtremeCraftShpaelessManager.getInstance().getRecipeOutPut(inputInventory, world);
             if (Config.SERVER.isCraftTable.get()){

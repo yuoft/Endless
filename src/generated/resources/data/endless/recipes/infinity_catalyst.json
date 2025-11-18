@@ -1,0 +1,30 @@
+{
+  "type": "endless:extreme_craft_shape",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "endless:crystal_matrix_ingot"
+    },
+    {
+      "item": "endless:neutronium_ingot"
+    },
+    {
+      "item": "endless:cosmic_meatballs"
+    },
+    {
+      "item": "endless:ultimate_stew"
+    },
+    {
+      "item": "endless:endest_pearl"
+    },
+    {
+      "item": "endless:record_fragment"
+    },
+    {
+      "item": "endless:eternal_singularity"
+    }
+  ],
+  "result": {
+    "item": "endless:infinity_catalyst"
+  }
+}

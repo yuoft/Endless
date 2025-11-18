@@ -1,0 +1,61 @@
+{
+  "type": "endless:extreme_craft_shape",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:coal}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:copper}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:iron}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:gold}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:diamond}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:netherite}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:emerald}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:lapis}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:redstone}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:quartz}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:clay}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:dark_matter}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:red_matter}"
+    }
+  ],
+  "result": {
+    "item": "endless:eternal_singularity"
+  }
+}

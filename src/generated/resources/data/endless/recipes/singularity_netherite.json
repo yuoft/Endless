@@ -1,0 +1,12 @@
+{
+  "type": "endless:neutronium",
+  "category": "misc",
+  "count": 700,
+  "input": {
+    "tag": "forge:storage_blocks/netherite"
+  },
+  "output": {
+    "item": "endless:singularity",
+    "nbt": "{type:netherite}"
+  }
+}

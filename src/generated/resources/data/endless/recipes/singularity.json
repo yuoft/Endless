@@ -1,0 +1,11 @@
+{
+  "type": "endless:extreme_craft_shape",
+  "category": "misc",
+  "count": 1,
+  "input": {
+    "item": "minecraft:diamond_block"
+  },
+  "output": {
+    "item": "endless:singularity"
+  }
+}

@@ -1,19 +1,19 @@
 package com.yuo.endless.Recipe;
 
-import com.yuo.endless.Endless;
 import com.yuo.endless.RlUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.NotNull;
 
 public interface INeutroniumRecipe extends Recipe<Container> {
     ResourceLocation TYPE_ID = RlUtils.fa("neutronium");
 
 
     @Override
-    default RecipeType<?> getType(){
-        return RecipeTypeRegistry.NEUTRONIUM_RECIPE;
+    default @NotNull RecipeType<?> getType(){
+        return EndlessRecipes.NEUTRONIUM_RECIPE.get();
     }
 
     @Override

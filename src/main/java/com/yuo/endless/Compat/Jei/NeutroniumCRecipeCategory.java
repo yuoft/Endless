@@ -52,10 +52,9 @@ public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumReci
     }
 
     //填充输入输出
-
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, NeutroniumRecipe recipe, IFocusGroup iFocusGroup) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1,9).addIngredients(recipe.getIngredients().get(0));
+        builder.addSlot(RecipeIngredientRole.INPUT, 1,9).addIngredients(recipe.getInput());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 9).addItemStack(recipe.getResultItem());
     }
 }
