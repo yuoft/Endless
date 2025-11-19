@@ -41,7 +41,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
             Ingredient list;
             JsonObject object = GsonHelper.getAsJsonObject(json, "input");
             if (object.has("tag")) {
-                list = Ingredient.of(ItemTags.create(ResourceLocation.parse(GsonHelper.getAsString(object, "tag"))));
+                list = Ingredient.of(ItemTags.create(RlUtils.parse(GsonHelper.getAsString(object, "tag"))));
             }else {
                 list = Ingredient.of(deserializeItem(object));
             }
@@ -146,7 +146,7 @@ public class NeutroniumRecipe implements INeutroniumRecipe {
             throw new JsonParseException("Disallowed data tag found");
         } else {
             int i = GsonHelper.getAsInt(object, "count", 1);
-            return net.minecraftforge.common.crafting.CraftingHelper.getItemStack(object, true);
+            return CraftingHelper.getItemStack(object, true);
         }
     }
 
