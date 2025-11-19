@@ -45,10 +45,6 @@ public class ModDataRecipes extends RecipeProvider {
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.ENCHANTED_GOLDEN_APPLE).requires(Items.DIAMOND).requires(EndlessItems.infinityCatalyst.get())
-                        .group("default").unlockedBy("has_item", has(Items.ENCHANTED_GOLDEN_APPLE)).save(consumer);
-
-
         //无序配方
         ExtremeShapeCraftBuilder infinityCatalyst = ExtremeShapeCraftBuilder.shapeless(RecipeCategory.MISC, EndlessItems.infinityCatalyst.get(), 1).requires(getBaseInfinityCatalyst());
         if (Endless.isEnchants) infinityCatalyst.requires(YEItems.SuperBrokenMagicPearl.get());

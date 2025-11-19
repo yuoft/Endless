@@ -3,7 +3,6 @@ package com.yuo.endless.Recipe;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yuo.endless.Compat.Crt.ExtremeCraftingCrt;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
@@ -167,7 +166,7 @@ public class ExtremeShapeCraftBuilder  extends CraftingRecipeBuilder implements 
             JsonArray jsonArray = new JsonArray();
 
             for (Ingredient ingredient : this.ingredients) {
-                if (ExtremeCraftingCrt.test(ingredient, new ItemStack(EndlessItems.singularity.get()))){
+                if (test(ingredient, new ItemStack(EndlessItems.singularity.get()))){
                     ItemStack stack = ingredient.getItems()[0];
                     if (!stack.isEmpty()) {
                         JsonObject obj = new JsonObject();
@@ -205,6 +204,31 @@ public class ExtremeShapeCraftBuilder  extends CraftingRecipeBuilder implements 
         @javax.annotation.Nullable
         public ResourceLocation getAdvancementId() {
             return this.advancementId;
+        }
+    }
+
+    /**
+     * 测试Ingredient是否含有相同物品
+     * @param ingredient ig
+     * @param stack 测试物品
+     * @return 是 true
+     */
+    public static boolean test(Ingredient ingredient, ItemStack stack){
+        if (stack == null) {
+            return false;
+        } else {
+            ingredient.checkInvalidation();
+            if (ingredient.getItems().length == 0) {
+                return stack.isEmpty();
+            } else {
+                for(ItemStack itemstack : ingredient.getItems()) {
+                    if (itemstack.getItem() == stack.getItem()) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         }
     }
 }

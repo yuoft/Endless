@@ -24,6 +24,8 @@ public class EndlessEmc {
      */
     public static void registerEmc(){
         init(EndlessItems.neutroniumPile.getId(), 12800);
+        init(EndlessItems.infinityFluidBucket.getId(), 24584370);
+//        init(EndlessItems.eternalSingularity.getId(), 214748364);
     }
 
     private static void init(ResourceLocation res, long v){

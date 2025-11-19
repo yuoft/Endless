@@ -92,10 +92,16 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
     public ItemStack getItem(){
         BlockPos pos = new BlockPos(data.get(2), data.get(3), data.get(4));
         BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof NeutroniumCompressorTile){
-            return ((NeutroniumCompressorTile) tileEntity).getItem(2);
+        if (tileEntity instanceof NeutroniumCompressorTile compressorTile){
+            return compressorTile.getItem(2);
         }
-        return this.tile.getItem(2);
+        return this.tile.getItem(2).isEmpty() ? ItemStack.EMPTY : this.tile.getItem(2);
+    }
+
+    public ItemStack getResultItem(){
+        ItemStack stack = getItem();
+        if (!stack.isEmpty()) return NeutroniumRecipe.getOutput(this.world, stack);
+        return ItemStack.EMPTY;
     }
 
     //获取物品数量

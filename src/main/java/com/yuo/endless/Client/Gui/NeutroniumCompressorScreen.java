@@ -7,6 +7,7 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.RlUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -30,9 +31,6 @@ public class NeutroniumCompressorScreen extends AbstractContainerScreen<Neutroni
     protected void renderBg(GuiGraphics matrixStack, float partialTicks, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F); //确保颜色正常
         RenderSystem.setShaderTexture(0, RESOURCE);
-//        if (this.minecraft != null) {
-//            this.minecraft.getTextureManager().bindTexture(RESOURCE);
-//        }
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         matrixStack.blit(RESOURCE, i, j, 0, 0, imageWidth, imageHeight);
@@ -40,12 +38,16 @@ public class NeutroniumCompressorScreen extends AbstractContainerScreen<Neutroni
         int l = this.menu.getProgress1();
         matrixStack.blit(RESOURCE, i + 62, j + 34, 176, 0, k , 16);
         matrixStack.blit(RESOURCE, i + 90, j + 35 + 16 - l, 176, 32 - l, 16, l);
+        ItemStack resultItem = this.menu.getResultItem();
+        if (!resultItem.isEmpty()) {
+            matrixStack.renderItem(resultItem, i + 90, j + 35);
+        }
         ItemStack item = this.menu.getItem();
         if (!item.isEmpty()){ //渲染当前参与合成的物品
             if (this.minecraft != null) {
                 matrixStack.renderItem(item, i + 15, j + 35);
             }
-            matrixStack.drawString(this.font, I18n.get(item.getItem().getDescriptionId()), i + 15, j + 25, 0x696969);
+            matrixStack.drawString(this.font, I18n.get(item.getItem().getDescriptionId()), i + 15, j + 25, 0x696969, false);
         }
     }
 

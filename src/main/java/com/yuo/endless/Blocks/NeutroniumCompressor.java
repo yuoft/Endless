@@ -71,7 +71,14 @@ public class NeutroniumCompressor extends BaseEntityBlock {
         if (!state.is(blockState.getBlock())) {
             BlockEntity tileentity = level.getBlockEntity(pos);
             if (tileentity instanceof NeutroniumCompressorTile neutroniumCompressorTile) {
-                neutroniumCompressorTile.items.set(2, ItemStack.EMPTY);
+                ItemStack stack = neutroniumCompressorTile.items.get(2);
+                if (!stack.isEmpty()) {
+                    int i = neutroniumCompressorTile.data.get(0);
+                    if (i > 0) {
+                        neutroniumCompressorTile.items.set(1, new ItemStack(stack.getItem(), i));
+                    }
+                    neutroniumCompressorTile.items.set(2, ItemStack.EMPTY);
+                }
                 Containers.dropContents(level, pos, neutroniumCompressorTile);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
