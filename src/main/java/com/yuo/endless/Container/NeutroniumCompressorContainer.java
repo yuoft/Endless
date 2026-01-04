@@ -33,7 +33,7 @@ public class NeutroniumCompressorContainer extends AbstractContainerMenu {
         //矿物输入槽
         this.addSlot(new NiumCSlot(tile, world, 0, 39,35));
         //奇点槽
-        this.addSlot(new NCOutputSlot(tile, 1, 116,35));
+        this.addSlot(new NCOutputSlot(tile, 1, 117,35));
         //添加玩家物品栏
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
