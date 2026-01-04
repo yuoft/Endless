@@ -115,20 +115,16 @@ public class AbsEndlessChest extends BaseEntityBlock implements SimpleWaterlogge
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof AbsEndlessChestTile chestTile) {
-            if (!level.isClientSide && !chestTile.isEmpty()) {
+            if (!level.isClientSide) {
                 ItemStack itemstack = new ItemStack(this);
-                chestTile.saveToItem(itemstack);
+                if (!chestTile.isEmpty()) chestTile.saveToItem(itemstack);
                 if (chestTile.hasCustomName()) {
                     itemstack.setHoverName(chestTile.getCustomName());
                 }
 
-                ItemEntity itementity = new ItemEntity(level, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, itemstack);
+                ItemEntity itementity = new ItemEntity(level, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, itemstack);
                 itementity.setDefaultPickUpDelay();
                 level.addFreshEntity(itementity);
-
-                
-            } else {
-//                chestTile.unpackLootTable(player);
             }
         }
 
