@@ -1,8 +1,7 @@
 package com.yuo.endless.Client.Sound;
 
 import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
-import net.minecraft.resources.ResourceLocation;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,11 +13,11 @@ public class ModSounds {
 
 //    public static final SoundEvent GAPING_VOID = new SoundEvent(new ResourceLocation("endless:gaping_void"));
     public static final RegistryObject<SoundEvent> GAPING_VOID = SOUNDS.register("gaping_void",
-            () -> SoundEvent.createVariableRangeEvent(RlUtils.fa("gaping_void")));
+            () -> SoundEvent.createVariableRangeEvent(EndlessUtils.fa("gaping_void")));
     public static final RegistryObject<SoundEvent> INFINITY_BOW_STAR = SOUNDS.register("infinity_bow_star",
-            () -> SoundEvent.createVariableRangeEvent(RlUtils.fa("infinity_bow_star")));
+            () -> SoundEvent.createVariableRangeEvent(EndlessUtils.fa("infinity_bow_star")));
     public static final RegistryObject<SoundEvent> INFINITY_BOW_SHOOT = SOUNDS.register("infinity_bow_shoot",
-            () -> SoundEvent.createVariableRangeEvent(RlUtils.fa("infinity_bow_shoot")));
+            () -> SoundEvent.createVariableRangeEvent(EndlessUtils.fa("infinity_bow_shoot")));
     public static final RegistryObject<SoundEvent> INFINITY_BOW_END = SOUNDS.register("infinity_bow_end",
-            () -> SoundEvent.createVariableRangeEvent(RlUtils.fa("infinity_bow_end")));
+            () -> SoundEvent.createVariableRangeEvent(EndlessUtils.fa("infinity_bow_end")));
 }

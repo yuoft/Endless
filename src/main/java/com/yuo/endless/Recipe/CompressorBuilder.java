@@ -1,9 +1,7 @@
 package com.yuo.endless.Recipe;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.advancements.Advancement.Builder;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
@@ -22,7 +20,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.function.Consumer;
 
 public class CompressorBuilder extends CraftingRecipeBuilder implements RecipeBuilder {
@@ -91,7 +88,7 @@ public class CompressorBuilder extends CraftingRecipeBuilder implements RecipeBu
     public void save(Consumer<FinishedRecipe> consumer, ResourceLocation res) {
         this.ensureValid(res);
         String path = res.getPath() + "_" + type;
-        ResourceLocation location = RlUtils.fa(path);
+        ResourceLocation location = EndlessUtils.fa(path);
         this.advancement.parent(ROOT_RECIPE_ADVANCEMENT).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(location)).rewards(AdvancementRewards.Builder.recipe(location)).requirements(RequirementsStrategy.OR);
         consumer.accept(new Result(location, this.result, this.type, this.resultCount, this.inputCount, this.group == null ? "" : this.group, determineBookCategory(this.category), this.ingredient, this.advancement, location.withPrefix("recipes/" + this.category.getFolderName() + "/")));
     }

@@ -1,10 +1,8 @@
 package com.yuo.endless.Blocks.Fluid;
 
-import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
@@ -17,7 +15,7 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 public abstract class InfinityFluid extends ForgeFlowingFluid {
-    public static final TagKey<Fluid> INFINITY = FluidTags.create(RlUtils.fa("infinity"));
+    public static final TagKey<Fluid> INFINITY = FluidTags.create(EndlessUtils.fa("infinity"));
 
     protected InfinityFluid(Properties properties) {
         super(properties);

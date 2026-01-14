@@ -191,7 +191,7 @@ public class InfinityBow extends BowItem {
                     arrow.setBaseDamage(Config.SERVER.noArrowDamage.get());
                 }
                 arrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, velocity * 3.0F, 1.0F);
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0) {
+                if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
                     arrow.setRemainingFireTicks(100);
                 }
                 arrow.setCritArrow(true); //暴击粒子

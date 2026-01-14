@@ -3,7 +3,7 @@ package com.yuo.endless.Client.Lib;
 import com.google.common.graph.GraphBuilder;
 import com.google.common.graph.MutableGraph;
 import com.mojang.blaze3d.preprocessor.GlslPreprocessor;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.Minecraft;
@@ -168,9 +168,9 @@ public class GlslProcessor {
                     if (!includeFolder) {
                         match = matcher.group(2);
                     }
-                    ResourceLocation loc = RlUtils.parse(match);
+                    ResourceLocation loc = EndlessUtils.parse(match);
                     if (includeFolder) {
-                        loc = RlUtils.fa(loc.getNamespace(), FilenameUtils.normalize("shaders/include/" + loc.getPath(), true));
+                        loc = EndlessUtils.fa(loc.getNamespace(), FilenameUtils.normalize("shaders/include/" + loc.getPath(), true));
                     }
                     imports.add(loc);
                 }

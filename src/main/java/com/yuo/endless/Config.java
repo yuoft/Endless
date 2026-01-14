@@ -1,7 +1,6 @@
 package com.yuo.endless;
 
 import com.yuo.endless.Items.Singularity;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -49,7 +48,7 @@ public class Config {
      */
     private static void getToolBlocks(List<? extends String> list, Set<Block> set){
         for (String s : list) {
-            ResourceLocation resourceLocation = RlUtils.parse(s);
+            ResourceLocation resourceLocation = EndlessUtils.parse(s);
             Block block = BuiltInRegistries.BLOCK.get(resourceLocation);
             if (block == Blocks.AIR){
                 errorInfo.add("error block for ["+ s + "]");
@@ -288,7 +287,7 @@ public class Config {
     }
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> buildConfig(ForgeConfigSpec.Builder builder, String name, String comment){
-        return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> s instanceof String && RlUtils.tryParse((String) s) != null);
+        return builder.comment(comment).translation(name).defineList(name, Collections.emptyList(), s -> s instanceof String && EndlessUtils.tryParse((String) s) != null);
     }
 
 }

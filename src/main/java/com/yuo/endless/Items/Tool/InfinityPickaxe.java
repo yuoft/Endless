@@ -46,7 +46,7 @@ public class InfinityPickaxe extends PickaxeItem {
         if (player.isCrouching()) { //潜行右键切换形态
             CompoundTag tags = stack.getOrCreateTag();
             Enchantment enchantment = Enchantments.BLOCK_FORTUNE;
-            int fortune = EnchantmentHelper.getItemEnchantmentLevel(enchantment, stack);
+            int fortune = stack.getEnchantmentLevel(enchantment);
             if (fortune > 0) { //添加附魔
                 Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
                 for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {

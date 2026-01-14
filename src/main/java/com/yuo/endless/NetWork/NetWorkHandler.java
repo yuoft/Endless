@@ -1,8 +1,6 @@
 package com.yuo.endless.NetWork;
 
-import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
-import net.minecraft.resources.ResourceLocation;
+import com.yuo.endless.EndlessUtils;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -18,7 +16,7 @@ public class NetWorkHandler {
 
     public static void registerMessage() {
         INSTANCE = NetworkRegistry.newSimpleChannel(
-                RlUtils.fa("network"), //标识符
+                EndlessUtils.fa("network"), //标识符
                 () -> VERSION, //数据包版本
                 (version) -> version.equals(VERSION), //客户端和服务端可以接收的版本号
                 (version) -> version.equals(VERSION)

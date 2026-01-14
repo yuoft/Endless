@@ -3,7 +3,7 @@ package com.yuo.endless.Compat.Jei;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.NeutroniumRecipe;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -14,19 +14,13 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.Collections;
 
 public class NeutroniumCRecipeCategory implements IRecipeCategory<NeutroniumRecipe> {
     //合成配方背景
-    public static final ResourceLocation TEXTURE = RlUtils.fa("textures/gui/compressor.png");
+    public static final ResourceLocation TEXTURE = EndlessUtils.fa("textures/gui/compressor.png");
     public static final RecipeType<NeutroniumRecipe> RECIPE_TYPE = RecipeType.create(Endless.MOD_ID, "neutronium", NeutroniumRecipe.class);
 
     private final IDrawable background;

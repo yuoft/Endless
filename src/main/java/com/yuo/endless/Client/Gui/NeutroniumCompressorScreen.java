@@ -1,21 +1,17 @@
 package com.yuo.endless.Client.Gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Container.NeutroniumCompressorContainer;
-import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.AnvilScreen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 public class NeutroniumCompressorScreen extends AbstractContainerScreen<NeutroniumCompressorContainer> {
-    private final ResourceLocation RESOURCE = RlUtils.fa("textures/gui/compressor.png");
+    private final ResourceLocation RESOURCE = EndlessUtils.fa("textures/gui/compressor.png");
     protected final int textureWidth = 176;
     protected final int textureHeight = 166;
 

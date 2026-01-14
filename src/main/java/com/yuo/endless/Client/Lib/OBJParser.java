@@ -1,7 +1,7 @@
 package com.yuo.endless.Client.Lib;
 
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -294,7 +294,7 @@ public class OBJParser {
 
     private static ResourceLocation maybeRelative(ResourceLocation other, String resource) {
         if (resource.contains(":")) {
-            return RlUtils.parse(resource);
+            return EndlessUtils.parse(resource);
         }
         String path = other.getPath();
         int lastSlash = path.lastIndexOf("/");
@@ -303,6 +303,6 @@ public class OBJParser {
         } else {
             path = "";
         }
-        return RlUtils.fa(other.getNamespace(), path + "/" + resource);
+        return EndlessUtils.fa(other.getNamespace(), path + "/" + resource);
     }
 }

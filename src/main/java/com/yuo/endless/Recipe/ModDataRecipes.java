@@ -13,7 +13,7 @@ import com.yuo.Enchants.Items.YEItems;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -59,7 +59,7 @@ public class ModDataRecipes extends RecipeProvider {
             infinityCatalyst.requires(new ItemStack(AEItems.SINGULARITY));
         }
         if (Endless.isDE){
-            Item item = BuiltInRegistries.ITEM.get(RlUtils.parse("draconicevolution:chaos_shard")); //混沌碎片
+            Item item = BuiltInRegistries.ITEM.get(EndlessUtils.parse("draconicevolution:chaos_shard")); //混沌碎片
             if (item != Items.AIR) infinityCatalyst.requires(item);
         }
         if (Endless.isTTF) infinityCatalyst.requires(new ItemStack(TFBlocks.IRONWOOD_BLOCK.get()));
@@ -93,7 +93,7 @@ public class ModDataRecipes extends RecipeProvider {
         if (Endless.isTTF) ultimateStew.requires(TFItems.MAZE_MAP.get());
         if (Endless.isCreate){
             String str = "create:bar_of_chocolate";
-            Item item = BuiltInRegistries.ITEM.get(RlUtils.parse(str));
+            Item item = BuiltInRegistries.ITEM.get(EndlessUtils.parse(str));
             if (item != Items.AIR) ultimateStew.requires(item);
         }
         if (Endless.isThermal){
@@ -172,7 +172,7 @@ public class ModDataRecipes extends RecipeProvider {
         }
         if (Endless.isCreate){
             String str = "create:zinc_block"; //锌块
-            Block block = BuiltInRegistries.BLOCK.get(RlUtils.parse(str));
+            Block block = BuiltInRegistries.BLOCK.get(EndlessUtils.parse(str));
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("zinc").getItem(), "zinc",
                             Ingredient.of(new ItemStack(block)), getInputCount(300))
                     .unlockedBy("has_item", has(Singularity.getSingularity("zinc").getItem())).save(consumer);
@@ -191,8 +191,8 @@ public class ModDataRecipes extends RecipeProvider {
         if (Endless.isDE){
             String str0 = "draconicevolution:draconium_block"; //龙块
             String str1 = "draconicevolution:awakened_draconium_block"; //觉醒龙块
-            Block block0 = BuiltInRegistries.BLOCK.get(RlUtils.parse(str0));
-            Block block1 = BuiltInRegistries.BLOCK.get(RlUtils.parse(str1));
+            Block block0 = BuiltInRegistries.BLOCK.get(EndlessUtils.parse(str0));
+            Block block1 = BuiltInRegistries.BLOCK.get(EndlessUtils.parse(str1));
             if (block0 != Blocks.AIR){
                 CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("draconium").getItem(), "draconium",
                                 Ingredient.of(new ItemStack(block0)), getInputCount(80))

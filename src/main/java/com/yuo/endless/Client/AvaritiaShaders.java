@@ -5,11 +5,10 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.yuo.endless.Client.Lib.CCShaderInstance;
 import com.yuo.endless.Client.Lib.CCUniform;
 import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -62,7 +61,7 @@ public class AvaritiaShaders {
     }
 
     public static void init(RegisterShadersEvent event) {
-        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), RlUtils.fa("cosmic"), DefaultVertexFormat.BLOCK), (e) -> {
+        event.registerShader(CCShaderInstance.create(event.getResourceProvider(), EndlessUtils.fa("cosmic"), DefaultVertexFormat.BLOCK), (e) -> {
             cosmicShader = (CCShaderInstance)e;
             cosmicTime = Objects.requireNonNull(cosmicShader.getUniform("time"));
             cosmicYaw = Objects.requireNonNull(cosmicShader.getUniform("yaw"));
@@ -102,4 +101,5 @@ public class AvaritiaShaders {
     public static void drawScreenPost(ScreenEvent.Render.Post e) {
         inventoryRender = false;
     }
+
 }

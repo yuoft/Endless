@@ -9,21 +9,13 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
-import com.yuo.endless.Items.Tool.ColorText;
-import com.yuo.endless.Items.Tool.InfinitySword;
-import com.yuo.endless.RlUtils;
-import net.minecraft.ChatFormatting;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,9 +26,9 @@ import net.minecraftforge.registries.RegistryObject;
  */
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Endless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientEventHandler {
-    public static final ModelLayerLocation COMPRESSOR_CHEST_TEXTURE = new ModelLayerLocation(RlUtils.fa("block/chest/compressor_chest"), "main");
-    public static final ModelLayerLocation INFINITY_CHEST_TEXTURE = new ModelLayerLocation(RlUtils.fa("block/chest/infinity_chest"), "main");
-    public static final ModelLayerLocation NORMAL_CHEST_LOCATION = new ModelLayerLocation(RlUtils.parse("entity/chest/normal"), "main");
+    public static final ModelLayerLocation COMPRESSOR_CHEST_TEXTURE = new ModelLayerLocation(EndlessUtils.fa("block/chest/compressor_chest"), "main");
+    public static final ModelLayerLocation INFINITY_CHEST_TEXTURE = new ModelLayerLocation(EndlessUtils.fa("block/chest/infinity_chest"), "main");
+    public static final ModelLayerLocation NORMAL_CHEST_LOCATION = new ModelLayerLocation(EndlessUtils.parse("entity/chest/normal"), "main");
 
     //箱子贴图
     @SubscribeEvent

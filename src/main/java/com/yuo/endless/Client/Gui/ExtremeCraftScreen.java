@@ -1,11 +1,9 @@
 package com.yuo.endless.Client.Gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.Config;
 import com.yuo.endless.Container.ExtremeCraftContainer;
-import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -13,8 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class ExtremeCraftScreen extends AbstractContainerScreen<ExtremeCraftContainer> {
-    private final ResourceLocation RESOURCE = RlUtils.fa("textures/gui/dire_crafting_gui.png");
-    private final ResourceLocation RESOURCE_OPEN = RlUtils.fa("textures/gui/dire_crafting_gui_open.png");
+    private final ResourceLocation RESOURCE = EndlessUtils.fa("textures/gui/dire_crafting_gui.png");
+    private final ResourceLocation RESOURCE_OPEN = EndlessUtils.fa("textures/gui/dire_crafting_gui_open.png");
     protected final int textureWidth = 238;
     protected final int textureHeight = 256;
 

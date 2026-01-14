@@ -5,24 +5,21 @@ import com.yuo.endless.Client.Render.CosmicBlockRender;
 import com.yuo.endless.Client.Render.EndlessChestTileRender;
 import com.yuo.endless.Config;
 import com.yuo.endless.Container.EndlessMenuTypes;
-import com.yuo.endless.Endless;
 import com.yuo.endless.Blocks.Fluid.EndlessFluids;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.InfinityCrossBow;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Tiles.EndlessTileTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * 客户端属性注册
@@ -69,7 +66,7 @@ public class ClientProxy implements IProxy {
 
     //使用动态属性来切换无尽镐，铲形态
     private void setInfinityToolProperty(Item item, String prop) {
-        ItemProperties.register(item, RlUtils.fa(prop), (itemStack, clientWorld, livingEntity, i) -> {
+        ItemProperties.register(item, EndlessUtils.fa(prop), (itemStack, clientWorld, livingEntity, i) -> {
             if (livingEntity == null){
                 return 0.0f;
             }
@@ -82,32 +79,32 @@ public class ClientProxy implements IProxy {
 
     //设置弓物品的动态属性
     private void setBowProperty(Item item){
-        ItemProperties.register(item, RlUtils.fa("pull"), (itemStack, clientWorld, livingEntity, i) -> {
+        ItemProperties.register(item, EndlessUtils.fa("pull"), (itemStack, clientWorld, livingEntity, i) -> {
             if (livingEntity == null) {
                 return 0.0F;
             } else {
                 return livingEntity.getUseItem() != itemStack ? 0.0F : (float)(itemStack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
             }
         });
-        ItemProperties.register(item, RlUtils.fa("pulling"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0F : 0.0F);
+        ItemProperties.register(item, EndlessUtils.fa("pulling"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0F : 0.0F);
     }
 
     private void setCrossBowProperty(Item item){
-        ItemProperties.register(item, RlUtils.fa("pull"), (itemStack, clientWorld, livingEntity, i) -> {
+        ItemProperties.register(item, EndlessUtils.fa("pull"), (itemStack, clientWorld, livingEntity, i) -> {
             if (livingEntity == null) {
                 return 0.0F;
             } else {
                 return InfinityCrossBow.isCharged(itemStack) ? 0.0F : (float)(itemStack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / (float) InfinityCrossBow.getChargeTime();
             }
         });
-        ItemProperties.register(item, RlUtils.fa("pulling"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0F : 0.0F);
+        ItemProperties.register(item, EndlessUtils.fa("pulling"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0F : 0.0F);
 
-        ItemProperties.register(item, RlUtils.fa("charged"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && InfinityCrossBow.isCharged(itemStack) ? 1f : 0f);
-        ItemProperties.register(item, RlUtils.fa("firework"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && InfinityCrossBow.isCharged(itemStack) && InfinityCrossBow.containsChargedProjectile(itemStack, Items.FIREWORK_ROCKET) ? 1f : 0f);
+        ItemProperties.register(item, EndlessUtils.fa("charged"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && InfinityCrossBow.isCharged(itemStack) ? 1f : 0f);
+        ItemProperties.register(item, EndlessUtils.fa("firework"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && InfinityCrossBow.isCharged(itemStack) && InfinityCrossBow.containsChargedProjectile(itemStack, Items.FIREWORK_ROCKET) ? 1f : 0f);
     }
 
     //物资团颜色变化
     private void setMatterClusterProperty(Item item){
-        ItemProperties.register(item, RlUtils.fa("num"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && MatterCluster.getItemTag(itemStack).size() >= Config.SERVER.matterClusterMaxTerm.get() ? 1F : 0F);
+        ItemProperties.register(item, EndlessUtils.fa("num"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && MatterCluster.getItemTag(itemStack).size() >= Config.SERVER.matterClusterMaxTerm.get() ? 1F : 0F);
     }
 }

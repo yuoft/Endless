@@ -3,8 +3,7 @@ package com.yuo.endless.Client.Render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.Client.AvaritiaShaders;
-import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -12,8 +11,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -39,7 +36,7 @@ public class CosmicBlockRenderHelper {
         AvaritiaShaders.cosmicOpacity.set(0.6F);
         for (int i = 0; i < 10; i++) {
             TextureAtlasSprite sprite = mc.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(
-                    RlUtils.parse("shader/cosmic_" + i));
+                    EndlessUtils.parse("shader/cosmic_" + i));
             AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
             AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
             AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();

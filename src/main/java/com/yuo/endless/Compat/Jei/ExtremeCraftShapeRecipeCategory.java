@@ -4,7 +4,7 @@ import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.Recipe.ExtremeCraftShapeRecipe;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeCraftShapeRecipe> {
     //合成配方背景
-    public static final ResourceLocation TEXTURE = RlUtils.fa("textures/gui/extreme_jei.png");
+    public static final ResourceLocation TEXTURE = EndlessUtils.fa("textures/gui/extreme_jei.png");
     public static final RecipeType<ExtremeCraftShapeRecipe> RECIPE_TYPE = RecipeType.create(Endless.MOD_ID, "extreme_craft_shape", ExtremeCraftShapeRecipe.class);
 
 

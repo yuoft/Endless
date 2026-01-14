@@ -3,7 +3,7 @@ package com.yuo.endless.Compat.Jei;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Recipe.ExtremeCraftRecipe;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftRecipe> {
     //合成配方背景
-    public static final ResourceLocation TEXTURE = RlUtils.fa("textures/gui/extreme_jei.png");
+    public static final ResourceLocation TEXTURE = EndlessUtils.fa("textures/gui/extreme_jei.png");
     public static final RecipeType<ExtremeCraftRecipe> RECIPE_TYPE = RecipeType.create(Endless.MOD_ID, "extreme_craft", ExtremeCraftRecipe.class);
 
     private final IDrawable background;

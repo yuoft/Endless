@@ -306,7 +306,7 @@ public class InfinityCrossBow extends CrossbowItem {
     @Override
     public void onUseTick(Level level, LivingEntity living, ItemStack stack, int count) {
         if (!level.isClientSide) {
-            int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+            int i = stack.getEnchantmentLevel(Enchantments.QUICK_CHARGE);
             SoundEvent soundevent = this.getSoundEvent(i);
             SoundEvent soundevent1 = i == 0 ? SoundEvents.CROSSBOW_LOADING_MIDDLE : null;
             float f = (float)(stack.getUseDuration() - count) / (float)getChargeTime();

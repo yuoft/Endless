@@ -5,10 +5,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Lib.PerspectiveModelState;
 import com.yuo.endless.Config;
-import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.*;
@@ -62,7 +61,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
 
         for(int i = 0; i < 10; ++i) {
             TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(RlUtils.fa( "shader/cosmic_" + i));
+                    .apply(EndlessUtils.fa( "shader/cosmic_" + i));
             AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
             AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
             AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();

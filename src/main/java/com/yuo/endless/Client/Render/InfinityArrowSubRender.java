@@ -3,9 +3,8 @@ package com.yuo.endless.Client.Render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.InfinityArrowSubEntity;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,7 +17,7 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class InfinityArrowSubRender extends ArrowRenderer<InfinityArrowSubEntity> {
-    private static final ResourceLocation TEXTURE = RlUtils.fa("textures/entity/infinity_arrow_sub.png");
+    private static final ResourceLocation TEXTURE = EndlessUtils.fa("textures/entity/infinity_arrow_sub.png");
 
     private EntityModel<InfinityArrowSubEntity> arrowSub;
 

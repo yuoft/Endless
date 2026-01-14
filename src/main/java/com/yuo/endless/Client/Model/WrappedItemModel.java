@@ -6,8 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.Client.Lib.PerspectiveModel;
 import com.yuo.endless.Client.Lib.PerspectiveModelState;
 import com.yuo.endless.Client.Lib.TransformUtils;
-import com.yuo.endless.Endless;
-import com.yuo.endless.RlUtils;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
@@ -20,7 +19,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -67,7 +65,7 @@ public abstract class WrappedItemModel implements PerspectiveModel {
             final List<BlockElement> unbaked = ITEM_MODEL_GENERATOR.processFrames(sprites.indexOf(sprite), "layer" + sprites.indexOf(sprite), sprite.contents());
             for (final BlockElement element : unbaked) {
                 for (final Map.Entry<Direction, BlockElementFace> entry : element.faces.entrySet()) {
-                    quads.add(FACE_BAKERY.bakeQuad(element.from, element.to, entry.getValue(), sprite, entry.getKey(), new PerspectiveModelState(ImmutableMap.of()), element.rotation, element.shade, RlUtils.fa("dynamic")));
+                    quads.add(FACE_BAKERY.bakeQuad(element.from, element.to, entry.getValue(), sprite, entry.getKey(), new PerspectiveModelState(ImmutableMap.of()), element.rotation, element.shade, EndlessUtils.fa("dynamic")));
                 }
             }
         }

@@ -4,10 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
-import com.yuo.endless.Endless;
 import com.yuo.endless.Items.Tool.ColorText;
-import com.yuo.endless.RlUtils;
-import net.minecraft.ChatFormatting;
+import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -19,11 +17,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.NotNull;
 
 public class InfinityBoxScreen extends AbstractContainerScreen<InfinityBoxContainer> {
-    private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = RlUtils.fa("textures/gui/infinity_chest.png");
+    private static final ResourceLocation INFINITY_CHEST_GFUI_TEXTURE = EndlessUtils.fa("textures/gui/infinity_chest.png");
     public InfinityBoxScreen(InfinityBoxContainer screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.imageWidth = 500;
