@@ -4,6 +4,7 @@ import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.google.common.collect.Lists;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageTypes;
 import com.yuo.endless.Items.Tool.InfinitySword;
@@ -176,33 +177,15 @@ public class InfinityArrowEntity extends AbstractArrow {
     @Override
     protected void doPostHurtEffects(LivingEntity living) {
         if (living.level().isClientSide) return;
-        if (living instanceof WitherBoss wither){
-            wither.setInvulnerableTicks(0);
-            wither.hurt(InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
-        } else if (living instanceof EnderDragon dragon && this.shooter instanceof Player){
-            dragon.hurt(dragon.head, InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
-        } else if (living instanceof ArmorStand){
-            living.hurt(this.damageSources().generic(), 10);
-        } else if (Endless.isDE && living instanceof DraconicGuardianEntity draconicGuardian){
-            draconicGuardian.attackEntityPartFrom(draconicGuardian.dragonPartHead, InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
-            draconicGuardian.setHealth(-1);
-            draconicGuardian.die(InfinityDamageTypes.infinity(this.shooter));
-        } else {
-            if (living instanceof Player player){
-                if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
-                    if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
-                        living.hurt(InfinityDamageTypes.infinity(this.shooter), Config.SERVER.infinityBearDamage.get());
-                    else living.hurt(InfinityDamageTypes.infinity(this.shooter), Config.SERVER.infinityArmorBearDamage.get());
-                } else living.hurt(InfinityDamageTypes.infinity(this.shooter),  Float.MAX_VALUE);
-            } else living.hurt(InfinityDamageTypes.infinity(this.shooter), Float.MAX_VALUE);
-            if (living instanceof Player player){
-                if (EventHandler.isInfinite(player)){
-                    this.discard();
-                    return;
-                }
+
+        if (living instanceof Player player){
+            if (EventHandler.isInfinite(player)){
+                this.discard();
+                return;
             }
-            living.setHealth(-1);
         }
+        EndlessUtils.atkInfinity(living, this.shooter);
+        if (living.isAlive()) living.setHealth(-1);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Event.EventHandler;
 import net.minecraft.core.particles.ParticleTypes;
@@ -124,7 +125,7 @@ public class InfinitySword extends SwordItem {
     private void knockAttack(Player player, LivingEntity living, ItemStack stack){
         AttributeInstance knockBack = player.getAttribute(Attributes.ATTACK_KNOCKBACK); //击退
         if (knockBack != null){
-            int level = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, stack); //击退附魔
+            int level = stack.getEnchantmentLevel(Enchantments.KNOCKBACK); //击退附魔
             if (player.isSprinting()) level++;
             player.level().playSound(player, player.getOnPos(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, SoundSource.PLAYERS, 1.0f, 1.0f);
             living.knockback((float)knockBack.getValue() + level, -player.getLookAngle().x, -player.getLookAngle().z); //击退
@@ -180,27 +181,11 @@ public class InfinitySword extends SwordItem {
     //攻击实体
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        int fireAspect = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
+        int fireAspect = stack.getEnchantmentLevel(Enchantments.FIRE_ASPECT);
         if (fireAspect > 0){
             target.setSecondsOnFire(fireAspect * 4);
         }
-        if (target instanceof EnderDragon dragon && attacker instanceof Player){ //攻击末影龙
-            dragon.hurt(dragon.head, InfinityDamageTypes.infinity(attacker), Float.MAX_VALUE);
-        }else if (target instanceof WitherBoss wither){
-            wither.setInvulnerableTicks(0);
-            wither.hurt(InfinityDamageTypes.infinity(attacker), Float.MAX_VALUE);
-        } else if (target instanceof ArmorStand){
-            target.hurt(attacker.damageSources().generic(), 10);
-            return true;
-        }else {
-            if (target instanceof Player player){
-                if (EventHandler.isInfinite(player)){ //被攻击玩家有全套无尽 减免至10点
-                    if (EventHandler.isInfinityItem(player)) //玩家在持有无尽剑或弓时 减免至4点
-                        target.hurt(InfinityDamageTypes.infinity(attacker), Config.SERVER.infinityBearDamage.get());
-                    else target.hurt(InfinityDamageTypes.infinity(attacker), Config.SERVER.infinityArmorBearDamage.get());
-                } else target.hurt(InfinityDamageTypes.infinity(attacker),  Float.MAX_VALUE);
-            } else target.hurt(InfinityDamageTypes.infinity(attacker), Float.MAX_VALUE);
-        }
+        EndlessUtils.atkInfinity(target, attacker);
         if (target instanceof Player player){
             if (EventHandler.isInfinite(player)){ //玩家穿戴全套无尽 则不执行死亡
                 return true;
@@ -279,9 +264,6 @@ public class InfinitySword extends SwordItem {
     public static void attackEntity(Entity entity, DamageSource src, float damage){
         if (entity instanceof EnderDragon dragon){
             dragon.hurt(dragon.head, src, damage);
-        }else if (entity instanceof WitherBoss wither){
-            wither.setInvulnerableTicks(0); //将凋零无敌时间设为0
-            wither.hurt(src, damage);
         }else entity.hurt(src, damage);//给与实体伤害
     }
 
