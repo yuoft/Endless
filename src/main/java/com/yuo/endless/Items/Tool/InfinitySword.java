@@ -20,11 +20,8 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.Entity.RemovalReason;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -47,6 +44,7 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class InfinitySword extends SwordItem {
@@ -242,8 +240,14 @@ public class InfinitySword extends SwordItem {
         AABB aabb = player.getBoundingBox().deflate(range);//范围
         List<Entity> toAttack = player.level().getEntities(player, aabb);//生物列表
         DamageSource src = InfinityDamageTypes.infinity(player);//伤害类型
-        for (Entity entity : toAttack) { //循环遍历
+        for (Entity entity : toAttack) {
             if (entity instanceof LivingEntity){
+                if (entity instanceof TamableAnimal animal){
+                    UUID ownerUUID = animal.getOwnerUUID();
+                    if (ownerUUID != null && ownerUUID.equals(player.getUUID())){
+                        continue;
+                    }
+                }
                 if(type) { //潜行攻击所有生物
                     attackEntity(entity, src, damage);
                 } else {
