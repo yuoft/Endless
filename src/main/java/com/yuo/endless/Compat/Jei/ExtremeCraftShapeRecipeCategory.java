@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("removal")
 public class ExtremeCraftShapeRecipeCategory implements IRecipeCategory<ExtremeCraftShapeRecipe> {
     //合成配方背景
     public static final ResourceLocation TEXTURE = EndlessUtils.fa("textures/gui/extreme_jei.png");

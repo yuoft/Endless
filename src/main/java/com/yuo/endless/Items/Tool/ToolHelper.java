@@ -1,6 +1,5 @@
 package com.yuo.endless.Items.Tool;
 
-import com.google.common.collect.Sets;
 import com.yuo.endless.Config;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
@@ -16,10 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GrassBlock;
-import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.Tags;
@@ -32,14 +28,6 @@ import java.util.*;
 public class ToolHelper {
     private final Map<ItemStack, Integer> map = new HashMap<>();
     private static final Set<BlockPos> set = new HashSet<>();
-//    public static final Set<Material> MATERIAL_PICKAXE = Sets.newHashSet(Material.STONE, Material.HEAVY_METAL, Material.ICE,
-//            Material.GLASS, Material.EXPLOSIVE, Material.BUILDABLE_GLASS, Material.ICE_SOLID, Material.SPONGE, Material.SHULKER_SHELL, Material.WOOL,
-//            Material.PISTON, Material.BARRIER);
-//    public static final Set<Material> MATERIAL_AXE = Sets.newHashSet(Material.WOOD, Material.PORTAL, Material.WEB, Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT,
-//            Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.NETHER_WOOD, Material.BAMBOO, Material.BAMBOO_SAPLING,
-//            Material.LEAVES, Material.CACTUS);
-//    public static final Set<Material> MATERIAL_SHOVEL = Sets.newHashSet(Material.DIRT, Material.SAND, Material.SNOW, Material.GRASS, Material.CLAY, Material.CAKE,
-//            Material.SNOW, Material.POWDER_SNOW, Material.TOP_SNOW);
 
     /**
      * 根据玩家朝向来破坏方块
@@ -113,7 +101,7 @@ public class ToolHelper {
     }
 
     /**
-     * 破坏方块
+     * 无尽工具范围破坏方块
      * @param x 要破坏的方块坐标
      * @param y 坐标
      * @param z 坐标
@@ -123,36 +111,39 @@ public class ToolHelper {
     private void destroyBlock(int x, int y, int z, Level world, ItemStack stack, Player player){
         BlockPos pos = new BlockPos(x, y, z);
         BlockState state = world.getBlockState(pos);
-        if (stack.getItem() == EndlessItems.infinityAxe.get() && Config.SERVER.isAxeChangeGrassBlock.get() && state.getBlock() instanceof GrassBlock){ //将草方块转变为泥土
-            world.setBlockAndUpdate(pos, Blocks.DIRT.defaultBlockState());
-        }
+        Block goalBlock = state.getBlock();
         //排除空气方块和不能用镐挖掘方块 挖掘等级不够
         if (state.isAir()){
             return;
         }
-
-        if (!stack.isCorrectToolForDrops(state)  //采集树叶
-                && !(stack.getItem() == EndlessItems.infinityAxe.get() && state.getBlock() instanceof LeavesBlock)) return;
-
-        if (stack.getItem() == EndlessItems.infinityPickaxe.get() && !state.canHarvestBlock(world, pos, player)) return;
-        if (stack.getItem() == EndlessItems.infinityShovel.get() && !state.canHarvestBlock(world, pos, player)) return;
-        if (stack.getItem() == EndlessItems.infinityAxe.get() && !state.canHarvestBlock(world, pos, player)) return;
-        //黑名单
-        if (stack.getItem() == EndlessItems.infinityPickaxe.get() && Config.pickaxeBlocks.contains(state.getBlock())) return;
-        if (stack.getItem() == EndlessItems.infinityShovel.get() && Config.shovelBlocks.contains(state.getBlock())) return;
-        if (stack.getItem() == EndlessItems.infinityAxe.get() && Config.axeBlocks.contains(state.getBlock())) return;
-
+        if (stack.getItem() == EndlessItems.infinityPickaxe.get()){
+            //无法采集或在黑名单，就跳过此方块
+            if (!state.canHarvestBlock(world, pos, player) || Config.pickaxeBlocks.contains(goalBlock)) return;
+        }
+        if (stack.getItem() == EndlessItems.infinityShovel.get()){
+            if (!state.canHarvestBlock(world, pos, player) || Config.shovelBlocks.contains(goalBlock)) return;
+        }
+        if (stack.getItem() == EndlessItems.infinityAxe.get()){
+            if (Config.SERVER.isAxeChangeGrassBlock.get() && goalBlock instanceof GrassBlock)
+                world.setBlockAndUpdate(pos, Blocks.DIRT.defaultBlockState());
+            //破坏植物和树叶 不添加到物资团
+            if (goalBlock instanceof BushBlock || goalBlock instanceof LeavesBlock){
+                world.destroyBlock(pos, false);
+                return;
+            }
+            if (!state.canHarvestBlock(world, pos, player) || Config.axeBlocks.contains(goalBlock)) return;
+        }
+        //是否破坏-1硬度方块
         if (!Config.SERVER.isBreakBedrock.get() && state.canHarvestBlock(world, pos, player)) return;
-//        world.destroyBlock(pos, false, player); //破坏方块
 
-        //添加到map中
+        //添加到map中，进行掉落收集
         if (state.canHarvestBlock(world, pos, player)){
-            Item block = Item.BY_BLOCK.getOrDefault(state.getBlock(), Items.AIR);
+            Item block = Item.BY_BLOCK.getOrDefault(goalBlock, Items.AIR);
             if (block != null && block != Items.AIR){
                 putMapItem(new ItemStack(block), map);
             }
         }else putMapDrops(world, pos, player, stack, map);
-        world.removeBlock(pos, false); //破坏方块
+        world.removeBlock(pos, false); //移除方块
     }
 
     /**
@@ -196,7 +187,7 @@ public class ToolHelper {
     public static void spawnMatterCluster(Player player, Level world, Map<ItemStack, Integer> map){
         List<ItemStack> stacks = MatterCluster.createMatterCluster(map);
         for (ItemStack stack : stacks) {
-            if (!player.isCreative()){ //创造模式不生成物质团
+            if (!player.getAbilities().instabuild){ //非生存模式不生成物质团
                 if (Config.SERVER.isMergeMatterCluster.get()){
                     if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
                         world.addFreshEntity(new ItemEntity(world, player.getX(), player.getY(), player.getZ(), stack));

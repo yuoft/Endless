@@ -4,6 +4,8 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
+
+@SuppressWarnings("removal")
 public class CuriosItemWrapper implements ICurio {
     private final ItemStack itemStack;
 

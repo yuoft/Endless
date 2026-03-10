@@ -100,7 +100,8 @@ public class Endless {
     public static boolean isCurios = false; //饰品栏
     public static boolean isDummmmmmy = false; //假人
     public static final IProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-	public Endless() {
+    @SuppressWarnings("removal")  //禁用过期警告
+    public Endless() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SERVER_CONFIG); //配置文件
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
+@SuppressWarnings("removal")
 public class ExtremeCraftRecipeCategory implements IRecipeCategory<ExtremeCraftRecipe> {
     //合成配方背景
     public static final ResourceLocation TEXTURE = EndlessUtils.fa("textures/gui/extreme_jei.png");

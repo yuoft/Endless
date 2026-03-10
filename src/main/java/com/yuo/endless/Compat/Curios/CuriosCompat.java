@@ -7,7 +7,7 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
 public class CuriosCompat {
-
+    @SuppressWarnings("removal")
     public static void sendImc(InterModEnqueueEvent evt){
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().build());
     }
