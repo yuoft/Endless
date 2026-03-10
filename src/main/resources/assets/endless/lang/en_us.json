@@ -228,6 +228,9 @@
   "config.jade.plugin_endless.compressor": "Compression",
   "config.jade.plugin_endless.collector": "Collection",
 
+  "task.endless.infinity_task": "Infinity Task",
+  "task.endless.infinity_task.desc": "Infinity Task Desc",
+
   "death.attack.infinity":"%1$s was annihilated",
   "death.attack.infinity_weapon.0":"%1$s was sliced to ribbons by %2$s using %3$s",
   "death.attack.infinity.0":"%1$s was obliterated by %2$s",

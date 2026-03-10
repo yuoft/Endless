@@ -230,6 +230,11 @@
     "config.jade.plugin_endless.compressor": "压缩",
     "config.jade.plugin_endless.collector": "收集",
 
+    "task.endless.infinity_task": "寰宇支配",
+    "task.endless.infinity_task.desc": "可使用无尽工具",
+    "task.endless.infinity_task.condition.has_infinity_bow": "主手持有无尽弓",
+    "task.endless.infinity_task.condition.has_infinity_arrow": "副手持有无尽箭矢",
+
     "death.attack.infinity":"%1$s被彻底湮灭",
     "death.attack.infinity_weapon.0":"%1$s被%2$s使用%3$s切成了条",
     "death.attack.infinity.0":"%1$s被%2$s彻底粉碎",

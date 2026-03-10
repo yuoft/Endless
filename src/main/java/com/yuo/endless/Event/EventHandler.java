@@ -310,7 +310,7 @@ public class EventHandler {
                     player.setHealth(player.getMaxHealth());
                     player.addEffect(new MobEffectInstance(MobEffects.JUMP, 800, 1));
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 800, 1));
-                    attackAOE(player, 8, 1000.0f);
+                    InfinitySword.attackAOE(player, 8, 1000.0f, false);
                     player.sendSystemMessage(Component.translatable("endless.text.msg.totem_break"));
                 }else {
                     player.setHealth(10.0F);
@@ -370,7 +370,7 @@ public class EventHandler {
 
     //玩家不会被无尽伤害外攻击
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onAttacked(LivingAttackEvent event) { //实体受到攻击事件
+    public static void onAttacked(LivingAttackEvent event) {
         if (!(event.getEntity() instanceof Player player)) { //受伤实体不是玩家
             return;
         }
@@ -538,17 +538,5 @@ public class EventHandler {
         return ItemStack.EMPTY;
     }
 
-    private static void attackAOE(Player player, float range, float damage) {
-        AABB aabb = player.getBoundingBox().inflate(range);//范围
-        List<Entity> toAttack = player.level().getEntities(player, aabb);//生物列表
-        DamageSource src = player.damageSources().playerAttack(player);//伤害类型
-        for (Entity entity : toAttack) { //循环遍历
-            if (entity instanceof LivingEntity){
-                if (entity instanceof Mob) {
-                    InfinitySword.attackEntity(entity, src, damage);
-                }
-            }
-        }
-    }
 }
 

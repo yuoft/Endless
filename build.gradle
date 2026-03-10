@@ -121,6 +121,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:slashblade-resharped-1022428:${sb_re_id}")
     compileOnly fg.deobf("curse.maven:croparia-250235:${croparia_id}")
     compileOnly fg.deobf("curse.maven:refined-storage-243076:${rs_id}")
+    implementation fg.deobf("curse.maven:touhou-little-maid-355044:${tlm_id}")
 
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
     runtimeOnly fg.deobf("curse.maven:selene-499980:4806893")

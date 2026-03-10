@@ -235,7 +235,7 @@ public class InfinitySword extends SwordItem {
     }
 
     //aoe伤害
-    private void attackAOE(Player player,float range, float damage,boolean type) {
+    public static void attackAOE(Player player, float range, float damage, boolean type) {
         if (player.level().isClientSide) return;
         AABB aabb = player.getBoundingBox().deflate(range);//范围
         List<Entity> toAttack = player.level().getEntities(player, aabb);//生物列表
