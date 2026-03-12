@@ -57,7 +57,6 @@ public class InfinityArmor extends ArmorItem {
     }
 
     //盔甲在身上时触发效果
-
     @Override
     public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
         Item item = stack.getItem();
@@ -70,23 +69,28 @@ public class InfinityArmor extends ArmorItem {
                 player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0)); //夜视
         }
         if (item == EndlessItems.infinityChest.get() && !player.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
-            //清除所有负面效果
-            Collection<MobEffectInstance> effects = player.getActiveEffects();
-            if (!effects.isEmpty()) {
-                List<MobEffect> bad = new ArrayList<>();
-                effects.forEach((e) -> {
-                    if (!e.getEffect().isBeneficial())
-                        bad.add(e.getEffect());
-                });
-                if (!bad.isEmpty()) {
-                    //player.clearActivePotions();
-                    bad.forEach(player::removeEffect);
-                }
-            }
+           clearBadEffects(player);
         }
         if (item == EndlessItems.infinityLegs.get() && !player.getItemBySlot(EquipmentSlot.LEGS).isEmpty()) {
             if (player.isOnFire()) player.clearFire();//着火时熄灭
             player.fireImmune(); //免疫火伤
+        }
+    }
+
+    /**
+     *  清除所有负面效果
+     */
+    public static void clearBadEffects(LivingEntity living) {
+        Collection<MobEffectInstance> effects = living.getActiveEffects();
+        if (!effects.isEmpty()) {
+            List<MobEffect> bad = new ArrayList<>();
+            effects.forEach((e) -> {
+                if (!e.getEffect().isBeneficial())
+                    bad.add(e.getEffect());
+            });
+            if (!bad.isEmpty()) {
+                bad.forEach(living::removeEffect);
+            }
         }
     }
 

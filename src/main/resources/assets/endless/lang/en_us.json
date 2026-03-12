@@ -228,8 +228,16 @@
   "config.jade.plugin_endless.compressor": "Compression",
   "config.jade.plugin_endless.collector": "Collection",
 
-  "task.endless.infinity_task": "Infinity Task",
-  "task.endless.infinity_task.desc": "Infinity Task Desc",
+  "task.endless.infinity_bow_task": "Universal·Bow",
+  "task.endless.infinity_bow_task.desc": "Can use Infinity Bow",
+  "task.endless.infinity_bow_task.condition.has_infinity_bow": "Holding Infinity Bow in main hand",
+  "task.endless.infinity_bow_task.condition.has_infinity_arrow": "Holding Infinity Arrow in off hand (Optional)",
+  "task.endless.infinity_sword_task": "Universal·Sword",
+  "task.endless.infinity_sword_task.desc": "Can use Infinity Sword",
+  "task.endless.infinity_sword_task.desc.use": "Area Cleared!!!",
+  "task.endless.infinity_sword_task.condition.has_infinity_sword": "Holding Infinity Sword in main hand",
+  "overlay.endless.cosmic_meat_balls.tips": "Hold §6Cosmic Meat Balls§r and use Shift + Right Click to feed the maid",
+  "overlay.endless.ultimate_stew.tips": "Hold §6Ultimate Stew§r and use Shift + Right Click to feed the maid",
 
   "death.attack.infinity":"%1$s was annihilated",
   "death.attack.infinity_weapon.0":"%1$s was sliced to ribbons by %2$s using %3$s",

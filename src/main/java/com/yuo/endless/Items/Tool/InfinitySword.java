@@ -234,7 +234,13 @@ public class InfinitySword extends SwordItem {
         return InteractionResultHolder.success(heldItem);
     }
 
-    //aoe伤害
+    /**
+     * aoe伤害
+     * @param player 原点实体
+     * @param range 范围
+     * @param damage 伤害值
+     * @param type 伤害类型
+     */
     public static void attackAOE(Player player, float range, float damage, boolean type) {
         if (player.level().isClientSide) return;
         AABB aabb = player.getBoundingBox().deflate(range);//范围
@@ -244,7 +250,7 @@ public class InfinitySword extends SwordItem {
             if (entity instanceof LivingEntity){
                 if (entity instanceof TamableAnimal animal){
                     UUID ownerUUID = animal.getOwnerUUID();
-                    if (ownerUUID != null && ownerUUID.equals(player.getUUID())){
+                    if (player.getUUID().equals(ownerUUID)){
                         continue;
                     }
                 }
