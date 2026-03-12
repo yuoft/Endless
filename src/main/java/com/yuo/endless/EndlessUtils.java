@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * ResourceLocation类调用
  */
+@SuppressWarnings("removal")
 public class EndlessUtils {
     public static ResourceLocation fa(String path){
         return new ResourceLocation(Endless.MOD_ID, path);

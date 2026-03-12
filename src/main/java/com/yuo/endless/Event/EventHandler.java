@@ -1,5 +1,6 @@
 package com.yuo.endless.Event;
 
+import com.yuo.endless.Client.ColorText;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
@@ -9,17 +10,19 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.NetWork.NetWorkHandler;
-import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -41,7 +44,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
@@ -299,7 +301,7 @@ public class EventHandler {
             }
             ItemStack totem = getPlayerBagItem(player);
             if (!totem.isEmpty()){
-                NetWorkHandler.INSTANCE.sendToServer(new TotemPacket(totem, player));
+                playTotem(totem, player);
                 if (player instanceof ServerPlayer serverplayer) {
                     serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
                     CriteriaTriggers.USED_TOTEM.trigger(serverplayer, totem);
@@ -489,6 +491,23 @@ public class EventHandler {
         ItemStack stack1 = new ItemStack(item, count);
         ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack1);
         event.getDrops().add(itemEntity);
+    }
+
+    /**
+     * 播放图腾动画
+     * @param stack 动画物品
+     * @param entity 对谁播放
+     */
+    @OnlyIn(Dist.CLIENT)
+    public static void playTotem(ItemStack stack, Entity entity) {
+        Minecraft instance = Minecraft.getInstance();
+        ClientLevel world = instance.level;
+        if (world != null) {
+            instance.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
+            world.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
+            instance.gameRenderer.displayItemActivation(stack);
+        }
+
     }
 
     /**

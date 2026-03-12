@@ -1,4 +1,4 @@
-package com.yuo.endless.Items.Tool;
+package com.yuo.endless.Client;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

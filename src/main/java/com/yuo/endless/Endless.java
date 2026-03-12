@@ -122,6 +122,7 @@ public class Endless {
         proxy.registerHandlers(modEventBus);
     }
 
+    @SuppressWarnings("removal")
     private void commonSetup(final FMLCommonSetupEvent event) {
         if (isCurios){
             FMLJavaModLoadingContext.get().getModEventBus().addListener(CuriosCompat::sendImc);
