@@ -9,7 +9,7 @@ public class MyFoods {
     //食物属性构建  补充饥饿值，饱腹度  药水效果 获取药水效果概率（1=100%） 总是可以食用 肉
     //寰宇肉丸
     public static final FoodProperties MEAT_BALLS = new FoodProperties.Builder().nutrition(50).saturationMod(30).effect(
-            () -> new MobEffectInstance(MobEffects.HARM, (int) Math.ceil(5 * 60 * 20 * Config.SERVER.foodTime.get()), 4), 1).effect(
+            () -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, (int) Math.ceil(5 * 60 * 20 * Config.SERVER.foodTime.get()), 4), 1).effect(
             () -> new MobEffectInstance(MobEffects.DIG_SPEED, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2), 1).effect(
             () -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2), 1).effect(
             () -> new MobEffectInstance(MobEffects.JUMP, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2), 1).alwaysEat().meat().build();
