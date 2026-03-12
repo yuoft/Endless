@@ -1,6 +1,5 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.Client.ColorText;
 import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;

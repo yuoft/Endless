@@ -5,7 +5,7 @@ import com.yuo.endless.Config;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.Client.ColorText;
+import com.yuo.endless.Items.Tool.ColorText;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.nbt.CompoundTag;

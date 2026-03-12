@@ -1,7 +1,7 @@
 package com.yuo.endless.Items;
 
 import com.yuo.endless.Config;
-import com.yuo.endless.Client.ColorText;
+import com.yuo.endless.Items.Tool.ColorText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
