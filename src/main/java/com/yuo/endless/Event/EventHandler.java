@@ -10,6 +10,7 @@ import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.Items.Tool.*;
 import com.yuo.endless.NetWork.NetWorkHandler;
+import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
@@ -55,6 +56,7 @@ import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
@@ -301,9 +303,10 @@ public class EventHandler {
             }
             ItemStack totem = getPlayerBagItem(player);
             if (!totem.isEmpty()){
-                playTotem(totem, player);
+                //发包到客户端
+                NetWorkHandler.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player), new TotemPacket(totem, player));
                 if (player instanceof ServerPlayer serverplayer) {
-                    serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
+                    serverplayer.awardStat(Stats.ITEM_USED.get(EndlessItems.infinityTotem.get()), 1);
                     CriteriaTriggers.USED_TOTEM.trigger(serverplayer, totem);
                 }
                 player.removeAllEffects();
@@ -491,23 +494,6 @@ public class EventHandler {
         ItemStack stack1 = new ItemStack(item, count);
         ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack1);
         event.getDrops().add(itemEntity);
-    }
-
-    /**
-     * 播放图腾动画
-     * @param stack 动画物品
-     * @param entity 对谁播放
-     */
-    @OnlyIn(Dist.CLIENT)
-    public static void playTotem(ItemStack stack, Entity entity) {
-        Minecraft instance = Minecraft.getInstance();
-        ClientLevel world = instance.level;
-        if (world != null) {
-            instance.particleEngine.createTrackingEmitter(entity, ParticleTypes.TOTEM_OF_UNDYING, 30);
-            world.playLocalSound(entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, entity.getSoundSource(), 1.0F, 1.0F, false);
-            instance.gameRenderer.displayItemActivation(stack);
-        }
-
     }
 
     /**

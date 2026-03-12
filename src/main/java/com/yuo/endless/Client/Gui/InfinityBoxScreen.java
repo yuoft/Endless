@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.Container.Chest.InfinityBoxContainer;
-import com.yuo.endless.Items.Tool.ColorText;
+import com.yuo.endless.Client.ColorText;
 import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
