@@ -56,6 +56,7 @@ import java.util.Random;
 public class InfinityMobEntity extends Zombie {
 
     private static final Random rand = new Random();
+    private boolean isInfinity;
     private final ServerBossEvent bossInfo = (ServerBossEvent)(new ServerBossEvent(this.getDisplayName(), BossBarColor.RED, BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 
 
@@ -123,18 +124,25 @@ public class InfinityMobEntity extends Zombie {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Entity entity = source.getDirectEntity();
+        boolean infinity = InfinityDamageTypes.isInfinity(source);
+        this.isInfinity = infinity;
         //攻击者为玩家且是无尽伤害
-        if (InfinityDamageTypes.isInfinity(source) && entity instanceof Player) {
+        if (infinity && entity instanceof Player) {
             amount *= 0.1f;
         } else { //伤害最高10点
-            amount *= 0.01f;
-            amount = amount > 10 ? 10 : amount;
-            amount = Math.max(amount, 0.5f); //最低0.5
+            amount = Mth.clamp(amount *= 0.01f, 0.5F, 10F);
         }
         if (amount >= this.getHealth() && this.checkTotemDeathProtection(source)) {
             this.heal(512.0F);
+            if (!infinity) return false;
         }
         return super.hurt(source, amount);
+    }
+
+    @Override
+    public void setHealth(float amount) {
+        if (amount < 1 && !this.isInfinity) return;
+        super.setHealth(amount);
     }
 
     @Override

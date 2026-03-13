@@ -10,9 +10,12 @@ import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.EndlessUtils;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -76,6 +79,9 @@ public class ClientEventHandler {
     public static void addPlayerLayer(EntityRenderersEvent.AddLayers event) {
         addLayer(event, "default");
         addLayer(event, "slim");
+
+//        LivingEntityRenderer entityRenderer = event.getRenderer(EntityType.CREEPER);
+//        entityRenderer.addLayer(new MobLayer<>(entityRenderer));
     }
 
     private static void addLayer(EntityRenderersEvent.AddLayers e, String s) {
