@@ -29,6 +29,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.core.appender.rolling.action.IfAccumulatedFileCount;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -37,9 +38,9 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
     public static ResourceLocation MASK = EndlessUtils.fa("models/infinity_armor_mask");
     public static ResourceLocation MASK_INV = EndlessUtils.fa("models/infinity_armor_mask_inv");
     public static ResourceLocation WING = EndlessUtils.fa("models/infinity_armor_mask_wings");
-    private static boolean modelRender;
-    private static boolean playerFlying;
-    private static boolean player;
+    private static boolean modelRender; //全套特效
+    private static boolean playerFlying; //飞行
+    private static boolean player; //
     private final ResourceLocation eyeTex = EndlessUtils.fa("textures/models/infinity_armor_eyes.png");
     private final ResourceLocation wingTex = EndlessUtils.fa("textures/models/infinity_armor_wing.png");
     private final ResourceLocation wingGlowTex = EndlessUtils.fa("textures/models/infinity_armor_wingglow.png");
@@ -62,7 +63,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         this.humanoidModel = new HumanoidModel<>(createMesh(new CubeDeformation(0.0F), 0.0F).getRoot().bake(64, 64));
     }
 
-    private static RenderType mask2(ResourceLocation tex) {
+    public static RenderType mask2(ResourceLocation tex) {
         return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
     }
 
@@ -136,7 +137,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
 
         AvaritiaShaders.cosmicOpacity.set(1.0F);
         if (AvaritiaShaders.inventoryRender) {
-            AvaritiaShaders.cosmicExternalScale.set(25.0F);
+            AvaritiaShaders.cosmicExternalScale.set(100.0F);
         } else {
             AvaritiaShaders.cosmicExternalScale.set(1.0F);
             AvaritiaShaders.cosmicYaw.set((float)((double)(this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0));
@@ -145,7 +146,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
 
         pPoseStack.pushPose();
         pPoseStack.scale(f, f, f);
-        pPoseStack.translate(0.0, this.babyYHeadOffset / 16.0F * f3, 0.0);
+        pPoseStack.translate(0.0, this.babyYHeadOffset / 16.0F * f3, -0.029999999329447746);
         this.head.render(pPoseStack, material(MASK).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
         if (modelRender && !player) {
             this.hatsOver().forEach((t) -> {
@@ -162,7 +163,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             this.bodyPartsOver().forEach((t) -> t.render(pPoseStack, material(MASK_INV).buffer(this.bufferSource, InfinityArmorModel::mask2), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha));
         }
 
-        this.bodyParts().forEach((t) -> t.render(pPoseStack, this.vertex(this.glow(this.eyeTex)), pPackedLight, pPackedOverlay, 0.84F, 1.0F, 0.95F, (float)(pulse_mag_sqr * 0.5)));
+        this.bodyParts().forEach((t) -> t.render(pPoseStack, this.vertex(this.glow(this.eyeTex)), pPackedLight, pPackedOverlay, 0.84F, 1.0F, 0.95F, (float) (pulse_mag_sqr * 0.5)));
         pPoseStack.popPose();
         pPoseStack.pushPose();
         this.random.setSeed(time / 3L * 1723609L);
@@ -171,7 +172,15 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         pPoseStack.translate(0.0, this.babyYHeadOffset / 16.0F * f3, -0.029999999329447746);
         this.hat.render(pPoseStack, material(MASK).buffer(this.bufferSource, this::mask), pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
         if (modelRender) {
-            this.hat.render(pPoseStack, this.vertex(RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(RenderType.POSITION_COLOR_TEX_SHADER).setTextureState(new RenderStateShard.TextureStateShard(this.eyeTex, false, false)).setCullState(RenderType.NO_CULL).createCompositeState(true))), pPackedLight, pPackedOverlay, col[0], col[1], col[2], 1.0F);
+            this.hat.render(pPoseStack, this.vertex(RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0,
+                    CompositeState.builder().setShaderState(RenderType.POSITION_COLOR_TEX_SHADER)
+                            .setTextureState(new RenderStateShard.TextureStateShard(this.eyeTex, false, false))
+                            .setCullState(RenderType.NO_CULL)
+                            .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
+                            .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)  // 深度测试：小于等于
+//                            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(false, true)) // 不写入深度
+                            .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
+                            .createCompositeState(true))), pPackedLight, pPackedOverlay, col[0], col[1], col[2], 1.0F);
         }
 
         pPoseStack.popPose();
