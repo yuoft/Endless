@@ -41,6 +41,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 
 import java.util.List;
@@ -109,8 +110,15 @@ public class InfinitySword extends SwordItem {
                 criticalAttack(player, living);
             }else if (player.isSprinting())
                 knockAttack(player, living, stack);
+        }else if (entity instanceof PartEntity<?> part){
+            Entity parent = part.getParent();
+            parent.hurt(InfinityDamageTypes.infinity(player), Float.MAX_VALUE);
+//            parent.kill();
         }
-        damageGuardian(entity, player);
+
+        if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
+            EndlessUtils.damageGuardian(entity, player);
+        }
         return true;
     }
 
@@ -277,37 +285,6 @@ public class InfinitySword extends SwordItem {
         }else entity.hurt(src, damage);//给与实体伤害
     }
 
-    /**
-     * 攻击龙研中的实体 混沌水晶
-     * @param entity 实体
-     * @param player 玩家
-     */
-    public static void damageGuardian(Entity entity, Player player){
-        if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
-            if (entity instanceof DraconicGuardianEntity draconicGuardian){
-                draconicGuardian.attackEntityPartFrom(draconicGuardian.getDragonParts()[2], InfinityDamageTypes.infinity(player), Float.MAX_VALUE);
-                draconicGuardian.setHealth(-1);
-                draconicGuardian.die(InfinityDamageTypes.infinity(player));
-            }else if (entity instanceof GuardianCrystalEntity crystal){
-                crystal.kill();
-            }else if (entity instanceof DraconicGuardianPartEntity draconicGuardian) {
-                DraconicGuardianEntity dragon = draconicGuardian.dragon;
-                    dragon.hurt(player.damageSources().thorns(player), Float.MAX_VALUE);
-                    dragon.attackEntityPartFrom(dragon.dragonPartHead, InfinityDamageTypes.infinity(player), Float.MAX_VALUE);
-                    GuardianCrystalEntity crystal = dragon.closestGuardianCrystal;
-                    if (crystal != null) {
-                        crystal.kill();
-                    }
-                    if (dragon.isAlive() || dragon.getHealth() > 0) {
-                        dragon.setHealth(-1);
-                        if (!player.level().isClientSide) {
-                            dragon.die(InfinityDamageTypes.infinity(player));
-                        }
-                    }
-                    dragon.kill();
-                }
-        }
-    }
 
     @Override
     public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {

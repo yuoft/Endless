@@ -1,9 +1,7 @@
 package com.yuo.endless.Entity;
 
-import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
 import com.google.common.collect.Lists;
 import com.yuo.endless.Config;
-import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageTypes;
@@ -21,9 +19,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -55,7 +50,7 @@ public class InfinityArrowEntity extends AbstractArrow {
     public InfinityArrowEntity(EntityType<? extends AbstractArrow> type, LivingEntity shooter, Level worldIn, boolean isSub) {
         super(type, shooter, worldIn);
         this.setBaseDamage(10000f);
-        this.shooter = shooter;
+        this.shooter = shooter;//(LivingEntity) getOwner();
         this.isSub = isSub;
     }
 
@@ -96,9 +91,7 @@ public class InfinityArrowEntity extends AbstractArrow {
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-        Entity entity = result.getEntity(); //被击中的实体
-        float f = (float)this.getDeltaMovement().length();
-        int i = Mth.ceil(Mth.clamp((double)f * this.baseDamage, 0.0D, 2.147483647E9D));
+        Entity target = result.getEntity(); //被击中的实体
         if (this.getPierceLevel() > 0) {  //穿透等级
             if (this.piercingIgnoreEntityIds == null) {
                 this.piercingIgnoreEntityIds = new IntOpenHashSet(5);
@@ -113,64 +106,68 @@ public class InfinityArrowEntity extends AbstractArrow {
                 return;
             }
 
-            this.piercingIgnoreEntityIds.add(entity.getId());
+            this.piercingIgnoreEntityIds.add(target.getId());
         }
 
-        if (this.isCritArrow()) {
-            long j = (long)this.random.nextInt(i / 2 + 2);
-            i = (int)Math.min(j + (long)i, 2147483647L);
+        DamageSource damageSource;
+        if (shooter == null){
+            damageSource = this.damageSources().fellOutOfWorld();
+        }else {
+            damageSource = InfinityDamageTypes.infinity(this.shooter);
+            shooter.setLastHurtMob(target); //设置最后攻击者
+
+            if (shooter instanceof Player){
+                if (target instanceof LivingEntity living)
+                    EndlessUtils.atkInfinity(living, shooter);
+                if (Config.SERVER.isBreakDECrystal.get())
+                    EndlessUtils.damageGuardian(target, (Player) shooter);
+            }
         }
 
-        if (shooter != null)
-            shooter.setLastHurtMob(entity); //设置最后攻击者
-
-        if (shooter instanceof Player){
-            InfinitySword.damageGuardian(entity, (Player) shooter);
-        }
 
         if (this.isOnFire()) {
-            entity.setSecondsOnFire(5);
+            target.setSecondsOnFire(5);
         }
 
-        if (entity instanceof LivingEntity livingentity) {
-            if (!this.level.isClientSide && this.getPierceLevel() <= 0) {
-                livingentity.setArrowCount(livingentity.getArrowCount() + 1);
-            }
+        if (target.hurt(damageSource, Float.MAX_VALUE)){
+            if (target instanceof LivingEntity livingentity) {
+                if (!this.level.isClientSide && this.getPierceLevel() <= 0) {
+                    livingentity.setArrowCount(livingentity.getArrowCount() + 1);
+                }
 
-            if (this.knockback > 0) { //击退
-                Vec3 vector3d = this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockback * 0.6D);
-                if (vector3d.lengthSqr() > 0.0D) {
-                    livingentity.push(vector3d.x, 0.1D, vector3d.z);
+                if (this.knockback > 0) { //击退
+                    Vec3 vector3d = this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D).normalize().scale((double)this.knockback * 0.6D);
+                    if (vector3d.lengthSqr() > 0.0D) {
+                        livingentity.push(vector3d.x, 0.1D, vector3d.z);
+                    }
+                }
+
+                if (!this.level.isClientSide) {
+                    EnchantmentHelper.doPostHurtEffects(livingentity, shooter);
+                    EnchantmentHelper.doPostDamageEffects(shooter, livingentity);
+                }
+
+                this.doPostHurtEffects(livingentity);
+                if (shooter != null && livingentity != shooter && livingentity instanceof Player && shooter instanceof ServerPlayer && !this.isSilent()) {
+                    ((ServerPlayer)shooter).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                }
+
+                if (!target.isAlive() && this.piercedAndKilledEntities != null) {
+                    this.piercedAndKilledEntities.add(livingentity);
+                }
+
+                if (!this.level.isClientSide && shooter instanceof ServerPlayer serverPlayer) {
+                    if (this.piercedAndKilledEntities != null && this.shotFromCrossbow()) {
+                        CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(serverPlayer, this.piercedAndKilledEntities);
+                    } else if (!target.isAlive() && this.shotFromCrossbow()) {
+                        CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(serverPlayer, Collections.singletonList(target));
+                    }
                 }
             }
-
-            if (!this.level.isClientSide) {
-                EnchantmentHelper.doPostHurtEffects(livingentity, shooter);
-                EnchantmentHelper.doPostDamageEffects(shooter, livingentity);
+            this.playSound(this.soundEvent, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+            if (this.getPierceLevel() <= 0) {
+                this.discard();
             }
-
-            this.doPostHurtEffects(livingentity);
-            if (shooter != null && livingentity != shooter && livingentity instanceof Player && shooter instanceof ServerPlayer && !this.isSilent()) {
-                ((ServerPlayer)shooter).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-            }
-
-            if (!entity.isAlive() && this.piercedAndKilledEntities != null) {
-                this.piercedAndKilledEntities.add(livingentity);
-            }
-
-            if (!this.level.isClientSide && shooter instanceof ServerPlayer serverPlayer) {
-                if (this.piercedAndKilledEntities != null && this.shotFromCrossbow()) {
-                    CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(serverPlayer, this.piercedAndKilledEntities);
-                } else if (!entity.isAlive() && this.shotFromCrossbow()) {
-                    CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(serverPlayer, Collections.singletonList(entity));
-                }
-            }
-        } else {
-            entity.hurt(InfinityDamageTypes.infinity(this.shooter), (float)i);
-        }
-        this.playSound(this.soundEvent, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-        if (this.getPierceLevel() <= 0) {
-            this.discard();
         }//反弹箭矢
     }
 

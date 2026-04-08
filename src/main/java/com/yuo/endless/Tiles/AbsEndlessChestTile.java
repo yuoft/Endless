@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
@@ -366,6 +367,17 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             this.chestHandler.invalidate();
             this.chestHandler = null;
         }
+    }
 
+    public static int getOpenCount(BlockGetter getter, BlockPos pos) {
+        BlockState blockstate = getter.getBlockState(pos);
+        if (blockstate.hasBlockEntity()) {
+            BlockEntity blockentity = getter.getBlockEntity(pos);
+            if (blockentity instanceof AbsEndlessChestTile) {
+                return ((AbsEndlessChestTile)blockentity).openersCounter.getOpenerCount();
+            }
+        }
+
+        return 0;
     }
 }
