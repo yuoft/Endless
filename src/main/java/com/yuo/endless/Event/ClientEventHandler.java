@@ -1,10 +1,13 @@
 package com.yuo.endless.Event;
 
+import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Model.CosmicModelLoader;
 import com.yuo.endless.Client.Model.HaloItemModelLoader;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Client.Render.*;
+import com.yuo.endless.Compat.Maid.LittleMaidCompat;
+import com.yuo.endless.Compat.Maid.LittleMaidCompat.MaidRender;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
@@ -81,7 +84,7 @@ public class ClientEventHandler {
         addLayer(event, "slim");
 
 //        LivingEntityRenderer entityRenderer = event.getRenderer(EntityType.CREEPER);
-//        entityRenderer.addLayer(new MobLayer<>(entityRenderer));
+//        entityRenderer.addLayer(new MobLayer(entityRenderer));
     }
 
     private static void addLayer(EntityRenderersEvent.AddLayers e, String s) {

@@ -1,6 +1,5 @@
 package com.yuo.endless.Client.Render;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.Client.AvaritiaShaders;
@@ -8,11 +7,9 @@ import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -53,12 +50,10 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
             AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
         }
 
-        VertexConsumer consumer = buffer.getBuffer(AvaritiaShaders.COSMIC_RENDER_TYPE);
-
         poseStack.pushPose();
 
         // 稍微放大一点避免深度冲突
-        poseStack.scale(1, 1, 1);
+        poseStack.scale(1.02f, 1.02f, 1.02f);
 
         // 渲染模型（使用星空着色器）
         this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2), packedLight,1, 0.84f, 1.0f, 0.95f, 0.8f);

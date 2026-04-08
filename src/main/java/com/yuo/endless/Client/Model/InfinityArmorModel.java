@@ -107,7 +107,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         return LayerDefinition.create(m, 64, 64);
     }
 
-    private void renderToBufferWing(@NotNull PoseStack pPoseStack, @NotNull VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+    public void renderToBufferWing(@NotNull PoseStack pPoseStack, @NotNull VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
         ModelPart h = this.rebuildWings().bakeRoot();
         ModelPart bipedRightWing = h.getChild("bipedRightWing");
         ModelPart bipedLeftWing = h.getChild("bipedLeftWing");
