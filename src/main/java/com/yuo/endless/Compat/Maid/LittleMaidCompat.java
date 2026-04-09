@@ -78,21 +78,4 @@ public class LittleMaidCompat implements ILittleMaid {
         renderer.addGeoLayerRenderer(new MaidGeoLayer<>(renderer));
     }
 
-    public static class MaidRender extends RenderLayer<EntityMaid, BedrockModel<EntityMaid>> {
-        public MaidRender(LivingEntityRenderer<EntityMaid, BedrockModel<EntityMaid>> renderer) {
-            super(renderer);
-        }
-
-//        public Iterable<ModelPart> playerParts() {
-//            return ImmutableList.of(this.getParentModel().getHead(), this.getParentModel().getLeftArm(), this.getParentModel().getRightArm());
-//        }
-
-        public void render(@NotNull PoseStack pPoseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, @NotNull EntityMaid l, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-            if (EventHandler.isInfinite(l)) {
-                AvaritiaShaders.cosmicOpacity.set(2.0F);
-                this.getParentModel().getModelMap().forEach((s, t) -> t.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, InfinityArmorModel::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));
-            }
-
-        }
-    }
 }

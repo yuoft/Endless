@@ -62,7 +62,7 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         cachedWingModel = new InfinityArmorModel(rebuildWings().bakeRoot(), 0);
     }
 
-    private LayerDefinition rebuildWings() {
+    public static LayerDefinition rebuildWings() {
         MeshDefinition m = new MeshDefinition();
         PartDefinition p = m.getRoot();
         p.addOrReplaceChild("bipedRightWing", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -11.6F, 0.0F, 0.0F, 32.0F, 32.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, 0.0F, 2.0F, 0.0F, 1.2566371F, 0.0F));
@@ -77,27 +77,8 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
             return;
         }
 
-        // 计算着色器参数
-        float yaw = (float) (entity.getYRot() * 2.0f * Math.PI / 360.0);
-        float pitch = -(float) (entity.getXRot() * 2.0f * Math.PI / 360.0);
+        updateShaderParams(entity);
 
-        AvaritiaShaders.cosmicTime.set((float) (System.currentTimeMillis() - AvaritiaShaders.renderTime) / 2000.0F);
-        AvaritiaShaders.cosmicYaw.set(yaw);
-        AvaritiaShaders.cosmicPitch.set(pitch);
-        AvaritiaShaders.cosmicExternalScale.set(1.0f);
-        AvaritiaShaders.cosmicOpacity.set(1.0F);
-
-        for (int i = 0; i < 10; ++i) {
-            TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(EndlessUtils.fa("shader/cosmic_" + i));
-            AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 3] = sprite.getV1();
-        }
-
-        if (AvaritiaShaders.cosmicUVs != null) {
-            AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
-        }
         // 渲染女仆翅膀
         IMaid maid = IMaid.convert(entity);
         if (maid != null) {
@@ -142,5 +123,36 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         model.renderToBufferWing(poseStack, InfinityArmorModel.material(InfinityArmorModel.WING).buffer(buffer, MaidLayer::mask), packedLight, OverlayTexture.NO_OVERLAY,  r, g, b, a);
         model.renderToBufferWing(poseStack, buffer.getBuffer(MaidLayer.glow(wingGlowTex)), packedLight, OverlayTexture.NO_OVERLAY,  r, g, b, a);
         poseStack.popPose();
+    }
+
+    public static void updateShaderParams(Mob entity) {
+        float yaw = (float) (entity.getYRot() * 2.0f * Math.PI / 360.0);
+        float pitch = -(float) (entity.getXRot() * 2.0f * Math.PI / 360.0);
+
+        AvaritiaShaders.cosmicTime.set((float) (System.currentTimeMillis() - AvaritiaShaders.renderTime) / 2000.0F);
+        AvaritiaShaders.cosmicYaw.set(yaw);
+        AvaritiaShaders.cosmicPitch.set(pitch);
+
+        if (AvaritiaShaders.inventoryRender) {
+            AvaritiaShaders.cosmicExternalScale.set(100.0f);
+        } else {
+            AvaritiaShaders.cosmicExternalScale.set(1.0f);
+        }
+        AvaritiaShaders.cosmicOpacity.set(1.0F);
+
+        for (int i = 0; i < 10; ++i) {
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                    .apply(EndlessUtils.fa("shader/cosmic_" + i));
+            if (sprite != null) {
+                AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
+                AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
+                AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();
+                AvaritiaShaders.COSMIC_UVS[i * 4 + 3] = sprite.getV1();
+            }
+        }
+
+        if (AvaritiaShaders.cosmicUVs != null) {
+            AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
+        }
     }
 }

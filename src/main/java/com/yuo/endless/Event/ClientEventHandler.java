@@ -1,24 +1,17 @@
 package com.yuo.endless.Event;
 
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Model.CosmicModelLoader;
 import com.yuo.endless.Client.Model.HaloItemModelLoader;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.Client.Render.*;
-import com.yuo.endless.Compat.Maid.LittleMaidCompat;
-import com.yuo.endless.Compat.Maid.LittleMaidCompat.MaidRender;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.EndlessUtils;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.*;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
