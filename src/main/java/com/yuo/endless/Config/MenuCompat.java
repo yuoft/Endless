@@ -210,6 +210,7 @@ public class MenuCompat {
     /**
      * 注册可视化配置
      */
+    @SuppressWarnings("removal")
     public static void registerModsPage() {
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> getConfigBuilder().setParentScreen(parent).build()));
     }

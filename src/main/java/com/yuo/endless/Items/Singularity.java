@@ -18,7 +18,7 @@ import java.util.List;
 public class Singularity extends Item {
     //原版+联动奇点
     public static final List<String> linkageTypes = Arrays.asList("coal", "copper", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay",
-             "silver", "zinc", "nickel", "lead", "tin", "draconium", "awakened_draconium", "manasteel", "terrasteel", "elementium",
+            "ruby", "dragon", "space", "xray", "ultra","silver", "zinc", "nickel", "lead", "tin", "draconium", "awakened_draconium", "manasteel", "terrasteel", "elementium",
             "dark_matter", "red_matter", "cobalt", "manyullyn");
     //原版奇点
     private static final String[] baseTypes = new String[]{ "coal", "copper", "iron", "gold", "diamond", "netherite", "emerald", "lapis", "redstone", "quartz", "clay"};

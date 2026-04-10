@@ -21,7 +21,7 @@ public class DataGenEvent {
         PackOutput output = generator.getPackOutput();
         CompletableFuture<Provider> lookupProvider = event.getLookupProvider();
         if (b){
-            generator.addProvider(true, new ModDataRecipes(output));
+            generator.addProvider(event.includeServer(), new ModDataRecipes(output));
         }
     }
 }
