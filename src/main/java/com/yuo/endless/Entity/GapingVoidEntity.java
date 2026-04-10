@@ -2,11 +2,9 @@ package com.yuo.endless.Entity;
 
 import com.mojang.authlib.GameProfile;
 import com.yuo.endless.Client.Sound.ModSounds;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Event.EventHandler;
-import net.favouriteless.enchanted.common.util.BlockPosUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -16,7 +14,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion.BlockInteraction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.level.block.Blocks;
@@ -38,7 +34,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
@@ -52,9 +47,9 @@ public class GapingVoidEntity extends Entity {
     public static final EntityDataAccessor<Integer> AGE_PARAMETER = SynchedEntityData.defineId(GapingVoidEntity.class, EntityDataSerializers.INT);
     public static final int maxLifetime = 186; //存在时间
     public static double collapse = 0.95; //坍塌系数 膨胀速度
-    public static int suckRange = Config.SERVER.endestPearlSuckRange.get(); //引力范围
-    private static final int endDamage = Config.SERVER.endestPearlEndDamage.get(); //最终爆炸伤害
-    private static final int oneDamage = Config.SERVER.endestPearlOneDamage.get(); //单次吸引伤害
+    public static int suckRange = ModConfig.SERVER.endestPearlSuckRange.get(); //引力范围
+    private static final int endDamage = ModConfig.SERVER.endestPearlEndDamage.get(); //最终爆炸伤害
+    private static final int oneDamage = ModConfig.SERVER.endestPearlOneDamage.get(); //单次吸引伤害
     private FakePlayer fakePlayer; //模拟玩家
     private LivingEntity useEntity;
     public GapingVoidEntity(EntityType<?> entityTypeIn, Level worldIn) {

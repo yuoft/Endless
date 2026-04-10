@@ -48,6 +48,14 @@
     },
     {
       "item": "endless:singularity",
+      "nbt": "{type:draconium}"
+    },
+    {
+      "item": "endless:singularity",
+      "nbt": "{type:awakened_draconium}"
+    },
+    {
+      "item": "endless:singularity",
       "nbt": "{type:dark_matter}"
     },
     {

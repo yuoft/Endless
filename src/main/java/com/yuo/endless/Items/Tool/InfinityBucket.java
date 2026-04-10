@@ -1,6 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Blocks.Fluid.EndlessFluidBucketWrapper;
 import com.yuo.endless.EndlessUtils;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -178,7 +178,7 @@ public class InfinityBucket extends Item {
                 CompoundTag tag = bucket.getOrCreateTag();
                 //范围装取流体
                 int fluidNum = 0;
-                int range = Config.SERVER.infinityBucketRange.get();
+                int range = ModConfig.SERVER.infinityBucketRange.get();
                 for (BlockPos pos : BlockPos.betweenClosed(blockpos.offset(-range, -range, -range), blockpos.offset(range, range, range))) {
                     if (pos == blockpos) continue;
                     FluidState fluidState = worldIn.getFluidState(pos);

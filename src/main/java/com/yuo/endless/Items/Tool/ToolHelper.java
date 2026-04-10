@@ -1,6 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import net.minecraft.core.BlockPos;
@@ -118,23 +118,23 @@ public class ToolHelper {
         }
         if (stack.getItem() == EndlessItems.infinityPickaxe.get()){
             //无法采集或在黑名单，就跳过此方块
-            if (!state.canHarvestBlock(world, pos, player) || Config.pickaxeBlocks.contains(goalBlock)) return;
+            if (!state.canHarvestBlock(world, pos, player) || ModConfig.pickaxeBlocks.contains(goalBlock)) return;
         }
         if (stack.getItem() == EndlessItems.infinityShovel.get()){
-            if (!state.canHarvestBlock(world, pos, player) || Config.shovelBlocks.contains(goalBlock)) return;
+            if (!state.canHarvestBlock(world, pos, player) || ModConfig.shovelBlocks.contains(goalBlock)) return;
         }
         if (stack.getItem() == EndlessItems.infinityAxe.get()){
-            if (Config.SERVER.isAxeChangeGrassBlock.get() && goalBlock instanceof GrassBlock)
+            if (ModConfig.SERVER.isAxeChangeGrassBlock.get() && goalBlock instanceof GrassBlock)
                 world.setBlockAndUpdate(pos, Blocks.DIRT.defaultBlockState());
             //破坏植物和树叶 不添加到物资团
             if (goalBlock instanceof BushBlock || goalBlock instanceof LeavesBlock){
                 world.destroyBlock(pos, false);
                 return;
             }
-            if (!state.canHarvestBlock(world, pos, player) || Config.axeBlocks.contains(goalBlock)) return;
+            if (!state.canHarvestBlock(world, pos, player) || ModConfig.axeBlocks.contains(goalBlock)) return;
         }
         //是否破坏-1硬度方块
-        if (!Config.SERVER.isBreakBedrock.get() && state.canHarvestBlock(world, pos, player)) return;
+        if (!ModConfig.SERVER.isBreakBedrock.get() && state.canHarvestBlock(world, pos, player)) return;
 
         //添加到map中，进行掉落收集
         if (state.canHarvestBlock(world, pos, player)){
@@ -157,7 +157,7 @@ public class ToolHelper {
     public static void putMapDrops(Level world, BlockPos pos, Player player, ItemStack stack, Map<ItemStack, Integer> map){
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        if (!Config.SERVER.isKeepStone.get() && (state.is(Tags.Blocks.STONE) || block == Blocks.DIRT || block == Blocks.COARSE_DIRT
+        if (!ModConfig.SERVER.isKeepStone.get() && (state.is(Tags.Blocks.STONE) || block == Blocks.DIRT || block == Blocks.COARSE_DIRT
             || block == Blocks.ROOTED_DIRT || block == Blocks.DIRT_PATH)) return; //不保留石头和泥土
         for (ItemStack drop : Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), player, stack)) {
             putMapItem(drop, map);
@@ -188,7 +188,7 @@ public class ToolHelper {
         List<ItemStack> stacks = MatterCluster.createMatterCluster(map);
         for (ItemStack stack : stacks) {
             if (!player.getAbilities().instabuild){ //非生存模式不生成物质团
-                if (Config.SERVER.isMergeMatterCluster.get()){
+                if (ModConfig.SERVER.isMergeMatterCluster.get()){
                     if (!MatterCluster.mergeMatterCluster(stack, player)) //合并
                         world.addFreshEntity(new ItemEntity(world, player.getX(), player.getY(), player.getZ(), stack));
                     else world.playSound(player, player.getOnPos(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0f, 3.0f);

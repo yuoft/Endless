@@ -1,6 +1,6 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -33,7 +33,7 @@ public class MatterCluster extends Item {
 
     @Override
     public Component getName(ItemStack pStack) {
-        if (getItemTag(pStack).size() >= Config.SERVER.matterClusterMaxTerm.get())
+        if (getItemTag(pStack).size() >= ModConfig.SERVER.matterClusterMaxTerm.get())
             return Component.translatable("item.endless.matter_cluster_full");
         return super.getName(pStack);
     }
@@ -44,15 +44,15 @@ public class MatterCluster extends Item {
      */
     public static List<ItemStack> createMatterCluster(Map<ItemStack, Integer> map){
         List<ItemStack> list = new ArrayList<>();
-        if (map.size() <= Config.SERVER.matterClusterMaxTerm.get()){
+        if (map.size() <= ModConfig.SERVER.matterClusterMaxTerm.get()){
             if (map.isEmpty()) return list;
             if (createMatterCluster(map, list)) return list;
         }else {
-            int num = (int) Math.ceil(map.size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0d));
+            int num = (int) Math.ceil(map.size() / (ModConfig.SERVER.matterClusterMaxTerm.get() * 1.0d));
             for (int i = 0; i < num; i++){ //物品组数量影响物质团数量 64 -- 1
                 if (map.isEmpty()) return list;
-                Map<ItemStack, Integer> topN = getTopN(map, Config.SERVER.matterClusterMaxTerm.get());
-                removeFirstNEntries(map, Config.SERVER.matterClusterMaxTerm.get());
+                Map<ItemStack, Integer> topN = getTopN(map, ModConfig.SERVER.matterClusterMaxTerm.get());
+                removeFirstNEntries(map, ModConfig.SERVER.matterClusterMaxTerm.get());
                 if (createMatterCluster(topN, list)) return list;
             }
         }
@@ -62,7 +62,7 @@ public class MatterCluster extends Item {
     public static boolean createMatterCluster(Map<ItemStack, Integer> map, List<ItemStack> list) {
         Map<ItemStack, Integer> spawnMap = spawnMap(map);
         int mapCount = getMaxCountFromMap(spawnMap);
-        int maxCount = Config.SERVER.matterClusterMaxCount.get();
+        int maxCount = ModConfig.SERVER.matterClusterMaxCount.get();
         for (int j = 0; j < Math.ceil(mapCount * 1.0d / maxCount); j++){ //数量数量限制 超过则新建物质团
             if (spawnMap.isEmpty()) return true;
             Map<ItemStack, Integer> newMap = spawnNewMap(spawnMap, maxCount);
@@ -143,7 +143,7 @@ public class MatterCluster extends Item {
         Iterator<Map.Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()){
             Map.Entry<ItemStack, Integer> next = iterator.next();
-            if (num <= Config.SERVER.matterClusterMaxTerm.get()){
+            if (num <= ModConfig.SERVER.matterClusterMaxTerm.get()){
                 map1.put(next.getKey(), next.getValue());
                 iterator.remove();
                 num++;
@@ -162,8 +162,8 @@ public class MatterCluster extends Item {
         if (matterCluster != null){
             //物品种类数量信息
             if (isMaxSize(stack)){
-                components.add(Component.keybind(matterCluster.size() + "/" + Config.SERVER.matterClusterMaxTerm.get() + Component.translatable("endless.text.itemInfo.matter_cluster2").getString()).withStyle(ChatFormatting.RED));
-            }else components.add(Component.keybind(matterCluster.size() + "/" + Config.SERVER.matterClusterMaxTerm.get() + Component.translatable("endless.text.itemInfo.matter_cluster2").getString()));
+                components.add(Component.keybind(matterCluster.size() + "/" + ModConfig.SERVER.matterClusterMaxTerm.get() + Component.translatable("endless.text.itemInfo.matter_cluster2").getString()).withStyle(ChatFormatting.RED));
+            }else components.add(Component.keybind(matterCluster.size() + "/" + ModConfig.SERVER.matterClusterMaxTerm.get() + Component.translatable("endless.text.itemInfo.matter_cluster2").getString()));
             components.add(Component.keybind(""));
 
             if (Screen.hasShiftDown()) { //在物品上按下shift键
@@ -259,7 +259,7 @@ public class MatterCluster extends Item {
     public static boolean addItem(ItemStack stack, ItemStack itemStack){
         Map<ItemStack, Integer> map = getItemTag(stack);
         Map<ItemStack, Integer> map1 = getItemTag(itemStack);
-        Integer maxCount = Config.SERVER.matterClusterMaxCount.get();
+        Integer maxCount = ModConfig.SERVER.matterClusterMaxCount.get();
         //合并相同项
         for (Map.Entry<ItemStack, Integer> entry : map.entrySet()) {
             Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
@@ -282,7 +282,7 @@ public class MatterCluster extends Item {
             Iterator<Map.Entry<ItemStack, Integer>> iterator = map1.entrySet().iterator();
             while (iterator.hasNext()){
                 Map.Entry<ItemStack, Integer> entry = iterator.next();
-                if (map.size() < Config.SERVER.matterClusterMaxTerm.get()){ //物质团1未满
+                if (map.size() < ModConfig.SERVER.matterClusterMaxTerm.get()){ //物质团1未满
                     ItemStack key = entry.getKey();
                     if (map.containsKey(key)){
                         map.put(new ItemStack(key.getItem(), key.getCount() + 1), entry.getValue());
@@ -307,7 +307,7 @@ public class MatterCluster extends Item {
     public static boolean isMaxSize(ItemStack stack){
         Map<ItemStack, Integer> map = getItemTag(stack);
         if (map.isEmpty()) return false;
-        return map.size() >= Config.SERVER.matterClusterMaxTerm.get();
+        return map.size() >= ModConfig.SERVER.matterClusterMaxTerm.get();
     }
 
     /**

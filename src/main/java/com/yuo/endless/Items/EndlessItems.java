@@ -155,9 +155,19 @@ public class EndlessItems {
 		Singularity.addSingularity(new Singularity.SingularityData("dark_matter", 0x0c0c0c,0x171717));//暗物质
 		Singularity.addSingularity(new Singularity.SingularityData("red_matter", 0x340303,0x4d0404));//红物质
 	}
+
 	//匠魂3
 	public static void registerTC3(){
 		Singularity.addSingularity(new Singularity.SingularityData("cobalt", 0x0753b8,0x59a6ef));//钴
 		Singularity.addSingularity(new Singularity.SingularityData("manyullyn", 0xa97de0,0xcfacf9));//玛玉灵
+	}
+
+	//强力装备
+	public static void registerSArms(){
+		Singularity.addSingularity(new Singularity.SingularityData("ruby", 0xe02e35,0xe25e63));//红宝石
+		Singularity.addSingularity(new Singularity.SingularityData("dragon", 0x550a56,0xe04fe2));//龙晶
+		Singularity.addSingularity(new Singularity.SingularityData("space", 0x000000,0xffffff));//空间
+		Singularity.addSingularity(new Singularity.SingularityData("xray", 0x3affff,0xe4ffff));//X光
+		Singularity.addSingularity(new Singularity.SingularityData("ultra", 0x7f6a00,0x4cff00));//极限
 	}
 }

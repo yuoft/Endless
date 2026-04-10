@@ -1,6 +1,6 @@
 package com.yuo.endless.Items.Tool;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,7 +44,7 @@ public class InfinityAxe extends AxeItem {
             BlockState state = world.getBlockState(pos);
             //垂直方向的树木
             if (state.is(BlockTags.LOGS) && state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y){
-                handler.aoeBlocks(world, pos, player, Config.SERVER.axeChainDistance.get(), itemstack);
+                handler.aoeBlocks(world, pos, player, ModConfig.SERVER.axeChainDistance.get(), itemstack);
                 return true;
             }
         }

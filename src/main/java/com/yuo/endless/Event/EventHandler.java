@@ -1,7 +1,8 @@
 package com.yuo.endless.Event;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Endless;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Entity.EntityRegistry;
 import com.yuo.endless.Entity.InfinityMobEntity;
 import com.yuo.endless.Items.Armor.InfinityArmor;
@@ -12,15 +13,11 @@ import com.yuo.endless.NetWork.NetWorkHandler;
 import com.yuo.endless.NetWork.TotemPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -105,7 +102,7 @@ public class EventHandler {
         Mob entity = event.getEntity();
         if (entity instanceof EnderMan enderMan) {
             ServerLevelAccessor level = event.getLevel();
-            boolean b = Config.SERVER.mobSpawn.get() && level.getRandom().nextFloat() < Config.SERVER.mobWeigh.get() * 0.1f;
+            boolean b = ModConfig.SERVER.mobSpawn.get() && level.getRandom().nextFloat() < ModConfig.SERVER.mobWeigh.get() * 0.1f;
             if (b){
                 InfinityMobEntity mob = new InfinityMobEntity(EntityRegistry.INFINITY_MOB.get(), level.getLevel());
                 BlockPos pos = enderMan.getOnPos();
@@ -180,7 +177,7 @@ public class EventHandler {
                     if (!player.getAbilities().mayfly)
                         player.getAbilities().mayfly = true;
                     if (chest.getOrCreateTag().getBoolean("flag") && player.level().isClientSide){
-                        player.getAbilities().setFlyingSpeed(0.05f + 0.05f * Config.SERVER.infinityChestFly.get());
+                        player.getAbilities().setFlyingSpeed(0.05f + 0.05f * ModConfig.SERVER.infinityChestFly.get());
                     }
                 }else {
                     if (player.getAbilities().mayfly && !player.isCreative() && !player.isSpectator()) {
@@ -197,7 +194,7 @@ public class EventHandler {
             }
             //legs
             if (playersWithLegs.contains(key)) {
-                AttributeModifier modifierWalk = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed", 0.1 * Config.SERVER.infinityLegsWalk.get(), AttributeModifier.Operation.ADDITION);
+                AttributeModifier modifierWalk = new AttributeModifier(UUID.fromString("d164b605-3715-49ca-bea3-1e67080d3f63"), Endless.MOD_ID + ":movement_speed", 0.1 * ModConfig.SERVER.infinityLegsWalk.get(), AttributeModifier.Operation.ADDITION);
                 AttributeInstance attribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
                 if (hasLegs) {
                     if (legs.getOrCreateTag().getBoolean("flag") && attribute != null && !attribute.hasModifier(modifierWalk))
@@ -239,7 +236,7 @@ public class EventHandler {
             String key = player.getGameProfile().getName() + ":" + player.level().isClientSide;
             ItemStack feet = player.getItemBySlot(EquipmentSlot.FEET);
             if (playersWithFeet.contains(key) && feet.hasTag() && feet.getOrCreateTag().getBoolean("flag")) {
-                player.setDeltaMovement(0, 0.42f + 0.1f * (Config.SERVER.infinityFeetJump.get() + 1), 0);
+                player.setDeltaMovement(0, 0.42f + 0.1f * (ModConfig.SERVER.infinityFeetJump.get() + 1), 0);
             }
         }
     }
@@ -286,7 +283,7 @@ public class EventHandler {
         Level world = event.getLevel();
         Player player = event.getEntity();
         if (stack.getItem() instanceof InfinityPickaxe && world.getBlockState(pos).getBlock().equals(Blocks.BEDROCK)){
-            if (Config.SERVER.isBreakBedrock.get() && stack.getOrCreateTag().getBoolean("hammer")){
+            if (ModConfig.SERVER.isBreakBedrock.get() && stack.getOrCreateTag().getBoolean("hammer")){
                 world.addFreshEntity(new ItemEntity(world, player.getX(), player.getY(), player.getZ(), new ItemStack(Blocks.BEDROCK)));
                 world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             }
@@ -422,9 +419,9 @@ public class EventHandler {
                             .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://space.bilibili.com/21854371"))));
         }
         //配置文件内容错误消息
-        if (!Config.errorInfo.isEmpty()){
+        if (!ModConfig.errorInfo.isEmpty()){
             player.sendSystemMessage(Component.keybind("The following errors were found in the configuration file:\n"
-                    + StringUtils.join(Config.errorInfo.toArray(), ",")).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
+                    + StringUtils.join(ModConfig.errorInfo.toArray(), ",")).setStyle(Style.EMPTY.withColor(ChatFormatting.RED)));
         }
     }
 
@@ -442,7 +439,7 @@ public class EventHandler {
     public static void matterClusterAdd(PlayerEvent.ItemPickupEvent event){
         Player player = event.getEntity();
         ItemStack stack = event.getStack();
-        if (player != null && stack.getItem() == EndlessItems.matterCluster.get() && Config.SERVER.isMergeMatterCluster.get()){
+        if (player != null && stack.getItem() == EndlessItems.matterCluster.get() && ModConfig.SERVER.isMergeMatterCluster.get()){
             int slot = player.getInventory().findSlotMatchingItem(stack);
             if (MatterCluster.mergeMatterCluster(stack, player, slot)){
                 player.getInventory().removeItemNoUpdate(slot);
@@ -459,7 +456,7 @@ public class EventHandler {
             BlockPos pos = event.getPos();
             Level world = event.getLevel();
             BlockState state = world.getBlockState(pos);
-            if (state.getDestroySpeed(world, pos) < 0 && player.isCrouching() && Config.SERVER.isRemoveBlock.get()){
+            if (state.getDestroySpeed(world, pos) < 0 && player.isCrouching() && ModConfig.SERVER.isRemoveBlock.get()){
                 Item item = Item.byBlock(state.getBlock());
                 if (item != Items.AIR){
                     world.addFreshEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ()
@@ -501,7 +498,7 @@ public class EventHandler {
      * @return 图腾
      */
     private static ItemStack getPlayerBagItem(Player player){
-        if (Endless.isCurios){
+        if (EndlessUtils.isCurios){
             final ItemStack[] stack = new ItemStack[1];
             LazyOptional<ICuriosItemHandler> curiosHandler = CuriosApi.getCuriosInventory(player);
             curiosHandler.ifPresent(handler -> {

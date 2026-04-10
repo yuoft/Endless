@@ -87,6 +87,7 @@ repositories {
     }
     maven { url = "https://maven.createmod.net" } // Ponder, Flywheel
     maven { url 'https://maven.covers1624.net/' }
+    maven { url "https://maven.shedaniel.me/" }
     // flatDir {
     //     dir 'libs'
     // }
@@ -121,13 +122,18 @@ dependencies {
     compileOnly fg.deobf("curse.maven:slashblade-resharped-1022428:${sb_re_id}")
     compileOnly fg.deobf("curse.maven:croparia-250235:${croparia_id}")
     compileOnly fg.deobf("curse.maven:refined-storage-243076:${rs_id}")
-    implementation fg.deobf("curse.maven:touhou-little-maid-355044:${tlm_id}")
+    compileOnly fg.deobf("curse.maven:touhou-little-maid-355044:${tlm_id}")
+    compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cc_api_ver}")
+    compileOnly fg.deobf("curse.maven:spacearms-698166:${spacearms_id}")
 
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
     runtimeOnly fg.deobf("curse.maven:selene-499980:4806893")
     runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:${mmmm_id}")
     runtimeOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
     runtimeOnly fg.deobf("curse.maven:crafttweaker-239197:${crt_id}")
+    runtimeOnly fg.deobf("curse.maven:touhou-little-maid-355044:${tlm_id}")
+    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cc_api_ver}")
+    runtimeOnly fg.deobf("curse.maven:spacearms-698166:${spacearms_id}")
 
 //    runtimeOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
     runtimeOnly fg.deobf("curse.maven:projecte-226410:${pe_id}")

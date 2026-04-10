@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Lib.PerspectiveModelState;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.MatterCluster;
 import com.yuo.endless.EndlessUtils;
@@ -106,7 +106,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
     }
 
     public float getMatterClusterOpacity(ItemStack itemStack){
-        float i = MatterCluster.getItemTag(itemStack).size() / (Config.SERVER.matterClusterMaxTerm.get() * 1.0f);
+        float i = MatterCluster.getItemTag(itemStack).size() / (ModConfig.SERVER.matterClusterMaxTerm.get() * 1.0f);
         return (float) (Math.floor(i * 100) / 100.f);
     }
 

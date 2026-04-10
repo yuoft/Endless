@@ -3,7 +3,7 @@ package com.yuo.endless.Proxy;
 import com.yuo.endless.Client.Gui.*;
 import com.yuo.endless.Client.Render.CosmicBlockRender;
 import com.yuo.endless.Client.Render.EndlessChestTileRender;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Blocks.Fluid.EndlessFluids;
 import com.yuo.endless.Items.EndlessItems;
@@ -105,6 +105,6 @@ public class ClientProxy implements IProxy {
 
     //物资团颜色变化
     private void setMatterClusterProperty(Item item){
-        ItemProperties.register(item, EndlessUtils.fa("num"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && MatterCluster.getItemTag(itemStack).size() >= Config.SERVER.matterClusterMaxTerm.get() ? 1F : 0F);
+        ItemProperties.register(item, EndlessUtils.fa("num"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && MatterCluster.getItemTag(itemStack).size() >= ModConfig.SERVER.matterClusterMaxTerm.get() ? 1F : 0F);
     }
 }

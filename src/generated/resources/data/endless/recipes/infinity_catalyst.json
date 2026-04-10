@@ -22,6 +22,12 @@
     },
     {
       "item": "endless:eternal_singularity"
+    },
+    {
+      "item": "minecraft:bedrock"
+    },
+    {
+      "item": "draconicevolution:chaos_shard"
     }
   ],
   "result": {

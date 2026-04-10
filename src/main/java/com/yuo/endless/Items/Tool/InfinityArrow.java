@@ -2,10 +2,9 @@ package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -21,7 +20,6 @@ import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -92,7 +90,7 @@ public class InfinityArrow extends Item {
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         Level world = attacker.level();
-        if (!world.isClientSide && world.isThundering() && Config.SERVER.isArrowLightning.get()){ //雷雨天 召雷
+        if (!world.isClientSide && world.isThundering() && ModConfig.SERVER.isArrowLightning.get()){ //雷雨天 召雷
             BlockPos pos = target.getOnPos();
             LightningBolt lightningboltentity = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
             lightningboltentity.moveTo(Vec3.atBottomCenterOf(pos));

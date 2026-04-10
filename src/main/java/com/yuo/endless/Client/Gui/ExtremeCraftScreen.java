@@ -1,7 +1,7 @@
 package com.yuo.endless.Client.Gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Container.ExtremeCraftContainer;
 import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,7 +28,7 @@ public class ExtremeCraftScreen extends AbstractContainerScreen<ExtremeCraftCont
     @Override
     protected void renderBg(GuiGraphics matrixStack, float partialTicks, int x, int y) {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F); //确保颜色正常
-        if (Config.SERVER.isCraftTable.get() && this.minecraft != null) {
+        if (ModConfig.SERVER.isCraftTable.get() && this.minecraft != null) {
             RenderSystem.setShaderTexture(0, RESOURCE_OPEN);
 //            this.minecraft.getTextureManager().bindTexture(RESOURCE_OPEN);
         } else if (this.minecraft != null) {
@@ -37,7 +37,7 @@ public class ExtremeCraftScreen extends AbstractContainerScreen<ExtremeCraftCont
         }
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        matrixStack.blit(Config.SERVER.isCraftTable.get() ? RESOURCE_OPEN : RESOURCE, i, j, 0, 0, imageWidth, imageHeight);
+        matrixStack.blit(ModConfig.SERVER.isCraftTable.get() ? RESOURCE_OPEN : RESOURCE, i, j, 0, 0, imageWidth, imageHeight);
     }
 
     @Override

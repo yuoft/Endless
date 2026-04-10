@@ -1,12 +1,11 @@
 package com.yuo.endless.Items.Tool;
 
 import com.google.common.collect.Lists;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Entity.*;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -20,21 +19,18 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -224,7 +220,7 @@ public class InfinityCrossBow extends CrossbowItem {
             boolean flag = projectile.getItem() == Items.FIREWORK_ROCKET;
             Projectile projectile1;
             if (flag) {
-                projectile1 = new InfinityFireWorkEntity(worldIn, projectile, shooter, Config.SERVER.infinityFireworkDamage.get(), shooter.getX(), shooter.getEyeY() - (double)0.15F, shooter.getZ(), true);
+                projectile1 = new InfinityFireWorkEntity(worldIn, projectile, shooter, ModConfig.SERVER.infinityFireworkDamage.get(), shooter.getX(), shooter.getEyeY() - (double)0.15F, shooter.getZ(), true);
             } else {
                 projectile1 = createArrow(worldIn, shooter, crossbow, projectile);
                 ((AbstractArrow)projectile1).pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
@@ -252,7 +248,7 @@ public class InfinityCrossBow extends CrossbowItem {
             ItemStack stack = new ItemStack(Items.ARROW);
             ArrowItem arrowitem = (ArrowItem)(stack.getItem() instanceof ArrowItem ? stack.getItem() : Items.ARROW);
             arrow = arrowitem.createArrow(worldIn, ammo, shooter);
-            arrow.setBaseDamage(Config.SERVER.noArrowDamage.get());
+            arrow.setBaseDamage(ModConfig.SERVER.noArrowDamage.get());
             arrow.setPierceLevel((byte) 1);
         }else {
             if (ammo.getItem() == EndlessItems.infinityArrow.get()){

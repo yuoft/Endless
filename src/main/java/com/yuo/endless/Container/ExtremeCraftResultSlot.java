@@ -1,6 +1,6 @@
 package com.yuo.endless.Container;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Recipe.*;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
@@ -38,7 +38,7 @@ public class ExtremeCraftResultSlot extends ResultSlot {
         }else if (recipeOptionalIn .isPresent()){ //无序配方  需单独匹配容器
             nonnulllist = world.getRecipeManager().getRemainingItemsFor(EndlessRecipes.EXTREME_CRAFT_SHAPE_RECIPE.get(), this.craftMatrix, world);
         }else {
-            if (Config.SERVER.isCraftTable.get()){
+            if (ModConfig.SERVER.isCraftTable.get()){
                 Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, this.craftMatrix, world);
                 if (optional.isPresent()){ // 原版配方
                     nonnulllist = world.getRecipeManager().getRemainingItemsFor(RecipeType.CRAFTING, this.craftMatrix, world);

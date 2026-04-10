@@ -1,9 +1,7 @@
 package com.yuo.endless.Entity;
 
 import com.google.common.collect.Sets;
-import com.yuo.endless.Config;
-import com.yuo.endless.Items.Tool.InfinityDamageTypes;
-import net.minecraft.core.BlockPos;
+import com.yuo.endless.Config.ModConfig;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -35,8 +33,6 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 //箭实体
 public class InfinityArrowSubEntity extends AbstractArrow {
@@ -54,19 +50,19 @@ public class InfinityArrowSubEntity extends AbstractArrow {
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, Level worldIn) {
         super(type, worldIn);
-        this.setBaseDamage(Config.SERVER.subArrowDamage.get());
+        this.setBaseDamage(ModConfig.SERVER.subArrowDamage.get());
         this.effects = Sets.newHashSet();
     }
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, double x, double y, double z, Level worldIn) {
         super(type, x, y, z, worldIn);
-        this.setBaseDamage(Config.SERVER.subArrowDamage.get());
+        this.setBaseDamage(ModConfig.SERVER.subArrowDamage.get());
         this.effects = Sets.newHashSet();
     }
 
     public InfinityArrowSubEntity(EntityType<? extends AbstractArrow> type, LivingEntity shooter, Level worldIn, ItemStack stack) {
         super(type, shooter, worldIn);
-        this.setBaseDamage(Config.SERVER.subArrowDamage.get());
+        this.setBaseDamage(ModConfig.SERVER.subArrowDamage.get());
         this.isLighting = stack.getItem() == Items.SPECTRAL_ARROW;
         this.setPotionEffect(stack); //添加药水效果
         this.effects = Sets.newHashSet();
@@ -90,7 +86,7 @@ public class InfinityArrowSubEntity extends AbstractArrow {
     @Override
     public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putDouble("damage", Config.SERVER.subArrowDamage.get());
+        compound.putDouble("damage", ModConfig.SERVER.subArrowDamage.get());
         if (this.potion != Potions.EMPTY && this.potion != null) {
             compound.putString("Potion", BuiltInRegistries.POTION.getKey(this.potion).toString());
         }

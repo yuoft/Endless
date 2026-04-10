@@ -2,7 +2,7 @@ package com.yuo.endless.Compat.Maid;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Items.Tool.InfinityDamageTypes;
 import com.yuo.endless.Items.Tool.InfinitySword;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public class MaidUseSwordTask extends Behavior<EntityMaid> {
     protected void start(ServerLevel serverLevel, EntityMaid maid, long gameTime) {
         ItemStack handItem = maid.getMainHandItem();
         if (handItem.getItem() instanceof InfinitySword){
-            attackAOE(maid, Config.SERVER.swordAttackRange.get(), Config.SERVER.swordRangeDamage.get(), Config.SERVER.isSwordAttackAnimal.get());
+            attackAOE(maid, ModConfig.SERVER.swordAttackRange.get(), ModConfig.SERVER.swordRangeDamage.get(), ModConfig.SERVER.isSwordAttackAnimal.get());
             if (maid.level().isClientSide) {
             }
             maid.sendSystemMessage(Component.translatable("task.endless.infinity_sword_task.desc.use"));

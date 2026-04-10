@@ -1,11 +1,10 @@
 package com.yuo.endless.Entity;
 
 import com.google.common.collect.Lists;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Tool.InfinityDamageTypes;
-import com.yuo.endless.Items.Tool.InfinitySword;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -14,7 +13,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -119,7 +117,7 @@ public class InfinityArrowEntity extends AbstractArrow {
             if (shooter instanceof Player){
                 if (target instanceof LivingEntity living)
                     EndlessUtils.atkInfinity(living, shooter);
-                if (Config.SERVER.isBreakDECrystal.get())
+                if (ModConfig.SERVER.isBreakDECrystal.get())
                     EndlessUtils.damageGuardian(target, (Player) shooter);
             }
         }

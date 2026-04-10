@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Armor;
 
 import com.yuo.endless.Client.Model.InfinityArmorModel;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import com.yuo.endless.Items.EndlessItems;
@@ -128,17 +128,17 @@ public class InfinityArmor extends ArmorItem {
         if (type == Type.CHESTPLATE) {
             components.add(Component.translatable("endless.text.itemInfo.infinity_chestplate"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                components.add(Component.keybind(ColorText.makeSANIC("+" + Config.SERVER.infinityChestFly.get() + "00% FlySpeed")));
+                components.add(Component.keybind(ColorText.makeSANIC("+" + ModConfig.SERVER.infinityChestFly.get() + "00% FlySpeed")));
         }
         if (type == Type.LEGGINGS) {
             components.add(Component.translatable("endless.text.itemInfo.infinity_leggings"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                components.add(Component.keybind(ColorText.makeSANIC("+" + Config.SERVER.infinityLegsWalk.get() + "00% WalkSpeed")));
+                components.add(Component.keybind(ColorText.makeSANIC("+" + ModConfig.SERVER.infinityLegsWalk.get() + "00% WalkSpeed")));
         }
         if (type == Type.BOOTS) {
             components.add(Component.translatable("endless.text.itemInfo.infinity_boots"));
             if (stack.hasTag() && stack.getOrCreateTag().getBoolean("flag"))
-                components.add(Component.keybind(ColorText.makeSANIC("+" + Config.SERVER.infinityFeetJump.get() + "00% JumpHeight")));
+                components.add(Component.keybind(ColorText.makeSANIC("+" + ModConfig.SERVER.infinityFeetJump.get() + "00% JumpHeight")));
         }
     }
 

@@ -1,6 +1,6 @@
 package com.yuo.endless.Items;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Items.Tool.ColorText;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
@@ -159,7 +159,7 @@ public class Singularity extends Item {
         CompoundTag nbt = (CompoundTag) tag.get(NBT_MOD);
         if (nbt != null){
             String type = nbt.getString(NBT_TYPE);
-            if (Config.customSingularities.contains(type)){
+            if (ModConfig.customSingularities.contains(type)){
                 char[] chars = type.toCharArray();
                 chars[0] -= 32;
                 String s = String.valueOf(chars);
@@ -250,7 +250,7 @@ public class Singularity extends Item {
             if ("netherite".equals(type)){
                 components.add(Component.keybind(ColorText.makeSANIC(I18n.get("endless.text.itemInfo.singularity_netherite"))));
             }
-            if (Config.customSingularities.contains(type)){
+            if (ModConfig.customSingularities.contains(type)){
                 components.add(Component.translatable("endless.text.itemInfo.custom_singularity"));
             }
         }

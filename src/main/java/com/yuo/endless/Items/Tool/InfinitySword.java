@@ -1,11 +1,8 @@
 package com.yuo.endless.Items.Tool;
 
-import com.brandon3055.draconicevolution.entity.GuardianCrystalEntity;
-import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianEntity;
-import com.brandon3055.draconicevolution.entity.guardian.DraconicGuardianPartEntity;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Entity.EndlessItemEntity;
@@ -27,13 +24,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -116,7 +111,7 @@ public class InfinitySword extends SwordItem {
 //            parent.kill();
         }
 
-        if (Endless.isDE && Config.SERVER.isBreakDECrystal.get()){
+        if (EndlessUtils.isDE && ModConfig.SERVER.isBreakDECrystal.get()){
             EndlessUtils.damageGuardian(entity, player);
         }
         return true;
@@ -203,10 +198,10 @@ public class InfinitySword extends SwordItem {
         if (target.isAlive() || target.getHealth() > 0){
             target.setHealth(-1);
             if (!target.level().isClientSide){
-                if (!Endless.isDummmmmmy)
+                if (!EndlessUtils.isDummmmmmy)
                     target.die(InfinityDamageTypes.infinity(attacker));
             }
-            if (Config.SERVER.swordKill.get()){
+            if (ModConfig.SERVER.swordKill.get()){
                 target.kill();
                 target.deathTime = 20;
                 target.remove(RemovalReason.KILLED);
@@ -234,7 +229,7 @@ public class InfinitySword extends SwordItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack heldItem = player.getItemInHand(hand);
         if (!level.isClientSide) {
-            attackAOE(player, Config.SERVER.swordAttackRange.get(), Config.SERVER.swordRangeDamage.get(), player.isCrouching() && Config.SERVER.isSwordAttackAnimal.get());
+            attackAOE(player, ModConfig.SERVER.swordAttackRange.get(), ModConfig.SERVER.swordRangeDamage.get(), player.isCrouching() && ModConfig.SERVER.isSwordAttackAnimal.get());
             player.swing(hand);
             player.getCooldowns().addCooldown(heldItem.getItem(), 20);
         }

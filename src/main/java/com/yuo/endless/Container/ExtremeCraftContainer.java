@@ -1,6 +1,6 @@
 package com.yuo.endless.Container;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Recipe.*;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -81,7 +81,7 @@ public class ExtremeCraftContainer extends RecipeBookMenu<CraftingContainer> {
                 itemStack = recipe.getResultItem();
             }
         }else {
-            if (Config.SERVER.isCraftTable.get()) {
+            if (ModConfig.SERVER.isCraftTable.get()) {
                 CraftingContainer craftingInv = getCraftingInv();
                 Optional<CraftingRecipe> optional = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingInv, world);
                 if (optional.isPresent() && isCraft()) {

@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.mojang.datafixers.util.Pair;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Entity.EndlessItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -170,7 +170,7 @@ public class InfinityHoe extends HoeItem {
                 || block instanceof CocoaBlock || block instanceof SweetBerryBushBlock){
             return;
         }
-        if (Config.hoeBlocks.contains(block)) return;
+        if (ModConfig.hoeBlocks.contains(block)) return;
         //添加到map中
         if (block.equals(Blocks.BEDROCK)){
             ItemStack stack1 = new ItemStack(Blocks.BEDROCK);

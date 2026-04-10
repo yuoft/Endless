@@ -1,6 +1,6 @@
 package com.yuo.endless.Entity;
 
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Tool.InfinityDamageTypes;
@@ -151,13 +151,13 @@ public class InfinityMobEntity extends Zombie {
 
     public void startSeenByPlayer(ServerPlayer pPlayer) {
         super.startSeenByPlayer(pPlayer);
-        if (Config.SERVER.mobHpInfo.get())
+        if (ModConfig.SERVER.mobHpInfo.get())
          this.bossInfo.addPlayer(pPlayer);
     }
 
     public void stopSeenByPlayer(ServerPlayer pPlayer) {
         super.stopSeenByPlayer(pPlayer);
-        if (Config.SERVER.mobHpInfo.get())
+        if (ModConfig.SERVER.mobHpInfo.get())
             this.bossInfo.removePlayer(pPlayer);
     }
 

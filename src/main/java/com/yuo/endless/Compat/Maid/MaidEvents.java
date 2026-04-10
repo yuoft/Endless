@@ -2,7 +2,7 @@ package com.yuo.endless.Compat.Maid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.Armor.InfinityArmor;
 import com.yuo.endless.Items.EndlessItems;
@@ -39,10 +39,10 @@ public class MaidEvents {
             // 播放吃东西的音效
             world.playSound(null, maid.getX(), maid.getY(), maid.getZ(), maid.getEatingSound(stack), SoundSource.NEUTRAL, 1, 1 + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F);
             // 添加食物效果
-            maid.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, (int) Math.ceil(5 * 60 * 20 * Config.SERVER.foodTime.get()), 4));
-            maid.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2));
-            maid.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2));
-            maid.addEffect(new MobEffectInstance(MobEffects.JUMP, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2));
+            maid.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, (int) Math.ceil(5 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 4));
+            maid.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, (int) Math.ceil(3 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 2));
+            maid.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, (int) Math.ceil(3 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 2));
+            maid.addEffect(new MobEffectInstance(MobEffects.JUMP, (int) Math.ceil(3 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 2));
             // 消耗苹果
             stack.shrink(1);
             // 取消后续操作，避免打开女仆GUI
@@ -51,11 +51,11 @@ public class MaidEvents {
         if (stack.is(EndlessItems.ultimateStew.get())) {
             world.playSound(null, maid.getX(), maid.getY(), maid.getZ(), maid.getEatingSound(stack), SoundSource.NEUTRAL, 1, 1 + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F);
 
-            maid.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, (int) Math.ceil(5 * 60 * 20 * Config.SERVER.foodTime.get()), 1));
-            maid.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 2));
-            maid.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, (int) Math.ceil(3 * 60 * 20 * Config.SERVER.foodTime.get()), 0));
-            maid.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, (int) Math.ceil(2 * 60 * 20 * Config.SERVER.foodTime.get()), 2));
-            maid.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) Math.ceil(5 * 60 * 20 * Config.SERVER.foodTime.get()), 4));
+            maid.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, (int) Math.ceil(5 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 1));
+            maid.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, (int) Math.ceil(3 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 2));
+            maid.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, (int) Math.ceil(3 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 0));
+            maid.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, (int) Math.ceil(2 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 2));
+            maid.addEffect(new MobEffectInstance(MobEffects.REGENERATION, (int) Math.ceil(5 * 60 * 20 * ModConfig.SERVER.foodTime.get()), 4));
 
             stack.shrink(1);
             event.setCanceled(true);

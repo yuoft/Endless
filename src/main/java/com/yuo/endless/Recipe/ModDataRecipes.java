@@ -10,10 +10,12 @@ import com.refinedmods.refinedstorage.RSItems;
 import com.refinedmods.refinedstorage.apiimpl.storage.FluidStorageType;
 import com.refinedmods.refinedstorage.apiimpl.storage.ItemStorageType;
 import com.yuo.Enchants.Items.YEItems;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Endless;
 import com.yuo.endless.Items.EndlessItems;
 import com.yuo.endless.Items.Singularity;
 import com.yuo.endless.EndlessUtils;
+import com.yuo.spacearms.Items.SAItems;
 import mods.flammpfeil.slashblade.init.SBItems;
 import moze_intel.projecte.gameObjs.registries.PEBlocks;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ModDataRecipes extends RecipeProvider {
     public ModDataRecipes(PackOutput packOutput) {
@@ -47,40 +50,41 @@ public class ModDataRecipes extends RecipeProvider {
     protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
         //无序配方
         ExtremeShapeCraftBuilder infinityCatalyst = ExtremeShapeCraftBuilder.shapeless(RecipeCategory.MISC, EndlessItems.infinityCatalyst.get(), 1).requires(getBaseInfinityCatalyst());
-        if (Endless.isEnchants) infinityCatalyst.requires(YEItems.SuperBrokenMagicPearl.get());
-        if (Endless.isIAF) {
+        if (EndlessUtils.isEnchants) infinityCatalyst.requires(YEItems.SuperBrokenMagicPearl.get());
+        if (EndlessUtils.isSpaceArms) infinityCatalyst.requires(Items.BEDROCK);
+        if (EndlessUtils.isIAF) {
             infinityCatalyst.requires(Ingredient.of(new ItemStack(IafItemRegistry.AMBROSIA.get())));
             infinityCatalyst.requires(Ingredient.of(new ItemStack(IafBlockRegistry.DRAGONSTEEL_FIRE_BLOCK.get()), new ItemStack(IafBlockRegistry.DRAGONSTEEL_ICE_BLOCK.get()), new ItemStack(IafBlockRegistry.DRAGONSTEEL_LIGHTNING_BLOCK.get())));
         }
-        if (Endless.isBOT) infinityCatalyst.requires(BotaniaItems.gaiaIngot);
-        if (Endless.isAE2){
+        if (EndlessUtils.isBOT) infinityCatalyst.requires(BotaniaItems.gaiaIngot);
+        if (EndlessUtils.isAE2){
             infinityCatalyst.requires(new ItemStack(AEItems.ITEM_CELL_256K));
             infinityCatalyst.requires(new ItemStack(AEItems.FLUID_CELL_256K));
             infinityCatalyst.requires(new ItemStack(AEItems.SINGULARITY));
         }
-        if (Endless.isDE){
+        if (EndlessUtils.isDE){
             Item item = BuiltInRegistries.ITEM.get(EndlessUtils.parse("draconicevolution:chaos_shard")); //混沌碎片
             if (item != Items.AIR) infinityCatalyst.requires(item);
         }
-        if (Endless.isTTF) infinityCatalyst.requires(new ItemStack(TFBlocks.IRONWOOD_BLOCK.get()));
-        if (Endless.isSlashBlade2) infinityCatalyst.requires(SBItems.proudsoul_trapezohedron);
-        if (Endless.isMysticalAgriculture){
+        if (EndlessUtils.isTTF) infinityCatalyst.requires(new ItemStack(TFBlocks.IRONWOOD_BLOCK.get()));
+        if (EndlessUtils.isSlashBlade2) infinityCatalyst.requires(SBItems.proudsoul_trapezohedron);
+        if (EndlessUtils.isMysticalAgriculture){
             infinityCatalyst.requires(new ItemStack(BlockInit.ELEMENTAL_STONE.get()));
             infinityCatalyst.requires(new ItemStack(BlockInit.ELEMATILIUS_CAULDRON.get()));
             infinityCatalyst.requires(ItemInit.POTION_ELEMATILIUS.get());
         }
-        if (Endless.isThermal) infinityCatalyst.requires(new ItemStack(ThermalCore.BLOCKS.get("enderium_block")));
-        if (Endless.isRS){
+        if (EndlessUtils.isThermal) infinityCatalyst.requires(new ItemStack(ThermalCore.BLOCKS.get("enderium_block")));
+        if (EndlessUtils.isRS){
             infinityCatalyst.requires(RSItems.ITEM_STORAGE_DISKS.get(ItemStorageType.SIXTY_FOUR_K).get());
             infinityCatalyst.requires(RSItems.FLUID_STORAGE_DISKS.get(FluidStorageType.FOUR_THOUSAND_NINETY_SIX_K).get());
         }
-        if (Endless.isTC3) infinityCatalyst.requires(new ItemStack(TinkerModifiers.dragonScale));
+        if (EndlessUtils.isTC3) infinityCatalyst.requires(new ItemStack(TinkerModifiers.dragonScale));
         infinityCatalyst.unlockedBy("has_item", has(EndlessItems.infinityCatalyst.get())).save(consumer);
 
         ExtremeShapeCraftBuilder cosmicMeatBalls = ExtremeShapeCraftBuilder.shapeless(RecipeCategory.MISC, EndlessItems.cosmicMeatBalls.get(), 1).requires(getBaseCosmicMeatBalls());
-        if (Endless.isIAF) cosmicMeatBalls.requires(Ingredient.of(new ItemStack(IafItemRegistry.FIRE_DRAGON_FLESH.get()), new ItemStack(IafItemRegistry.ICE_DRAGON_FLESH.get()), new ItemStack(IafItemRegistry.LIGHTNING_DRAGON_FLESH.get())));
-        if (Endless.isTTF) cosmicMeatBalls.requires(TFItems.HYDRA_CHOP.get());
-        if (Endless.isThermal){
+        if (EndlessUtils.isIAF) cosmicMeatBalls.requires(Ingredient.of(new ItemStack(IafItemRegistry.FIRE_DRAGON_FLESH.get()), new ItemStack(IafItemRegistry.ICE_DRAGON_FLESH.get()), new ItemStack(IafItemRegistry.LIGHTNING_DRAGON_FLESH.get())));
+        if (EndlessUtils.isTTF) cosmicMeatBalls.requires(TFItems.HYDRA_CHOP.get());
+        if (EndlessUtils.isThermal){
             cosmicMeatBalls.requires(ThermalCore.ITEMS.get("stuffed_pepper"));
             cosmicMeatBalls.requires(ThermalCore.ITEMS.get("sushi_maki"));
             cosmicMeatBalls.requires(ThermalCore.ITEMS.get("stuffed_pumpkin"));
@@ -88,42 +92,42 @@ public class ModDataRecipes extends RecipeProvider {
         cosmicMeatBalls.unlockedBy("has_item", has(EndlessItems.cosmicMeatBalls.get())).save(consumer);
 
         ExtremeShapeCraftBuilder ultimateStew = ExtremeShapeCraftBuilder.shapeless(RecipeCategory.MISC, EndlessItems.ultimateStew.get(), 1).requires(getBaseUltimateStew());
-        if (Endless.isIAF) ultimateStew.requires(Ingredient.of(new ItemStack(IafItemRegistry.FIRE_STEW.get()), new ItemStack(IafItemRegistry.FROST_STEW.get()), new ItemStack(IafItemRegistry.LIGHTNING_STEW.get())));
-        if (Endless.isBOT) ultimateStew.requires(BotaniaItems.manaCookie);
-        if (Endless.isTTF) ultimateStew.requires(TFItems.MAZE_MAP.get());
-        if (Endless.isCreate){
+        if (EndlessUtils.isIAF) ultimateStew.requires(Ingredient.of(new ItemStack(IafItemRegistry.FIRE_STEW.get()), new ItemStack(IafItemRegistry.FROST_STEW.get()), new ItemStack(IafItemRegistry.LIGHTNING_STEW.get())));
+        if (EndlessUtils.isBOT) ultimateStew.requires(BotaniaItems.manaCookie);
+        if (EndlessUtils.isTTF) ultimateStew.requires(TFItems.MAZE_MAP.get());
+        if (EndlessUtils.isCreate){
             String str = "create:bar_of_chocolate";
             Item item = BuiltInRegistries.ITEM.get(EndlessUtils.parse(str));
             if (item != Items.AIR) ultimateStew.requires(item);
         }
-        if (Endless.isThermal){
+        if (EndlessUtils.isThermal){
             ultimateStew.requires(ThermalCore.ITEMS.get("xp_stew"));
             ultimateStew.requires(ThermalCore.ITEMS.get("spring_salad"));
         }
         ultimateStew.unlockedBy("has_item", has(EndlessItems.ultimateStew.get())).save(consumer);
 
         ExtremeShapeCraftBuilder eternalSingularity = ExtremeShapeCraftBuilder.shapeless(RecipeCategory.MISC, EndlessItems.eternalSingularity.get(), 1).requires(getBaseEternalSingularity());
-        if (Endless.isIAF) eternalSingularity.requires(Singularity.getSingularity("silver"));
-        if (Endless.isBOT) {
+        if (EndlessUtils.isIAF) eternalSingularity.requires(Singularity.getSingularity("silver"));
+        if (EndlessUtils.isBOT) {
             eternalSingularity.requires(Singularity.getSingularity("manasteel"));
             eternalSingularity.requires(Singularity.getSingularity("terrasteel"));
             eternalSingularity.requires(Singularity.getSingularity("elementium"));
         }
-        if (Endless.isDE){
+        if (EndlessUtils.isDE){
             eternalSingularity.requires(Singularity.getSingularity("draconium"));
             eternalSingularity.requires(Singularity.getSingularity("awakened_draconium"));
         }
-        if (Endless.isPE){
+        if (EndlessUtils.isPE){
             eternalSingularity.requires(Singularity.getSingularity("dark_matter"));
             eternalSingularity.requires(Singularity.getSingularity("red_matter"));
         }
-        if (Endless.isCreate) eternalSingularity.requires(Singularity.getSingularity("zinc"));
-        if (Endless.isThermal){
+        if (EndlessUtils.isCreate) eternalSingularity.requires(Singularity.getSingularity("zinc"));
+        if (EndlessUtils.isThermal){
             eternalSingularity.requires(Singularity.getSingularity("nickel"));
             eternalSingularity.requires(Singularity.getSingularity("lead"));
             eternalSingularity.requires(Singularity.getSingularity("tin"));
         }
-        if (Endless.isTC3){
+        if (EndlessUtils.isTC3){
             eternalSingularity.requires(Singularity.getSingularity("cobalt"));
             eternalSingularity.requires(Singularity.getSingularity("manyullyn"));
         }
@@ -165,19 +169,36 @@ public class ModDataRecipes extends RecipeProvider {
                 .unlockedBy("has_item", has(Singularity.getSingularity("copper").getItem())).save(consumer);
 
         //模组
-        if (Endless.isIAF){
+        if (EndlessUtils.isIAF){
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("silver").getItem(), "silver",
                             Ingredient.of(new ItemStack(IafBlockRegistry.SILVER_BLOCK.get())), getInputCount(275))
                     .unlockedBy("has_item", has(Singularity.getSingularity("silver").getItem())).save(consumer);
         }
-        if (Endless.isCreate){
+        if (EndlessUtils.isSpaceArms){
+            CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("ruby").getItem(), "ruby",
+                            Ingredient.of(new ItemStack(SAItems.rubyBlock.get())), getInputCount(250))
+                    .unlockedBy("has_item", has(Singularity.getSingularity("ruby").getItem())).save(consumer);
+            CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("dragon").getItem(), "dragon",
+                            Ingredient.of(new ItemStack(SAItems.dragonBlock.get())), getInputCount(100))
+                    .unlockedBy("has_item", has(Singularity.getSingularity("dragon").getItem())).save(consumer);
+            CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("space").getItem(), "space",
+                            Ingredient.of(new ItemStack(SAItems.spaceBlock.get())), getInputCount(50))
+                    .unlockedBy("has_item", has(Singularity.getSingularity("space").getItem())).save(consumer);
+            CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("xray").getItem(), "xray",
+                            Ingredient.of(new ItemStack(SAItems.xrayBlock.get())), getInputCount(150))
+                    .unlockedBy("has_item", has(Singularity.getSingularity("xray").getItem())).save(consumer);
+            CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("ultra").getItem(), "ultra",
+                            Ingredient.of(new ItemStack(SAItems.superBlock.get())), getInputCount(80))
+                    .unlockedBy("has_item", has(Singularity.getSingularity("ultra").getItem())).save(consumer);
+        }
+        if (EndlessUtils.isCreate){
             String str = "create:zinc_block"; //锌块
             Block block = BuiltInRegistries.BLOCK.get(EndlessUtils.parse(str));
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("zinc").getItem(), "zinc",
                             Ingredient.of(new ItemStack(block)), getInputCount(300))
                     .unlockedBy("has_item", has(Singularity.getSingularity("zinc").getItem())).save(consumer);
         }
-        if (Endless.isThermal){
+        if (EndlessUtils.isThermal){
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("nickel").getItem(), "nickel",
                             Ingredient.of(new ItemStack(ThermalCore.BLOCKS.get("nickel_block"))), getInputCount(400))
                     .unlockedBy("has_item", has(Singularity.getSingularity("nickel").getItem())).save(consumer);
@@ -188,7 +209,7 @@ public class ModDataRecipes extends RecipeProvider {
                             Ingredient.of(new ItemStack(ThermalCore.BLOCKS.get("tin_block"))), getInputCount(400))
                     .unlockedBy("has_item", has(Singularity.getSingularity("tin").getItem())).save(consumer);
         }
-        if (Endless.isDE){
+        if (EndlessUtils.isDE){
             String str0 = "draconicevolution:draconium_block"; //龙块
             String str1 = "draconicevolution:awakened_draconium_block"; //觉醒龙块
             Block block0 = BuiltInRegistries.BLOCK.get(EndlessUtils.parse(str0));
@@ -204,7 +225,7 @@ public class ModDataRecipes extends RecipeProvider {
                         .unlockedBy("has_item", has(Singularity.getSingularity("awakened_draconium").getItem())).save(consumer);
             }
         }
-        if (Endless.isBOT){
+        if (EndlessUtils.isBOT){
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("manasteel").getItem(), "manasteel",
                             Ingredient.of(new ItemStack(BotaniaBlocks.manasteelBlock)), getInputCount(200))
                     .unlockedBy("has_item", has(Singularity.getSingularity("manasteel").getItem())).save(consumer);
@@ -215,7 +236,7 @@ public class ModDataRecipes extends RecipeProvider {
                             Ingredient.of(new ItemStack(BotaniaBlocks.elementiumBlock)), getInputCount(50))
                     .unlockedBy("has_item", has(Singularity.getSingularity("elementium").getItem())).save(consumer);
         }
-        if (Endless.isPE){
+        if (EndlessUtils.isPE){
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("dark_matter").getItem(), "dark_matter",
                             Ingredient.of(new ItemStack(PEBlocks.DARK_MATTER)), getInputCount(150))
                     .unlockedBy("has_item", has(Singularity.getSingularity("dark_matter").getItem())).save(consumer);
@@ -223,7 +244,7 @@ public class ModDataRecipes extends RecipeProvider {
                             Ingredient.of(new ItemStack(PEBlocks.RED_MATTER)), getInputCount(100))
                     .unlockedBy("has_item", has(Singularity.getSingularity("red_matter").getItem())).save(consumer);
         }
-        if (Endless.isTC3){
+        if (EndlessUtils.isTC3){
             CompressorBuilder.shapeless(RecipeCategory.MISC, Singularity.getSingularity("cobalt").getItem(), "cobalt",
                             Ingredient.of(new ItemStack(TinkerMaterials.cobalt)), getInputCount(100))
                     .unlockedBy("has_item", has(Singularity.getSingularity("cobalt").getItem())).save(consumer);
@@ -289,7 +310,7 @@ public class ModDataRecipes extends RecipeProvider {
      * 计算最终数量
      * @param base 基础
      */
-    private static int getInputCount(int base){
+    private int getInputCount(int base){
         List<Integer> list = getSingularityCount();
         return (base + list.get(0)) * list.get(1);
     }
@@ -297,73 +318,73 @@ public class ModDataRecipes extends RecipeProvider {
     /**
      * 压缩机所需矿物块数量
      */
-    private static List<Integer> getSingularityCount(){
+    private List<Integer> getSingularityCount(){
         int count = 0; //模组影响的额外数量 +25 +50 +100 +150 -25
         int rate = 1; //模组影响的额外倍率  *1 *2 *3 *4
 
-        if (Endless.isEnchants) count += 50;
-        if (Endless.isPE) rate += 3;
-        if (Endless.isBOT) count += 100;
-        if (Endless.isIAF) count += 100;
-        if (Endless.isTorcherino) rate += 2;
-        if (Endless.isCreate) rate += 1;
-        if (Endless.isSophisticatedBackpacks) count += 100;
+        if (EndlessUtils.isEnchants) count += 50;
+        if (EndlessUtils.isPE) rate += 3;
+        if (EndlessUtils.isBOT) count += 100;
+        if (EndlessUtils.isIAF) count += 100;
+        if (EndlessUtils.isTorcherino) rate += 2;
+        if (EndlessUtils.isCreate) rate += 1;
+        if (EndlessUtils.isSophisticatedBackpacks) count += 100;
 
-        if (Endless.isOreExcavation) rate += 2;
-        if (Endless.isTC3) count += 100;
-        if (Endless.isCrT) count += 25;
-        if (Endless.isStorageDrawers) count += 50;
-        if (Endless.isEnchantingInfuser) rate += 1;
-        if (Endless.isTouhouLittleMaid) count += 50;
-        if (Endless.isTravelersBackpack) count += 100;
-        if (Endless.isAE2) count += 150;
-        if (Endless.isWaystones) count += 25;
-        if (Endless.isAlexsMobs) count += 25;
-        if (Endless.isTTF) count += 50;
-        if (Endless.isSlashBlade2) rate += 2;
-        if (Endless.isThermal) count += 100;
-        if (Endless.isTimeBottle) rate += 1;
-        if (Endless.isDE) rate += 2;
-        if (Endless.isInfernalMobs) count -= 25;
-        if (Endless.isChampions) count -= 25;
-        if (Endless.isZombieAwareness) rate -= 2;
-        if (Endless.isMysticalAgriculture) rate += 3;
-        if (Endless.isRS) count += 150;
+        if (EndlessUtils.isOreExcavation) rate += 2;
+        if (EndlessUtils.isTC3) count += 100;
+        if (EndlessUtils.isCrT) count += 25;
+        if (EndlessUtils.isStorageDrawers) count += 50;
+        if (EndlessUtils.isEnchantingInfuser) rate += 1;
+        if (EndlessUtils.isTouhouLittleMaid) count += 50;
+        if (EndlessUtils.isTravelersBackpack) count += 100;
+        if (EndlessUtils.isAE2) count += 150;
+        if (EndlessUtils.isWaystones) count += 25;
+        if (EndlessUtils.isAlexsMobs) count += 25;
+        if (EndlessUtils.isTTF) count += 50;
+        if (EndlessUtils.isSlashBlade2) rate += 2;
+        if (EndlessUtils.isThermal) count += 100;
+        if (EndlessUtils.isTimeBottle) rate += 1;
+        if (EndlessUtils.isDE) rate += 2;
+        if (EndlessUtils.isInfernalMobs) count -= 25;
+        if (EndlessUtils.isChampions) count -= 25;
+        if (EndlessUtils.isZombieAwareness) rate -= 2;
+        if (EndlessUtils.isMysticalAgriculture) rate += 3;
+        if (EndlessUtils.isRS) count += 150;
 
-        if (Endless.isDS) rate += 2;
-        if (Endless.isIPN) count += 50;
-        if (Endless.isWDA) count += 50;
-        if (Endless.isFarmersDelight) count += 100;
-        if (Endless.isGoblinTraders) rate += 1;
-        if (Endless.isFTBUltimine) rate += 2;
-        if (Endless.isVampirism) count += 100;
-        if (Endless.isCroparia) rate += 3;
-        if (Endless.isMinecolonies) count += 100;
-        if (Endless.isDivineRPG) rate += 2;
-        if (Endless.isDEAdd) rate += 2;
-        if (Endless.isDoggyTalents) count += 100;
-        if (Endless.isIE) rate += 1;
-        if (Endless.isEnigmaticLegacy) rate += 2;
-        if (Endless.isApotheosis) rate += 2;
-        if (Endless.isQuark) count += 50;
-        if (Endless.isArsNouveau) rate += 1;
-        if (Endless.isEXBOT) count += 50;
-        if (Endless.isIronChests) rate += 1;
-        if (Endless.isMobGrindingUtils) count += 50;
-        if (Endless.isAR) rate += 2;
-        if (Endless.isEverlastingAbilities) rate += 3;
-        if (Endless.isBM3) rate += 2;
-        if (Endless.isPEI) rate += 1;
-        if (Endless.isER) count += 50;
-        if (Endless.isLB) rate += 5;
-        if (Endless.isPEX) rate += 5;
-        if (Endless.isMorph) rate += 2;
-        if (Endless.isLootr) rate += 2;
-        if (Endless.isExtremeReactors) rate += 3;
-        if (Endless.isPlayerRevive) count += 50;
-        if (Endless.isXPTmoe) count += 50;
-        if (Endless.isIronFurnaces) rate += 1;
-        if (Endless.isCA) rate += 3;
+        if (EndlessUtils.isDS) rate += 2;
+        if (EndlessUtils.isIPN) count += 50;
+        if (EndlessUtils.isWDA) count += 50;
+        if (EndlessUtils.isFarmersDelight) count += 100;
+        if (EndlessUtils.isGoblinTraders) rate += 1;
+        if (EndlessUtils.isFTBUltimine) rate += 2;
+        if (EndlessUtils.isVampirism) count += 100;
+        if (EndlessUtils.isCroparia) rate += 3;
+        if (EndlessUtils.isMinecolonies) count += 100;
+        if (EndlessUtils.isDivineRPG) rate += 2;
+        if (EndlessUtils.isDEAdd) rate += 2;
+        if (EndlessUtils.isDoggyTalents) count += 100;
+        if (EndlessUtils.isIE) rate += 1;
+        if (EndlessUtils.isEnigmaticLegacy) rate += 2;
+        if (EndlessUtils.isApotheosis) rate += 2;
+        if (EndlessUtils.isQuark) count += 50;
+        if (EndlessUtils.isArsNouveau) rate += 1;
+        if (EndlessUtils.isEXBOT) count += 50;
+        if (EndlessUtils.isIronChests) rate += 1;
+        if (EndlessUtils.isMobGrindingUtils) count += 50;
+        if (EndlessUtils.isAR) rate += 2;
+        if (EndlessUtils.isEverlastingAbilities) rate += 3;
+        if (EndlessUtils.isBM3) rate += 2;
+        if (EndlessUtils.isPEI) rate += 1;
+        if (EndlessUtils.isER) count += 50;
+        if (EndlessUtils.isLB) rate += 5;
+        if (EndlessUtils.isPEX) rate += 5;
+        if (EndlessUtils.isMorph) rate += 2;
+        if (EndlessUtils.isLootr) rate += 2;
+        if (EndlessUtils.isExtremeReactors) rate += 3;
+        if (EndlessUtils.isPlayerRevive) count += 50;
+        if (EndlessUtils.isXPTmoe) count += 50;
+        if (EndlessUtils.isIronFurnaces) rate += 1;
+        if (EndlessUtils.isCA) rate += 3;
 
         //限制
         int countEnd = Math.min(2000, count);
@@ -373,4 +394,5 @@ public class ModDataRecipes extends RecipeProvider {
         list.add(rateEnd);
         return list;
     }
+
 }

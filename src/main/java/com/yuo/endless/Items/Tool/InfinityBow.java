@@ -1,7 +1,7 @@
 package com.yuo.endless.Items.Tool;
 
 import com.yuo.endless.Client.Sound.ModSounds;
-import com.yuo.endless.Config;
+import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Entity.*;
 import com.yuo.endless.Items.EndlessItems;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,12 +15,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -188,7 +186,7 @@ public class InfinityBow extends BowItem {
                     ItemStack arrowStack = new ItemStack(Items.ARROW);
                     ArrowItem arrowitem = (ArrowItem)(arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
                     arrow = arrowitem.createArrow(level, stack, player);
-                    arrow.setBaseDamage(Config.SERVER.noArrowDamage.get());
+                    arrow.setBaseDamage(ModConfig.SERVER.noArrowDamage.get());
                 }
                 arrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, velocity * 3.0F, 1.0F);
                 if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
