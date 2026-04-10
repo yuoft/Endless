@@ -368,16 +368,4 @@ public abstract class AbsEndlessChestTile extends RandomizableContainerBlockEnti
             this.chestHandler = null;
         }
     }
-
-    public static int getOpenCount(BlockGetter getter, BlockPos pos) {
-        BlockState blockstate = getter.getBlockState(pos);
-        if (blockstate.hasBlockEntity()) {
-            BlockEntity blockentity = getter.getBlockEntity(pos);
-            if (blockentity instanceof AbsEndlessChestTile) {
-                return ((AbsEndlessChestTile)blockentity).openersCounter.getOpenerCount();
-            }
-        }
-
-        return 0;
-    }
 }

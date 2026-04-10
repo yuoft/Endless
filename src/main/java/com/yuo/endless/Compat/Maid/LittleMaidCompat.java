@@ -58,11 +58,11 @@ public class LittleMaidCompat implements ILittleMaid {
         manager.bind(EndlessItems.infinityTotem.get(), new InfinityTotemBauble());
     }
 
-    @Override
-    public void addChestType(ChestManager manager) {
-        manager.add(EndlessChestType.COMPRESSOR);
-        manager.add(EndlessChestType.INFINITY);
-    }
+//    @Override
+//    public void addChestType(ChestManager manager) {
+//        manager.add(EndlessChestType.COMPRESSOR);
+//        manager.add(EndlessChestType.INFINITY);
+//    }
 
     @Override
     public void addAdditionMaidLayer(EntityMaidRenderer renderer, Context context) {
