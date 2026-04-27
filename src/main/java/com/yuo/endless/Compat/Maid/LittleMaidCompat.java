@@ -67,8 +67,6 @@ public class LittleMaidCompat implements ILittleMaid {
     @Override
     public void addAdditionMaidLayer(EntityMaidRenderer renderer, Context context) {
         ILittleMaid.super.addAdditionMaidLayer(renderer, context);
-        EntityModelSet modelSet = context.getModelSet();
-        ModelManager modelManager = context.getModelManager();
         renderer.addLayer(new MaidLayer(renderer, context));
     }
 

@@ -52,6 +52,8 @@ public class MaidGeoLayer<T extends Mob, R extends IGeoEntityRenderer<T>> extend
         IMaid maid = IMaid.convert(entity);
         if (maid != null) {
             EntityMaid maidEntity = maid.asStrictMaid();
+            if (maidEntity == null) return;
+
             IGeoEntity geoEntity = this.getGeoEntity(entity);
             if (geoEntity instanceof GeckoMaidEntity<?> geckoMaid){
                 AnimatedGeoModel currentModel = geckoMaid.getCurrentModel();
@@ -65,9 +67,7 @@ public class MaidGeoLayer<T extends Mob, R extends IGeoEntityRenderer<T>> extend
 
                 if (currentModel1 != null && EventHandler.isInfinite(maidEntity)){
                     this.geoEntityRenderer.render(currentModel1, entity, partialTick, AvaritiaShaders.COSMIC_RENDER_TYPE, poseStack, buffer, consumer, packedLight, 1, 0.84f, 1.0f, 0.95f, 0.8f);
-                    if (maidEntity != null) {
-                        MaidLayer.renderWing(poseStack, buffer, maidEntity, cachedWingModel, packedLight);
-                    }
+                    MaidLayer.renderWing(poseStack, buffer, maidEntity, cachedWingModel, packedLight);
                 }
                 poseStack.popPose();
             }

@@ -83,6 +83,8 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         IMaid maid = IMaid.convert(entity);
         if (maid != null) {
             EntityMaid maidEntity = maid.asStrictMaid();
+            if (maidEntity == null) return;
+
             // 渲染身体星空效果
             poseStack.pushPose();
             poseStack.scale(1.0f, 1.0f, 1.0f);

@@ -134,6 +134,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:touhou-little-maid-355044:${tlm_id}")
     runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cc_api_ver}")
     runtimeOnly fg.deobf("curse.maven:spacearms-698166:${spacearms_id}")
+    runtimeOnly fg.deobf("curse.maven:kaguyafd-1449092:${kfd_id}")
 
 //    runtimeOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
     runtimeOnly fg.deobf("curse.maven:projecte-226410:${pe_id}")
