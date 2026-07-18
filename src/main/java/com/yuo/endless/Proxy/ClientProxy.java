@@ -3,6 +3,7 @@ package com.yuo.endless.Proxy;
 import com.yuo.endless.Client.Gui.*;
 import com.yuo.endless.Client.Render.CosmicBlockRender;
 import com.yuo.endless.Client.Render.EndlessChestTileRender;
+import com.yuo.endless.Config.MenuCompat;
 import com.yuo.endless.Config.ModConfig;
 import com.yuo.endless.Container.EndlessMenuTypes;
 import com.yuo.endless.Blocks.Fluid.EndlessFluids;
@@ -31,6 +32,8 @@ public class ClientProxy implements IProxy {
 //        ModelLoaderRegistry.registerLoader(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
 //        ModelLoaderRegistry.registerLoader(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
         modBus.addListener(this::clientSetup);
+        if (EndlessUtils.isccApi)
+            MenuCompat.registerModsPage();
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {

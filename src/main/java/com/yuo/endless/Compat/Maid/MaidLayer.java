@@ -2,26 +2,16 @@ package com.yuo.endless.Compat.Maid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
-import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
-import com.github.tartaricacid.touhoulittlemaid.compat.patpat.PatPatCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.yuo.endless.Client.AvaritiaShaders;
 import com.yuo.endless.Client.Model.InfinityArmorModel;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.Event.EventHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -30,25 +20,13 @@ import net.minecraft.client.renderer.RenderStateShard.ShaderStateShard;
 import net.minecraft.client.renderer.RenderStateShard.TextureStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderType.CompositeState;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
 
 public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
     private static final ResourceLocation wingTex = EndlessUtils.fa("textures/models/infinity_armor_wing.png");
@@ -57,7 +35,7 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
     private final InfinityArmorModel cachedWingModel;
     private final Minecraft mc = Minecraft.getInstance();
 
-    public MaidLayer(LivingEntityRenderer<Mob, BedrockModel<Mob>> renderer, Context manager) {
+    public MaidLayer(LivingEntityRenderer<Mob, BedrockModel<Mob>> renderer) {
         super(renderer);
         cachedWingModel = new InfinityArmorModel(rebuildWings().bakeRoot(), 0);
     }
@@ -79,7 +57,6 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
 
         updateShaderParams(entity);
 
-        // 渲染女仆翅膀
         IMaid maid = IMaid.convert(entity);
         if (maid != null) {
             EntityMaid maidEntity = maid.asStrictMaid();
@@ -109,7 +86,11 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         return RenderType.create("mask", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING).createCompositeState(true));
     }
 
-
+    /**
+     * 渲染女仆翅膀
+     * @param entityMaid 女仆实体
+     * @param model 女仆模型
+     */
     public static void renderWing(PoseStack poseStack, MultiBufferSource buffer, EntityMaid entityMaid, InfinityArmorModel model, int packedLight){
         float f3 = entityMaid.getEyeHeight() * 0.5f;
         float f2 = entityMaid.getEyeHeight() * 0.5f;
@@ -127,6 +108,9 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         poseStack.popPose();
     }
 
+    /**
+     * 星空参数更新
+     */
     public static void updateShaderParams(Mob entity) {
         float yaw = (float) (entity.getYRot() * 2.0f * Math.PI / 360.0);
         float pitch = -(float) (entity.getXRot() * 2.0f * Math.PI / 360.0);

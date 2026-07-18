@@ -2,31 +2,17 @@ package com.yuo.endless.Compat.Maid;
 
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.LittleMaidExtension;
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.yuo.endless.Blocks.EndlessChestType;
-import com.yuo.endless.Client.AvaritiaShaders;
-import com.yuo.endless.Client.Model.InfinityArmorModel;
-import com.yuo.endless.Event.EventHandler;
 import com.yuo.endless.Items.EndlessItems;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import org.jetbrains.annotations.NotNull;
 
 @LittleMaidExtension
 public class LittleMaidCompat implements ILittleMaid {
@@ -64,12 +50,14 @@ public class LittleMaidCompat implements ILittleMaid {
 //        manager.add(EndlessChestType.INFINITY);
 //    }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addAdditionMaidLayer(EntityMaidRenderer renderer, Context context) {
         ILittleMaid.super.addAdditionMaidLayer(renderer, context);
-        renderer.addLayer(new MaidLayer(renderer, context));
+        renderer.addLayer(new MaidLayer(renderer));
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addAdditionGeckoMaidLayer(GeckoEntityMaidRenderer<? extends Mob> renderer, Context context) {
         ILittleMaid.super.addAdditionGeckoMaidLayer(renderer, context);
