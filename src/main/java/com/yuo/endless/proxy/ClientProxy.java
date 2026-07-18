@@ -11,6 +11,7 @@ import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.MatterCluster;
 import com.yuo.endless.items.tool.InfinityCrossBow;
 import com.yuo.endless.EndlessUtils;
+import com.yuo.endless.network.NetWorkHandler;
 import com.yuo.endless.tiles.EndlessTileTypes;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * 客户端属性注册
@@ -29,11 +31,15 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void registerHandlers(IEventBus modBus) {
-//        ModelLoaderRegistry.registerLoader(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "cosmic"), new CosmicModelLoader());
-//        ModelLoaderRegistry.registerLoader(ResourceLocation.fromNamespaceAndPath(Endless.MOD_ID, "halo"), new HaloItemModelLoader());
         modBus.addListener(this::clientSetup);
         if (EndlessUtils.isccApi)
             MenuCompat.registerModsPage();
+        modBus.addListener(this::commonSetup);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        //客户端同步注册网络包
+        event.enqueueWork(NetWorkHandler::registerMessage);
     }
 
     public void clientSetup(final FMLClientSetupEvent event) {

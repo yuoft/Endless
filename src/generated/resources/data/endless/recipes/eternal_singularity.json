@@ -45,22 +45,6 @@
     {
       "item": "endless:singularity",
       "nbt": "{type:clay}"
-    },
-    {
-      "item": "endless:singularity",
-      "nbt": "{type:draconium}"
-    },
-    {
-      "item": "endless:singularity",
-      "nbt": "{type:awakened_draconium}"
-    },
-    {
-      "item": "endless:singularity",
-      "nbt": "{type:dark_matter}"
-    },
-    {
-      "item": "endless:singularity",
-      "nbt": "{type:red_matter}"
     }
   ],
   "result": {
