@@ -1,9 +1,9 @@
 {
   "required": true,
-  "package": "com.yuo.endless.Mixin",
+  "package": "com.yuo.endless.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "endless.refmap.json",
-  "plugin": "com.yuo.endless.Mixin.MixinPlugin",
+  "plugin": "com.yuo.endless.mixin.MixinPlugin",
   "mixins": [
     "GiveCommandMixin"
   ],

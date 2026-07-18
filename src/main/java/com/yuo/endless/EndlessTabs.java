@@ -1,8 +1,8 @@
 package com.yuo.endless;
 
-import com.yuo.endless.Event.EventHandler;
-import com.yuo.endless.Items.EndlessItems;
-import com.yuo.endless.Items.Singularity;
+import com.yuo.endless.event.EventHandler;
+import com.yuo.endless.items.EndlessItems;
+import com.yuo.endless.items.Singularity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

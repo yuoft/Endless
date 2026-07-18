@@ -1,0 +1,42 @@
+package com.yuo.endless.items.tool;
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import com.yuo.endless.items.EndlessItems;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.block.state.BlockState;
+
+public class OrdinaryAxe extends AxeItem {
+
+    public OrdinaryAxe(Tier tier) {
+        super(tier, 2,-3.0f, new Properties().fireResistant());
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> multimap = getDefaultAttributeModifiers(slot);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.putAll(multimap);
+        if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND){
+            if (stack.getItem() == EndlessItems.crystalMatrixAxe.get()){
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.03d));
+            }else if (stack.getItem() == EndlessItems.neutroniumAxe.get()){
+                builder.put(Attributes.MOVEMENT_SPEED, Modifiers.getModifierSpeed(6,0.04d));
+            }
+            return builder.build();
+        }
+        return super.getAttributeModifiers(slot, stack);
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
+        int blockTool = OrdinaryPickaxe.getBlockTool(state);
+        return blockTool == 0 ? 150000 : blockTool == 1 ? 1000000 : super.getDestroySpeed(stack, state);
+    }
+}
