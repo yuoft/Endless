@@ -149,7 +149,7 @@ public class GapingVoidEntity extends Entity {
             discard();
         } else {
             if (age == 0) { //生成实体时播放音效
-                level.playSound( null, position, ModSounds.GAPING_VOID.get(), SoundSource.HOSTILE, 8.0F, 1.0F);
+                level.playSound( null, position, ModSounds.GAPING_VOID.get(), SoundSource.HOSTILE, 7.5F, 1.0F);
             }
             setAge(age + 1); //年龄增加
         }
@@ -185,7 +185,7 @@ public class GapingVoidEntity extends Entity {
 
         double radius = getVoidScale(age) * 0.5; //引力系数
         for (Entity suckee : sucked) { //将所以实体吸引到此实体处
-            if (suckee != this && !(suckee instanceof Player)) {
+            if (!(suckee instanceof GapingVoidEntity) && !(suckee instanceof EndestPearlEntity) && !(suckee instanceof Player)) {
                 double dist = getDist(suckee.getOnPos(), position); //距离
                 if (dist <= suckRange)
                     setEntityMotionFromVector(suckee, position, radius * 0.075d);
