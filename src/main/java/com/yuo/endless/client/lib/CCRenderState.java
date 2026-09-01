@@ -250,7 +250,6 @@ public class CCRenderState {
                     break;
                 case COLOR:
                     if (r instanceof BufferBuilder && ((BufferBuilder) r).defaultColorSet) {
-                        //-_- Fucking mojang..
                         ((BufferBuilder) r).nextElement();
                     } else {
                         r.color(colour >>> 24, colour >> 16 & 0xFF, colour >> 8 & 0xFF, alphaOverride >= 0 ? alphaOverride : colour & 0xFF);

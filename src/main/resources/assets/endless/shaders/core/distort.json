@@ -1,0 +1,9 @@
+{
+  "vertex": "endless:distort",
+  "fragment": "endless:distort",
+  "attributes": ["Position", "Color", "UV0"],
+  "uniforms": [
+    { "name": "time", "type": "float", "count": 1, "values": [0.0] },
+    { "name": "distortStrength", "type": "float", "count": 1, "values": [0.3] }
+  ]
+}

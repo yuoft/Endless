@@ -100,7 +100,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
     compileOnly fg.deobf("curse.maven:curios-309927:${curios_id}")
 
-//    compileOnly fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
+//    implementation fg.deobf("curse.maven:re-avaritia-623969:${ra_id}")
     compileOnly fg.deobf("vazkii.botania:Botania:${minecraft_version}-${bot_ver}")
     compileOnly fg.deobf("curse.maven:blood-magic-224791:${bloodmagic_id}")
     compileOnly fg.deobf("curse.maven:enchanted-witchcraft-560363:${enchanted_id}")

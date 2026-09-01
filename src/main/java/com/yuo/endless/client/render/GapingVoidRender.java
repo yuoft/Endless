@@ -1,8 +1,6 @@
 package com.yuo.endless.client.render;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.yuo.endless.client.lib.*;
 import com.yuo.endless.entity.GapingVoidEntity;
@@ -34,20 +32,13 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
             256, RenderType.CompositeState.builder().setShaderState(RenderType.RENDERTYPE_ENTITY_SHADOW_SHADER).setTextureState(new RenderStateShard.TextureStateShard(VOID, false, false))
                     .setCullState(RenderType.NO_CULL).createCompositeState(false));
 
-    private static final RenderStateShard.ShaderStateShard DISTORT_SHADER_STATE =
-            new RenderStateShard.ShaderStateShard(() -> DistortShaders.distortShader);
-
-    private static final RenderType VOID_DISTORT = RenderType.create(
-            "endless:void_distort",
-            DefaultVertexFormat.POSITION_COLOR_TEX,  // 与着色器顶点格式匹配
-            VertexFormat.Mode.QUADS,
-            256,
-            RenderType.CompositeState.builder()
-                    .setShaderState(DISTORT_SHADER_STATE)
-                    .setTextureState(new RenderStateShard.TextureStateShard(VOID1, false, false))
-                    .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(RenderType.COLOR_WRITE)
-                    .createCompositeState(false)
+    private static final RenderType VOID_DISTORT = RenderType.create("endless:void_distort", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256,
+            RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> DistortShaders.distortShader))
+                    .setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST)
+                    .setLightmapState(RenderStateShard.LIGHTMAP)
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
+                    .createCompositeState(true)
     );
 
     public GapingVoidRender(EntityRendererProvider.Context renderManagerIn) {
@@ -60,54 +51,62 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         float age = entityIn.getAge() + partialTicks;
         Colour colour = getColour(age); // 光环颜色
         double scale = GapingVoidEntity.getVoidScale(age);
-        double halocoord = 0.58D * scale;
-        double haloscaledist = 2.2D * scale;
+        double haloCord = 0.58D * scale;
+        double haloScaleDist = 2.2D * scale;
         Vec3 cam = this.entityRenderDispatcher.camera.getPosition();
         double dx = entityIn.getX() - cam.x();
         double dy = entityIn.getY() - cam.y();
         double dz = entityIn.getZ() - cam.z();
         double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (len <= haloscaledist) {
-            double close = (haloscaledist - len) / haloscaledist;
-            halocoord *= 1.0D + close * close * close * close * 1.5D;
+        if (len <= haloScaleDist) {
+            double close = (haloScaleDist - len) / haloScaleDist;
+            haloCord *= 1.0D + close * close * close * close * 1.5D;
         }
         stack.pushPose();
         stack.mulPose(Axis.YP.rotationDegrees((float) (Math.atan2(dx, dz) * 57.29577951308232f)));
         stack.mulPose(Axis.XP.rotationDegrees((float)(Math.atan2(Math.sqrt(dx * dx + dz * dz), dy) * 57.29577951308232D + 90.0D)));
+
         //外部光环
         stack.pushPose();
         stack.mulPose(Axis.XP.rotationDegrees(90.0F));
+//        TransformingVertexConsumer consHalo = new TransformingVertexConsumer(bufferIn.getBuffer(VOID_HALO), stack);
+//        consHalo.vertex(-haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 0.0F).endVertex();
+//        consHalo.vertex(-haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 1.0F).endVertex();
+//        consHalo.vertex(haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 1.0F).endVertex();
+//        consHalo.vertex(haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 0.0F).endVertex();
+        renderDistort(bufferIn, stack, age, haloCord);
+        stack.popPose();
+
+
+        //内部球体
+//        stack.scale((float)scale, (float)scale, (float)scale);
+//        CCRenderState cc = CCRenderState.instance();
+//        cc.reset();
+//        cc.bind(VOID_HEMISPHERE, bufferIn, stack);
+//        cc.baseColour = colour.rgba();
+//        this.hemisphere.render(cc);
+        stack.popPose();
+    }
+
+    /**
+     * 扭曲渲染
+     */
+    private void renderDistort(MultiBufferSource bufferIn, PoseStack stack, float age, double haloCord){
         // 在 render 方法中，渲染扭曲环之前
         ShaderInstance shader = DistortShaders.distortShader;
         if (shader != null) {
             shader.apply(); // 激活当前着色器程序
-            // 设置 uniform
             DistortShaders.distortTime.set(age / 20.0f); // 时间参数，可调节速度
-            DistortShaders.distortStrength.set(0.8f);    // 扭曲强度
+            DistortShaders.distortStrength.set(2f);    // 扭曲强度
         }
         // 然后绑定 RenderType 并渲染
         TransformingVertexConsumer cons = new TransformingVertexConsumer(bufferIn.getBuffer(VOID_DISTORT), stack);
-        double size = halocoord * 1.3;
-        float alpha = 0.4f; // 可根据 age 调整
+        double size = haloCord * 2;
+        float alpha = 0.8f; // 可根据 age 调整
         cons.vertex(-size, 0, -size).color(1,1,1,alpha).uv(0,0).endVertex();
         cons.vertex(-size, 0,  size).color(1,1,1,alpha).uv(0,1).endVertex();
         cons.vertex( size, 0,  size).color(1,1,1,alpha).uv(1,1).endVertex();
         cons.vertex( size, 0, -size).color(1,1,1,alpha).uv(1,0).endVertex();
-
-        TransformingVertexConsumer consHalo = new TransformingVertexConsumer(bufferIn.getBuffer(VOID_HALO), stack);
-        consHalo.vertex(-halocoord, 0.0D, -halocoord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 0.0F).endVertex();
-        consHalo.vertex(-halocoord, 0.0D, halocoord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 1.0F).endVertex();
-        consHalo.vertex(halocoord, 0.0D, halocoord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 1.0F).endVertex();
-        consHalo.vertex(halocoord, 0.0D, -halocoord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 0.0F).endVertex();
-        stack.popPose();
-        //内部球体
-        stack.scale((float)scale, (float)scale, (float)scale);
-        CCRenderState cc = CCRenderState.instance();
-        cc.reset();
-        cc.bind(VOID_HEMISPHERE, bufferIn, stack);
-        cc.baseColour = colour.rgba();
-        this.hemisphere.render(cc);
-        stack.popPose();
     }
 
     private static Colour getColour(double age) {

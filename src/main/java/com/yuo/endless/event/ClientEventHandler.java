@@ -64,6 +64,7 @@ public class ClientEventHandler {
     )
     public static void onRegisterShaders(RegisterShadersEvent event) {
         AvaritiaShaders.init(event);//注册着色器
+        DistortShaders.onRegisterShaders(event);
     }
     @SubscribeEvent
     public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
