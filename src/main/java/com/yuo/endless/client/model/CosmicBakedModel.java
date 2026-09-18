@@ -56,7 +56,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         if (stack.getItem() == EndlessItems.matterCluster.get()) {
             AvaritiaShaders.cosmicOpacity.set(getMatterClusterOpacity(stack));
         } else {
-            AvaritiaShaders.cosmicOpacity.set(1.0F);
+            AvaritiaShaders.cosmicOpacity.set(2.0f);
         }
 
         for(int i = 0; i < 10; ++i) {

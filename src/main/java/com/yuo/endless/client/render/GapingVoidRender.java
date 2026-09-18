@@ -74,7 +74,7 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
 //        consHalo.vertex(-haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 1.0F).endVertex();
 //        consHalo.vertex(haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 1.0F).endVertex();
 //        consHalo.vertex(haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 0.0F).endVertex();
-        renderDistort(bufferIn, stack, age, haloCord);
+//        renderDistort(bufferIn, stack, age, haloCord);
         stack.popPose();
 
 

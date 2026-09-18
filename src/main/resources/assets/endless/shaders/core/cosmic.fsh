@@ -67,7 +67,8 @@ void main (void) {
         vec2 tex = vec2( u, v );
         int tu = int(mod(floor(u*uvtiles),uvtiles));
         int tv = int(mod(floor(v*uvtiles),uvtiles));
-        int position = ((1777541 * tu) + (7649689 * tv) + (3612703 * (i+31)) + 1723609 ) ^ 50943779;
+//        int position = ((1777541 * tu) + (7649689 * tv) + (3612703 * (i+31)) + 1723609 ) ^ 50943779;  数值较大导致溢出，使结果总是为0
+        int position = ((171 * tu) + (489 * tv) + (303 * (i+31)) + 17209 ) ^ 10;
         int symbol = int(mod(position, cosmicoutof));
         int rotation = int(mod(pow(tu,float(tv)) + tu + 3 + tv*i, 8));
         bool flip = false;
@@ -102,7 +103,7 @@ void main (void) {
             cosmictex.x = umin * (1.0-oru) + umax * oru;
             cosmictex.y = vmin * (1.0-orv) + vmax * orv;
             tcol = texture(Sampler0, cosmictex);
-            float a = tcol.r * (0.5 + (1.0/mult) * 1.0) * (1.0-smoothstep(0.15, 0.48, abs(rawv-0.5)));
+            float a = max(max(tcol.r, tcol.g), tcol.b) * (0.5 + (1.0/mult) * 1.0) * (1.0-smoothstep(0.15, 0.48, abs(rawv-0.5)));
             float r = (mod(rand1, 29.0)/29.0) * 0.3 + 0.4;
             float g = (mod(rand2, 35.0)/35.0) * 0.4 + 0.6;
             float b = (mod(rand1, 17.0)/17.0) * 0.3 + 0.7;
