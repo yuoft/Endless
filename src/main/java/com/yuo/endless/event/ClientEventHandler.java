@@ -10,8 +10,11 @@ import com.yuo.endless.entity.EntityRegistry;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.Singularity;
 import com.yuo.endless.EndlessUtils;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -59,12 +62,11 @@ public class ClientEventHandler {
         event.registerEntityRenderer(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntityRender::new);
     }
 
-    @SubscribeEvent(
-            priority = EventPriority.HIGHEST
-    )
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRegisterShaders(RegisterShadersEvent event) {
         AvaritiaShaders.init(event);//注册着色器
         DistortShaders.onRegisterShaders(event);
+        GapingVoidShaders.register(event);
     }
     @SubscribeEvent
     public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -82,7 +84,9 @@ public class ClientEventHandler {
     }
 
     private static void addLayer(EntityRenderersEvent.AddLayers e, String s) {
-        LivingEntityRenderer entityRenderer = e.getSkin(s);
-        entityRenderer.addLayer(new InfinityArmorModel.PlayerRender(entityRenderer));
+        LivingEntityRenderer<Player, PlayerModel<Player>> entityRenderer = e.getSkin(s);
+        if (entityRenderer != null) {
+            entityRenderer.addLayer(new InfinityArmorModel.PlayerRender(entityRenderer));
+        }
     }
 }

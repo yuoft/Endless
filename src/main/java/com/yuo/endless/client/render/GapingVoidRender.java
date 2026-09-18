@@ -32,15 +32,6 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
             256, RenderType.CompositeState.builder().setShaderState(RenderType.RENDERTYPE_ENTITY_SHADOW_SHADER).setTextureState(new RenderStateShard.TextureStateShard(VOID, false, false))
                     .setCullState(RenderType.NO_CULL).createCompositeState(false));
 
-    private static final RenderType VOID_DISTORT = RenderType.create("endless:void_distort", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 256,
-            RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> DistortShaders.distortShader))
-                    .setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST)
-                    .setLightmapState(RenderStateShard.LIGHTMAP)
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
-                    .createCompositeState(true)
-    );
-
     public GapingVoidRender(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
         this.hemisphere = new OBJParser(EndlessUtils.fa("models/hemisphere.obj")).parse().get("model");
@@ -50,7 +41,7 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
     public void render(GapingVoidEntity entityIn, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
         float age = entityIn.getAge() + partialTicks;
         Colour colour = getColour(age); // 光环颜色
-        double scale = GapingVoidEntity.getVoidScale(age);
+        float scale = GapingVoidEntity.getVoidScale(age);
         double haloCord = 0.58D * scale;
         double haloScaleDist = 2.2D * scale;
         Vec3 cam = this.entityRenderDispatcher.camera.getPosition();
@@ -69,44 +60,32 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         //外部光环
         stack.pushPose();
         stack.mulPose(Axis.XP.rotationDegrees(90.0F));
-//        TransformingVertexConsumer consHalo = new TransformingVertexConsumer(bufferIn.getBuffer(VOID_HALO), stack);
-//        consHalo.vertex(-haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 0.0F).endVertex();
-//        consHalo.vertex(-haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 1.0F).endVertex();
-//        consHalo.vertex(haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 1.0F).endVertex();
-//        consHalo.vertex(haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 0.0F).endVertex();
-//        renderDistort(bufferIn, stack, age, haloCord);
+        if (age < 140) renderVoidHalo(stack, bufferIn, haloCord, colour);
         stack.popPose();
 
+        //shader黑洞
+        if (age >= 140) GapingVoidShaders.enqueue(stack.last().pose(), scale * 0.05f, age / 20.0F);
 
         //内部球体
-//        stack.scale((float)scale, (float)scale, (float)scale);
-//        CCRenderState cc = CCRenderState.instance();
-//        cc.reset();
-//        cc.bind(VOID_HEMISPHERE, bufferIn, stack);
-//        cc.baseColour = colour.rgba();
-//        this.hemisphere.render(cc);
+        if (age < 140) renderVoidHemisphere(stack, bufferIn, scale, colour);
         stack.popPose();
     }
 
-    /**
-     * 扭曲渲染
-     */
-    private void renderDistort(MultiBufferSource bufferIn, PoseStack stack, float age, double haloCord){
-        // 在 render 方法中，渲染扭曲环之前
-        ShaderInstance shader = DistortShaders.distortShader;
-        if (shader != null) {
-            shader.apply(); // 激活当前着色器程序
-            DistortShaders.distortTime.set(age / 20.0f); // 时间参数，可调节速度
-            DistortShaders.distortStrength.set(2f);    // 扭曲强度
-        }
-        // 然后绑定 RenderType 并渲染
-        TransformingVertexConsumer cons = new TransformingVertexConsumer(bufferIn.getBuffer(VOID_DISTORT), stack);
-        double size = haloCord * 2;
-        float alpha = 0.8f; // 可根据 age 调整
-        cons.vertex(-size, 0, -size).color(1,1,1,alpha).uv(0,0).endVertex();
-        cons.vertex(-size, 0,  size).color(1,1,1,alpha).uv(0,1).endVertex();
-        cons.vertex( size, 0,  size).color(1,1,1,alpha).uv(1,1).endVertex();
-        cons.vertex( size, 0, -size).color(1,1,1,alpha).uv(1,0).endVertex();
+    private void renderVoidHalo(PoseStack stack, MultiBufferSource bufferIn, double haloCord, Colour colour){
+        TransformingVertexConsumer consHalo = new TransformingVertexConsumer(bufferIn.getBuffer(VOID_HALO), stack);
+        consHalo.vertex(-haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 0.0F).endVertex();
+        consHalo.vertex(-haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 1.0F).endVertex();
+        consHalo.vertex(haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 1.0F).endVertex();
+        consHalo.vertex(haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 0.0F).endVertex();
+    }
+
+    private void renderVoidHemisphere(PoseStack stack, MultiBufferSource bufferIn, float scale, Colour colour){
+        stack.scale(scale, scale, scale);
+        CCRenderState cc = CCRenderState.instance();
+        cc.reset();
+        cc.bind(VOID_HEMISPHERE, bufferIn, stack);
+        cc.baseColour = colour.rgba();
+        this.hemisphere.render(cc);
     }
 
     private static Colour getColour(double age) {
@@ -119,21 +98,5 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
     @Override
     public ResourceLocation getTextureLocation(GapingVoidEntity entity) {
         return VOID;
-    }
-
-    private static ShaderInstance DISTORT_SHADER;
-
-    public static ShaderInstance getDistortShader() {
-        if (DISTORT_SHADER == null) {
-            try {
-                DISTORT_SHADER = new ShaderInstance(
-                        Minecraft.getInstance().getResourceManager(), EndlessUtils.fa("distort"),
-                        DefaultVertexFormat.POSITION_COLOR_TEX
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return DISTORT_SHADER;
     }
 }

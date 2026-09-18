@@ -38,7 +38,7 @@ void main (void) {
     vec4 mask = texture(Sampler0, texCoord0.xy);
     float oneOverExternalScale = 1.0/externalScale;
     int uvtiles = 16;
-    vec4 col = vec4(0.1,0.0,0.0,1.0);
+    vec4 col = vec4(0.1,0.0,0.0,1.0);  //背景色
     float pulse = mod(time,400)/400.0;
     col.g = sin(pulse*M_PI*2) * 0.075 + 0.225;
     col.b = cos(pulse*M_PI*2) * 0.05 + 0.3;
@@ -103,6 +103,7 @@ void main (void) {
             cosmictex.x = umin * (1.0-oru) + umax * oru;
             cosmictex.y = vmin * (1.0-orv) + vmax * orv;
             tcol = texture(Sampler0, cosmictex);
+            //星星颜色
             float a = max(max(tcol.r, tcol.g), tcol.b) * (0.5 + (1.0/mult) * 1.0) * (1.0-smoothstep(0.15, 0.48, abs(rawv-0.5)));
             float r = (mod(rand1, 29.0)/29.0) * 0.3 + 0.4;
             float g = (mod(rand2, 35.0)/35.0) * 0.4 + 0.6;

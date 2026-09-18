@@ -1,0 +1,19 @@
+{
+  "vertex": "endless:gaping_void",
+  "fragment": "endless:gaping_void",
+  "attributes": ["Position", "UV0"],
+  "samplers": [
+    { "name": "SceneColor" },
+    { "name": "SceneDepth" },
+    { "name": "AccretionTexture" }
+  ],
+  "uniforms": [
+    { "name": "InverseProjection", "type": "matrix4x4", "count": 16, "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0] },
+    { "name": "SceneProjection", "type": "matrix4x4", "count": 16, "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0] },
+    { "name": "HoleCenter", "type": "float", "count": 3, "values": [0.0, 0.0, -10.0] },
+    { "name": "DiskNormal", "type": "float", "count": 3, "values": [0.0, 1.0, 0.0] },
+    { "name": "DiskAxis", "type": "float", "count": 3, "values": [1.0, 0.0, 0.0] },
+    { "name": "HorizonRadius", "type": "float", "count": 1, "values": [1.0] },
+    { "name": "Time", "type": "float", "count": 1, "values": [0.0] }
+  ]
+}
