@@ -1,6 +1,6 @@
 package com.yuo.endless.items;
 
-import com.yuo.endless.entity.EntityRegistry;
+import com.yuo.endless.entity.EndlessEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -60,7 +60,7 @@ public class InfinityMobSpawnEgg extends Item {
                 BlockEntity blockentity = level.getBlockEntity(blockpos);
                 if (blockentity instanceof SpawnerBlockEntity) {
                     BaseSpawner basespawner = ((SpawnerBlockEntity)blockentity).getSpawner();
-                    EntityType<?> entitytype1 = EntityRegistry.INFINITY_MOB.get();
+                    EntityType<?> entitytype1 = EndlessEntityTypes.INFINITY_MOB.get();
                     basespawner.setEntityId(entitytype1, level, level.random, blockpos);
                     blockentity.setChanged();
                     level.sendBlockUpdated(blockpos, blockstate, blockstate, 3);
@@ -76,7 +76,7 @@ public class InfinityMobSpawnEgg extends Item {
                 blockpos1 = blockpos.relative(direction);
             }
 
-            EntityType<?> entitytype = EntityRegistry.INFINITY_MOB.get();
+            EntityType<?> entitytype = EndlessEntityTypes.INFINITY_MOB.get();
             if (entitytype.spawn((ServerLevel)level, itemstack, pContext.getPlayer(), blockpos1, MobSpawnType.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP) != null) {
                 itemstack.shrink(1);
                 level.gameEvent(pContext.getPlayer(), GameEvent.ENTITY_PLACE, blockpos);
@@ -100,7 +100,7 @@ public class InfinityMobSpawnEgg extends Item {
             if (!(pLevel.getBlockState(blockpos).getBlock() instanceof LiquidBlock)) {
                 return InteractionResultHolder.pass(itemstack);
             } else if (pLevel.mayInteract(pPlayer, blockpos) && pPlayer.mayUseItemAt(blockpos, blockhitresult.getDirection(), itemstack)) {
-                EntityType<?> entitytype = EntityRegistry.INFINITY_MOB.get();
+                EntityType<?> entitytype = EndlessEntityTypes.INFINITY_MOB.get();
                 if (entitytype.spawn((ServerLevel)pLevel, itemstack, pPlayer, blockpos, MobSpawnType.SPAWN_EGG, false, false) == null) {
                     return InteractionResultHolder.pass(itemstack);
                 } else {

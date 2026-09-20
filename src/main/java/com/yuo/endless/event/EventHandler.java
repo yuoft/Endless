@@ -3,8 +3,6 @@ package com.yuo.endless.event;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessUtils;
-import com.yuo.endless.entity.EntityRegistry;
-import com.yuo.endless.entity.InfinityMobEntity;
 import com.yuo.endless.items.armor.InfinityArmor;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.MatterCluster;
@@ -29,7 +27,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,7 +35,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -72,14 +68,6 @@ public class EventHandler {
     public static List<String> playersWithLegs = new ArrayList<>();
     public static List<String> playersWithFeet = new ArrayList<>();
 
-//    @SubscribeEvent 物品到期销毁
-//    public static void expCancel(ItemExpireEvent event) {
-//        if (event.getEntity() instanceof ImmortalItemEntity) {
-//            event.setCanceled(true);
-//        }
-//
-//    }
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
@@ -94,22 +82,6 @@ public class EventHandler {
                     break;
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
-        Mob entity = event.getEntity();
-        if (entity instanceof EnderMan enderMan) {
-            ServerLevelAccessor level = event.getLevel();
-            boolean b = ModConfig.SERVER.mobSpawn.get() && level.getRandom().nextFloat() < ModConfig.SERVER.mobWeigh.get() * 0.1f;
-            if (b){
-                InfinityMobEntity mob = new InfinityMobEntity(EntityRegistry.INFINITY_MOB.get(), level.getLevel());
-                BlockPos pos = enderMan.getOnPos();
-                mob.setPos(pos.getX() + level.getRandom().nextDouble() + 0.25d, pos.getY(), pos.getZ() + level.getRandom().nextDouble() + 0.25d);
-                level.addFreshEntity(mob);
-            }
-
         }
     }
 

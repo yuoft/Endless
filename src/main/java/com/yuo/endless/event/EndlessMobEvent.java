@@ -1,7 +1,7 @@
 package com.yuo.endless.event;
 
 import com.yuo.endless.Endless;
-import com.yuo.endless.entity.EntityRegistry;
+import com.yuo.endless.entity.EndlessEntityTypes;
 import com.yuo.endless.entity.InfinityMobEntity;
 import com.yuo.endless.items.tool.InfinityDamageTypes;
 import net.minecraft.core.HolderLookup;
@@ -23,7 +23,7 @@ public class EndlessMobEvent {
     //实体属性
     @SubscribeEvent
     public static void onRegisterEntitiesAttr(EntityAttributeCreationEvent event) {
-        event.put(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntity.createAttributes().build());
+        event.put(EndlessEntityTypes.INFINITY_MOB.get(), InfinityMobEntity.createAttributes().build());
     }
 
     @SubscribeEvent

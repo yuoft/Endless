@@ -6,11 +6,10 @@ import com.yuo.endless.client.model.HaloItemModelLoader;
 import com.yuo.endless.client.model.InfinityArmorModel;
 import com.yuo.endless.client.render.*;
 import com.yuo.endless.Endless;
-import com.yuo.endless.entity.EntityRegistry;
+import com.yuo.endless.entity.EndlessEntityTypes;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.Singularity;
 import com.yuo.endless.EndlessUtils;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.*;
@@ -53,13 +52,13 @@ public class ClientEventHandler {
     //实体渲染注册
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(EntityRegistry.ENDEST_PEARL.get(), ThrownItemRenderer::new); //投掷物渲染
-        event.registerEntityRenderer(EntityRegistry.INFINITY_ARROW.get(), InfinityArrowRender::new);
-        event.registerEntityRenderer(EntityRegistry.INFINITY_FIREWORK.get(), InfinityFireWorkRender::new);
-        event.registerEntityRenderer(EntityRegistry.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
+        event.registerEntityRenderer(EndlessEntityTypes.ENDEST_PEARL.get(), ThrownItemRenderer::new); //投掷物渲染
+        event.registerEntityRenderer(EndlessEntityTypes.INFINITY_ARROW.get(), InfinityArrowRender::new);
+        event.registerEntityRenderer(EndlessEntityTypes.INFINITY_FIREWORK.get(), InfinityFireWorkRender::new);
+        event.registerEntityRenderer(EndlessEntityTypes.INFINITY_ARROW_SUB.get(), InfinityArrowSubRender::new);
 
-        event.registerEntityRenderer(EntityRegistry.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
-        event.registerEntityRenderer(EntityRegistry.INFINITY_MOB.get(), InfinityMobEntityRender::new);
+        event.registerEntityRenderer(EndlessEntityTypes.GAPING_VOID.get(), GapingVoidRender::new); //渲染实体
+        event.registerEntityRenderer(EndlessEntityTypes.INFINITY_MOB.get(), InfinityMobEntityRender::new);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

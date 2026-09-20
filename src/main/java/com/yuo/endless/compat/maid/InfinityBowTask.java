@@ -6,7 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.yuo.endless.EndlessUtils;
-import com.yuo.endless.entity.EntityRegistry;
+import com.yuo.endless.entity.EndlessEntityTypes;
 import com.yuo.endless.entity.InfinityArrowEntity;
 import com.yuo.endless.entity.InfinityArrowSubEntity;
 import com.yuo.endless.items.EndlessItems;
@@ -84,8 +84,8 @@ public class InfinityBowTask implements IRangedAttackTask {
         int arrowNum = this.findArrow(shooter);
         AbstractArrow arrow;
         if (arrowNum == 1) {
-            arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, level, true);
-        }else arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, level, shooter.getOffhandItem());
+            arrow = new InfinityArrowEntity(EndlessEntityTypes.INFINITY_ARROW.get(), shooter, level, true);
+        }else arrow = new InfinityArrowSubEntity(EndlessEntityTypes.INFINITY_ARROW_SUB.get(), shooter, level, shooter.getOffhandItem());
         arrow.setPierceLevel((byte) 3);
         arrow.setCritArrow(true); //暴击粒子
         arrow.setOwner(shooter);

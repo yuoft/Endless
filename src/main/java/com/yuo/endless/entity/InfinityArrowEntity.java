@@ -202,7 +202,7 @@ public class InfinityArrowEntity extends AbstractArrow {
             double dx = Math.sin(dangle) * ddist;
             double dz = Math.cos(dangle) * ddist;
 
-            InfinityArrowSubEntity arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), x, y, z, level);
+            InfinityArrowSubEntity arrow = new InfinityArrowSubEntity(EndlessEntityTypes.INFINITY_ARROW_SUB.get(), x, y, z, level);
             if (shooter != null) arrow.setOwner(shooter);
             arrow.push(dx, -(random.nextDouble() * 1.85 + 0.15), dz);
             arrow.setCritArrow(true);

@@ -1,6 +1,6 @@
 package com.yuo.endless.items.tool;
 
-import com.yuo.endless.client.sound.ModSounds;
+import com.yuo.endless.client.sound.EndlessSounds;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.entity.*;
 import com.yuo.endless.items.EndlessItems;
@@ -95,9 +95,9 @@ public class InfinityBow extends BowItem {
 
             if (!world.isClientSide) {
                 if (useTime == 20) //蓄力
-                    world.playSound(null, player.getOnPos(), ModSounds.INFINITY_BOW_STAR.get(), SoundSource.NEUTRAL, 6.0f, 1.0f);
+                    world.playSound(null, player.getOnPos(), EndlessSounds.INFINITY_BOW_STAR.get(), SoundSource.NEUTRAL, 6.0f, 1.0f);
                 if (useTime == 200) //蓄力完成
-                    world.playSound(null, player.getOnPos(), ModSounds.INFINITY_BOW_END.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    world.playSound(null, player.getOnPos(), EndlessSounds.INFINITY_BOW_END.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
             }
 
         }
@@ -173,13 +173,13 @@ public class InfinityBow extends BowItem {
                 if (!itemStack.isEmpty()) {
                     if (itemStack.getItem() == EndlessItems.infinityArrow.get()) { //无尽箭矢
                         if (flag && useTime >= 200){
-                            arrow = new InfinitySuperArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, level, useTime);
+                            arrow = new InfinitySuperArrowEntity(EndlessEntityTypes.INFINITY_ARROW.get(), player, level, useTime);
                         }else {
-                            arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), player, level, true);
+                            arrow = new InfinityArrowEntity(EndlessEntityTypes.INFINITY_ARROW.get(), player, level, true);
                             arrow.setPierceLevel((byte) 3);
                         }
                     } else {
-                        arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), player, level, itemStack); //普通箭矢
+                        arrow = new InfinityArrowSubEntity(EndlessEntityTypes.INFINITY_ARROW_SUB.get(), player, level, itemStack); //普通箭矢
                         arrow.setPierceLevel((byte) 1);
                     }
                 } else { //无箭矢

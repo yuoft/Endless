@@ -252,10 +252,10 @@ public class InfinityCrossBow extends CrossbowItem {
             arrow.setPierceLevel((byte) 1);
         }else {
             if (ammo.getItem() == EndlessItems.infinityArrow.get()){
-                arrow = new InfinityArrowEntity(EntityRegistry.INFINITY_ARROW.get(), shooter, worldIn, false);
+                arrow = new InfinityArrowEntity(EndlessEntityTypes.INFINITY_ARROW.get(), shooter, worldIn, false);
                 arrow.setPierceLevel((byte) 5);//5级穿透效果
             }else {
-                arrow = new InfinityArrowSubEntity(EntityRegistry.INFINITY_ARROW_SUB.get(), shooter, worldIn, ammo);
+                arrow = new InfinityArrowSubEntity(EndlessEntityTypes.INFINITY_ARROW_SUB.get(), shooter, worldIn, ammo);
                 arrow.setPierceLevel((byte) 3);
             }
         }

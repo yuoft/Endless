@@ -55,8 +55,8 @@ public class EndestPearlEntity extends ThrowableItemProjectile {
         if (!level.isClientSide){
             GapingVoidEntity voidEntity;
             if (shooter != null){
-                voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), shooter ,level);
-            }else voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), level); //生成黑洞实体
+                voidEntity = new GapingVoidEntity(EndlessEntityTypes.GAPING_VOID.get(), shooter ,level);
+            }else voidEntity = new GapingVoidEntity(EndlessEntityTypes.GAPING_VOID.get(), level); //生成黑洞实体
             BlockPos offset = entity.getOnPos();
             voidEntity.setPos(offset.getX(), offset.getY(), offset.getZ());
             level.addFreshEntity(voidEntity);
@@ -75,8 +75,8 @@ public class EndestPearlEntity extends ThrowableItemProjectile {
         if (!level.isClientSide){
             GapingVoidEntity voidEntity;
             if (shooter != null){
-                voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), shooter ,level);
-            }else voidEntity = new GapingVoidEntity(EntityRegistry.GAPING_VOID.get(), level);
+                voidEntity = new GapingVoidEntity(EndlessEntityTypes.GAPING_VOID.get(), shooter ,level);
+            }else voidEntity = new GapingVoidEntity(EndlessEntityTypes.GAPING_VOID.get(), level);
             Direction facing = result.getDirection();
             BlockPos blockPos = pos.relative(facing);
             voidEntity.setPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());

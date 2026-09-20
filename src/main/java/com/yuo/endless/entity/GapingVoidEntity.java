@@ -1,7 +1,7 @@
 package com.yuo.endless.entity;
 
 import com.mojang.authlib.GameProfile;
-import com.yuo.endless.client.sound.ModSounds;
+import com.yuo.endless.client.sound.EndlessSounds;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.event.EventHandler;
 import net.minecraft.core.BlockPos;
@@ -149,7 +149,7 @@ public class GapingVoidEntity extends Entity {
             discard();
         } else {
             if (age == 0) { //生成实体时播放音效
-                level.playSound( null, position, ModSounds.GAPING_VOID.get(), SoundSource.HOSTILE, 7.5F, 1.0F);
+                level.playSound( null, position, EndlessSounds.GAPING_VOID.get(), SoundSource.HOSTILE, 7.5F, 1.0F);
             }
             setAge(age + 1); //年龄增加
         }

@@ -2,11 +2,12 @@ package com.yuo.endless;
 
 import com.yuo.endless.blocks.EndlessBlocks;
 import com.yuo.endless.blocks.Fluid.EndlessFluidTypes;
-import com.yuo.endless.client.sound.ModSounds;
+import com.yuo.endless.client.sound.EndlessSounds;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.container.EndlessMenuTypes;
-import com.yuo.endless.entity.EntityRegistry;
+import com.yuo.endless.entity.EndlessEntityTypes;
 import com.yuo.endless.blocks.Fluid.EndlessFluids;
+import com.yuo.endless.entity.spawn.EndlessBiomeModifiers;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.proxy.ClientProxy;
 import com.yuo.endless.proxy.CommonProxy;
@@ -35,13 +36,18 @@ public class Endless {
         EndlessUtils.registerModCompat();
         EndlessBlocks.BLOCKS.register(modEventBus);
         EndlessTabs.TABS.register(modEventBus);
-        EntityRegistry.ENTITY_TYPES.register(modEventBus);
+        EndlessEntityTypes.ENTITY_TYPES.register(modEventBus);
         EndlessFluidTypes.FLUID_TYPES.register(modEventBus);
         EndlessFluids.FLUIDS.register(modEventBus);
         EndlessTileTypes.TILE_ENTITIES.register(modEventBus);
         EndlessMenuTypes.CONTAINERS.register(modEventBus);
         EndlessRecipes.register(modEventBus);
-        ModSounds.SOUNDS.register(modEventBus);
+        EndlessSounds.SOUNDS.register(modEventBus);
+        EndlessBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
         proxy.registerHandlers(modEventBus);
+        /**
+         * 修改无尽弓毁灭模式的粒子为法阵
+         * 加强无尽套装和无尽生物
+         */
     }
 }

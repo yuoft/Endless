@@ -38,10 +38,24 @@ void main (void) {
     vec4 mask = texture(Sampler0, texCoord0.xy);
     float oneOverExternalScale = 1.0/externalScale;
     int uvtiles = 16;
-    vec4 col = vec4(0.1, 0.0, 0.0, 0.8);  //背景色
-    float pulse = mod(time,400)/400.0;
-    col.g = sin(pulse*M_PI*2) * 0.075 + 0.225;
-    col.b = cos(pulse*M_PI*2) * 0.05 + 0.3;
+    // 基础色：暗红紫
+    vec4 col = vec4(0.1, 0.0, 0.0, 1.0);
+
+    // 用多个不同频率的脉冲叠加，让颜色在红/紫/蓝/青之间缓慢游走
+    float pulse = mod(time, 400.0) / 400.0;
+    float p1 = sin(pulse * M_PI * 2.0);        // 主频
+    float p2 = sin(pulse * M_PI * 4.0 + 1.5);  // 二倍频，相位偏移
+    float p3 = cos(pulse * M_PI * 2.0 + 0.8);  // 相位 90° 偏移
+
+    // r：主频控制，范围 0.08 ~ 0.18
+    col.r = p1 * 0.05 + 0.13;
+
+    // g：二倍频 + 偏置，范围 0.10 ~ 0.30
+    col.g = p2 * 0.10 + 0.20;
+
+    // b：主频 + 二倍频混合，范围 0.20 ~ 0.45
+    col.b = (p1 * 0.5 + p2 * 0.5) * 0.125 + 0.325;
+
     vec4 dir = normalize(vec4(-fPos, 0));
     float sb = sin(pitch);
     float cb = cos(pitch);

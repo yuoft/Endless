@@ -21,7 +21,7 @@ public class InfinityFireWorkEntity extends FireworkRocketEntity {
     private final float damage;
 
     public InfinityFireWorkEntity(EntityType<InfinityFireWorkEntity> type, Level world) {
-        super(EntityRegistry.INFINITY_FIREWORK.get(), world);
+        super(EndlessEntityTypes.INFINITY_FIREWORK.get(), world);
         this.damage = 10;
     }
 

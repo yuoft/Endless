@@ -1,25 +1,17 @@
 package com.yuo.endless.client.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.yuo.endless.client.lib.*;
 import com.yuo.endless.entity.GapingVoidEntity;
 import com.yuo.endless.EndlessUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
-
-import java.io.IOException;
 
 public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
     private static final ResourceLocation VOID = EndlessUtils.fa("textures/entity/void.png");

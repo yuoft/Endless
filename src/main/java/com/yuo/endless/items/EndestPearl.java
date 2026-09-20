@@ -1,7 +1,7 @@
 package com.yuo.endless.items;
 
 import com.yuo.endless.entity.EndestPearlEntity;
-import com.yuo.endless.entity.EntityRegistry;
+import com.yuo.endless.entity.EndlessEntityTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +26,7 @@ public class EndestPearl extends Item {
         world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.NEUTRAL,
                 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
-            EndestPearlEntity pearl = new EndestPearlEntity(EntityRegistry.ENDEST_PEARL.get(), player, world);
+            EndestPearlEntity pearl = new EndestPearlEntity(EndlessEntityTypes.ENDEST_PEARL.get(), player, world);
             pearl.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             world.addFreshEntity(pearl);
             player.getCooldowns().addCooldown(stack.getItem(), 30);
