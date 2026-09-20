@@ -5,7 +5,8 @@
   "refmap": "endless.refmap.json",
   "plugin": "com.yuo.endless.mixin.MixinPlugin",
   "mixins": [
-    "GiveCommandMixin"
+    "GiveCommandMixin",
+    "EXEEndlessHaloBakedModelMixin"
   ],
   "client": [
     "ItemRendererMixin"

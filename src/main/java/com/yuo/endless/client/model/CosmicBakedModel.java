@@ -56,7 +56,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         if (stack.getItem() == EndlessItems.matterCluster.get()) {
             AvaritiaShaders.cosmicOpacity.set(getMatterClusterOpacity(stack));
         } else {
-            AvaritiaShaders.cosmicOpacity.set(2.0f);
+            AvaritiaShaders.cosmicOpacity.set(4.0f);
         }
 
         for(int i = 0; i < 10; ++i) {
@@ -107,7 +107,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
 
     public float getMatterClusterOpacity(ItemStack itemStack){
         float i = MatterCluster.getItemTag(itemStack).size() / (ModConfig.SERVER.matterClusterMaxTerm.get() * 1.0f);
-        return (float) (Math.floor(i * 100) / 100.f);
+        return (float) (Math.floor(i * 100) / 100.f) * 2;
     }
 
     public @Nullable PerspectiveModelState getModelState() {

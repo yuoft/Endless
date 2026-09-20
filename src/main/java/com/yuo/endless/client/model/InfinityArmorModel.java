@@ -134,7 +134,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             f3 = 0.0F;
         }
 
-        AvaritiaShaders.cosmicOpacity.set(1.0F);
+        AvaritiaShaders.cosmicOpacity.set(4.0F);
         if (AvaritiaShaders.inventoryRender) {
             AvaritiaShaders.cosmicExternalScale.set(100.0F);
         } else {

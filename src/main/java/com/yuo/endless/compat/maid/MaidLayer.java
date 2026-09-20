@@ -124,7 +124,7 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         } else {
             AvaritiaShaders.cosmicExternalScale.set(1.0f);
         }
-        AvaritiaShaders.cosmicOpacity.set(1.0F);
+        AvaritiaShaders.cosmicOpacity.set(4.0F);
 
         for (int i = 0; i < 10; ++i) {
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)

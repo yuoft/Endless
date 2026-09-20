@@ -33,7 +33,7 @@ public class CosmicBlockRenderHelper {
         AvaritiaShaders.cosmicYaw.set(yaw);
         AvaritiaShaders.cosmicPitch.set(pitch);
         AvaritiaShaders.cosmicExternalScale.set(scale);
-        AvaritiaShaders.cosmicOpacity.set(0.6F);
+        AvaritiaShaders.cosmicOpacity.set(2.0F);
         for (int i = 0; i < 10; i++) {
             TextureAtlasSprite sprite = mc.getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS).getSprite(
                     EndlessUtils.parse("shader/cosmic_" + i));

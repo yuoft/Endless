@@ -38,7 +38,7 @@ void main (void) {
     vec4 mask = texture(Sampler0, texCoord0.xy);
     float oneOverExternalScale = 1.0/externalScale;
     int uvtiles = 16;
-    vec4 col = vec4(0.1,0.0,0.0,1.0);  //背景色
+    vec4 col = vec4(0.1, 0.1, 0.0, 1.0);  //背景色
     float pulse = mod(time,400)/400.0;
     col.g = sin(pulse*M_PI*2) * 0.075 + 0.225;
     col.b = cos(pulse*M_PI*2) * 0.05 + 0.3;

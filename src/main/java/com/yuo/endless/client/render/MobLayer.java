@@ -34,7 +34,7 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
         AvaritiaShaders.cosmicYaw.set(yaw);
         AvaritiaShaders.cosmicPitch.set(pitch);
         AvaritiaShaders.cosmicExternalScale.set(scale);
-        AvaritiaShaders.cosmicOpacity.set(1.0F);
+        AvaritiaShaders.cosmicOpacity.set(2.0F);
 
         for(int i = 0; i < 10; ++i) {
             TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
