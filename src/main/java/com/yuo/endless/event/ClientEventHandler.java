@@ -65,7 +65,7 @@ public class ClientEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onRegisterShaders(RegisterShadersEvent event) {
         AvaritiaShaders.init(event);//注册着色器
-        DistortShaders.onRegisterShaders(event);
+        GapingVoidShaders.register(event);
     }
     @SubscribeEvent
     public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {

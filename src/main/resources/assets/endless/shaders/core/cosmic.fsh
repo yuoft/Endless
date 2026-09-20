@@ -38,7 +38,7 @@ void main (void) {
     vec4 mask = texture(Sampler0, texCoord0.xy);
     float oneOverExternalScale = 1.0/externalScale;
     int uvtiles = 16;
-    vec4 col = vec4(0.1, 0.1, 0.0, 1.0);  //背景色
+    vec4 col = vec4(0.1, 0.0, 0.0, 0.8);  //背景色
     float pulse = mod(time,400)/400.0;
     col.g = sin(pulse*M_PI*2) * 0.075 + 0.225;
     col.b = cos(pulse*M_PI*2) * 0.05 + 0.3;
@@ -68,7 +68,7 @@ void main (void) {
         int tu = int(mod(floor(u*uvtiles),uvtiles));
         int tv = int(mod(floor(v*uvtiles),uvtiles));
 //        int position = ((1777541 * tu) + (7649689 * tv) + (3612703 * (i+31)) + 1723609 ) ^ 50943779;  数值较大导致溢出，使结果总是为0
-        int position = ((171 * tu) + (489 * tv) + (303 * (i+31)) + 17209 ) ^ 10;
+        int position = ((177 * tu) + (469 * tv) + (313 * (i+31)) + 1209 ) ^ 10;
         int symbol = int(mod(position, cosmicoutof));
         int rotation = int(mod(pow(tu,float(tv)) + tu + 3 + tv*i, 8));
         bool flip = false;
@@ -105,9 +105,9 @@ void main (void) {
             tcol = texture(Sampler0, cosmictex);
             //星星颜色
             float a = max(max(tcol.r, tcol.g), tcol.b) * (0.5 + (1.0/mult) * 1.0) * (1.0-smoothstep(0.15, 0.48, abs(rawv-0.5)));
-            float r = (mod(rand1, 29.0)/29.0) * 0.3 + 0.4;
-            float g = (mod(rand2, 35.0)/35.0) * 0.4 + 0.6;
-            float b = (mod(rand1, 17.0)/17.0) * 0.3 + 0.7;
+            float r = (mod(rand1, 29.0)/29.0) * 0.6 + 0.2;
+            float g = (mod(rand2, 35.0)/35.0) * 0.7 + 0.3;
+            float b = (mod(rand1, 17.0)/17.0) * 0.6 + 0.4;
             col = col + vec4(r,g,b,1)*a;
         }
     }
