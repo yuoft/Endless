@@ -109,6 +109,12 @@ void main() {
     vec3 ray = normalize(farPoint.xyz / farPoint.w);
     vec3 eye = -HoleCenter * R_BAR / HorizonRadius;
     float eyeDistance2 = dot(eye, eye);
+
+    // ---- 区域 UV（必须在任何 early return 之前算好）----
+    vec2 rmin  = min(RegionUV0, RegionUV1);
+    vec2 rmax  = max(RegionUV0, RegionUV1);
+    vec2 rsize = max(rmax - rmin, vec2(1e-6));
+
     if (eyeDistance2 < R_BAR * R_BAR) {
         fragColor = vec4(0.0, 0.0, 0.0, original.a);
         return;
@@ -126,18 +132,16 @@ void main() {
     float shadowFront = closestTime - sqrt(max(0.0, R_BAR * R_BAR - impact * impact));
     float shadowWidth = max(fwidth(impact), EPSILON);
     float shadow = (1.0 - smoothstep(R_BAR - shadowWidth, R_BAR + shadowWidth, impact))
-                 * step(shadowFront, geometryDistance);
+    * step(shadowFront, geometryDistance);
 
     vec3 light = vec3(0.0);
     vec3 outgoing = ray;
     float alpha = 4.0 * BH_M / max(impact, EPSILON);
     float discRadius = DISC_R_ORIG;
     if (impact < R_BAR) {
-        // Source's inner-ray correction. Camera up is +Y in view space.
         alpha *= 1.0 - clamp(abs(DiskNormal.y), 0.0, 1.0);
         discRadius *= 1.25;
     }
-    // Captured central rays need a bounded tan(alpha/2), including rm == 0.
     alpha = clamp(alpha, 0.0, 2.8);
     float k = tan(alpha * 0.5);
     vec3 closest = eye + ray * closestTime;
@@ -154,23 +158,18 @@ void main() {
             line /= lineLength;
             float b2 = c * c / (1.0 + k * k);
             float a2 = k * k * b2;
-            // Same hyperbola x*x/a2 - y*y/b2 = 1 as the Shadertoy.
-            // Parameterize the intersection line as position = line * distance:
-            // x = c + distance*lx, y = distance*ly. This avoids dividing by
-            // dot(xAxis,line), including the original denom == 0 special case.
             float lx = dot(xAxis, line);
             float ly = dot(yAxis, line);
             vec2 hits;
             int count = roots(b2 * lx * lx - a2 * ly * ly,
-                              2.0 * b2 * c * lx, b2 * (c * c - a2), hits);
+                    2.0 * b2 * c * lx, b2 * (c * c - a2), hits);
             float eyeY = dot(eye - coordOrigin, yAxis);
             if (count > 0) light += discIntersection(hits.x, line, xAxis, yAxis, c, eyeY,
-                                                   impact, discRadius, eye, ray, geometryDistance);
+                    impact, discRadius, eye, ray, geometryDistance);
             if (count > 1) light += discIntersection(hits.y, line, xAxis, yAxis, c, eyeY,
-                                                   impact, discRadius, eye, ray, geometryDistance);
+                    impact, discRadius, eye, ray, geometryDistance);
         }
     } else {
-        // Straight-ray limit for the source's zero-deflection inner correction.
         float denominator = dot(ray, DiskNormal);
         if (abs(denominator) > EPSILON) {
             float t = -dot(eye, DiskNormal) / denominator;
@@ -189,33 +188,30 @@ void main() {
         float edgeFade = smoothstep(0.0, 0.06, border);
         float outerFade = 1.0 - smoothstep(4.0, INFLUENCE_RADIUS, impact / R_BAR);
         lensedUV = mix(texCoord, clamp(candidate, vec2(0.001), vec2(0.999)), edgeFade * outerFade);
-        // Do not drag a foreground wall into the distorted background.
         if (sceneViewDepth(lensedUV) < eye.z) lensedUV = texCoord;
     }
+
     vec3 background = texture(SceneColor, lensedUV).rgb * (1.0 - shadow);
-    vec3 computed = background + (1.0 - exp(-light));
+    vec3 computed   = background + (1.0 - exp(-light));
 
-    // ---- 区域边缘 / 圆形融合 ----
-    vec2 rmin  = min(RegionUV0, RegionUV1);
-    vec2 rmax  = max(RegionUV0, RegionUV1);
-    vec2 rsize = max(rmax - rmin, vec2(1e-6));
-    vec2 local = (texCoord - rmin) / rsize;          // 0..1，正对四边形
+    // ---- 以黑洞屏幕位置为圆心的圆形遮罩 ----
+    vec2 holeUV = texCoord;
+    vec4 clip = SceneProjection * vec4(HoleCenter, 1.0);
+    if (clip.w > EPSILON) {
+        holeUV = clip.xy / clip.w * 0.5 + 0.5;
+    }
+    holeUV = clamp(holeUV, rmin, rmax);
 
-    // 圆形遮罩：以区域中心为圆心，1.0 为半径（外接圆），
-    // 0.65 起开始淡出，1.0 完全淡出，边缘不会被看到。
-    vec2  centered = (local - 0.5) * 2.0;            // -1..1
-    float r        = length(centered);
-    float circleMask = 1.0 - smoothstep(0.65, 1.0, r);
+    vec2 dEdgeXY = min(holeUV - rmin, rmax - holeUV) / rsize;
+    float dEdge  = min(dEdgeXY.x, dEdgeXY.y);
 
-    // 矩形软边：防止圆形被屏幕裁剪时反而露出硬边
-    float rectEdge = min(min(local.x, 1.0 - local.x),
-            min(local.y, 1.0 - local.y));
-    float rectMask = smoothstep(0.0, 0.06, rectEdge);
+    float R  = max(dEdge * 0.9, 1e-4);
+    float r  = length((texCoord - holeUV) / rsize);
+    float circleMask = 1.0 - smoothstep(R * 0.9, R, r);
 
-    float mask = circleMask * rectMask;
+    vec2 edgeDist = min(texCoord, 1.0 - texCoord);
+    float edgeMask = smoothstep(0.0, 0.02, min(edgeDist.x, edgeDist.y));
 
-    // 在融合区域外，输出与 SceneColor 中已存在的像素完全一致，
-    // 因此与周边画面无缝衔接。
-    vec3 finalRGB = mix(original.rgb, computed, mask);
-    fragColor = vec4(finalRGB, original.a);
+    float mask = circleMask * edgeMask;
+    fragColor = vec4(mix(original.rgb, computed, mask), original.a);
 }

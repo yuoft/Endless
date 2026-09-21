@@ -18,7 +18,7 @@ public class InfinityMobSpawnModifier implements BiomeModifier {
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD) {
-            if (ModConfig.SERVER.mobSpawn.get() && biome.is(BiomeTags.IS_OVERWORLD)) {
+            if (ModConfig.SERVER.mobSpawn.get() && (biome.is(BiomeTags.IS_OVERWORLD) || biome.is(BiomeTags.IS_NETHER) || biome.is(BiomeTags.IS_END))) {
                 builder.getMobSpawnSettings().addSpawn(MobCategory.MONSTER,
                         new MobSpawnSettings.SpawnerData(EndlessEntityTypes.INFINITY_MOB.get(), ModConfig.SERVER.mobWeigh.get(), 0, 1));
             }

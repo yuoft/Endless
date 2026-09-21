@@ -1,11 +1,16 @@
 package com.yuo.endless.client.render;
 
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.lib.*;
+import com.yuo.endless.compat.oculus.GapingVoidLateRenderQueue;
+import com.yuo.endless.compat.oculus.OculusCompat;
+import com.yuo.endless.compat.oculus.RenderFrameState;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.entity.GapingVoidEntity;
-import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -31,16 +36,28 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
     }
 
     @Override
-    public void render(GapingVoidEntity entityIn, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
-        float age = entityIn.getAge() + partialTicks;
+    public void render(GapingVoidEntity gapingVoid, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
+        if (OculusCompat.isShaderPackActive()){
+            if (RenderFrameState.isShadowPass()) {
+                return;
+            }
+            if (!RenderFrameState.shouldDeferWorldEffect()) {
+                return;
+            }
+
+            GapingVoidLateRenderQueue.enqueue(gapingVoid, this.hemisphere, stack, partialTicks, packedLightIn);
+            return;
+        }
+
+        float age = gapingVoid.getAge() + partialTicks;
         Colour colour = getColour(age); // 光环颜色
         float scale = GapingVoidEntity.getVoidScale(age);
         double haloCord = 0.58D * scale;
         double haloScaleDist = 2.2D * scale;
         Vec3 cam = this.entityRenderDispatcher.camera.getPosition();
-        double dx = entityIn.getX() - cam.x();
-        double dy = entityIn.getY() - cam.y();
-        double dz = entityIn.getZ() - cam.z();
+        double dx = gapingVoid.getX() - cam.x();
+        double dy = gapingVoid.getY() - cam.y();
+        double dz = gapingVoid.getZ() - cam.z();
         double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (len <= haloScaleDist) {
             double close = (haloScaleDist - len) / haloScaleDist;

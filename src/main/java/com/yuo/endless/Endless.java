@@ -47,7 +47,6 @@ public class Endless {
         proxy.registerHandlers(modEventBus);
         /**
          * 修改无尽弓毁灭模式的粒子为法阵
-         * 加强无尽套装和无尽生物
          */
     }
 }

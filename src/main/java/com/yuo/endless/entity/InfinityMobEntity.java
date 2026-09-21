@@ -4,6 +4,7 @@ import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.event.EventHandler;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.tool.InfinityDamageTypes;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -16,6 +17,8 @@ import net.minecraft.world.BossEvent.BossBarOverlay;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -31,6 +34,7 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +44,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,6 +53,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.lang.ref.Reference;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.List;
@@ -99,6 +105,15 @@ public class InfinityMobEntity extends Zombie {
                 .add(Attributes.ARMOR, 2.0d);
     }
 
+    // 自定义生成规则
+    public static boolean checkInfinityMobSpawnRules(EntityType<InfinityMobEntity> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        // 1. 首先调用父类的通用怪物生成规则（如亮度、难度等检查）
+        if (!Monster.checkMonsterSpawnRules(type, level, spawnType, pos, random)) {
+            return false;
+        }
+        return level.getDifficulty() == Difficulty.HARD;
+    }
+
     @Override
     public void setPersistenceRequired() {
         super.setPersistenceRequired();
@@ -126,6 +141,9 @@ public class InfinityMobEntity extends Zombie {
         Entity entity = source.getDirectEntity();
         boolean infinity = InfinityDamageTypes.isInfinity(source);
         this.isInfinity = infinity;
+        //非原版伤害无效
+        if (!infinity && !isFromNamespace(source, "minecraft")) return false;
+
         //攻击者为玩家且是无尽伤害
         if (infinity && entity instanceof Player) {
             amount *= 0.1f;
@@ -139,6 +157,15 @@ public class InfinityMobEntity extends Zombie {
         return super.hurt(source, amount);
     }
 
+    /**
+     * 判断伤害类型是否在某个命名空间
+     */
+    public static boolean isFromNamespace(DamageSource source, String namespace) {
+        return source.typeHolder().unwrapKey()
+                .map(key -> key.location().getNamespace().equals(namespace))
+                .orElse(false);
+    }
+
     @Override
     public void setHealth(float amount) {
         if (amount < 1 && !this.isInfinity) return;
@@ -147,6 +174,13 @@ public class InfinityMobEntity extends Zombie {
 
     @Override
     public void kill() {
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        boolean infinity = InfinityDamageTypes.isInfinity(source);
+        if (!infinity && !isFromNamespace(source, "minecraft")) return ;
+        super.die(source);
     }
 
     public void startSeenByPlayer(ServerPlayer pPlayer) {

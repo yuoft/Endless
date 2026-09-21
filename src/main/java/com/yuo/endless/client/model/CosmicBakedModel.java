@@ -2,15 +2,18 @@ package com.yuo.endless.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.lib.PerspectiveModelState;
+import com.yuo.endless.compat.oculus.CosmicItemLateRenderQueue;
+import com.yuo.endless.compat.oculus.RenderFrameState;
+import com.yuo.endless.compat.oculus.OculusCompat;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.MatterCluster;
-import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
@@ -22,7 +25,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
     private final List<ResourceLocation> maskSprite;
@@ -32,7 +36,19 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         this.maskSprite = maskSprite;
     }
 
+    @Override
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource source, int light, int overlay) {
+        boolean isGuiContext = (transformType == ItemDisplayContext.GUI) || AvaritiaShaders.inventoryRender;
+        if (!isGuiContext && OculusCompat.isShaderPackActive()) {
+            if (RenderFrameState.isShadowPass()) {
+                this.renderWrapped(stack, pStack, source, light, overlay, true);
+                return;
+            }
+            if (!CosmicItemLateRenderQueue.shouldDefer()) {
+                return;
+            }
+        }
+
         this.renderWrapped(stack, pStack, source, light, overlay, true);
         if (source instanceof MultiBufferSource.BufferSource bs) {
             bs.endBatch();
@@ -45,19 +61,18 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         if (AvaritiaShaders.inventoryRender || transformType == ItemDisplayContext.GUI) {
             scale = 100.0F;
         } else {
-            yaw = (float)(mc.player.getYRot() * 2.0f * Math.PI / 360.0);
-            pitch = -(float)(mc.player.getXRot() * 2.0f * Math.PI / 360.0);
+            yaw = (float)(mc.player == null ? 1.0f : mc.player.getYRot() * 2.0f * Math.PI / 360.0);
+            pitch = -(float)(mc.player == null ? 1.0f : mc.player.getXRot() * 2.0f * Math.PI / 360.0);
         }
+        float cosmicTime = (float) (System.currentTimeMillis() - (long) AvaritiaShaders.renderTime) / 2000.0F;
 
-        AvaritiaShaders.cosmicTime.set((float)(System.currentTimeMillis() - (long) AvaritiaShaders.renderTime) / 2000.0F);
+        AvaritiaShaders.cosmicTime.set(cosmicTime);
         AvaritiaShaders.cosmicYaw.set(yaw);
         AvaritiaShaders.cosmicPitch.set(pitch);
         AvaritiaShaders.cosmicExternalScale.set(scale);
-        if (stack.getItem() == EndlessItems.matterCluster.get()) {
-            AvaritiaShaders.cosmicOpacity.set(getMatterClusterOpacity(stack));
-        } else {
-            AvaritiaShaders.cosmicOpacity.set(4.0f);
-        }
+
+        float opacity = (stack.getItem() == EndlessItems.matterCluster.get()) ? this.getMatterClusterOpacity(stack) : 4.0F;
+        AvaritiaShaders.cosmicOpacity.set(opacity);
 
         for(int i = 0; i < 10; ++i) {
             TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
@@ -72,6 +87,37 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
             AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
         }
 
+        if (!isGuiContext && OculusCompat.isShaderPackActive()) {
+            renderOculus(mc, pStack, stack, light, overlay, cosmicTime, yaw, pitch, scale, opacity);
+        }else {
+            renderCosmic(mc, pStack, source, stack, light, overlay);
+        }
+    }
+
+    /**
+     * 有光影兼容渲染逻辑
+     */
+    private void renderOculus(Minecraft mc, PoseStack pStack, ItemStack stack, int light, int overlay, float cosmicTime, float yaw, float pitch, float scale, float opacity){
+        CosmicItemLateRenderQueue.CosmicUniforms uniforms =
+                new CosmicItemLateRenderQueue.CosmicUniforms(cosmicTime, yaw, pitch, scale, opacity, AvaritiaShaders.COSMIC_UVS);
+
+        BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
+
+        if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) {
+            CosmicItemLateRenderQueue.enqueue(pStack, getBlockItemQuads(model), stack, light, overlay, uniforms);
+        } else {
+            List<TextureAtlasSprite> atlasSprite = new ArrayList<>();
+            for (ResourceLocation res : this.maskSprite) {
+                atlasSprite.add(mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
+            }
+            CosmicItemLateRenderQueue.enqueue(pStack, WrappedItemModel.bakeItem(atlasSprite), stack, light, overlay, uniforms);
+        }
+    }
+
+    /**
+     * 无光影渲染逻辑
+     */
+    private void renderCosmic(Minecraft mc, PoseStack pStack, MultiBufferSource source, ItemStack stack, int light, int overlay){
         VertexConsumer cons = source.getBuffer(AvaritiaShaders.COSMIC_RENDER_TYPE);
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
         if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) { //是否是方块
@@ -79,21 +125,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
 //                for (RenderType rendertype : bakedModel.getRenderTypes(stack, true))
 //                    itemRenderer.renderModelLists(bakedModel, stack, light, overlay, pStack, source.getBuffer(rendertype));
 //            }
-            List<BakedQuad> blockLayer = new ArrayList<>();
-            RandomSource random = RandomSource.create();
-            for (Direction direction : Direction.values()) //获取六面
-                blockLayer.addAll(model.getQuads(null, direction, random));
-            List<TextureAtlasSprite> maskSprites = new ArrayList<>();
-            for (ResourceLocation res : this.maskSprite)
-                maskSprites.add(Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
-            List<BakedQuad> overlayQuads = new ArrayList<>();
-            for (BakedQuad base : blockLayer) { //添加纹理
-                for (TextureAtlasSprite sprite : maskSprites) {
-                    BakedQuad masked = new BakedQuad(base.getVertices(), base.getTintIndex(), base.getDirection(), sprite, base.isShade());
-                    overlayQuads.add(masked);
-                }
-            }
-            mc.getItemRenderer().renderQuadList(pStack, cons, overlayQuads, stack, light, overlay);
+            mc.getItemRenderer().renderQuadList(pStack, cons, getBlockItemQuads(model), stack, light, overlay);
         } else {
             List<TextureAtlasSprite> atlasSprite = new ArrayList<>();
 
@@ -103,6 +135,24 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
 
             mc.getItemRenderer().renderQuadList(pStack, cons, bakeItem(atlasSprite), stack, light, overlay);
         }
+    }
+
+    private List<BakedQuad> getBlockItemQuads(BakedModel model) {
+        List<BakedQuad> blockLayer = new ArrayList<>();
+        RandomSource random = RandomSource.create();
+        for (Direction direction : Direction.values()) //获取六面
+            blockLayer.addAll(model.getQuads(null, direction, random));
+        List<TextureAtlasSprite> maskSprites = new ArrayList<>();
+        for (ResourceLocation res : this.maskSprite)
+            maskSprites.add(Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
+        List<BakedQuad> overlayQuads = new ArrayList<>();
+        for (BakedQuad base : blockLayer) { //添加纹理
+            for (TextureAtlasSprite sprite : maskSprites) {
+                BakedQuad masked = new BakedQuad(base.getVertices(), base.getTintIndex(), base.getDirection(), sprite, base.isShade());
+                overlayQuads.add(masked);
+            }
+        }
+        return overlayQuads;
     }
 
     public float getMatterClusterOpacity(ItemStack itemStack){

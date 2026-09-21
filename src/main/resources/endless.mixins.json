@@ -5,11 +5,11 @@
   "refmap": "endless.refmap.json",
   "plugin": "com.yuo.endless.mixin.MixinPlugin",
   "mixins": [
-    "GiveCommandMixin",
-    "EXEEndlessHaloBakedModelMixin"
+    "GiveCommandMixin"
   ],
   "client": [
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "OculusAfterLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

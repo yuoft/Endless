@@ -7,16 +7,20 @@ import com.yuo.endless.client.model.InfinityArmorModel;
 import com.yuo.endless.client.render.*;
 import com.yuo.endless.Endless;
 import com.yuo.endless.entity.EndlessEntityTypes;
+import com.yuo.endless.entity.InfinityMobEntity;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.Singularity;
 import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.*;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,6 +34,17 @@ public class ClientEventHandler {
     public static final ModelLayerLocation COMPRESSOR_CHEST_TEXTURE = new ModelLayerLocation(EndlessUtils.fa("block/chest/compressor_chest"), "main");
     public static final ModelLayerLocation INFINITY_CHEST_TEXTURE = new ModelLayerLocation(EndlessUtils.fa("block/chest/infinity_chest"), "main");
     public static final ModelLayerLocation NORMAL_CHEST_LOCATION = new ModelLayerLocation(EndlessUtils.parse("entity/chest/normal"), "main");
+
+    @SubscribeEvent
+    public static void onSpawnPlacementRegister(SpawnPlacementRegisterEvent event) {
+        event.register(
+                EndlessEntityTypes.INFINITY_MOB.get(), // 你的 EntityType
+                SpawnPlacements.Type.ON_GROUND,        // 生成位置类型：地面
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, // 高度图类型
+                InfinityMobEntity::checkInfinityMobSpawnRules, // 你的检查方法
+                SpawnPlacementRegisterEvent.Operation.REPLACE // 操作类型
+        );
+    }
 
     //箱子贴图
     @SubscribeEvent

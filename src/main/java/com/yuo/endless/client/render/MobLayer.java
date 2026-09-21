@@ -1,9 +1,12 @@
 package com.yuo.endless.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.model.InfinityArmorModel;
-import com.yuo.endless.EndlessUtils;
+import com.yuo.endless.compat.oculus.MobLateRenderQueue;
+import com.yuo.endless.compat.oculus.OculusCompat;
+import com.yuo.endless.compat.oculus.RenderFrameState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -21,7 +24,14 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-
+        if (OculusCompat.isShaderPackActive()){
+            if (RenderFrameState.isShadowPass()) {
+                return;
+            }
+            if (!RenderFrameState.shouldDeferWorldEffect()) {
+                return;
+            }
+        }
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
@@ -54,8 +64,10 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
         // 稍微放大一点避免深度冲突
         poseStack.scale(1.02f, 1.02f, 1.02f);
 
+        if (OculusCompat.isShaderPackActive())
+            MobLateRenderQueue.enqueue(this.getParentModel(), poseStack, entity, packedLight, 1);
         // 渲染模型（使用星空着色器）
-        this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2), packedLight,1, 0.84f, 1.0f, 0.95f, 0.8f);
+        else this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2), packedLight,1, 0.84f, 1.0f, 0.95f, 0.8f);
 
         poseStack.popPose();
     }
