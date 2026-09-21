@@ -52,6 +52,8 @@ public class MenuCompat {
         base.addEntry(mobHpInfo.setSaveConsumer(ModConfig.SERVER.mobHpInfo::set).build());
         BooleanToggleBuilder swordKill = entryBuilder.startBooleanToggle(Component.translatable("config.endless.swordKill"), ModConfig.SERVER.swordKill.get()).setDefaultValue(false).setTooltip(Component.translatable("config.endless.swordKill.desc"));
         base.addEntry(swordKill.setSaveConsumer(ModConfig.SERVER.swordKill::set).build());
+        BooleanToggleBuilder isVoidNewRender = entryBuilder.startBooleanToggle(Component.translatable("config.endless.isVoidNewRender"), ModConfig.SERVER.isVoidNewRender.get()).setDefaultValue(false).setTooltip(Component.translatable("config.endless.isVoidNewRender.desc"));
+        base.addEntry(isVoidNewRender.setSaveConsumer(ModConfig.SERVER.isVoidNewRender::set).build());
 
         IntFieldBuilder swordRangeDamage = entryBuilder.startIntField(Component.translatable("config.endless.swordRangeDamage"), ModConfig.SERVER.swordRangeDamage.get()).setMin(10).setMax(1000000).setDefaultValue(10000).setTooltip(Component.translatable("config.endless.swordRangeDamage.desc"));
 //        base.addEntry(swordRangeDamage.setSaveConsumer((i) -> ModConfig.SERVER.swordRangeDamage.set(i)).build());

@@ -49,6 +49,7 @@ public final class GapingVoidShaders {
         PoseStack mvStack = RenderSystem.getModelViewStack();
         try {
             Matrix4f projection = RenderSystem.getProjectionMatrix();
+            stack.translate(0,-1.0,0);
             Matrix4f pose = stack.last().pose();
 
             // 世界空间：中心、法线、轴

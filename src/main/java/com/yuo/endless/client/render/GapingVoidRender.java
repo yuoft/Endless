@@ -3,6 +3,7 @@ package com.yuo.endless.client.render;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.yuo.endless.client.lib.*;
+import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.entity.GapingVoidEntity;
 import com.yuo.endless.EndlessUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -51,17 +52,16 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
 
         //外部光环
         stack.pushPose();
+        boolean flag = ModConfig.SERVER.isVoidNewRender.get();
         stack.mulPose(Axis.XP.rotationDegrees(90.0F));
-        renderVoidHalo(stack, bufferIn, haloCord, colour);
+        if (!flag) renderVoidHalo(stack, bufferIn, haloCord, colour);
         stack.popPose();
 
         //shader黑洞
-        if (age >= 140) {
-//            GapingVoidShaders.renderDirect(stack, (float) haloCord, age / 20.0F);
-        }
+        if (flag) GapingVoidShaders.renderDirect(stack, (float) haloCord, age / 20.0F);
 
         //内部球体
-        renderVoidHemisphere(stack, bufferIn, scale, colour);
+        if (!flag) renderVoidHemisphere(stack, bufferIn, scale, colour);
         stack.popPose();
     }
 

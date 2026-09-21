@@ -14,6 +14,8 @@
     { "name": "DiskNormal", "type": "float", "count": 3, "values": [0.0, 1.0, 0.0] },
     { "name": "DiskAxis", "type": "float", "count": 3, "values": [1.0, 0.0, 0.0] },
     { "name": "HorizonRadius", "type": "float", "count": 1, "values": [1.0] },
-    { "name": "Time", "type": "float", "count": 1, "values": [0.0] }
+    { "name": "Time", "type": "float", "count": 1, "values": [0.0] },
+    { "name": "RegionUV0", "type": "float", "count": 2, "values": [0.0, 0.0] },
+    { "name": "RegionUV1", "type": "float", "count": 2, "values": [1.0, 1.0] }
   ]
 }

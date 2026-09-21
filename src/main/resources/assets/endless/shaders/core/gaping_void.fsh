@@ -10,6 +10,8 @@ uniform vec3 DiskNormal;
 uniform vec3 DiskAxis;
 uniform float HorizonRadius;
 uniform float Time;
+uniform vec2 RegionUV0;
+uniform vec2 RegionUV1;
 
 in vec2 texCoord;
 out vec4 fragColor;
@@ -191,6 +193,29 @@ void main() {
         if (sceneViewDepth(lensedUV) < eye.z) lensedUV = texCoord;
     }
     vec3 background = texture(SceneColor, lensedUV).rgb * (1.0 - shadow);
-    // Keep scene colors intact; map only the Shadertoy's additive HDR emission.
-    fragColor = vec4(background + (1.0 - exp(-light)), original.a);
+    vec3 computed = background + (1.0 - exp(-light));
+
+    // ---- 区域边缘 / 圆形融合 ----
+    vec2 rmin  = min(RegionUV0, RegionUV1);
+    vec2 rmax  = max(RegionUV0, RegionUV1);
+    vec2 rsize = max(rmax - rmin, vec2(1e-6));
+    vec2 local = (texCoord - rmin) / rsize;          // 0..1，正对四边形
+
+    // 圆形遮罩：以区域中心为圆心，1.0 为半径（外接圆），
+    // 0.65 起开始淡出，1.0 完全淡出，边缘不会被看到。
+    vec2  centered = (local - 0.5) * 2.0;            // -1..1
+    float r        = length(centered);
+    float circleMask = 1.0 - smoothstep(0.65, 1.0, r);
+
+    // 矩形软边：防止圆形被屏幕裁剪时反而露出硬边
+    float rectEdge = min(min(local.x, 1.0 - local.x),
+            min(local.y, 1.0 - local.y));
+    float rectMask = smoothstep(0.0, 0.06, rectEdge);
+
+    float mask = circleMask * rectMask;
+
+    // 在融合区域外，输出与 SceneColor 中已存在的像素完全一致，
+    // 因此与周边画面无缝衔接。
+    vec3 finalRGB = mix(original.rgb, computed, mask);
+    fragColor = vec4(finalRGB, original.a);
 }

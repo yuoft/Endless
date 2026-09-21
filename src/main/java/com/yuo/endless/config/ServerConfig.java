@@ -39,43 +39,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue infinityFeetJump; //无尽鞋子增加的跳跃高度
     public final ForgeConfigSpec.IntValue mobWeigh; //无尽生物生成权重
     public final ForgeConfigSpec.DoubleValue foodTime; //无尽食物的效果持续时间缩放系数
-
-    /*
-    public final ForgeConfigSpec.IntValue singularityCoal; // 奇点基础数量
-    public final ForgeConfigSpec.IntValue singularityClay;
-    public final ForgeConfigSpec.IntValue singularityIron;
-    public final ForgeConfigSpec.IntValue singularityGold;
-    public final ForgeConfigSpec.IntValue singularityDiamond;
-    public final ForgeConfigSpec.IntValue singularityEmerald;
-    public final ForgeConfigSpec.IntValue singularityNetherite;
-    public final ForgeConfigSpec.IntValue singularityLapis;
-    public final ForgeConfigSpec.IntValue singularityQuartz;
-    public final ForgeConfigSpec.IntValue singularityRedstone;
-    public final ForgeConfigSpec.IntValue singularitySilver;
-    public final ForgeConfigSpec.IntValue singularityCopper;
-    public final ForgeConfigSpec.IntValue singularityRuby;
-    public final ForgeConfigSpec.IntValue singularityDragon;
-    public final ForgeConfigSpec.IntValue singularitySpace;
-    public final ForgeConfigSpec.IntValue singularityXray;
-    public final ForgeConfigSpec.IntValue singularityUltra;
-    public final ForgeConfigSpec.IntValue singularityZinc;
-    //        public final ForgeConfigSpec.IntValue singularityPlatinum;
-    public final ForgeConfigSpec.IntValue singularityNickel;
-    public final ForgeConfigSpec.IntValue singularityLead;
-    public final ForgeConfigSpec.IntValue singularityTin;
-    public final ForgeConfigSpec.IntValue singularityDragonIum;
-    public final ForgeConfigSpec.IntValue singularityAwakenDragon;
-    public final ForgeConfigSpec.IntValue singularityMana;
-    public final ForgeConfigSpec.IntValue singularityTara;
-    public final ForgeConfigSpec.IntValue singularityElementIum;
-    public final ForgeConfigSpec.IntValue singularityDarkMatter;
-    public final ForgeConfigSpec.IntValue singularityRedMatter;
-    public final ForgeConfigSpec.IntValue singularityCobalt;
-    public final ForgeConfigSpec.IntValue singularityManyullyn;
-
-    public final ForgeConfigSpec.IntValue modRatioRate; //模组额外提供的奇点所需合成最大倍率
-    public final ForgeConfigSpec.IntValue modRatioCount; //模组额外提供的奇点所需合成最大数量
-    */
+    public final ForgeConfigSpec.BooleanValue isVoidNewRender; //是否开启黑洞新渲染
 
     public final ConfigValue<List<String>> pickaxeBlackList; //工具范围挖掘黑名单
     public final ConfigValue<List<String>> axeBlackList;
@@ -97,6 +61,8 @@ public class ServerConfig {
         this.isArrowLightning = buildBoolean(builder, "Is Arrow Lightning", false, "Whether to allow the infinity arrow to channel lightning.");
         this.mobSpawn = buildBoolean(builder, "Mob Spawn", false, "Infinity mob is it naturally generated");
         this.mobHpInfo = buildBoolean(builder, "Mob HP Info", true, "Infinity mob hp info");
+        this.isVoidNewRender = buildBoolean(builder, "Is Void New Render", false, "Do you want to enable new rendering of black holes");
+
         this.swordKill = buildBoolean(builder, "Sword Over Kill Code", false, "Infinity sword over kill code");
         this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 1000000, "Damage of right click attack of the infinity sword.");
         this.swordAttackRange = buildInt(builder, "Sword Attack Range", 32, 8, 128, "Infinity sword right click attack range.");
@@ -118,44 +84,6 @@ public class ServerConfig {
         this.mobWeigh = buildInt(builder, "Mob Weigh", 1, 0, 5, "Infinity mob spawn weigh");
         this.foodTime = buildDouble(builder, "Food Time", 1d, 0.1d, 5d, "Food effect time scaling factor.");
         builder.pop();
-
-        /*
-        builder.comment("Basic amount of singularities required by the compressor.").push("singularity");
-        this.singularityCoal = buildInt(builder, "Coal", 450, 10, 100000, "base count");
-        this.singularityClay = buildInt(builder, "Clay", 400, 10, 100000, "base count");
-        this.singularityIron = buildInt(builder, "Iron", 300, 10, 100000, "base count");
-        this.singularityGold = buildInt(builder, "Gold", 350, 10, 100000, "base count");
-        this.singularityDiamond = buildInt(builder, "Diamond", 250, 10, 100000, "base count");
-        this.singularityEmerald = buildInt(builder, "Emerald", 200, 10, 100000, "base count");
-        this.singularityNetherite = buildInt(builder, "Netherite", 150, 10, 100000, "base count");
-        this.singularityLapis = buildInt(builder, "Lapis", 400, 10, 100000, "base count");
-        this.singularityQuartz = buildInt(builder, "Quartz", 500, 10, 100000, "base count");
-        this.singularityRedstone = buildInt(builder, "Redstone", 400, 10, 100000, "base count");
-        this.singularitySilver = buildInt(builder, "Silver", 200, 10, 100000, "base count");
-        this.singularityCopper = buildInt(builder, "Copper", 375, 10, 100000, "base count");
-        this.singularityRuby = buildInt(builder, "Ruby", 250, 10, 100000, "base count");
-        this.singularityDragon = buildInt(builder, "Dragon", 100, 10, 100000, "base count");
-        this.singularitySpace = buildInt(builder, "Space", 50, 10, 100000, "base count");
-        this.singularityXray = buildInt(builder, "Xray", 150, 10, 100000, "base count");
-        this.singularityUltra = buildInt(builder, "Ultra", 80, 10, 100000, "base count");
-        this.singularityZinc = buildInt(builder, "Zinc", 300, 10, 100000, "base count");
-//            this.singularityPlatinum = buildInt(builder, "Platinum", 200, 10, 2000, "base count");
-        this.singularityNickel = buildInt(builder, "Nickel", 400, 10, 100000, "base count");
-        this.singularityLead = buildInt(builder, "Lead", 300, 10, 100000, "base count");
-        this.singularityTin = buildInt(builder, "Tin", 400, 10, 100000, "base count");
-        this.singularityDragonIum = buildInt(builder, "DragonIum", 80, 10, 100000, "base count");
-        this.singularityAwakenDragon = buildInt(builder, "AwakenDragon", 10, 10, 100000, "base count");
-        this.singularityMana = buildInt(builder, "Mana", 200, 10, 100000, "base count");
-        this.singularityTara = buildInt(builder, "Tara", 100, 10, 100000, "base count");
-        this.singularityElementIum = buildInt(builder, "ElementIum", 50, 10, 100000, "base count");
-        this.singularityDarkMatter = buildInt(builder, "Dark Matter", 150, 10, 100000, "base count");
-        this.singularityRedMatter = buildInt(builder, "Red Matter", 100, 10, 100000, "base count");
-        this.singularityCobalt = buildInt(builder, "Cobalt", 150, 10, 100000, "base count");
-        this.singularityManyullyn = buildInt(builder, "Manyullyn", 100, 10, 100000, "base count");
-        this.modRatioRate = buildInt(builder, "Mod Ratio Rate", 20, 5, 100, "Maximum multiple of the amount of singularities affected by other mods.");
-        this.modRatioCount = buildInt(builder, "Mod Ratio Count", 2000, 500, 5000, "Maximum addition of the amount of singularities affected by other mods.");
-        builder.pop();
-        */
 
         builder.comment("Blacklist of the super mode of infinity tools.For example, if you want stone and block of diamond to be ignored from the super mode of the infinity pickaxe, use [\"minecraft:stone\", \"minecraft:diamond_block\"] in pickaxe blacklist;" +
                 "if you want dirt to be ignored from the super mode of the infinity shovel, use [\"minecraft:dirt\"] in shovel blacklist.").push("black list");
