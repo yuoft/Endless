@@ -32,11 +32,11 @@ public final class CosmicItemLateRenderQueue {
         return deferThisFrame;
     }
 
-    public static void enqueue(PoseStack poseStack, List<BakedQuad> quads, ItemStack stack, int light, int overlay, CosmicUniforms uniforms) {
+    public static void enqueue(PoseStack poseStack, List<BakedQuad> quads, ItemStack stack, boolean flag, int light, int overlay, CosmicUniforms uniforms) {
         if (!deferThisFrame || RenderFrameState.isShadowPass()) return;
 
         PoseStack.Pose pose = poseStack.last();
-        QUEUE.add(new CosmicItemTask(new Matrix4f(pose.pose()), new Matrix3f(pose.normal()), new Matrix4f(RenderSystem.getModelViewMatrix()), new Matrix4f(RenderSystem.getProjectionMatrix()), new ArrayList<>(quads), stack.copy(), light, overlay, uniforms));
+        QUEUE.add(new CosmicItemTask(new Matrix4f(pose.pose()), new Matrix3f(pose.normal()), new Matrix4f(RenderSystem.getModelViewMatrix()), new Matrix4f(RenderSystem.getProjectionMatrix()), new ArrayList<>(quads), stack.copy(), flag, light, overlay, uniforms));
     }
 
     public static void renderAfterLevel() {
@@ -102,7 +102,7 @@ public final class CosmicItemLateRenderQueue {
     }
 
     private record CosmicItemTask(Matrix4f pose, Matrix3f normal, Matrix4f modelView, Matrix4f projection,
-                                  List<BakedQuad> quads, ItemStack stack, int light, int overlay,
+                                  List<BakedQuad> quads, ItemStack stack, boolean flag, int light, int overlay,
                                   CosmicUniforms uniforms) {
     }
 }

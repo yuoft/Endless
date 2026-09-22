@@ -6,8 +6,8 @@ import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.lib.PerspectiveModelState;
 import com.yuo.endless.compat.oculus.CosmicItemLateRenderQueue;
-import com.yuo.endless.compat.oculus.RenderFrameState;
 import com.yuo.endless.compat.oculus.OculusCompat;
+import com.yuo.endless.compat.oculus.RenderFrameState;
 import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.items.MatterCluster;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
+public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer {
     private final List<ResourceLocation> maskSprite;
 
     public CosmicBakedModel(BakedModel wrapped, List<ResourceLocation> maskSprite) {
@@ -39,7 +39,8 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
     @Override
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource source, int light, int overlay) {
         boolean isGuiContext = (transformType == ItemDisplayContext.GUI) || AvaritiaShaders.inventoryRender;
-        if (!isGuiContext && OculusCompat.isShaderPackActive()) {
+        boolean flag = !isGuiContext && OculusCompat.isShaderPackActive();
+        if (flag) {
             if (RenderFrameState.isShadowPass()) {
                 this.renderWrapped(stack, pStack, source, light, overlay, true);
                 return;
@@ -71,7 +72,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         AvaritiaShaders.cosmicPitch.set(pitch);
         AvaritiaShaders.cosmicExternalScale.set(scale);
 
-        float opacity = (stack.getItem() == EndlessItems.matterCluster.get()) ? this.getMatterClusterOpacity(stack) : 4.0F;
+        float opacity = stack.getItem() instanceof BlockItem ? 1.0F : (stack.getItem() == EndlessItems.matterCluster.get()) ? this.getMatterClusterOpacity(stack) : 4.0F;
         AvaritiaShaders.cosmicOpacity.set(opacity);
 
         for(int i = 0; i < 10; ++i) {
@@ -87,8 +88,8 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
             AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
         }
 
-        if (!isGuiContext && OculusCompat.isShaderPackActive()) {
-            renderOculus(mc, pStack, stack, light, overlay, cosmicTime, yaw, pitch, scale, opacity);
+        if (flag) {
+            renderOculus(mc, pStack, stack, flag, light, overlay, cosmicTime, yaw, pitch, scale, opacity);
         }else {
             renderCosmic(mc, pStack, source, stack, light, overlay);
         }
@@ -97,20 +98,20 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
     /**
      * 有光影兼容渲染逻辑
      */
-    private void renderOculus(Minecraft mc, PoseStack pStack, ItemStack stack, int light, int overlay, float cosmicTime, float yaw, float pitch, float scale, float opacity){
+    private void renderOculus(Minecraft mc, PoseStack pStack, ItemStack stack, boolean flag, int light, int overlay, float cosmicTime, float yaw, float pitch, float scale, float opacity){
         CosmicItemLateRenderQueue.CosmicUniforms uniforms =
                 new CosmicItemLateRenderQueue.CosmicUniforms(cosmicTime, yaw, pitch, scale, opacity, AvaritiaShaders.COSMIC_UVS);
 
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
 
         if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) {
-            CosmicItemLateRenderQueue.enqueue(pStack, getBlockItemQuads(model), stack, light, overlay, uniforms);
+            CosmicItemLateRenderQueue.enqueue(pStack, getBlockItemQuads(model), stack, flag, light, overlay, uniforms);
         } else {
             List<TextureAtlasSprite> atlasSprite = new ArrayList<>();
             for (ResourceLocation res : this.maskSprite) {
                 atlasSprite.add(mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
             }
-            CosmicItemLateRenderQueue.enqueue(pStack, WrappedItemModel.bakeItem(atlasSprite), stack, light, overlay, uniforms);
+            CosmicItemLateRenderQueue.enqueue(pStack, WrappedItemModel.bakeItem(atlasSprite), stack, flag, light, overlay, uniforms);
         }
     }
 
@@ -121,10 +122,6 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer{
         VertexConsumer cons = source.getBuffer(AvaritiaShaders.COSMIC_RENDER_TYPE);
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
         if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) { //是否是方块
-//            for (BakedModel bakedModel : model.getRenderPasses(stack, true)) {  加上后渲染出错
-//                for (RenderType rendertype : bakedModel.getRenderTypes(stack, true))
-//                    itemRenderer.renderModelLists(bakedModel, stack, light, overlay, pStack, source.getBuffer(rendertype));
-//            }
             mc.getItemRenderer().renderQuadList(pStack, cons, getBlockItemQuads(model), stack, light, overlay);
         } else {
             List<TextureAtlasSprite> atlasSprite = new ArrayList<>();

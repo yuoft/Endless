@@ -39,7 +39,7 @@ void main (void) {
     float oneOverExternalScale = 1.0/externalScale;
     int uvtiles = 16;
     // 基础色：暗红紫
-    vec4 col = vec4(0.1, 0.0, 0.0, 1.0);
+    vec4 col = vec4(0.0, 0.1, 0.0, 1.0);
 
     // 用多个不同频率的脉冲叠加，让颜色在红/紫/蓝/青之间缓慢游走
     float pulse = mod(time, 400.0) / 400.0;
@@ -49,10 +49,8 @@ void main (void) {
 
     // r：主频控制，范围 0.08 ~ 0.18
     col.r = p1 * 0.05 + 0.13;
-
     // g：二倍频 + 偏置，范围 0.10 ~ 0.30
     col.g = p2 * 0.10 + 0.20;
-
     // b：主频 + 二倍频混合，范围 0.20 ~ 0.45
     col.b = (p1 * 0.5 + p2 * 0.5) * 0.125 + 0.325;
 
@@ -128,7 +126,7 @@ void main (void) {
 
     vec3 shade = vertexColor.rgb * (lightmix) + vec3(1.0-lightmix,1.0-lightmix,1.0-lightmix);
     col.rgb *= shade;
-    col.a *= mask.r * opacity;
+    col.a = mask.r * opacity;
     col = clamp(col,0.0,1.0);
     fragColor = linear_fog(col * ColorModulator, vertexDistance, FogStart, FogEnd, FogColor);
 }
