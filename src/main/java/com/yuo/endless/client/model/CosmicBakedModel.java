@@ -130,7 +130,6 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
             for (ResourceLocation res : this.maskSprite) {
                 atlasSprite.add(mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
             }
-
             mc.getItemRenderer().renderQuadList(pStack, cons, bakeItem(atlasSprite), stack, light, overlay);
         }
     }

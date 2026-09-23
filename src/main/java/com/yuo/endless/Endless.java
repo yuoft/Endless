@@ -45,8 +45,5 @@ public class Endless {
         EndlessSounds.SOUNDS.register(modEventBus);
         EndlessBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
         proxy.registerHandlers(modEventBus);
-        /**
-         * 修改无尽弓毁灭模式的粒子为法阵
-         */
     }
 }

@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -92,7 +93,7 @@ public class ClientProxy implements IProxy {
             if (livingEntity == null) {
                 return 0.0F;
             } else {
-                return livingEntity.getUseItem() != itemStack ? 0.0F : (float)(itemStack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F;
+                return livingEntity.getUseItem() != itemStack ? 0.0F : Mth.clamp((float)(itemStack.getUseDuration() - livingEntity.getUseItemRemainingTicks()) / 20.0F, 0, 1.0F);
             }
         });
         ItemProperties.register(item, EndlessUtils.fa("pulling"), (itemStack, clientWorld, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0F : 0.0F);

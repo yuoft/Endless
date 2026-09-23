@@ -47,6 +47,7 @@ public class InfinityBowCircleRenderer {
         ItemStack bow = player.getItemInHand(InteractionHand.MAIN_HAND);
         if (!(player.isUsingItem() && bow.getItem() instanceof InfinityBow)) return;
 
+        if (!bow.getOrCreateTag().getBoolean("InfinityBow")) return;
         int time = Mth.clamp(player.getUseItem().getUseDuration() - player.getUseItemRemainingTicks(), 0, 200);
         if (time < 10) return;
         int circleNum = Mth.clamp(InfinityBow.getCircleNumFormBowUseTime(time), 0, 4);
