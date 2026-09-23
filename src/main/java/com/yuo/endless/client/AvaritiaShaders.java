@@ -1,14 +1,11 @@
 package com.yuo.endless.client;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.yuo.endless.client.lib.CCShaderInstance;
-import com.yuo.endless.client.lib.CCUniform;
 import com.yuo.endless.Endless;
 import com.yuo.endless.EndlessUtils;
+import com.yuo.endless.client.lib.CCShaderInstance;
+import com.yuo.endless.client.lib.CCUniform;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterShadersEvent;
@@ -38,24 +35,6 @@ public class AvaritiaShaders {
     public static CCUniform cosmicExternalScale;
     public static CCUniform cosmicOpacity;
     public static CCUniform cosmicUVs;
-    public static RenderType COSMIC_RENDER_TYPE = RenderType.create("endless:cosmic",
-            DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false,
-            RenderType.CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
-                    .setDepthTestState(RenderStateShard.EQUAL_DEPTH_TEST)
-                    .setLightmapState(RenderStateShard.LIGHTMAP)
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
-                    .createCompositeState(true)
-    );
-
-    public static final RenderType COSMIC_BLOCK_RENDER_TYPE = RenderType.create("endless:cosmic_block", DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, RenderType.CompositeState.builder()
-            .setShaderState(new RenderStateShard.ShaderStateShard(() -> cosmicShader))
-            .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)
-            .setLightmapState(RenderStateShard.LIGHTMAP)
-            .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-            .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
-            .createCompositeState(true));
-
 
     public AvaritiaShaders() {
     }

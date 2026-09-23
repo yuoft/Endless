@@ -25,12 +25,16 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class InfinityBow extends BowItem {
     public static final Predicate<ItemStack> ARROWS = (stack) -> stack.is(ItemTags.ARROWS) || stack.getItem() == EndlessItems.infinityArrow.get();
+    private static final Map<UUID, InfinityBowChargeSound> CHARGE_SOUNDS = new HashMap<>();
 
     public InfinityBow() {
         super(new Properties().stacksTo(1).durability(9999).fireResistant());
@@ -79,27 +83,62 @@ public class InfinityBow extends BowItem {
     }
 
     @Override
-    public void onUseTick(Level world, LivingEntity player, ItemStack bow, int count) {
+    public void onUseTick(Level world, LivingEntity living, ItemStack bow, int count) {
         CompoundTag nbt = bow.getOrCreateTag();
         boolean flag = nbt.getBoolean("InfinityBow");
-        if (flag && player instanceof Player && findArrow(player).getItem() == EndlessItems.infinityArrow.get()) {
+        if (flag && living instanceof Player player && findArrow(living).getItem() == EndlessItems.infinityArrow.get()) {
             int useTime = getUseTime(count);
             int circleNum = getCircleNumFormBowUseTime(useTime);
 
-            for (int i = 1; i <= circleNum; i++) {
-                double radius = i / 3.0d + Math.min(i / 2.0d, useTime / 20.0d);
-                int particleNum = 36 + 36 * (i - 1) + 36 * Math.max(0, i - 2) + 36 * Math.max(0, i - 3);
-                double dis = 4 * i;
-                spawnCircleParticle((Player) player, world, radius, particleNum, dis, i);
-            }
+//            for (int i = 1; i <= circleNum; i++) {
+//                double radius = i / 3.0d + Math.min(i / 2.0d, useTime / 20.0d);
+//                int particleNum = 36 + 36 * (i - 1) + 36 * Math.max(0, i - 2) + 36 * Math.max(0, i - 3);
+//                double dis = 4 * i;
+//                spawnCircleParticle((Player) living, world, radius, particleNum, dis, i);
+//            }
 
-            if (!world.isClientSide) {
-                if (useTime == 20) //蓄力
-                    world.playSound(null, player.getOnPos(), EndlessSounds.INFINITY_BOW_STAR.get(), SoundSource.NEUTRAL, 6.0f, 1.0f);
-                if (useTime == 200) //蓄力完成
-                    world.playSound(null, player.getOnPos(), EndlessSounds.INFINITY_BOW_END.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+            if (world.isClientSide) {
+                // === 客户端处理音效 ===
+                if (useTime == 20) {
+                    playChargeSound(player);
+                } else if (useTime == 200) {
+                    stopChargeSound(player); // 停掉蓄力音
+                }
+            } else {
+                // === 服务端处理音效（广播给所有客户端） ===
+                if (useTime == 200) {
+                    world.playSound(null, living.getOnPos(), EndlessSounds.INFINITY_BOW_END.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                }
             }
+        }
+    }
 
+    @Override
+    public void onStopUsing(ItemStack bow, LivingEntity entity, int count) {
+        super.onStopUsing(bow, entity, count);
+        CompoundTag nbt = bow.getOrCreateTag();
+        boolean flag = nbt.getBoolean("InfinityBow");
+        if (entity instanceof Player player){
+            if (flag && player instanceof Player && findArrow(player).getItem() == EndlessItems.infinityArrow.get()) {
+                Level world = player.level();
+                if (world.isClientSide) {
+                    stopChargeSound(player);
+                }
+            }
+        }
+    }
+
+    public static void playChargeSound(Player player) {
+        stopChargeSound(player); // 先停掉旧的，避免重复
+        InfinityBowChargeSound sound = new InfinityBowChargeSound(player);
+        net.minecraft.client.Minecraft.getInstance().getSoundManager().play(sound);
+        CHARGE_SOUNDS.put(player.getUUID(), sound);
+    }
+
+    public static void stopChargeSound(Player player) {
+        InfinityBowChargeSound sound = CHARGE_SOUNDS.remove(player.getUUID());
+        if (sound != null) {
+            net.minecraft.client.Minecraft.getInstance().getSoundManager().stop(sound);
         }
     }
 
@@ -113,7 +152,7 @@ public class InfinityBow extends BowItem {
      * @param time 使用时间
      * @return 数量
      */
-    public int getCircleNumFormBowUseTime(int time){
+    public static int getCircleNumFormBowUseTime(int time){
         if (time >= 0 && time<= 50) return 1;
         else if (time > 50 && time <= 100) return 2;
         else if (time > 100 && time <= 150) return 3;

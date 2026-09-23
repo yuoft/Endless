@@ -91,9 +91,6 @@ public class ClientEventHandler {
     public static void addPlayerLayer(EntityRenderersEvent.AddLayers event) {
         addLayer(event, "default");
         addLayer(event, "slim");
-
-//        LivingEntityRenderer entityRenderer = event.getRenderer(EntityType.CREEPER);
-//        entityRenderer.addLayer(new MobLayer(entityRenderer));
     }
 
     private static void addLayer(EntityRenderersEvent.AddLayers e, String s) {

@@ -49,7 +49,7 @@ public class CosmicBlockRender implements BlockEntityRenderer<CosmicTile> {
         if (CosmicBlockLateRenderQueue.shouldDefer())
             CosmicBlockLateRenderQueue.enqueue(blockState, poseStack, light, overlay);
         else
-            renderBlockQuads(blockState, poseStack, bufferSource, light, overlay, stack, AvaritiaShaders.COSMIC_BLOCK_RENDER_TYPE);
+            renderBlockQuads(blockState, poseStack, bufferSource, light, overlay, stack, EndlessRenderTypes.COSMIC_BLOCK_RENDER_TYPE);
         poseStack.popPose();
     }
 

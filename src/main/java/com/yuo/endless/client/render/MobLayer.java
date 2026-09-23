@@ -67,7 +67,7 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
         if (OculusCompat.isShaderPackActive())
             MobLateRenderQueue.enqueue(this.getParentModel(), poseStack, entity, packedLight, 1);
         // 渲染模型（使用星空着色器）
-        else this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2), packedLight,1, 0.84f, 1.0f, 0.95f, 0.8f);
+        else this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, EndlessRenderTypes::mask2), packedLight,1, 0.84f, 1.0f, 0.95f, 0.8f);
 
         poseStack.popPose();
     }

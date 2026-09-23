@@ -31,6 +31,7 @@ public abstract class OculusAfterLevelMixin {
                 CosmicBlockLateRenderQueue::endFrame,
                 GapingVoidLateRenderQueue::endFrame,
                 MobLateRenderQueue::endFrame,
+                BowCircleLateRenderQueue::endFrame,
                 RenderFrameState::endFrame
         );
 
@@ -51,6 +52,7 @@ public abstract class OculusAfterLevelMixin {
         CosmicBlockLateRenderQueue.beginFrame(snap);
         GapingVoidLateRenderQueue.beginFrame(snap);
         MobLateRenderQueue.beginFrame(snap);
+        BowCircleLateRenderQueue.beginFrame(snap);
     }
 
     @Inject(method = "renderLevel", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/GameRenderer;renderHand:Z", ordinal = 0))
@@ -63,6 +65,7 @@ public abstract class OculusAfterLevelMixin {
         CosmicBlockLateRenderQueue.renderAfterLevel();
         GapingVoidLateRenderQueue.renderAfterLevel();
         MobLateRenderQueue.renderAfterLevel();
+        BowCircleLateRenderQueue.renderAfterLevel();
     }
 
     @Inject(method = "renderLevel", at = @At("TAIL"))
@@ -75,6 +78,7 @@ public abstract class OculusAfterLevelMixin {
                 CosmicBlockLateRenderQueue.renderAfterLevel();
                 GapingVoidLateRenderQueue.renderAfterLevel();
                 MobLateRenderQueue.renderAfterLevel();
+                BowCircleLateRenderQueue.renderAfterLevel();
             }
         } finally {
             endless_20$finishAllFrames();

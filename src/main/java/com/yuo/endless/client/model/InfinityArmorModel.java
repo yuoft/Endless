@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.lib.ColorUtils;
+import com.yuo.endless.client.render.EndlessRenderTypes;
 import com.yuo.endless.compat.oculus.CosmicArmorLateRenderQueue;
 import com.yuo.endless.compat.oculus.OculusCompat;
 import com.yuo.endless.compat.oculus.RenderFrameState;
@@ -63,22 +64,6 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         this.bufferSource = this.mc.renderBuffers().bufferSource();
         this.random = new Random();
         this.humanoidModel = new HumanoidModel<>(createMesh(new CubeDeformation(0.0F), 0.0F).getRoot().bake(64, 64));
-    }
-
-    public static RenderType mask2(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0, CompositeState.builder().setShaderState(new RenderStateShard.ShaderStateShard(() -> AvaritiaShaders.cosmicShader)).setTextureState(new RenderStateShard.TextureStateShard(tex, false, false)).setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY).setLightmapState(RenderType.LIGHTMAP).setWriteMaskState(RenderStateShard.COLOR_WRITE).setCullState(RenderType.NO_CULL).createCompositeState(true));
-    }
-
-    public static RenderType getMask(ResourceLocation tex) {
-        return RenderType.create("", DefaultVertexFormat.NEW_ENTITY, Mode.QUADS, 0,
-                CompositeState.builder().setShaderState(RenderType.POSITION_COLOR_TEX_SHADER)
-                        .setTextureState(new RenderStateShard.TextureStateShard(tex, false, false))
-                        .setCullState(RenderType.NO_CULL)
-                        .setTransparencyState(RenderType.TRANSLUCENT_TRANSPARENCY)
-                        .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)  // 深度测试：小于等于
-//                            .setWriteMaskState(new RenderStateShard.WriteMaskStateShard(false, true)) // 不写入深度
-                        .setLayeringState(RenderType.VIEW_OFFSET_Z_LAYERING)
-                        .createCompositeState(true));
     }
 
     public static MeshDefinition createMesh(CubeDeformation deformation, float f, boolean islegs) {
@@ -178,7 +163,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             this.hatsOver().forEach((modelPart) -> {
                 if (OculusCompat.isShaderPackActive())
                     CosmicArmorLateRenderQueue.enqueuePart(poseStack, modelPart, MASK, light, overlay, red, green, blue, alpha);
-                else modelPart.render(poseStack, material(MASK_INV).buffer(this.bufferSource, InfinityArmorModel::mask2), light, overlay, red, green, blue, alpha);
+                else modelPart.render(poseStack, material(MASK_INV).buffer(this.bufferSource, EndlessRenderTypes::mask2), light, overlay, red, green, blue, alpha);
             });
         }
 
@@ -200,7 +185,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             this.bodyPartsOver().forEach((modelPart) -> {
                 if (OculusCompat.isShaderPackActive())
                     CosmicArmorLateRenderQueue.enqueuePart(poseStack, modelPart, MASK_INV, light, overlay, red, green, blue, alpha);
-                else modelPart.render(poseStack, material(MASK_INV).buffer(this.bufferSource, InfinityArmorModel::mask2), light, overlay, red, green, blue, alpha);
+                else modelPart.render(poseStack, material(MASK_INV).buffer(this.bufferSource, EndlessRenderTypes::mask2), light, overlay, red, green, blue, alpha);
             });
         }
 
@@ -216,7 +201,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         if (modelRender) {
             if (OculusCompat.isShaderPackActive())
                 CosmicArmorLateRenderQueue.enqueueEyePart(poseStack, this.hat, CosmicArmorLateRenderQueue.EyeType.HAT_RAINBOW, light, overlay);
-            else this.hat.render(poseStack, this.vertex(getMask(this.eyeTex)), light, overlay, col[0], col[1], col[2], 1.0F);
+            else this.hat.render(poseStack, this.vertex(EndlessRenderTypes.getEyeMask(this.eyeTex)), light, overlay, col[0], col[1], col[2], 1.0F);
         }
 
         poseStack.popPose();
@@ -320,10 +305,10 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
                 }
             }
             if (EventHandler.isInfinite(l)) {
-                AvaritiaShaders.cosmicOpacity.set(2.0F);
+                AvaritiaShaders.cosmicOpacity.set(4.0F);
                 if (OculusCompat.isShaderPackActive())
                     CosmicArmorLateRenderQueue.enqueuePlayerLayer(pPoseStack, this.getParentModel(), pPackedLight);
-                else this.playerParts().forEach((modelPart) -> modelPart.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, InfinityArmorModel::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));
+                else this.playerParts().forEach((modelPart) -> modelPart.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, EndlessRenderTypes::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));
             }
         }
     }

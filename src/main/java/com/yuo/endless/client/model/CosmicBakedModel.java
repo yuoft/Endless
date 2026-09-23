@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.lib.PerspectiveModelState;
+import com.yuo.endless.client.render.EndlessRenderTypes;
 import com.yuo.endless.compat.oculus.CosmicItemLateRenderQueue;
 import com.yuo.endless.compat.oculus.OculusCompat;
 import com.yuo.endless.compat.oculus.RenderFrameState;
@@ -119,7 +120,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
      * 无光影渲染逻辑
      */
     private void renderCosmic(Minecraft mc, PoseStack pStack, MultiBufferSource source, ItemStack stack, int light, int overlay){
-        VertexConsumer cons = source.getBuffer(AvaritiaShaders.COSMIC_RENDER_TYPE);
+        VertexConsumer cons = source.getBuffer(EndlessRenderTypes.COSMIC_RENDER_TYPE);
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
         if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) { //是否是方块
             mc.getItemRenderer().renderQuadList(pStack, cons, getBlockItemQuads(model), stack, light, overlay);

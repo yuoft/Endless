@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 
-public class MyFoods {
+public class ModFoods {
     //食物属性构建  补充饥饿值，饱腹度  药水效果 获取药水效果概率（1=100%） 总是可以食用 肉
     //寰宇肉丸
     public static final FoodProperties MEAT_BALLS = new FoodProperties.Builder().nutrition(50).saturationMod(30).effect(

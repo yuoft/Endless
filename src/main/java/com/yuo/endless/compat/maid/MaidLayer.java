@@ -10,6 +10,7 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.model.InfinityArmorModel;
 import com.yuo.endless.EndlessUtils;
+import com.yuo.endless.client.render.EndlessRenderTypes;
 import com.yuo.endless.event.EventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.PartPose;
@@ -70,7 +71,7 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
                 this.maidModel = model;
             });
             if (this.maidModel != null && EventHandler.isInfinite(maidEntity)) {
-                this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2), packedLight, 1, 0.84f, 1.0f, 0.95f, 0.8f);
+                this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, EndlessRenderTypes::mask2), packedLight, 1, 0.84f, 1.0f, 0.95f, 0.8f);
 //                this.maidModel.renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2), packedLight, 1, 0.84f, 1.0f, 0.95f, 0.8f);
                 renderWing(poseStack, buffer, maidEntity, cachedWingModel, packedLight);
             }

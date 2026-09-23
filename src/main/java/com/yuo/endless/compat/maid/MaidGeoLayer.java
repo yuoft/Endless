@@ -12,6 +12,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.model.InfinityArmorModel;
+import com.yuo.endless.client.render.EndlessRenderTypes;
 import com.yuo.endless.event.EventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -54,7 +55,7 @@ public class MaidGeoLayer<T extends Mob, R extends IGeoEntityRenderer<T>> extend
                     GeckoEntityMaidRenderer<T> renderer = (GeckoEntityMaidRenderer<T>)this.geoEntityRenderer;
 
                     AnimatedGeoModel currentModel1 = renderer.getAnimatableEntity(entity).getCurrentModel();
-                    VertexConsumer consumer = InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, InfinityArmorModel::mask2);
+                    VertexConsumer consumer = InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, EndlessRenderTypes::mask2);
 
                     // 渲染身体星空效果
                     poseStack.pushPose();
@@ -62,7 +63,7 @@ public class MaidGeoLayer<T extends Mob, R extends IGeoEntityRenderer<T>> extend
                     poseStack.translate(0,1.2f,0.3f);
 
                     if (currentModel1 != null && EventHandler.isInfinite(maidEntity)){
-                        renderer.render(currentModel1, entity, partialTick, AvaritiaShaders.COSMIC_RENDER_TYPE, poseStack, buffer, consumer, packedLight, 1, 0.84f, 1.0f, 0.95f, 0.8f);
+                        renderer.render(currentModel1, entity, partialTick, EndlessRenderTypes.COSMIC_RENDER_TYPE, poseStack, buffer, consumer, packedLight, 1, 0.84f, 1.0f, 0.95f, 0.8f);
                         MaidLayer.renderWing(poseStack, buffer, maidEntity, cachedWingModel, packedLight);
                     }
                 }
