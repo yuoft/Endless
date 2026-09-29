@@ -40,15 +40,13 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
     @Override
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource source, int light, int overlay) {
         boolean isGuiContext = (transformType == ItemDisplayContext.GUI) || AvaritiaShaders.inventoryRender;
-        boolean flag = !isGuiContext && OculusCompat.isShaderPackActive();
-        if (flag) {
-            if (RenderFrameState.isShadowPass()) {
-                this.renderWrapped(stack, pStack, source, light, overlay, true);
-                return;
-            }
-            if (!CosmicItemLateRenderQueue.shouldDefer()) {
-                return;
-            }
+        boolean oculusActive = OculusCompat.isShaderPackActive();
+        boolean shadowPass   = oculusActive && RenderFrameState.isShadowPass();
+        boolean deferPath    = oculusActive && !shadowPass && CosmicItemLateRenderQueue.shouldDefer();
+
+        if (shadowPass) {
+            this.renderWrapped(stack, pStack, source, light, overlay, true);
+            return;
         }
 
         this.renderWrapped(stack, pStack, source, light, overlay, true);
@@ -60,7 +58,7 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
         float yaw = 0.0F;
         float pitch = 0.0F;
         float scale = 1.0F;
-        if (AvaritiaShaders.inventoryRender || transformType == ItemDisplayContext.GUI) {
+        if (isGuiContext) {
             scale = 100.0F;
         } else {
             yaw = (float)(mc.player == null ? 1.0f : mc.player.getYRot() * 2.0f * Math.PI / 360.0);
@@ -89,8 +87,8 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
             AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
         }
 
-        if (flag) {
-            renderOculus(mc, pStack, stack, flag, light, overlay, cosmicTime, yaw, pitch, scale, opacity);
+        if (deferPath) {
+            renderOculus(mc, pStack, stack, deferPath, light, overlay, cosmicTime, yaw, pitch, scale, opacity);
         }else {
             renderCosmic(mc, pStack, source, stack, light, overlay);
         }
@@ -106,13 +104,13 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
 
         if (model != null && model.isGui3d() && stack.getItem() instanceof BlockItem) {
-            CosmicItemLateRenderQueue.enqueue(pStack, getBlockItemQuads(model), stack, flag, light, overlay, uniforms);
+            CosmicItemLateRenderQueue.enqueue(pStack, getBlockItemQuads(model), stack, light, overlay, uniforms);
         } else {
             List<TextureAtlasSprite> atlasSprite = new ArrayList<>();
             for (ResourceLocation res : this.maskSprite) {
                 atlasSprite.add(mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(res));
             }
-            CosmicItemLateRenderQueue.enqueue(pStack, WrappedItemModel.bakeItem(atlasSprite), stack, flag, light, overlay, uniforms);
+            CosmicItemLateRenderQueue.enqueue(pStack, WrappedItemModel.bakeItem(atlasSprite), stack, light, overlay, uniforms);
         }
     }
 

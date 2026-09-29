@@ -133,11 +133,11 @@ public final class CosmicArmorLateRenderQueue {
         if (AvaritiaShaders.cosmicShader == null) {
             return;
         }
-
+        float externalScale = AvaritiaShaders.inventoryRender ? 100.0F : 1.0F;
         float cosmicTime = (float) (System.currentTimeMillis() - (long) AvaritiaShaders.renderTime) / 2000.0F;
         AvaritiaShaders.cosmicTime.set(cosmicTime);
         AvaritiaShaders.cosmicOpacity.set(opacity);
-        AvaritiaShaders.cosmicExternalScale.set(1.0F);
+        AvaritiaShaders.cosmicExternalScale.set(externalScale);
 
         if (mc.player != null) {
             AvaritiaShaders.cosmicYaw.set((float) (mc.player.getYRot() * 2.0F * Math.PI / 360.0F));

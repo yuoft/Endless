@@ -3,7 +3,7 @@
 #define M_PI 3.1415926535897932384626433832795
 #moj_import <fog.glsl>
 const int cosmiccount = 10;
-const int cosmicoutof = 101;
+const int cosmicoutof = 71;
 const float lightmix = 0.2f;
 uniform sampler2D Sampler0;
 uniform vec4 ColorModulator;
@@ -62,8 +62,8 @@ void main (void) {
     float ca = cos(-yaw);
     dir = normalize(vec4(dir.z * sa + dir.x * ca, dir.y, dir.z * ca - dir.x * sa, 0));
     vec4 ray;
-    for (int i=0; i<16; i++) {
-        int mult = 16-i;
+    for (int i=0; i<24; i++) {
+        int mult = max(16-i, 1);
         int j = i + 7;
         float rand1 = (j * j * 4321 + j * 8) * 2.0F;
         int k = j + 1;

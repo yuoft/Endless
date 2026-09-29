@@ -24,14 +24,14 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (OculusCompat.isShaderPackActive()){
-            if (RenderFrameState.isShadowPass()) {
-                return;
-            }
-            if (!RenderFrameState.shouldDeferWorldEffect()) {
-                return;
-            }
+        boolean oculusActive = OculusCompat.isShaderPackActive();
+        boolean shadowPass   = oculusActive && RenderFrameState.isShadowPass();
+        boolean deferPath    = oculusActive && !shadowPass && RenderFrameState.shouldDeferWorldEffect();
+
+        if (shadowPass) {
+            return;
         }
+
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null) return;
 
@@ -64,7 +64,7 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
         // 稍微放大一点避免深度冲突
         poseStack.scale(1.02f, 1.02f, 1.02f);
 
-        if (OculusCompat.isShaderPackActive())
+        if (deferPath)
             MobLateRenderQueue.enqueue(this.getParentModel(), poseStack, entity, packedLight, 1);
         // 渲染模型（使用星空着色器）
         else this.getParentModel().renderToBuffer(poseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(buffer, EndlessRenderTypes::mask2), packedLight,1, 0.84f, 1.0f, 0.95f, 0.8f);

@@ -115,14 +115,13 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
     }
 
     public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        if (OculusCompat.isShaderPackActive()){
-            if (RenderFrameState.isShadowPass()) {
-                super.renderToBuffer(poseStack, consumer, light, overlay, red, green, blue, alpha);
-                return;
-            }
-            if (!RenderFrameState.shouldDeferWorldEffect()) {
-                return;
-            }
+        boolean oculusActive = OculusCompat.isShaderPackActive();
+        boolean shadowPass   = oculusActive && RenderFrameState.isShadowPass();
+        boolean deferPath    = oculusActive && !shadowPass && RenderFrameState.shouldDeferWorldEffect();
+
+        if (shadowPass) {
+            super.renderToBuffer(poseStack, consumer, light, overlay, red, green, blue, alpha);
+            return;
         }
 
         InfinityArmorModel model = new InfinityArmorModel(this.rebuildWings().bakeRoot(), 0);
@@ -161,7 +160,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         else this.head.render(poseStack, material(MASK).buffer(this.bufferSource, this::mask), light, overlay, red, green, blue, alpha);
         if (modelRender && !player) {
             this.hatsOver().forEach((modelPart) -> {
-                if (OculusCompat.isShaderPackActive())
+                if (deferPath)
                     CosmicArmorLateRenderQueue.enqueuePart(poseStack, modelPart, MASK, light, overlay, red, green, blue, alpha);
                 else modelPart.render(poseStack, material(MASK_INV).buffer(this.bufferSource, EndlessRenderTypes::mask2), light, overlay, red, green, blue, alpha);
             });
@@ -172,7 +171,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         poseStack.scale(f2, f2, f2);
         poseStack.translate(0.0, this.bodyYOffset / 16.0F * f3, 0.0);
         this.bodyParts().forEach((modelPart) -> {
-            if (OculusCompat.isShaderPackActive()) {
+            if (deferPath) {
                 CosmicArmorLateRenderQueue.enqueuePart(poseStack, modelPart, MASK, light, overlay, red, green, blue, alpha);
                 CosmicArmorLateRenderQueue.enqueueEyePart(poseStack, modelPart,CosmicArmorLateRenderQueue.EyeType.BODY_GLOW, light, overlay);
             }
@@ -183,7 +182,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         });
         if (modelRender && !player) {
             this.bodyPartsOver().forEach((modelPart) -> {
-                if (OculusCompat.isShaderPackActive())
+                if (deferPath)
                     CosmicArmorLateRenderQueue.enqueuePart(poseStack, modelPart, MASK_INV, light, overlay, red, green, blue, alpha);
                 else modelPart.render(poseStack, material(MASK_INV).buffer(this.bufferSource, EndlessRenderTypes::mask2), light, overlay, red, green, blue, alpha);
             });
@@ -195,11 +194,11 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         float[] col = ColorUtils.HSVtoRGB(this.random.nextFloat() * 6.0F, 1.0F, 1.0F);
         poseStack.scale(f, f, f);
         poseStack.translate(0.0, this.babyYHeadOffset / 16.0F * f3, -0.029999999329447746);
-        if (OculusCompat.isShaderPackActive())
+        if (deferPath)
             CosmicArmorLateRenderQueue.enqueuePart(poseStack, this.hat, MASK, light, overlay, red, green, blue, alpha);
         else this.hat.render(poseStack, material(MASK).buffer(this.bufferSource, this::mask), light, overlay, red, green, blue, alpha);
         if (modelRender) {
-            if (OculusCompat.isShaderPackActive())
+            if (deferPath)
                 CosmicArmorLateRenderQueue.enqueueEyePart(poseStack, this.hat, CosmicArmorLateRenderQueue.EyeType.HAT_RAINBOW, light, overlay);
             else this.hat.render(poseStack, this.vertex(EndlessRenderTypes.getEyeMask(this.eyeTex)), light, overlay, col[0], col[1], col[2], 1.0F);
         }
@@ -211,7 +210,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             poseStack.scale(f2, f2, f2);
             poseStack.translate(0.0, this.bodyYOffset / 16.0F * f3, 0.0);
             model.renderToBufferWing(poseStack, this.mc.renderBuffers().bufferSource().getBuffer(RenderType.armorCutoutNoCull(this.wingTex)), light, overlay, red, green, blue, alpha);
-            if (OculusCompat.isShaderPackActive()){
+            if (deferPath){
                 CosmicArmorLateRenderQueue.enqueueWing(this.mc.player, poseStack, this, WING, light, overlay, red, green, blue, alpha);
             }else {
                 model.renderToBufferWing(poseStack, material(WING).buffer(this.bufferSource, this::mask), light, overlay, red, green, blue, alpha);
@@ -295,18 +294,16 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
         }
 
         public void render(@NotNull PoseStack pPoseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight, @NotNull Player l, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-            if (OculusCompat.isShaderPackActive()){
-                if (RenderFrameState.isShadowPass()) {
-                    return;
-                }
+            boolean oculusActive = OculusCompat.isShaderPackActive();
+            boolean shadowPass   = oculusActive && RenderFrameState.isShadowPass();
+            boolean deferPath    = oculusActive && !shadowPass && RenderFrameState.shouldDeferWorldEffect();
 
-                if (!RenderFrameState.shouldDeferWorldEffect()) {
-                    return;
-                }
+            if (shadowPass || (oculusActive && !deferPath)) {
+                return;
             }
             if (EventHandler.isInfinite(l)) {
                 AvaritiaShaders.cosmicOpacity.set(4.0F);
-                if (OculusCompat.isShaderPackActive())
+                if (deferPath)
                     CosmicArmorLateRenderQueue.enqueuePlayerLayer(pPoseStack, this.getParentModel(), pPackedLight);
                 else this.playerParts().forEach((modelPart) -> modelPart.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, EndlessRenderTypes::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));
             }

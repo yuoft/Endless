@@ -2,12 +2,14 @@ package com.yuo.endless.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yuo.endless.client.lib.*;
+import com.yuo.endless.compat.oculus.OculusCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
@@ -60,7 +62,16 @@ public class HaloBakedModel extends WrappedItemModel implements IItemRenderer{
 
     public void renderItem(ItemStack stack, ItemDisplayContext transformType, PoseStack pStack, MultiBufferSource source, int packedLight, int packedOverlay) {
         if (transformType == ItemDisplayContext.GUI) {
-            Minecraft.getInstance().getItemRenderer().renderQuadList(pStack, source.getBuffer(ItemBlockRenderTypes.getRenderType(stack, true)), List.of(this.haloQuad), stack, packedLight, packedOverlay);
+            if (this.haloQuad == null) return;
+            if (OculusCompat.EMBEDDIUM_LOADED){ //光影兼容
+                TextureAtlasSprite sprite = this.haloQuad.getSprite();
+                Minecraft.getInstance()
+                        .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                        .apply(sprite.contents().name());
+            }
+            Minecraft.getInstance().getItemRenderer().renderQuadList(pStack,
+                    source.getBuffer(ItemBlockRenderTypes.getRenderType(stack, true)),
+                    List.of(this.haloQuad), stack, packedLight, packedOverlay);
             if (this.pulse) {
                 pStack.pushPose();
                 double scale = this.random.nextDouble() * 0.15 + 0.95;

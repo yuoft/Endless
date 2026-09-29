@@ -27,29 +27,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CosmicBlockRender implements BlockEntityRenderer<CosmicTile> {
+    private static final ItemStack STACK = new ItemStack(EndlessItems.cosmicBlock.get());
     public CosmicBlockRender(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
     public void render(CosmicTile cosmicTile, float v, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
-        if (OculusCompat.isShaderPackActive()) {
-            if (RenderFrameState.isShadowPass()) {
-                return;
-            }
-            if (!CosmicBlockLateRenderQueue.shouldDefer()) {
-                return;
-            }
-        }
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return;
         BlockState blockState = cosmicTile.getBlockState();
-        ItemStack stack = new ItemStack(EndlessItems.cosmicBlock.get());
+
+        // ===== 一次性查询光影状态，避免帧内状态分裂 =====
+        boolean oculusActive = OculusCompat.isShaderPackActive();
+        boolean shadowPass = oculusActive && RenderFrameState.isShadowPass();
+        // 阴影 pass 只画方块本体（由 chunk 渲染），这里不叠加 cosmic
+        if (shadowPass) return;
+
+        // shouldDefer 为 false 时不再直接 return，而是回退到立即渲染，
+        // 避免光影切换那几帧方块星空完全消失
+        boolean deferPath = oculusActive && CosmicBlockLateRenderQueue.shouldDefer();
+
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
         poseStack.scale(1.0011123F, 1.0011123F, 1.0011123F);
         poseStack.translate(-0.5D, -0.5D, -0.5D);
-        if (CosmicBlockLateRenderQueue.shouldDefer())
+        if (deferPath)
             CosmicBlockLateRenderQueue.enqueue(blockState, poseStack, light, overlay);
         else
-            renderBlockQuads(blockState, poseStack, bufferSource, light, overlay, stack, EndlessRenderTypes.COSMIC_BLOCK_RENDER_TYPE);
+            renderBlockQuads(blockState, poseStack, bufferSource, light, overlay, STACK, EndlessRenderTypes.COSMIC_BLOCK_RENDER_TYPE);
         poseStack.popPose();
     }
 
