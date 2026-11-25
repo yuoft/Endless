@@ -143,14 +143,15 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             f3 = 0.0F;
         }
 
-        AvaritiaShaders.cosmicOpacity.set(4.0F);
-        if (AvaritiaShaders.inventoryRender) {
-            AvaritiaShaders.cosmicExternalScale.set(100.0F);
-        } else {
-            AvaritiaShaders.cosmicExternalScale.set(1.0F);
-            AvaritiaShaders.cosmicYaw.set((float)((double)(this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0));
-            AvaritiaShaders.cosmicPitch.set(-((float)((double)(this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0)));
+        // 星空参数统一走 AvaritiaShaders（自动处理 UV 刷新、判空与重载后重新上传）
+        float cosmicScale = AvaritiaShaders.inventoryRender ? 100.0F : 1.0F;
+        float cosmicYaw = 0.0F;
+        float cosmicPitch = 0.0F;
+        if (!AvaritiaShaders.inventoryRender && this.mc.player != null) {
+            cosmicYaw = (float) ((double) (this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0);
+            cosmicPitch = -((float) ((double) (this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0));
         }
+        AvaritiaShaders.applyCosmicUniforms(cosmicYaw, cosmicPitch, cosmicScale, 4.0F);
 
         poseStack.pushPose();
         poseStack.scale(f, f, f);
@@ -302,7 +303,10 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
                 return;
             }
             if (EventHandler.isInfinite(l)) {
-                AvaritiaShaders.cosmicOpacity.set(4.0F);
+                AvaritiaShaders.applyCosmicUniforms(
+                        (float) (l.getYRot() * 2.0F * Math.PI / 360.0F),
+                        -(float) (l.getXRot() * 2.0F * Math.PI / 360.0F),
+                        AvaritiaShaders.inventoryRender ? 100.0F : 1.0F, 4.0F);
                 if (deferPath)
                     CosmicArmorLateRenderQueue.enqueuePlayerLayer(pPoseStack, this.getParentModel(), pPackedLight);
                 else this.playerParts().forEach((modelPart) -> modelPart.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, EndlessRenderTypes::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));

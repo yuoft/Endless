@@ -2,12 +2,11 @@ package com.yuo.endless.items.tool;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.EndlessUtils;
+import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.entity.EndlessItemEntity;
 import com.yuo.endless.event.EventHandler;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -27,7 +26,6 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -73,17 +71,6 @@ public class InfinitySword extends SwordItem {
                 player.removeEffect(MobEffects.DIG_SPEED);
             }
         }
-    }
-
-//    @Override
-//    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-//        stack.getOrCreateTag().putBoolean("Unbreakable",true);
-//        return super.onEntityItemUpdate(stack, entity);
-//    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @org.jetbrains.annotations.Nullable Level level, List<Component> components, TooltipFlag pIsAdvanced) {
-//        components.add(Component.keybind(ColorText.makeFabulous(I18n.get("endless.text.itemInfo.infinity")) + I18n.get("attribute.name.generic.attack_damage")));
     }
 
     @Override
@@ -202,6 +189,8 @@ public class InfinitySword extends SwordItem {
             }
             if (ModConfig.SERVER.swordKill.get()){
                 target.kill();
+                target.invulnerableTime = 0;
+                target.hurtMarked = true;
                 target.deathTime = 20;
                 target.remove(RemovalReason.KILLED);
             }

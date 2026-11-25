@@ -88,14 +88,20 @@ public final class CosmicItemLateRenderQueue {
         deferThisFrame = false;
     }
 
-    public record CosmicUniforms(float time, float yaw, float pitch, float externalScale, float opacity, float[] uvs) {
+    public record CosmicUniforms(float yaw, float pitch, float externalScale, float opacity, float[] uvs) {
+        public CosmicUniforms {
+            // 延迟渲染发生在世界渲染之后，这里存快照，避免之后 COSMIC_UVS 被刷新导致数据串台
+            if (uvs != null) uvs = uvs.clone();
+        }
+
         public void apply() {
-            AvaritiaShaders.cosmicTime.set(time);
-            AvaritiaShaders.cosmicYaw.set(yaw);
-            AvaritiaShaders.cosmicPitch.set(pitch);
-            AvaritiaShaders.cosmicExternalScale.set(externalScale);
-            AvaritiaShaders.cosmicOpacity.set(opacity);
-            if (AvaritiaShaders.cosmicUVs != null) {
+            // 必须判空，防止重载瞬间 shader/uniform 短暂失效导致渲染崩溃或花屏
+            if (AvaritiaShaders.getCosmicShader() == null) return;
+            if (AvaritiaShaders.cosmicYaw != null) AvaritiaShaders.cosmicYaw.set(yaw);
+            if (AvaritiaShaders.cosmicPitch != null) AvaritiaShaders.cosmicPitch.set(pitch);
+            if (AvaritiaShaders.cosmicExternalScale != null) AvaritiaShaders.cosmicExternalScale.set(externalScale);
+            if (AvaritiaShaders.cosmicOpacity != null) AvaritiaShaders.cosmicOpacity.set(opacity);
+            if (AvaritiaShaders.cosmicUVs != null && uvs != null) {
                 AvaritiaShaders.cosmicUVs.set(uvs);
             }
         }

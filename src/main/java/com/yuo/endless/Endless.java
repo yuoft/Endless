@@ -45,5 +45,11 @@ public class Endless {
         EndlessSounds.SOUNDS.register(modEventBus);
         EndlessBiomeModifiers.BIOME_MODIFIER_SERIALIZERS.register(modEventBus);
         proxy.registerHandlers(modEventBus);
+
+        /*
+        * 兼容旧渲染。配置切换
+        * 黑洞修复。
+        *
+         */
     }
 }

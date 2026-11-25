@@ -24,10 +24,8 @@ import net.minecraft.client.renderer.RenderType.CompositeState;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.inventory.InventoryMenu;
 
 public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
     private static final ResourceLocation wingTex = EndlessUtils.fa("textures/models/infinity_armor_wing.png");
@@ -115,31 +113,9 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
     public static void updateShaderParams(Mob entity) {
         float yaw = (float) (entity.getYRot() * 2.0f * Math.PI / 360.0);
         float pitch = -(float) (entity.getXRot() * 2.0f * Math.PI / 360.0);
+        float scale = AvaritiaShaders.inventoryRender ? 100.0F : 1.0F;
 
-        AvaritiaShaders.cosmicTime.set((float) (System.currentTimeMillis() - AvaritiaShaders.renderTime) / 2000.0F);
-        AvaritiaShaders.cosmicYaw.set(yaw);
-        AvaritiaShaders.cosmicPitch.set(pitch);
-
-        if (AvaritiaShaders.inventoryRender) {
-            AvaritiaShaders.cosmicExternalScale.set(100.0f);
-        } else {
-            AvaritiaShaders.cosmicExternalScale.set(1.0f);
-        }
-        AvaritiaShaders.cosmicOpacity.set(4.0F);
-
-        for (int i = 0; i < 10; ++i) {
-            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(EndlessUtils.fa("shader/cosmic_" + i));
-            if (sprite != null) {
-                AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
-                AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
-                AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();
-                AvaritiaShaders.COSMIC_UVS[i * 4 + 3] = sprite.getV1();
-            }
-        }
-
-        if (AvaritiaShaders.cosmicUVs != null) {
-            AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
-        }
+        // UV + uniform 统一由 AvaritiaShaders 维护（含重载/切换 shader 后的重新上传）
+        AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale, 4.0F);
     }
 }

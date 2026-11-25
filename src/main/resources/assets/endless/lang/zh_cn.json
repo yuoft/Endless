@@ -249,6 +249,8 @@
   "config.endless.isArrowLightning.desc": "是否开启无尽矢的召雷功能",
   "config.endless.isVoidNewRender": "黑洞新渲染",
   "config.endless.isVoidNewRender.desc": "是否开启黑洞新渲染",
+  "config.endless.isOldCosmicRender": "旧星空渲染",
+  "config.endless.isOldCosmicRender.desc": "是否使用旧版星空渲染",
   "config.endless.mobSpawn": "无尽生物自然生成",
   "config.endless.mobSpawn.desc": "无尽生物是否自然生成",
   "config.endless.mobHpInfo": "无尽生物血条",

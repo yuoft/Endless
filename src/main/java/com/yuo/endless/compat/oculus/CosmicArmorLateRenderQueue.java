@@ -130,31 +130,19 @@ public final class CosmicArmorLateRenderQueue {
     static void applyCosmicUniforms(float opacity) {
         Minecraft mc = Minecraft.getInstance();
 
-        if (AvaritiaShaders.cosmicShader == null) {
+        if (AvaritiaShaders.getCosmicShader() == null) {
             return;
         }
         float externalScale = AvaritiaShaders.inventoryRender ? 100.0F : 1.0F;
-        float cosmicTime = (float) (System.currentTimeMillis() - (long) AvaritiaShaders.renderTime) / 2000.0F;
-        AvaritiaShaders.cosmicTime.set(cosmicTime);
-        AvaritiaShaders.cosmicOpacity.set(opacity);
-        AvaritiaShaders.cosmicExternalScale.set(externalScale);
-
+        float yaw = 0.0F;
+        float pitch = 0.0F;
         if (mc.player != null) {
-            AvaritiaShaders.cosmicYaw.set((float) (mc.player.getYRot() * 2.0F * Math.PI / 360.0F));
-            AvaritiaShaders.cosmicPitch.set(-(float) (mc.player.getXRot() * 2.0F * Math.PI / 360.0F));
+            yaw = (float) (mc.player.getYRot() * 2.0F * Math.PI / 360.0F);
+            pitch = -(float) (mc.player.getXRot() * 2.0F * Math.PI / 360.0F);
         }
 
-        for (int i = 0; i < 10; ++i) {
-            var sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(EndlessUtils.fa("shader/cosmic_" + i));
-            AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 3] = sprite.getV1();
-        }
-
-        if (AvaritiaShaders.cosmicUVs != null) {
-            AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
-        }
+        // UV + uniform 统一由 AvaritiaShaders 维护
+        AvaritiaShaders.applyCosmicUniforms(yaw, pitch, externalScale, opacity);
     }
 
     public static void renderAfterLevel() {

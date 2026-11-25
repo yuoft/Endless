@@ -2,7 +2,6 @@ package com.yuo.endless.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.lib.PerspectiveModelState;
 import com.yuo.endless.client.render.EndlessRenderTypes;
@@ -48,6 +47,11 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
             this.renderWrapped(stack, pStack, source, light, overlay, true);
             return;
         }
+        // 【关键拦截】如果 Shader 尚未就绪（例如 F3+T 瞬间），直接渲染原版模型并返回
+        if (AvaritiaShaders.getCosmicShader() == null) {
+            this.renderWrapped(stack, pStack, source, light, overlay, true);
+            return;
+        }
 
         this.renderWrapped(stack, pStack, source, light, overlay, true);
         if (source instanceof MultiBufferSource.BufferSource bs) {
@@ -64,31 +68,16 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
             yaw = (float)(mc.player == null ? 1.0f : mc.player.getYRot() * 2.0f * Math.PI / 360.0);
             pitch = -(float)(mc.player == null ? 1.0f : mc.player.getXRot() * 2.0f * Math.PI / 360.0);
         }
-        float cosmicTime = (float) (System.currentTimeMillis() - (long) AvaritiaShaders.renderTime) / 2000.0F;
-
-        AvaritiaShaders.cosmicTime.set(cosmicTime);
-        AvaritiaShaders.cosmicYaw.set(yaw);
-        AvaritiaShaders.cosmicPitch.set(pitch);
-        AvaritiaShaders.cosmicExternalScale.set(scale);
 
         float opacity = stack.getItem() instanceof BlockItem ? 1.0F : (stack.getItem() == EndlessItems.matterCluster.get()) ? this.getMatterClusterOpacity(stack) : 4.0F;
-        AvaritiaShaders.cosmicOpacity.set(opacity);
 
-        for(int i = 0; i < 10; ++i) {
-            TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                    .apply(EndlessUtils.fa( "shader/cosmic_" + i));
-            AvaritiaShaders.COSMIC_UVS[i * 4] = sprite.getU0();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 1] = sprite.getV0();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 2] = sprite.getU1();
-            AvaritiaShaders.COSMIC_UVS[i * 4 + 3] = sprite.getV1();
-        }
-
-        if (AvaritiaShaders.cosmicUVs != null) {
-            AvaritiaShaders.cosmicUVs.set(AvaritiaShaders.COSMIC_UVS);
+        // 星空 UV + uniform 统一由 AvaritiaShaders 维护（含重载后重新解析图集并强制上传）
+        if (!AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale, opacity)) {
+            return;
         }
 
         if (deferPath) {
-            renderOculus(mc, pStack, stack, deferPath, light, overlay, cosmicTime, yaw, pitch, scale, opacity);
+            renderOculus(mc, pStack, stack, deferPath, light, overlay, yaw, pitch, scale, opacity);
         }else {
             renderCosmic(mc, pStack, source, stack, light, overlay);
         }
@@ -97,9 +86,9 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
     /**
      * 有光影兼容渲染逻辑
      */
-    private void renderOculus(Minecraft mc, PoseStack pStack, ItemStack stack, boolean flag, int light, int overlay, float cosmicTime, float yaw, float pitch, float scale, float opacity){
+    private void renderOculus(Minecraft mc, PoseStack pStack, ItemStack stack, boolean flag, int light, int overlay, float yaw, float pitch, float scale, float opacity){
         CosmicItemLateRenderQueue.CosmicUniforms uniforms =
-                new CosmicItemLateRenderQueue.CosmicUniforms(cosmicTime, yaw, pitch, scale, opacity, AvaritiaShaders.COSMIC_UVS);
+                new CosmicItemLateRenderQueue.CosmicUniforms(yaw, pitch, scale, opacity, AvaritiaShaders.COSMIC_UVS);
 
         BakedModel model = this.wrapped.getOverrides().resolve(this.wrapped, stack, this.world, this.entity, 0);
 

@@ -40,6 +40,7 @@ public class ServerConfig {
     public final ForgeConfigSpec.IntValue mobWeigh; //无尽生物生成权重
     public final ForgeConfigSpec.DoubleValue foodTime; //无尽食物的效果持续时间缩放系数
     public final ForgeConfigSpec.BooleanValue isVoidNewRender; //是否开启黑洞新渲染
+    public final ForgeConfigSpec.BooleanValue isOldCosmicRender; //是否使用原版星空渲染
 
     public final ConfigValue<List<String>> pickaxeBlackList; //工具范围挖掘黑名单
     public final ConfigValue<List<String>> axeBlackList;
@@ -62,6 +63,7 @@ public class ServerConfig {
         this.mobSpawn = buildBoolean(builder, "Mob Spawn", false, "Infinity mob is it naturally generated");
         this.mobHpInfo = buildBoolean(builder, "Mob HP Info", true, "Infinity mob hp info");
         this.isVoidNewRender = buildBoolean(builder, "Is Void New Render", false, "Do you want to enable new rendering of black holes");
+        this.isOldCosmicRender = buildBoolean(builder, "Is Old Cosmic Render", false, "Whether to use the original starry sky rendering");
 
         this.swordKill = buildBoolean(builder, "Sword Over Kill Code", false, "Infinity sword over kill code");
         this.swordRangeDamage = buildInt(builder, "Sword Range Damage", 10000, 10, 1000000, "Damage of right click attack of the infinity sword.");

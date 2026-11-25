@@ -1,6 +1,7 @@
 package com.yuo.endless.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.math.Axis;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.lib.*;
@@ -59,7 +60,7 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         stack.pushPose();
         boolean flag = ModConfig.SERVER.isVoidNewRender.get();
         stack.mulPose(Axis.XP.rotationDegrees(90.0F));
-        if (!flag) renderVoidHalo(stack, bufferIn, haloCord, colour);
+        if (!flag) renderVoidHalo(stack, bufferIn, packedLightIn, haloCord, colour);
         stack.popPose();
 
         //shader黑洞
@@ -70,8 +71,9 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
         stack.popPose();
     }
 
-    private void renderVoidHalo(PoseStack stack, MultiBufferSource bufferIn, double haloCord, Colour colour) {
-        TransformingVertexConsumer consHalo = new TransformingVertexConsumer(bufferIn.getBuffer(EndlessRenderTypes.VOID_HALO), stack);
+    private void renderVoidHalo(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, double haloCord, Colour colour) {
+        Pose pose = poseStack.last();
+        TransformingVertexConsumer consHalo = new TransformingVertexConsumer(bufferIn.getBuffer(EndlessRenderTypes.VOID_HALO), poseStack);
         consHalo.vertex(-haloCord, 0.0D, -haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 0.0F).endVertex();
         consHalo.vertex(-haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(0.0F, 1.0F).endVertex();
         consHalo.vertex(haloCord, 0.0D, haloCord).color(colour.r, colour.g, colour.b, colour.a).uv(1.0F, 1.0F).endVertex();
@@ -88,9 +90,11 @@ public class GapingVoidRender extends EntityRenderer<GapingVoidEntity> {
     }
 
     private static Colour getColour(double age) {
-        double life = age / 186.0D;
-        double f = Math.max(0.0, (life - 0.95) / 0.05);
-        f = Math.max(f, 1.0 - life * 30.0);
+        double life = Math.max(0.0D, Math.min(1.0D, age / 186.0D));
+        // 头 5%：白 → 黑；尾 5%：黑 → 白
+        double fadeIn  = 1.0D - life / 0.05D;       // 0 → 0.05：1 → 0
+        double fadeOut = (life - 0.95D) / 0.05D;    // 0.95 → 1：0 → 1
+        float f = (float) Math.max(0.0D, Math.min(1.0D, Math.max(fadeIn, fadeOut)));
         return new ColourRGBA(f, f, f, 1);
     }
 

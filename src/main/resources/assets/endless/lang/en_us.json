@@ -249,6 +249,8 @@
   "config.endless.isArrowLightning.desc": "Whether to allow the infinity arrow to channel lightning.",
   "config.endless.isVoidNewRender": "Is Void New Render",
   "config.endless.isVoidNewRender.desc": "Do you want to enable new rendering of black holes.",
+  "config.endless.isOldCosmicRender": "Is Old Cosmic Render",
+  "config.endless.isOldCosmicRender.desc": "Whether to use the original starry sky rendering.",
   "config.endless.mobSpawn": "Mob Spawn",
   "config.endless.mobSpawn.desc": "Infinity mob is it naturally generated",
   "config.endless.mobHpInfo": "Mob HP Info",

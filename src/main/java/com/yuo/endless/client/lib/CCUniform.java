@@ -43,6 +43,11 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
         glUniformF(false, values);
     }
 
+    /** 强制下一次 apply() 时重新上传，用于资源重载 / 切换 shader 后清掉旧的 GL 状态。 */
+    public void markDirty() {
+        this.dirty = true;
+    }
+
     static CCUniform makeUniform(String name, UniformType type, int count, @Nullable Shader parent) {
         if (count % type.getSize() != 0) {
             throw new IllegalArgumentException("Expected count to be a multiple of the uniform type size: " + type.getSize());
@@ -351,13 +356,24 @@ public abstract class CCUniform extends Uniform implements ICCUniform {
             if (this.len(values) != this.getCount()) {
                 throw new IllegalArgumentException("Invalid size for uniform '%s', Expected: '%s', Got: '%s'.".formatted(this.getName(), this.getCount(), this.len(values)));
             } else {
-                if (!this.equals(this.cache, values) || this.transpose != transpose) {
-                    this.cache = values;
+                // 必须复制：调用方传入的往往是长期复用、原地修改的数组（例如 COSMIC_UVS）。
+                // 若直接持有引用，之后的原地修改会被 equals 判定成“没有变化”，uniform 再也不会重新上传。
+                T copy = copyOf(values);
+                if (!this.equals(this.cache, copy) || this.transpose != transpose) {
+                    this.cache = copy;
                     this.transpose = transpose;
                     this.dirty = true;
                 }
 
             }
+        }
+
+        @SuppressWarnings("unchecked")
+        private T copyOf(T values) {
+            if (values instanceof float[] floats) return (T) floats.clone();
+            if (values instanceof int[] ints) return (T) ints.clone();
+            if (values instanceof double[] doubles) return (T) doubles.clone();
+            return values;
         }
 
         public void upload() {

@@ -22,14 +22,14 @@ public class EndlessRenderTypes extends RenderType {
 
     public static RenderType COSMIC_RENDER_TYPE = create("endless:cosmic",
             DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false,
-            CompositeState.builder().setShaderState(new ShaderStateShard(() -> AvaritiaShaders.cosmicShader))
+            CompositeState.builder().setShaderState(new ShaderStateShard(AvaritiaShaders::getCosmicShader))
                     .setDepthTestState(EQUAL_DEPTH_TEST).setLightmapState(LIGHTMAP).setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setTextureState(BLOCK_SHEET_MIPPED).createCompositeState(true)
     );
 
     public static final RenderType COSMIC_BLOCK_RENDER_TYPE = create("endless:cosmic_block",
             DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false,
-            CompositeState.builder().setShaderState(new ShaderStateShard(() -> AvaritiaShaders.cosmicShader))
+            CompositeState.builder().setShaderState(new ShaderStateShard(AvaritiaShaders::getCosmicShader))
                     .setDepthTestState(LEQUAL_DEPTH_TEST).setLightmapState(LIGHTMAP).setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setTextureState(BLOCK_SHEET_MIPPED).createCompositeState(true));
 
