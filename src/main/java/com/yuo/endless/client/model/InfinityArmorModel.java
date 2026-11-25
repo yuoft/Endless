@@ -12,6 +12,7 @@ import com.yuo.endless.client.render.EndlessRenderTypes;
 import com.yuo.endless.compat.oculus.CosmicArmorLateRenderQueue;
 import com.yuo.endless.compat.oculus.OculusCompat;
 import com.yuo.endless.compat.oculus.RenderFrameState;
+import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.event.EventHandler;
 import com.yuo.endless.items.EndlessItems;
 import net.minecraft.client.Minecraft;
@@ -151,7 +152,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
             cosmicYaw = (float) ((double) (this.mc.player.getYRot() * 2.0F) * Math.PI / 360.0);
             cosmicPitch = -((float) ((double) (this.mc.player.getXRot() * 2.0F) * Math.PI / 360.0));
         }
-        AvaritiaShaders.applyCosmicUniforms(cosmicYaw, cosmicPitch, cosmicScale, 4.0F);
+        AvaritiaShaders.applyCosmicUniforms(cosmicYaw, cosmicPitch, cosmicScale,  ModConfig.SERVER.isOldCosmicRender.get() ? 2.0F : 4.0F);
 
         poseStack.pushPose();
         poseStack.scale(f, f, f);
@@ -306,7 +307,7 @@ public class InfinityArmorModel extends HumanoidModel<Player> {
                 AvaritiaShaders.applyCosmicUniforms(
                         (float) (l.getYRot() * 2.0F * Math.PI / 360.0F),
                         -(float) (l.getXRot() * 2.0F * Math.PI / 360.0F),
-                        AvaritiaShaders.inventoryRender ? 100.0F : 1.0F, 4.0F);
+                        AvaritiaShaders.inventoryRender ? 100.0F : 1.0F,  ModConfig.SERVER.isOldCosmicRender.get() ? 2.0F : 4.0F);
                 if (deferPath)
                     CosmicArmorLateRenderQueue.enqueuePlayerLayer(pPoseStack, this.getParentModel(), pPackedLight);
                 else this.playerParts().forEach((modelPart) -> modelPart.render(pPoseStack, InfinityArmorModel.material(InfinityArmorModel.MASK_INV).buffer(pBuffer, EndlessRenderTypes::mask2), pPackedLight, 1, 1.0F, 1.0F, 1.0F, 1.0F));

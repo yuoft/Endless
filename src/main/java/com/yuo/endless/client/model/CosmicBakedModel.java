@@ -69,7 +69,9 @@ public class CosmicBakedModel extends WrappedItemModel implements IItemRenderer 
             pitch = -(float)(mc.player == null ? 1.0f : mc.player.getXRot() * 2.0f * Math.PI / 360.0);
         }
 
-        float opacity = stack.getItem() instanceof BlockItem ? 1.0F : (stack.getItem() == EndlessItems.matterCluster.get()) ? this.getMatterClusterOpacity(stack) : 4.0F;
+        float opacity = stack.getItem() instanceof BlockItem ? 1.0F :
+                (stack.getItem() == EndlessItems.matterCluster.get()) ? this.getMatterClusterOpacity(stack) :
+                ModConfig.SERVER.isOldCosmicRender.get() ? 2.0F : 4.0F;
 
         // 星空 UV + uniform 统一由 AvaritiaShaders 维护（含重载后重新解析图集并强制上传）
         if (!AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale, opacity)) {

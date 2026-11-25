@@ -110,6 +110,11 @@ public class AvaritiaShaders {
         }
     }
 
+    /** 当前实际生效的是否为旧版着色器（供排查/显示用） */
+    public static boolean isUsingOldShader() {
+        return cosmicShader != null && cosmicShader == shaderOld;
+    }
+
     // 保留给外部查询：未就绪时返回 null
     public static CCShaderInstance getCosmicShader() {
         return shaderReady && cosmicShader != null ? cosmicShader : null;

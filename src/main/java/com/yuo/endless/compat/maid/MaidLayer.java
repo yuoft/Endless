@@ -11,6 +11,7 @@ import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.client.model.InfinityArmorModel;
 import com.yuo.endless.EndlessUtils;
 import com.yuo.endless.client.render.EndlessRenderTypes;
+import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.event.EventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.PartPose;
@@ -116,6 +117,6 @@ public class MaidLayer extends RenderLayer<Mob, BedrockModel<Mob>> {
         float scale = AvaritiaShaders.inventoryRender ? 100.0F : 1.0F;
 
         // UV + uniform 统一由 AvaritiaShaders 维护（含重载/切换 shader 后的重新上传）
-        AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale, 4.0F);
+        AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale,  ModConfig.SERVER.isOldCosmicRender.get() ? 2.0F : 4.0F);
     }
 }

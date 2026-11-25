@@ -6,6 +6,7 @@ import com.yuo.endless.client.model.InfinityArmorModel;
 import com.yuo.endless.compat.oculus.MobLateRenderQueue;
 import com.yuo.endless.compat.oculus.OculusCompat;
 import com.yuo.endless.compat.oculus.RenderFrameState;
+import com.yuo.endless.config.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -38,7 +39,7 @@ public class MobLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
         float scale = 1.0f;
 
         // 星空 UV + uniform 统一走 AvaritiaShaders，未就绪/图集异常时放弃本次叠加
-        if (!AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale, 2.0F)) {
+        if (!AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale,  ModConfig.SERVER.isOldCosmicRender.get() ? 1.0F : 2.0F)) {
             return;
         }
 

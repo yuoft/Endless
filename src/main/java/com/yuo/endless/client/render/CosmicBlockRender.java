@@ -6,6 +6,7 @@ import com.yuo.endless.client.AvaritiaShaders;
 import com.yuo.endless.compat.oculus.CosmicBlockLateRenderQueue;
 import com.yuo.endless.compat.oculus.OculusCompat;
 import com.yuo.endless.compat.oculus.RenderFrameState;
+import com.yuo.endless.config.ModConfig;
 import com.yuo.endless.items.EndlessItems;
 import com.yuo.endless.tiles.CosmicTile;
 import net.minecraft.client.Minecraft;
@@ -76,9 +77,7 @@ public class CosmicBlockRender implements BlockEntityRenderer<CosmicTile> {
         }
 
         // 星空 UV + uniform 统一由 AvaritiaShaders 处理：
-        // 以前这里用 EndlessUtils.parse("shader/cosmic_N") 查图集，实际查的是 minecraft:shader/cosmic_N，
-        // 拿到的是 missingno 贴图，会把错误的 UV 写进 COSMIC_UVS，重载后图集重排就变成马赛克。
-        if (!AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale, 2.0F)) return;
+        if (!AvaritiaShaders.applyCosmicUniforms(yaw, pitch, scale,  ModConfig.SERVER.isOldCosmicRender.get() ? 1.0F : 2.0F)) return;
 
         VertexConsumer consumer = buffers.getBuffer(renderType);
         BakedModel model = mc.getBlockRenderer().getBlockModel(blockState);
